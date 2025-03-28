@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: musicverse-python-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: FLASK_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://tu-frontend-vercel.vercel.app
+      - key: YOUTUBE_API_KEY
+        sync: false # Se configurará manualmente 

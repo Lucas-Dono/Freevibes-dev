@@ -1,0 +1,339 @@
+tutorial completo de Tailwind CSS
+
+Tailwind CSS no funciona como una biblioteca CSS convencional . No se trata simplemente de una colección de estilos que se incluyen en el CSS. También es necesario transpilar correctamente el código usando las clases de Tailwind para obtener estilos funcionales.
+
+Aunque existen varias maneras de usar Tailwind CSS, el método recomendado es el preprocesador PostCSS y un plugin dedicado que genere los estilos necesarios. El preprocesador mencionado funciona como otras herramientas de este tipo, como SCSS o LESS: toma tu código y, con la ayuda de la lógica adecuada, lo transpila a CSS puro. PostCSS tiene la ventaja de ser totalmente extensible. Puedes crear plugins para él y ampliar sus capacidades según tus necesidades. Esto es similar a Babel o Eslint.
+
+Si usas PostCSS, la forma exacta de instalar Tailwind CSS en tu proyecto dependerá de la pila tecnológica. Puedes encontrar fácilmente las instrucciones correctas para instalar todo en internet. La excelente documentación de Tailwind CSS también explica gran parte del proceso .
+
+En este artículo, explicaré cómo instalar el framework CSS en cuestión en proyectos generados con el popular iniciador Create React App . Suponiendo que el proyecto ya está creado, se puede proceder a instalar las bibliotecas necesarias en las versiones correspondientes. Posteriormente, también crearé un archivo HTML y un archivo CSS final.
+
+
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+view rawinstall.sh hosted with ❤ by GitHub
+El problema con CRA es que esta herramienta usa PostCSS internamente y no permite sobrescribir la configuración de su preprocesador de forma integrada. Sin embargo, esto no es un problema, ya que puedes usar CRACO, una herramienta para sobrescribir fácilmente todas las configuraciones de CRA. Instala CRACO en tu proyecto:
+
+
+npm install @craco/craco --save-dev
+view rawcraco.sh hosted with ❤ by GitHub
+…y luego modificamos los comandos en package.json para que su aplicación se inicie con la ayuda de esta herramienta:
+
+
+{
+  //...
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    //...
+  }
+}
+view rawpackage.json hosted with ❤ by GitHub
+El siguiente paso es crear un archivo de configuración para CRACO que definirá cómo se sobrescribirá la configuración de PostCSS. Para ello, en la carpeta principal de la aplicación, cree el archivo craco.config.js e incluya el siguiente contenido:
+
+
+module.exports = {
+  style: {
+    postcss: {
+  	plugins: [
+        require('tailwindcss'),
+        require('autoprefixer'),
+  	],
+  },
+}
+view rawcraco.config.js hosted with ❤ by GitHub
+En el código anterior, añadimos dos complementos a la configuración de PostCSS. El primero es el transpilador de CSS Tailwind para generar todas las clases necesarias, y el segundo es un autoprefijador que garantiza que todos los atributos CSS se generen en las versiones compatibles con todos los navegadores.
+
+Ahora que hemos configurado PostCSS, es hora de agregar el archivo de configuración de Tailwind. La forma más rápida de hacerlo es generarlo con el comando:
+
+
+npx tailwindcss init
+view rawtailwindcss.sh hosted with ❤ by GitHub
+Después de un tiempo, el archivo tailwind.config.js aparecerá en la carpeta principal de su proyecto con el siguiente contenido:
+
+
+module.exports = {
+  purge: [],
+  darkMode: false,
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Esta configuración está vacía por ahora, pero tendrás tiempo de ampliarla un poco antes de terminar el artículo. Siempre que añadas al purgecampo solo los archivos donde usarás las clases de Tailwind, puedes usar las expresiones glob:
+
+
+module.exports = {
+  purge: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    './public/index.html'
+  ],
+  //...
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Esta configuración permite que Tailwind CSS verifique en los archivos indicados qué clases usaste realmente en tu proyecto y cuáles deberían añadirse a la versión de producción de nuestra aplicación. El resto se eliminará, lo que reducirá el tamaño final de tus estilos.
+
+Sin embargo, para que este mecanismo funcione correctamente, debes recordar una regla: no debes concatenar dinámicamente nombres de clases en ninguna parte del código.
+
+Es decir, en lugar de hacer algo como esto:
+
+
+<div class=”bg-{{ error ? 'red' : 'green' }}-500”>...</div>
+view rawwrong.html hosted with ❤ by GitHub
+…debes usar siempre nombres sin cortar:
+
+
+<div class="{{ error ? 'bg-red-500' : 'bg-green-500' }}">...</div>
+view rawcorrect.html hosted with ❤ by GitHub
+Finalmente, queda una cosa por hacer. Debes indicar dónde quieres incluir este framework en tu aplicación. Puedes hacerlo de dos maneras: añadiendo instrucciones PostCSS fáciles de entender en uno de tus archivos CSS:
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+view rawapp.css hosted with ❤ by GitHub
+…o importe el conjunto todo en uno en un archivo JS/TS:
+
+
+import "tailwindcss/tailwind.css";
+view rawapp.js hosted with ❤ by GitHub
+La última solución es preferible si su pila le permite importar directamente archivos CSS a JS.
+
+*Atomic de Blondie suena de fondo*
+Diseño atómico. Explicado por Ryan Reynolds.
+Un marco a medida
+tailwind css viewport contenido ancho dispositivo ancho escala inicial redondeado completo
+
+Si crees que Tailwind CSS podría no ser la mejor opción porque temes que te limite de alguna manera, puedes dormir tranquilo. Como todas las clases de Tailwind se generan durante la compilación, puedes modificarlas fácilmente desde el archivo de configuración.
+
+Echemos un vistazo a dichos ajustes de los puntos de interrupción de un diseño adaptable:
+
+
+module.exports = {
+  theme: {
+    screens: {
+      'tablet': '640px',
+      'laptop': '1024px',
+      'desktop': '1280px',
+    },
+  },
+  //...
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Con el código anterior, ha sobrescrito los puntos de interrupción predeterminados de Tailwind (p. ej. sm, md, lg, etc.) y ha creado los suyos propios. A partir de ahora, en su aplicación, puede empezar a usar clases como tablet:font-weighto desktop:text-white, que se activan en las resoluciones indicadas en el archivo de configuración. Si necesita usar clases activas hasta una resolución determinada o establecer condiciones más avanzadas, todo es posible:
+
+
+module.exports = {
+  theme: {
+    screens: {
+      'sm-max': {'max': '639px'},
+      'md-lg': {'min': '768px', 'max': '1023px'},
+      'md': [
+        {'min': '668px', 'max': '767px'},
+        {'min': '868px'}
+      ]
+      'portrait': {'raw': '(orientation: portrait)'},
+    },
+  },
+  //...
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Para obtener más ejemplos e instrucciones sobre cómo expandir la lista de puntos de interrupción sin sobrescribir los predeterminados, visita las páginas de documentación oficial .
+
+Otro aspecto de Tailwind CSS que muchos querrán personalizar es la disponibilidad de colores. La forma más sencilla de hacerlo es crear una paleta a partir de conjuntos de tonos predefinidos. Por ejemplo, si planean usar rojo, amarillo y algunos otros colores primarios, su paleta podría verse así:
+
+
+const colors = require('tailwindcss/colors');
+
+module.exports = {
+  theme: {
+    colors: {
+      red: colors.red,
+      yellow: colors.amber,
+      black: colors.black,
+      white: colors.white,
+      gray: colors.coolGray,
+      transparent: 'transparent'
+    },
+  },
+  //...
+};
+view rawtailwind.config.js hosted with ❤ by GitHub
+Nada te impide definir tus propios tonos o nombrar los colores de una manera específica:
+
+
+module.exports = {
+  theme: {
+    colors: {
+      primary: {
+        light: '#ffcccb',
+        dark: '#8b0000',
+      },
+      secondary: {
+        light: '#b5651d',
+        dark: '#654321',
+      },
+      //...
+    },
+  },
+  //...
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Después de tal reconfiguración de Tailwind CSS, puedes hacer referencia a tonos definidos en el código usando clases como bg-primary-lighto text-secondary-dark.
+
+Bien, ¿qué pasa si quieres modificar aún más el contenido de las clases integradas de Tailwind? Esto también es posible y se realiza desde el archivo de configuración. Supongamos que, según tu clase, shadow-lglas sombras proyectadas son demasiado suaves para tu gusto y quieres intensificar este efecto. Puedes hacerlo fácilmente modificando el campo correspondiente en la configuración del tema:
+
+
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  theme: {
+    boxShadow: {
+      ...defaultTheme.boxShadow,
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)'
+    }
+  }
+  //...
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+Observe cómo hemos anulado los estilos solo para la variante LG y hemos dejado el resto de la configuración predeterminada, haciendo referencia al tema predeterminado. Por supuesto, también se pueden modificar otras clases, como se muestra.
+
+¡Una cosa más! Mencioné al principio del artículo que, por defecto, Tailwind no genera todas las combinaciones de prefijos y clases. Por ejemplo, sin cambiar la configuración, no se puede usar la active:shadowclase en la aplicación que debería aparecer en el botón al hacer clic (equivalente a button:active). Tailwind simplemente no genera esta clase con la configuración predeterminada. ¿Cómo cambiarlo? Es bastante sencillo. Por eso hay un variantscampo en la configuración para configurar las combinaciones de prefijos adicionales que necesitamos.
+
+
+module.exports = {
+  variants: {
+    extend: {
+      shadow: ['active'],
+      //...
+    },
+  },
+  //...
+};
+view rawtailwind.config.js hosted with ❤ by GitHub
+Tus propios pequeños ladrillos
+Archivo CSS de Tailwind Utilitys, metanombre, ventana gráfica, contenido, ancho, dispositivo
+
+Hasta ahora, solo has modificado conjuntos de clases existentes. Tailwind, a pesar de ser una herramienta muy universal, no tiene clases para todos los atributos CSS ni para todos sus usos. Tailwind tampoco admite, por ejemplo, atributos CSS que aún no son compatibles con todos los navegadores. ¿Puede Tailwind ayudarte a crear tus propias clases? Pues sí.
+
+Puedes ordenar a Tailwind que genere clases individuales o conjuntos completos de clases con diferentes prefijos. Esto se realiza en un archivo CSS mediante la @layersregla "arroba". Por ejemplo, Tailwind no admite filtros CSS, así que si quieres mostrar elementos en tonos de gris en tu sitio web, puedes añadir la compatibilidad con los filtros que faltan de la siguiente manera:
+
+
+@layer utilities {
+  .filter-grayscale {
+    filter: grayscale(100%);
+  }
+  .filter-none {
+    filter: none;
+  }
+}
+view rawutilities.css hosted with ❤ by GitHub
+Gracias a esto, ahora puedes combinar tus clases filter-grayscaley filter-nonecon los prefijos hover y focus y así, por ejemplo, hacer imágenes coloridas solo cuando las indique el cursor.
+
+
+<img 
+  src="https://bit.ly/2MrYzwH" 
+  className="filter-grayscale hover:filter-none ..." 
+  alt=”Kitty in grass” 
+/>
+view rawkitty.html hosted with ❤ by GitHub
+Tutorial de CSS de Tailwind: clase div, elementos flexibles, clase contenedor, mezcla, agrega el siguiente módulo, exportaciones
+
+Generar clases funciona de maravilla. Sin embargo, de esta forma, puede ser bastante tedioso definir si se desea gestionar una amplia gama de clases (por ejemplo, establecer una potencia de filtro diferente de 0 a 100 en incrementos de 10). ¿Es necesario entonces escribir todo manualmente? Por suerte, Tailwind también es de gran ayuda.
+
+Puede escribir su propio complemento de utilidad para este marco que generará definiciones para una amplia gama de estilos.
+
+Para agregar dicho complemento, debes regresar a tu archivo de configuración e importar un archivo en el plugins campo donde almacenarás tu generador de estilos.
+
+
+module.exports = {
+  //...
+  plugins: [
+    require('./filter.tailwind'),
+  ]
+}
+view rawtailwind.config.js hosted with ❤ by GitHub
+El segundo paso es escribir el generador que produce todas las descripciones de clase necesarias. En mi caso, el contenido de filter.tailwind.js se ve así:
+
+
+module.exports = plugin(function({ addUtilities }) {
+  let newUtilities = {
+    '.filter-none': {
+      filter: 'none',
+    }
+  };
+
+  for (let i = 10; i <= 100; i = i + 10) {
+    newUtilities[`.filter-grayscale-${i}`] = {
+      filter: `grayscale(${i}%)`,
+    };
+  }
+
+  addUtilities(newUtilities, {
+    variants: ['responsive', 'hover'],
+  })
+});
+view rawfilter.tailwind.js hosted with ❤ by GitHub
+A simple vista, no hay nada complicado. Primero, se agrega una clase que desactiva la escala de grises del objeto, por ejemplo .filter-none, . Más adelante en el bucle, se agregan más clases, .filter-grayscale-10desde .filter-grayscale-100. Finalmente, los datos preparados se envían a la addUtilitiesfunción, indicando en el segundo parámetro que las clases creadas deben admitir prefijos al pasar el cursor y aquellos relacionados con la capacidad de respuesta.
+
+Y listo. Las 10 clases, con sus variantes y diferentes prefijos, están listas para usar. Como puedes ver, crear plugins de Tailwind es facilísimo. Sin embargo, antes de empezar, te recomiendo que siempre consultes si hay alguna solución lista para usar en internet. Hay muchos plugins de código abierto listos para usar, como webdna/tailwindcss-aspect-ratio , que recomiendo encarecidamente.
+
+¿Buscas trabajo en frontend? Tenemos excelentes consejos aquí.
+Preguntas de entrevista de frontend: ¿cómo impresionar en 2023?
+Clases de recorte
+Tutorial de CSS de Tailwind: clase div, elementos flexibles, clase contenedor, mezcla, agrega el siguiente módulo, exportaciones
+
+Hay una cosa más que prometí mencionar. ¿Cómo lidiar con listas de clases largas y en constante crecimiento? Al final, tarde o temprano esto te pasará:
+
+
+<button class="text-white font-semibold bg-blue-500 hover:bg-blue-700
+               border-blue-700 border-b hover:border-indigo-900 
+               transition-all px-6 py-2 rounded-full">
+  Hello World
+</button>
+view rawbutton.html hosted with ❤ by GitHub
+Usé 11 clases para describir este botón y, de hecho, no hay mucho que hacer. ¡Y ni siquiera me he ocupado de su capacidad de respuesta! Es difícil imaginar qué podría pasar con componentes web mucho más complejos.
+
+Afortunadamente, Tailwind CSS ofrece soluciones para esto. Primero, puedes definir en tu archivo CSS un componente llamado Tailwind que recopilará varias clases atómicas y las combinará en una clase más compleja. Aquí se utilizan dos reglas at: @layery @apply:
+
+
+@layer components {
+  .button-blue-rounded {
+    @apply text-white font-semibold bg-blue-500 ...;
+  }
+}
+view rawbuttons.css hosted with ❤ by GitHub
+Si no te gusta crear componentes a partir de clases predefinidas, puedes volver a escribir plugins. Los plugins de componentes son tan fáciles de escribir como los plugins de utilidad y permiten definir nuevos estilos complejos usando CSS en JS.
+
+
+module.exports = plugin(function({ addComponents, theme }) {
+  let base = {
+    borderRadius: '20px',
+    padding: '10px 30px',
+    fontWeight: 'bolder',
+  };
+
+  const newComponents = {
+    '.button-blue': {
+      ...base,
+      background: theme('colors.blue.500'),
+    },
+    '.button-red': {
+      ...base,
+      background: theme('colors.red.600'),
+    }
+  };
+
+  addComponents(newComponents, {
+    variants: ['responsive', 'hover'],
+  })
+});
+view rawbuttons.tailwind.js hosted with ❤ by GitHub
+Crear componentes tiene otra ventaja sobre usar clases atómicas directamente en el código HTML. Al depurar, se puede ver mejor qué parte del código se está viendo, ya que hay nombres más claros. Por lo tanto, al practicar el método, siempre creo componentes para que el código de la aplicación sea más legible y fácil de desarrollar. Compare estos dos botones:
+
+tutorial de viento de cola
+Código de muestra

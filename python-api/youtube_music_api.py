@@ -1,0 +1,1226 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import os
+import json
+from datetime import datetime, timedelta
+import logging
+from ytmusicapi import YTMusic
+import time
+import threading
+import ssl
+from pprint import pprint
+import random
+from functools import wraps
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger('youtube_music_api')
+
+app = Flask(__name__)
+CORS(app)  # Habilitamos CORS para permitir peticiones desde el frontend
+
+# Configuración y autenticación
+AUTH_FILE = "browser.json"
+
+# Caché para almacenar resultados y reducir llamadas a la API
+CACHE_DIR = "cache"
+if not os.path.exists(CACHE_DIR):
+    os.makedirs(CACHE_DIR)
+
+# Inicialización perezosa de YTMusic
+yt_music = None
+
+# Variables globales para cacheo y autenticación
+setup_auth_lock = threading.Lock()
+cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache')
+os.makedirs(cache_dir, exist_ok=True)
+
+# Duración del caché en segundos
+CACHE_DURATION = 3600  # 1 hora
+
+# Decorador para caché
+def cached(cache_file):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Obtener la región si está presente en los args de request
+            region = request.args.get('region', 'default')
+            # Crear nombre de caché específico para la región
+            region_cache_file = f"{region}_{cache_file}"
+            cache_path = os.path.join(CACHE_DIR, region_cache_file)
+            
+            try:
+                # Verificar si existe un caché válido
+                if os.path.exists(cache_path):
+                    with open(cache_path, 'r') as f:
+                        cached_data = json.load(f)
+                    
+                    # Verificar si el caché está vigente
+                    if time.time() - cached_data.get('timestamp', 0) < CACHE_DURATION:
+                        logger.info(f"Usando caché para {func.__name__} con región {region}")
+                        # Importante: devolver como jsonify para que sea una respuesta válida
+                        return jsonify(cached_data.get('data'))
+            
+                # Si no hay caché o expiró, ejecutar función
+                result = func(*args, **kwargs)
+                
+                # Extraer los datos JSON si es una respuesta Flask
+                if hasattr(result, 'get_json'):
+                    data_to_cache = result.get_json()
+                else:
+                    data_to_cache = result
+                
+                # Guardar en caché
+                with open(cache_path, 'w') as f:
+                    json.dump({
+                        'timestamp': time.time(),
+                        'data': data_to_cache
+                    }, f)
+                
+                return result
+            except Exception as e:
+                logger.error(f"Error en caché para {func.__name__}: {str(e)}")
+                # Si hay un error en la caché, intentar ejecutar la función directamente
+                return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+def get_ytmusic():
+    global yt_music
+    if yt_music is None:
+        logger.info("Inicializando YTMusic...")
+        try:
+            yt_music = YTMusic()
+            logger.info("YTMusic inicializado correctamente")
+        except Exception as e:
+            logger.error(f"Error al inicializar YTMusic: {str(e)}")
+            raise e
+    return yt_music
+
+def get_cached(key, ttl_hours=24):
+    cache_file = os.path.join(CACHE_DIR, f"{key}.json")
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as f:
+            data = json.load(f)
+            if datetime.fromisoformat(data['timestamp']) + timedelta(hours=ttl_hours) > datetime.now():
+                return data['content']
+    return None
+
+def save_to_cache(key, content):
+    cache_file = os.path.join(CACHE_DIR, f"{key}.json")
+    with open(cache_file, 'w') as f:
+        json.dump({
+            'timestamp': datetime.now().isoformat(),
+            'content': content
+        }, f)
+
+def get_cache_file_path(key):
+    """Genera una ruta de archivo para la clave de caché dada"""
+    # Convertir la clave a un nombre de archivo válido
+    cache_key = key.replace('/', '_').replace('?', '_').replace('=', '_')
+    return os.path.join(cache_dir, f"{cache_key}.json")
+
+def get_cached_results(key):
+    """Obtiene resultados cacheados si existen y no han expirado"""
+    cache_file = get_cache_file_path(key)
+    
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cached_data = json.load(f)
+                
+            # Verificar si el caché ha expirado
+            cache_time = cached_data.get('timestamp', 0)
+            if time.time() - cache_time < CACHE_DURATION:
+                print(f"Cache hit para {key}")
+                return cached_data.get('data')
+            else:
+                print(f"Cache expirado para {key}")
+        except Exception as e:
+            print(f"Error leyendo caché para {key}: {e}")
+    
+    return None
+
+def save_to_cache(key, data):
+    """Guarda resultados en caché"""
+    cache_file = get_cache_file_path(key)
+    
+    try:
+        with open(cache_file, 'w', encoding='utf-8') as f:
+            json.dump({
+                'timestamp': time.time(),
+                'data': data
+            }, f, ensure_ascii=False)
+        print(f"Datos guardados en caché: {key}")
+    except Exception as e:
+        print(f"Error guardando caché para {key}: {e}")
+
+def setup_auth():
+    """Configura la autenticación para YTMusic"""
+    global yt_music
+    
+    try:
+        # Obtener la región de la solicitud actual (si estamos en un contexto de solicitud)
+        region = None
+        try:
+            if request:
+                region = request.args.get('region', 'US')
+        except:
+            # Si no estamos en un contexto de solicitud, usamos el valor predeterminado
+            pass
+        
+        # Si ya tenemos una instancia y la región coincide, la reutilizamos
+        if yt_music and hasattr(yt_music, 'region') and yt_music.region == region:
+            return yt_music
+        
+        # Caso contrario, creamos una nueva instancia
+        if AUTH_FILE and os.path.exists(AUTH_FILE):
+            # Usar archivo de autenticación si existe
+            yt_music = YTMusic(AUTH_FILE, language=region)
+        else:
+            # Usar autenticación básica sin credenciales
+            yt_music = YTMusic(language=region)
+        
+        # Guardar la región utilizada
+        yt_music.region = region
+        
+        logger.info(f"YTMusic configurado correctamente con región: {region}")
+        return yt_music
+    except Exception as e:
+        logger.error(f"Error en setup_auth: {str(e)}")
+        # Fallback a crear una instancia simple sin autenticación
+        yt_music = YTMusic(language=region)
+        return yt_music
+
+@app.route('/api/setup', methods=['POST'])
+def setup_auth():
+    """Configura la autenticación con headers proporcionados"""
+    headers_raw = request.json.get('headers', '')
+    try:
+        # En producción usaríamos ytmusicapi
+        # from ytmusicapi import setup
+        # auth_json = setup(headers_raw=headers_raw)
+        auth_json = '{"user": "authenticated"}'  # Simulamos para desarrollo
+        with open(AUTH_FILE, 'w') as f:
+            f.write(auth_json)
+        return jsonify({"success": True, "message": "Autenticación configurada correctamente"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route('/search', methods=['GET'])
+def search():
+    """Busca tracks, albums, artistas, playlists en YouTube Music"""
+    try:
+        query = request.args.get('query', '')
+        filter_type = request.args.get('type', 'songs')  # Tipo de búsqueda: songs, albums, artists, playlists
+        limit = int(request.args.get('limit', 10))
+        region = request.args.get('region', 'AR')  # Región por defecto Argentina
+        
+        if not query:
+            return jsonify({'error': 'Se requiere parámetro query'}), 400
+        
+        logger.info(f"Búsqueda en YouTube Music: {query} (filtro: {filter_type}, límite: {limit}, región: {region})")
+        
+        # Configurar YTMusic con la región específica
+        music = YTMusic(language=region)
+        
+        # Realizar la búsqueda
+        start_time = time.time()
+        
+        try:
+            search_results = music.search(query, filter=filter_type, limit=limit)
+            elapsed = time.time() - start_time
+            logger.info(f"Búsqueda completada en {elapsed:.2f}s, resultados: {len(search_results) if search_results else 0}")
+            
+            if search_results and len(search_results) > 0:
+                # Transformar los resultados
+                transformed_results = []
+                
+                for item in search_results:
+                    if item.get('resultType', '').lower() in ['song', 'video']:
+                        track_data = {
+                            'id': item.get('videoId', ''),
+                            'title': item.get('title', 'Sin título'),
+                            'artist': item.get('artists', [{'name': 'Artista desconocido'}])[0].get('name', 'Artista desconocido'),
+                            'thumbnail': get_best_thumbnail(item.get('thumbnails', [])),
+                            'album': item.get('album', {}).get('name', '') if item.get('album') else '',
+                            'duration': item.get('duration', ''),
+                            'region': region  # Incluir la región en la respuesta
+                        }
+                        transformed_results.append(track_data)
+                
+                return jsonify(transformed_results)
+            else:
+                logger.warning(f"No se encontraron resultados para: {query}")
+                return jsonify([])
+        except Exception as e:
+            logger.error(f"Error al realizar la búsqueda: {str(e)}")
+            # Intentar con YTMusic sin especificar región como fallback
+            try:
+                logger.info(f"Intentando búsqueda sin especificar región para: {query}")
+                music_fallback = YTMusic()
+                search_results = music_fallback.search(query, filter=filter_type, limit=limit)
+                
+                if search_results and len(search_results) > 0:
+                    # Transformar los resultados igual que antes
+                    transformed_results = []
+                    
+                    for item in search_results:
+                        if item.get('resultType', '').lower() in ['song', 'video']:
+                            track_data = {
+                                'id': item.get('videoId', ''),
+                                'title': item.get('title', 'Sin título'),
+                                'artist': item.get('artists', [{'name': 'Artista desconocido'}])[0].get('name', 'Artista desconocido'),
+                                'thumbnail': get_best_thumbnail(item.get('thumbnails', [])),
+                                'album': item.get('album', {}).get('name', '') if item.get('album') else '',
+                                'duration': item.get('duration', ''),
+                                'region': 'global'  # Marcar como búsqueda global
+                            }
+                            transformed_results.append(track_data)
+                    
+                    return jsonify(transformed_results)
+                else:
+                    logger.warning(f"No se encontraron resultados en el fallback para: {query}")
+                    return jsonify([])
+            except Exception as fallback_error:
+                logger.error(f"Error también en la búsqueda de fallback: {str(fallback_error)}")
+                return jsonify([])
+    except Exception as e:
+        logger.error(f"Error general en endpoint search: {str(e)}")
+        return jsonify([])
+
+def get_best_thumbnail(thumbnails):
+    """Obtiene la mejor calidad de thumbnail disponible"""
+    if not thumbnails:
+        return ''
+    
+    # Ordenar por tamaño (width * height) de mayor a menor
+    sorted_thumbnails = sorted(
+        [t for t in thumbnails if 'width' in t and 'height' in t and 'url' in t],
+        key=lambda x: x['width'] * x['height'],
+        reverse=True
+    )
+    
+    # Devolver la URL del más grande, o el primero disponible
+    if sorted_thumbnails:
+        return sorted_thumbnails[0]['url']
+    elif thumbnails and 'url' in thumbnails[0]:
+        return thumbnails[0]['url']
+    else:
+        return ''
+
+@app.route('/api/find-track', methods=['GET'])
+def find_track():
+    """Busca una canción específica por artista y título"""
+    title = request.args.get('title', '')
+    artist = request.args.get('artist', '')
+    
+    if not title:
+        return jsonify({"error": "Se requiere el título de la canción"}), 400
+    
+    query = f"{title} {artist}".strip()
+    
+    # Verificar caché
+    cache_key = f"find_track_{query}"
+    cached = get_cached(cache_key, ttl_hours=72)
+    if cached:
+        return jsonify(cached)
+    
+    try:
+        # En producción usaríamos ytmusicapi
+        # ytmusic = YTMusic(AUTH_FILE) if os.path.exists(AUTH_FILE) else YTMusic()
+        # results = ytmusic.search(query, filter="songs", limit=5)
+        
+        # Simulamos un resultado para desarrollo
+        track_info = {
+            'id': "dQw4w9WgXcQ",
+            'title': title,
+            'artist': artist or 'Artista desconocido',
+            'album': 'Álbum simulado',
+            'duration': 180,  # 3 minutos en segundos
+            'thumbnail': "https://via.placeholder.com/150"
+        }
+        
+        save_to_cache(cache_key, track_info)
+        return jsonify(track_info)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/spotify-to-youtube', methods=['GET'])
+def spotify_to_youtube():
+    """Convierte un track de Spotify a YouTube Music"""
+    spotify_id = request.args.get('id', '')
+    title = request.args.get('title', '')
+    artist = request.args.get('artist', '')
+    
+    if not spotify_id and (not title or not artist):
+        return jsonify({"error": "Se requiere ID de Spotify o título y artista"}), 400
+    
+    # Verificar caché
+    cache_key = f"spotify_to_youtube_{spotify_id}_{title}_{artist}"
+    cached = get_cached(cache_key, ttl_hours=168)  # 1 semana de caché
+    if cached:
+        return jsonify(cached)
+    
+    try:
+        # En producción usaríamos ytmusicapi
+        # ytmusic = YTMusic(AUTH_FILE) if os.path.exists(AUTH_FILE) else YTMusic()
+        # results = ytmusic.search(f"{title} {artist}", filter="songs", limit=5)
+        
+        # Simulamos un resultado para desarrollo
+        result = {
+            'youtube_id': "dQw4w9WgXcQ",
+            'spotify_id': spotify_id,
+            'title': title or 'Título simulado',
+            'artist': artist or 'Artista simulado',
+            'duration': 180,  # 3 minutos en segundos
+            'thumbnail': "https://via.placeholder.com/150"
+        }
+        
+        save_to_cache(cache_key, result)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/recommendations', methods=['GET'])
+def get_recommendations():
+    """Obtiene recomendaciones variadas"""
+    limit = int(request.args.get('limit', 50))
+    
+    # Verificar caché
+    cache_key = f"recommendations_{limit}"
+    cached = get_cached(cache_key, ttl_hours=6)  # Menor tiempo para recomendaciones
+    if cached:
+        return jsonify(cached)
+    
+    try:
+        # En producción usaríamos ytmusicapi
+        # ytmusic = YTMusic(AUTH_FILE) if os.path.exists(AUTH_FILE) else YTMusic()
+        # Aquí iría el código para obtener recomendaciones reales
+        
+        # Simulamos resultados para desarrollo
+        results = []
+        for i in range(min(20, limit)):
+            results.append({
+                'id': f"video{i}",
+                'title': f"Canción recomendada {i}",
+                'artist': f"Artista {i % 5}",
+                'thumbnail': f"https://via.placeholder.com/150?text=Rec{i}",
+                'source': 'youtube_music_recommendations'
+            })
+                
+        save_to_cache(cache_key, results[:limit])
+        return jsonify(results[:limit])
+    except Exception as e:
+        logger.error(f"Error al obtener recomendaciones: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/top-artists', methods=['GET'])
+def get_top_artists():
+    """Obtiene artistas populares de YouTube Music"""
+    limit = int(request.args.get('limit', 16))
+    
+    # Verificar caché
+    cache_key = f"top_artists_{limit}"
+    cached = get_cached(cache_key, ttl_hours=24)  # Caché por 24 horas
+    if cached:
+        return jsonify(cached)
+    
+    try:
+        ytm = get_ytmusic()
+        
+        # Obtener diferentes géneros para diversificar resultados
+        genres = ["pop", "rock", "hip hop", "electrónica", "latin"]
+        all_artists = []
+        
+        # Buscar artistas por género
+        for genre in genres[:3]:  # Limitamos a 3 géneros para no hacer muchas llamadas
+            search_results = ytm.search(f"{genre} artist", filter="artists", limit=limit//3)
+            logger.info(f"Búsqueda de artistas para género {genre}, resultados: {len(search_results)}")
+            all_artists.extend(search_results)
+        
+        # Formatear resultados en un formato similar al que espera nuestra aplicación
+        formatted_artists = []
+        for artist in all_artists[:limit]:
+            # Asegurarse de que tenemos todos los campos necesarios
+            if 'browseId' in artist and 'thumbnails' in artist:
+                artist_data = {
+                    'id': artist['browseId'],
+                    'name': artist.get('artist', 'Artista Desconocido'),
+                    'images': [{'url': artist['thumbnails'][-1]['url']}] if artist['thumbnails'] else [],
+                    'genres': [artist.get('category', 'música')],
+                    'popularity': 80  # No disponible en YTMusic, asignamos un valor por defecto
+                }
+                formatted_artists.append(artist_data)
+        
+        logger.info(f"Artistas populares encontrados: {len(formatted_artists)}")
+        
+        # Si no encontramos artistas, crear algunos de ejemplo
+        if not formatted_artists:
+            for i in range(min(16, limit)):
+                formatted_artists.append({
+                    'id': f"artist{i}",
+                    'name': f"Artista Popular {i}",
+                    'images': [{'url': f"https://via.placeholder.com/300?text=Artist{i}"}],
+                    'genres': [genres[i % len(genres)]],
+                    'popularity': 80 + (i % 20)
+                })
+        
+        result = {'items': formatted_artists[:limit]}
+        save_to_cache(cache_key, result)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error al obtener artistas populares: {str(e)}")
+        # Devolver datos simulados en caso de error
+        result = {'items': [
+            {
+                'id': "artist_fallback_1",
+                'name': "Artista Pop",
+                'images': [{'url': "https://via.placeholder.com/300?text=PopArtist"}],
+                'genres': ["pop"],
+                'popularity': 90
+            },
+            {
+                'id': "artist_fallback_2",
+                'name': "Artista Rock",
+                'images': [{'url': "https://via.placeholder.com/300?text=RockArtist"}],
+                'genres': ["rock"],
+                'popularity': 85
+            }
+        ]}
+        return jsonify(result)
+
+@app.route('/api/recommendations-by-genres', methods=['GET'])
+def get_recommendations_by_genres():
+    """Obtiene recomendaciones basadas en los géneros favoritos del usuario"""
+    # Parámetros
+    genres = request.args.getlist('genres[]') or [] 
+    artists_per_genre = int(request.args.get('artistsPerGenre', 20))
+    playlists_per_genre = int(request.args.get('playlistsPerGenre', 10))
+    tracks_per_genre = int(request.args.get('tracksPerGenre', 30))
+    
+    # Verificar que se hayan proporcionado géneros
+    if not genres:
+        return jsonify({"error": "Se requieren géneros favoritos"}), 400
+    
+    # Limitar a los 3 principales géneros
+    top_genres = genres[:3]
+    logger.info(f"Obteniendo recomendaciones para géneros: {top_genres}")
+    
+    # Verificar caché
+    cache_key = f"recommendations_by_genres_{'-'.join(top_genres)}_{artists_per_genre}_{playlists_per_genre}_{tracks_per_genre}"
+    cached = get_cached(cache_key, ttl_hours=4)  # 4 horas de caché
+    if cached:
+        logger.info(f"Usando caché para recomendaciones de géneros: {top_genres}")
+        return jsonify(cached)
+    
+    try:
+        ytm = get_ytmusic()
+        result = {
+            "artists": [],
+            "playlists": [],
+            "tracks": []
+        }
+        
+        # Obtener artistas, playlists y tracks para cada género
+        for genre in top_genres:
+            logger.info(f"Procesando género: {genre}")
+            
+            # 1. Artistas
+            logger.info(f"Buscando artistas para género: {genre}")
+            artists_results = ytm.search(f"{genre} artist", filter="artists", limit=artists_per_genre)
+            if artists_results:
+                # Formatear y agregar artistas al resultado
+                for artist in artists_results:
+                    if 'browseId' in artist and 'thumbnails' in artist:
+                        artist_data = {
+                            'id': artist['browseId'],
+                            'name': artist.get('artist', 'Artista Desconocido'),
+                            'images': [{'url': artist['thumbnails'][-1]['url']}] if artist['thumbnails'] else [],
+                            'genres': [genre],  # Asignamos el género de búsqueda
+                            'popularity': 80,  # No disponible en YTMusic
+                            'source': 'youtube_music',
+                            'sourceGenre': genre
+                        }
+                        result['artists'].append(artist_data)
+            
+            # 2. Playlists
+            logger.info(f"Buscando playlists para género: {genre}")
+            playlists_results = ytm.search(f"{genre} music", filter="playlists", limit=playlists_per_genre)
+            if playlists_results:
+                # Formatear y agregar playlists al resultado
+                for playlist in playlists_results:
+                    if 'browseId' in playlist:
+                        playlist_data = {
+                            'id': playlist['browseId'],
+                            'name': playlist.get('title', 'Playlist Sin Título'),
+                            'description': playlist.get('description', ''),
+                            'images': [{'url': playlist['thumbnails'][-1]['url']}] if 'thumbnails' in playlist and playlist['thumbnails'] else [],
+                            'tracks_count': playlist.get('itemCount', 0),
+                            'owner': playlist.get('author', {}).get('name', 'YouTube Music'),
+                            'source': 'youtube_music',
+                            'sourceGenre': genre
+                        }
+                        result['playlists'].append(playlist_data)
+            
+            # 3. Tracks
+            logger.info(f"Buscando tracks para género: {genre}")
+            tracks_results = ytm.search(f"{genre}", filter="songs", limit=tracks_per_genre)
+            if tracks_results:
+                # Formatear y agregar tracks al resultado
+                for track in tracks_results:
+                    if 'videoId' in track:
+                        track_data = {
+                            'id': track['videoId'],
+                            'title': track.get('title', 'Canción sin título'),
+                            'artist': track.get('artists', [{}])[0].get('name', 'Artista desconocido') if 'artists' in track and track['artists'] else 'Artista desconocido',
+                            'album': track.get('album', {}).get('name', 'Álbum desconocido') if 'album' in track else 'Álbum desconocido',
+                            'cover': track['thumbnails'][-1]['url'] if 'thumbnails' in track and track['thumbnails'] else '',
+                            'duration': track.get('duration_seconds', 0) * 1000 if 'duration_seconds' in track else 0,
+                            'source': 'youtube',
+                            'youtubeId': track['videoId'],
+                            'sourceGenre': genre
+                        }
+                        result['tracks'].append(track_data)
+        
+        # Guardar en caché
+        save_to_cache(cache_key, result)
+        logger.info(f"Recomendaciones generadas: {len(result['artists'])} artistas, {len(result['playlists'])} playlists, {len(result['tracks'])} tracks")
+        
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error al obtener recomendaciones por géneros: {str(e)}")
+        # Generar datos de fallback en caso de error
+        fallback_result = {
+            "artists": [],
+            "playlists": [],
+            "tracks": []
+        }
+        
+        # Generar algunos datos de ejemplo para cada género
+        for genre in top_genres:
+            # Artistas fallback
+            for i in range(5):
+                fallback_result['artists'].append({
+                    'id': f"fallback_artist_{genre}_{i}",
+                    'name': f"Artista de {genre.capitalize()} {i+1}",
+                    'images': [{'url': f"https://via.placeholder.com/300?text={genre}+Artist+{i+1}"}],
+                    'genres': [genre],
+                    'popularity': 80,
+                    'source': 'youtube_music',
+                    'sourceGenre': genre
+                })
+            
+            # Playlists fallback
+            for i in range(3):
+                fallback_result['playlists'].append({
+                    'id': f"fallback_playlist_{genre}_{i}",
+                    'name': f"Playlist de {genre.capitalize()} {i+1}",
+                    'description': f"Los mejores éxitos de {genre}",
+                    'images': [{'url': f"https://via.placeholder.com/300?text={genre}+Playlist+{i+1}"}],
+                    'tracks_count': 20,
+                    'owner': 'YouTube Music',
+                    'source': 'youtube_music',
+                    'sourceGenre': genre
+                })
+            
+            # Tracks fallback
+            for i in range(10):
+                fallback_result['tracks'].append({
+                    'id': f"fallback_track_{genre}_{i}",
+                    'title': f"Canción de {genre.capitalize()} {i+1}",
+                    'artist': f"Artista de {genre.capitalize()}",
+                    'album': f"Álbum de {genre.capitalize()}",
+                    'cover': f"https://via.placeholder.com/300?text={genre}+Track+{i+1}",
+                    'duration': 180000,  # 3 minutos
+                    'source': 'youtube',
+                    'youtubeId': f"fallback_track_{genre}_{i}",
+                    'sourceGenre': genre
+                })
+        
+        return jsonify(fallback_result)
+
+@app.route('/featured-playlists', methods=['GET'])
+@cached('featured_playlists.json')
+def get_featured_playlists():
+    """Endpoint para obtener playlists destacadas"""
+    try:
+        limit = int(request.args.get('limit', 10))
+        region = request.args.get('region', 'US')  # Nuevo parámetro de región
+        
+        logger.info(f"Obteniendo playlists destacadas para región {region}, límite {limit}")
+        
+        # Intentar obtener la sección de exploración
+        try:
+            # Usar YTMusic directamente sin get_ytmusic
+            ytmusic = YTMusic(language=region)  # Configurar YTMusic con la región del usuario
+            explore_data = ytmusic.get_explore()
+            
+            # Verificar si la respuesta es válida y contiene playlists
+            if explore_data and 'sections' in explore_data:
+                # Buscar la sección de playlists destacadas (generalmente la segunda sección)
+                playlists_section = None
+                for section in explore_data['sections']:
+                    if 'Playlists' in section.get('title', ''):
+                        playlists_section = section
+                        break
+                
+                # Si encontramos la sección de playlists
+                if playlists_section and 'playlists' in playlists_section:
+                    playlists = playlists_section['playlists'][:limit]
+                    
+                    # Asegurar que todas las playlists tienen thumbnails válidos
+                    valid_playlists = []
+                    for playlist in playlists:
+                        if 'thumbnails' in playlist and playlist['thumbnails']:
+                            # Agregar región a la información de la playlist
+                            playlist['region'] = region
+                            valid_playlists.append(playlist)
+                    
+                    logger.info(f"Encontradas {len(valid_playlists)} playlists destacadas para región {region}")
+                    return jsonify(valid_playlists)
+        except Exception as e:
+            logger.error(f"Error al obtener playlists destacadas desde la exploración: {str(e)}")
+        
+        # Si no hay datos de explore o hubo un error, usar playlists predefinidas según la región
+        logger.info(f"Usando playlists predefinidas como fallback para región {region}")
+        
+        # Playlists específicas por región
+        region_playlists = {
+            'ES': [
+                {
+                    "title": "Éxitos España",
+                    "playlistId": "ES_top_hits",
+                    "author": "YouTube Music",
+                    "description": "Los éxitos más populares en España",
+                    "trackCount": 50,
+                    "thumbnails": [{"url": "https://i.ytimg.com/vi/p7bfOZek9t4/maxresdefault.jpg"}],
+                    "region": "ES"
+                },
+                {
+                    "title": "Flamenco Fusion",
+                    "playlistId": "ES_flamenco",
+                    "author": "YouTube Music",
+                    "description": "Lo mejor del flamenco fusión",
+                    "trackCount": 30,
+                    "thumbnails": [{"url": "https://i.ytimg.com/vi/qmbx4_TQbkA/maxresdefault.jpg"}],
+                    "region": "ES"
+                }
+            ],
+            'MX': [
+                {
+                    "title": "Regional Mexicano",
+                    "playlistId": "MX_regional",
+                    "author": "YouTube Music",
+                    "description": "Lo mejor de la música regional mexicana",
+                    "trackCount": 40,
+                    "thumbnails": [{"url": "https://i.ytimg.com/vi/NGZ-xIDBiCs/maxresdefault.jpg"}],
+                    "region": "MX"
+                },
+                {
+                    "title": "Pop Latino México",
+                    "playlistId": "MX_pop",
+                    "author": "YouTube Music",
+                    "description": "El pop más escuchado en México",
+                    "trackCount": 45,
+                    "thumbnails": [{"url": "https://i.ytimg.com/vi/MBmb5_TTT-w/maxresdefault.jpg"}],
+                    "region": "MX"
+                }
+            ],
+            'AR': [
+                {
+                    "title": "Trap Argentino",
+                    "playlistId": "AR_trap",
+                    "author": "YouTube Music",
+                    "description": "El mejor trap de Argentina",
+                    "trackCount": 40,
+                    "thumbnails": [{"url": "https://i.ytimg.com/vi/3V-bu_i-w_o/maxresdefault.jpg"}],
+                    "region": "AR"
+                }
+            ]
+        }
+        
+        # Playlists genéricas para todas las regiones
+        generic_playlists = [
+            {
+                "title": "Top Hits Globales",
+                "playlistId": "PL55713C70BA91BD6E",
+                "author": "YouTube Music",
+                "description": "Los éxitos más populares del momento",
+                "trackCount": 50,
+                "thumbnails": [{"url": "https://i.ytimg.com/vi/kJQP7kiw5Fk/maxresdefault.jpg"}],
+                "region": "global"
+            },
+            {
+                "title": "Éxitos Latinos",
+                "playlistId": "PL4fGSI1pDJn6jXS_Tv_N9B8Z0HTRVJE0n",
+                "author": "YouTube Music",
+                "description": "Lo mejor de la música latina",
+                "trackCount": 40,
+                "thumbnails": [{"url": "https://i.ytimg.com/vi/TmKh7lAwnBI/maxresdefault.jpg"}],
+                "region": "global"
+            },
+            {
+                "title": "Acoustic Chill",
+                "playlistId": "PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx",
+                "author": "YouTube Music",
+                "description": "Música acústica para relajarte",
+                "trackCount": 35,
+                "thumbnails": [{"url": "https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg"}],
+                "region": "global"
+            },
+            {
+                "title": "Workout Hits",
+                "playlistId": "PL4o29bINVT4EG_y-k5jGoOu3-Am8Nvi10",
+                "author": "YouTube Music",
+                "description": "Música para entrenar",
+                "trackCount": 45,
+                "thumbnails": [{"url": "https://i.ytimg.com/vi/pRpeEdMmmQ0/maxresdefault.jpg"}],
+                "region": "global"
+            },
+            {
+                "title": "Indie Discoveries",
+                "playlistId": "PL4fGSI1pDJn5kI81J1fYWK5eZRl1zJ5kM",
+                "author": "YouTube Music",
+                "description": "Descubre nuevas bandas indie",
+                "trackCount": 30,
+                "thumbnails": [{"url": "https://i.ytimg.com/vi/8SbUC-UaAxE/maxresdefault.jpg"}],
+                "region": "global"
+            }
+        ]
+        
+        # Combinar playlists específicas de la región con las genéricas
+        combined_playlists = region_playlists.get(region, []) + generic_playlists
+        
+        # Limitar al número solicitado
+        combined_playlists = combined_playlists[:limit]
+        
+        return jsonify(combined_playlists)
+    except Exception as e:
+        logger.error(f"Error en get_featured_playlists: {str(e)}")
+        return jsonify([])
+
+@app.route('/new-releases', methods=['GET'])
+@cached('new_releases.json')
+def get_new_releases():
+    """Endpoint para obtener nuevos lanzamientos"""
+    try:
+        limit = int(request.args.get('limit', 10))
+        region = request.args.get('region', 'US')  # Parámetro de región, por defecto US
+        
+        logger.info(f"Obteniendo nuevos lanzamientos para región {region}, límite {limit}")
+        
+        # Intentar obtener la sección de exploración
+        try:
+            # Usar YTMusic directamente sin get_ytmusic
+            ytmusic = YTMusic(language=region)  # Configurar YTMusic con el idioma/región del usuario
+            
+            # Obtener nuevos lanzamientos a través de la API de charts
+            # Ya que los charts suelen tener contenido más actualizado
+            charts = ytmusic.get_charts(country=region)
+            
+            # También obtener la sección de exploración para tener más fuentes
+            explore_data = ytmusic.get_explore()
+            
+            # Lista para almacenar los lanzamientos combinados
+            all_releases = []
+            
+            # 1. Primero intentar con la sección de nuevos lanzamientos de explore
+            if explore_data and 'sections' in explore_data:
+                # Buscar la sección de nuevos lanzamientos (generalmente la primera sección)
+                for section in explore_data['sections']:
+                    if ('New' in section.get('title', '') or 
+                        'Nuevo' in section.get('title', '') or 
+                        'reciente' in section.get('title', '').lower()):
+                        if 'items' in section:
+                            all_releases.extend(section['items'])
+                            logger.info(f"Encontrados {len(section['items'])} nuevos lanzamientos en sección '{section.get('title', '')}'")
+            
+            # 2. Agregar lanzamientos de charts (tendencias)
+            if charts and 'singles' in charts:
+                # Los singles en charts suelen ser más recientes
+                singles = charts['singles'][:limit]
+                logger.info(f"Encontrados {len(singles)} singles en charts")
+                all_releases.extend(singles)
+            
+            # 3. También intentar con los álbumes nuevos de charts
+            if charts and 'albums' in charts:
+                # Filtrar solo los álbumes que parecen más recientes basados en metadatos
+                recent_albums = []
+                for album in charts['albums'][:limit*2]:  # Obtenemos más para luego filtrar
+                    # En la práctica real necesitaríamos verificar la fecha de lanzamiento
+                    # pero YTMusic API no proporciona esta información fácilmente
+                    # Así que usamos claves en los títulos que sugieren novedad
+                    if album and 'title' in album:
+                        title = album['title'].lower()
+                        if ('new' in title or 'nuevo' in title or 
+                            '2025' in title or '2024' in title):
+                            recent_albums.append(album)
+                
+                logger.info(f"Encontrados {len(recent_albums)} álbumes recientes en charts")
+                all_releases.extend(recent_albums)
+            
+            # Eliminar duplicados basados en videoId o browseId
+            unique_releases = {}
+            for release in all_releases:
+                if not release:
+                    continue
+                
+                # Usar videoId o browseId como clave única
+                release_id = release.get('videoId', release.get('browseId', ''))
+                if release_id and release_id not in unique_releases:
+                    unique_releases[release_id] = release
+            
+            # Convertir a lista
+            filtered_releases = list(unique_releases.values())
+            logger.info(f"Total de {len(filtered_releases)} lanzamientos únicos encontrados")
+            
+            # Limitar al número solicitado
+            filtered_releases = filtered_releases[:limit]
+            
+            # Transformar el formato para hacerlo compatible con el frontend
+            formatted_releases = []
+            for release in filtered_releases:
+                if 'thumbnails' in release and release['thumbnails']:
+                    formatted_release = {
+                        'id': release.get('videoId', release.get('browseId', f"yt-{release.get('title', '').replace(' ', '-')}")),
+                        'name': release.get('title', 'Sin título'),
+                        'artists': [{'name': release.get('subtitle', release.get('artist', 'Artista desconocido'))}],
+                        'images': [{'url': thumb.get('url', '')} for thumb in release.get('thumbnails', [])],
+                        'release_date': '2025',  # YouTube Music no proporciona fecha exacta en esta API
+                        'type': release.get('type', 'album'),
+                        'region': region
+                    }
+                    formatted_releases.append(formatted_release)
+            
+            if formatted_releases:
+                logger.info(f"Devolviendo {len(formatted_releases)} nuevos lanzamientos para región {region}")
+                return jsonify(formatted_releases)
+        except Exception as e:
+            logger.error(f"Error al obtener nuevos lanzamientos desde la exploración: {str(e)}")
+        
+        # Si no hay datos de explore o hubo un error, usar álbumes predefinidos
+        logger.info(f"Usando álbumes predefinidos como fallback para región {region}")
+        
+        # Personalizar algunos álbumes predefinidos basados en la región
+        region_specific_albums = {
+            'ES': [
+                {
+                    'id': 'yt-album-es-1',
+                    'name': 'El Madrileño',
+                    'artists': [{'name': 'C. Tangana'}],
+                    'images': [{'url': 'https://i.ytimg.com/vi/7Z2XmgX-jjE/maxresdefault.jpg'}],
+                    'release_date': '2025',
+                    'type': 'album',
+                    'region': 'ES'
+                },
+                {
+                    'id': 'yt-album-es-2',
+                    'name': 'Vibras',
+                    'artists': [{'name': 'J Balvin'}],
+                    'images': [{'url': 'https://i.ytimg.com/vi/0MpFSsP9rIM/maxresdefault.jpg'}],
+                    'release_date': '2025',
+                    'type': 'album',
+                    'region': 'ES'
+                }
+            ],
+            'MX': [
+                {
+                    'id': 'yt-album-mx-1',
+                    'name': 'Un Canto por México',
+                    'artists': [{'name': 'Natalia Lafourcade'}],
+                    'images': [{'url': 'https://i.ytimg.com/vi/F0IjuWLTuZM/maxresdefault.jpg'}],
+                    'release_date': '2025',
+                    'type': 'album',
+                    'region': 'MX'
+                },
+                {
+                    'id': 'yt-album-mx-2',
+                    'name': 'Mañana Será Bonito',
+                    'artists': [{'name': 'Karol G'}],
+                    'images': [{'url': 'https://i.ytimg.com/vi/sqj6yUQyGmw/maxresdefault.jpg'}],
+                    'release_date': '2025',
+                    'type': 'album',
+                    'region': 'MX'
+                }
+            ],
+            'AR': [
+                {
+                    'id': 'yt-album-ar-1',
+                    'name': 'Bzrp Music Sessions',
+                    'artists': [{'name': 'Bizarrap'}],
+                    'images': [{'url': 'https://i.ytimg.com/vi/3nQNiWdeH2Q/maxresdefault.jpg'}],
+                    'release_date': '2025',
+                    'type': 'album',
+                    'region': 'AR'
+                }
+            ]
+        }
+        
+        # Álbumes predefinidos generales
+        default_albums = [
+            {
+                'id': 'yt-album-1',
+                'name': 'Future Nostalgia (2025 Edition)',
+                'artists': [{'name': 'Dua Lipa'}],
+                'images': [{'url': 'https://i.ytimg.com/vi/WHuBW3qKm9g/maxresdefault.jpg'}],
+                'release_date': '2025',
+                'type': 'album',
+                'region': 'global'
+            },
+            {
+                'id': 'yt-album-2',
+                'name': 'Un Verano Sin Ti (Deluxe)',
+                'artists': [{'name': 'Bad Bunny'}],
+                'images': [{'url': 'https://i.ytimg.com/vi/1TCX_Aqzoo4/maxresdefault.jpg'}],
+                'release_date': '2025',
+                'type': 'album',
+                'region': 'global'
+            },
+            {
+                'id': 'yt-album-3',
+                'name': 'After Hours (Extended Version)',
+                'artists': [{'name': 'The Weeknd'}],
+                'images': [{'url': 'https://i.ytimg.com/vi/XXYlFuWEuKI/maxresdefault.jpg'}],
+                'release_date': '2025',
+                'type': 'album',
+                'region': 'global'
+            },
+            {
+                'id': 'yt-album-4',
+                'name': 'Harry\'s House (Expanded Edition)',
+                'artists': [{'name': 'Harry Styles'}],
+                'images': [{'url': 'https://i.ytimg.com/vi/H5v3kku4y6Q/maxresdefault.jpg'}],
+                'release_date': '2025',
+                'type': 'album',
+                'region': 'global'
+            },
+            {
+                'id': 'yt-album-5',
+                'name': 'Midnights (The Complete Collection)',
+                'artists': [{'name': 'Taylor Swift'}],
+                'images': [{'url': 'https://i.ytimg.com/vi/b1kbLwvqugk/maxresdefault.jpg'}],
+                'release_date': '2025',
+                'type': 'album',
+                'region': 'global'
+            }
+        ]
+        
+        # Combinar álbumes específicos de región con los predeterminados
+        fallback_albums = region_specific_albums.get(region, []) + default_albums
+        
+        # Asegurarnos de que no excedemos el límite
+        fallback_albums = fallback_albums[:limit]
+        
+        return jsonify(fallback_albums)
+    except Exception as e:
+        logger.error(f"Error en get_new_releases: {str(e)}")
+        return jsonify([])
+
+@app.route('/artists-by-genre', methods=['GET'])
+@cached('artists_by_genre.json')
+def get_artists_by_genre():
+    """Endpoint para obtener artistas por género"""
+    genre = request.args.get('genre', 'pop')
+    limit = int(request.args.get('limit', 10))
+    region = request.args.get('region', 'US')  # Nuevo parámetro de región
+    
+    if not genre:
+        return jsonify([])
+    
+    # Verificar caché
+    cache_key = f"artists_by_genre_{genre}_{limit}_{region}"
+    cached_results = get_cached_results(cache_key)
+    if cached_results:
+        return jsonify(cached_results)
+    
+    try:
+        # Configurar autenticación si es necesario
+        music = setup_auth()
+        
+        # Evitar formar consultas inválidas como "genre:Lucky Jason Mraz"
+        # En su lugar, buscar directamente con el género como término de búsqueda
+        search_results = music.search(genre, filter='artists', limit=limit)
+        
+        logger.info(f"Búsqueda de artistas para género '{genre}' en región '{region}', encontrados: {len(search_results) if search_results else 0}")
+        
+        # Procesar resultados
+        artists = []
+        
+        if search_results:
+            for artist_data in search_results:
+                if not artist_data:
+                    continue
+                    
+                thumbnails = artist_data.get('thumbnails', [])
+                if not thumbnails:
+                    thumbnails = [{'url': ''}]
+                    
+                artist = {
+                    'id': artist_data.get('browseId', f'genre-artist-{len(artists)}'),
+                    'name': artist_data.get('artist', artist_data.get('name', 'Artista desconocido')),
+                    'images': [{'url': image.get('url', '')} for image in thumbnails],
+                    'genres': [genre],  # Asignar el género buscado
+                    'popularity': 50,  # Valor predeterminado
+                    'source': 'youtube',
+                    'region': region
+                }
+                artists.append(artist)
+        
+        # Si no hay suficientes artistas, añadir algunos predefinidos por género
+        if len(artists) < limit:
+            # Generar artistas predefinidos según el género y región
+            genre_specific_artists = get_predefined_artists_by_genre(genre, limit - len(artists), region)
+            artists.extend(genre_specific_artists)
+        
+        # Guardar en caché
+        save_to_cache(cache_key, artists)
+        
+        return jsonify(artists)
+    except Exception as e:
+        logger.error(f"Error en get_artists_by_genre para {genre} en región {region}: {e}")
+        return jsonify([])
+
+def get_region_keyword(region_code):
+    """Devuelve una palabra clave basada en la región para mejorar los resultados de búsqueda"""
+    region_keywords = {
+        'ES': 'españa',
+        'MX': 'méxico',
+        'AR': 'argentina',
+        'CO': 'colombia',
+        'CL': 'chile',
+        'US': 'usa',
+        'GB': 'uk',
+        'FR': 'francia',
+        'DE': 'alemania',
+        'IT': 'italia',
+        'BR': 'brasil'
+    }
+    return region_keywords.get(region_code, '')
+
+def get_predefined_artists_by_genre(genre, count, region='US'):
+    """Devuelve artistas predefinidos según el género solicitado y la región"""
+    # Base de artistas por género
+    genre_artists = {
+        'pop': [
+            {'id': 'pop1', 'name': 'Taylor Swift', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb6a224073987b930f99adc8bc'}]},
+            {'id': 'pop2', 'name': 'Ed Sheeran', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb3bcef85e105dfc42399ef0c2'}]},
+            {'id': 'pop3', 'name': 'Ariana Grande', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebcdce7620dc940db079bf4952'}]},
+            {'id': 'pop4', 'name': 'Justin Bieber', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb8ae7f2aaa9817a704a87ea36'}]}
+        ],
+        'rock': [
+            {'id': 'rock1', 'name': 'Foo Fighters', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb8b9e05bd676878c8861f7828'}]},
+            {'id': 'rock2', 'name': 'Arctic Monkeys', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f'}]},
+            {'id': 'rock3', 'name': 'Imagine Dragons', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e'}]},
+            {'id': 'rock4', 'name': 'Twenty One Pilots', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eba53ac4a3e0240306c2c33bae'}]}
+        ],
+        'hip hop': [
+            {'id': 'hiphop1', 'name': 'Kendrick Lamar', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb6eb08a5d2495d9f7d429aee9'}]},
+            {'id': 'hiphop2', 'name': 'Drake', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9'}]},
+            {'id': 'hiphop3', 'name': 'J. Cole', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebadd503b411a712e277895c8a'}]},
+            {'id': 'hiphop4', 'name': 'Travis Scott', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b'}]}
+        ],
+        'electronic': [
+            {'id': 'edm1', 'name': 'Calvin Harris', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebc2b305a3560d6708dd8b7de0'}]},
+            {'id': 'edm2', 'name': 'Martin Garrix', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb12a2ef08d00dd7451a6dbed6'}]},
+            {'id': 'edm3', 'name': 'Daft Punk', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb10ca40ea0b0b5082dba0ff75'}]},
+            {'id': 'edm4', 'name': 'Avicii', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebd212fe90e871fa11c232c3a6'}]}
+        ],
+        'indie': [
+            {'id': 'indie1', 'name': 'Tame Impala', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebf87efa01ac7680a3fa7d0987'}]},
+            {'id': 'indie2', 'name': 'The 1975', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb8197fc99bf4768c774d18c55'}]},
+            {'id': 'indie3', 'name': 'Vampire Weekend', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb809b75d71c5e258695cef8c4'}]},
+            {'id': 'indie4', 'name': 'MGMT', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb68151ade82ce461f9f761a5e'}]}
+        ]
+    }
+    
+    # Artistas por región y género (para personalizar aún más los resultados)
+    region_genre_artists = {
+        'ES': {
+            'pop': [
+                {'id': 'es-pop1', 'name': 'Rosalía', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb4a5844d12a6633fcce886ce2'}]},
+                {'id': 'es-pop2', 'name': 'Aitana', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb1af3fabbe3738a589d6f45de'}]},
+                {'id': 'es-pop3', 'name': 'Pablo Alborán', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb996e3a6acf0b2bec97b29f34'}]}
+            ],
+            'rock': [
+                {'id': 'es-rock1', 'name': 'Leiva', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb1f3c2b9c5fafe47fdb6dd2e3'}]},
+                {'id': 'es-rock2', 'name': 'Izal', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb32d0c0c92328b225d069534a'}]}
+            ]
+        },
+        'MX': {
+            'pop': [
+                {'id': 'mx-pop1', 'name': 'Natalia Lafourcade', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb9c0ac81650538c3a3f5c5536'}]},
+                {'id': 'mx-pop2', 'name': 'Reik', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eba09a439764e2c2d5eb517de1'}]},
+                {'id': 'mx-pop3', 'name': 'Jesse & Joy', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eba8c8f89da7b1c1fcc9e1c92e'}]}
+            ]
+        },
+        'AR': {
+            'pop': [
+                {'id': 'ar-pop1', 'name': 'Tini', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5ebb6a2c7d2a2b38be4f4ede430'}]},
+                {'id': 'ar-pop2', 'name': 'Lali', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb1e34e6df777e8d4bd0269ed7'}]},
+                {'id': 'ar-pop3', 'name': 'Nicki Nicole', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb21128629ebdb8ac427228921'}]}
+            ]
+        }
+    }
+    
+    # Normalizar el género para la búsqueda
+    normalized_genre = genre.lower()
+    matched_genre = None
+    
+    for key in genre_artists:
+        if key in normalized_genre or normalized_genre in key:
+            matched_genre = key
+            break
+    
+    # Intentar primero obtener artistas específicos por región y género
+    region_specific_artists = []
+    if region in region_genre_artists and matched_genre in region_genre_artists[region]:
+        region_specific_artists = region_genre_artists[region][matched_genre]
+        logger.info(f"Usando {len(region_specific_artists)} artistas específicos para región {region} y género {matched_genre}")
+    
+    # Si no encontramos un género específico, usar una mezcla de todos
+    if not matched_genre:
+        all_artists = []
+        for genre_list in genre_artists.values():
+            all_artists.extend(genre_list)
+        # Mezclar la lista para variedad
+        random.shuffle(all_artists)
+        result = region_specific_artists + all_artists[:max(0, count - len(region_specific_artists))]
+    else:
+        # Combinar artistas específicos de la región con artistas generales del género
+        general_genre_artists = genre_artists[matched_genre][:max(0, count - len(region_specific_artists))]
+        result = region_specific_artists + general_genre_artists
+        result = result[:count]  # Asegurarnos de no exceder el límite
+    
+    # Añadir información común a todos los artistas
+    for artist in result:
+        artist['genres'] = [genre]
+        artist['popularity'] = 50
+        artist['source'] = 'youtube'
+        artist['region'] = region
+    
+    return result
+
+if __name__ == '__main__':
+    # Certificado SSL
+    context = None
+    try:
+        # Intentar configurar SSL si los certificados existen
+        cert_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cert')
+        if os.path.exists(os.path.join(cert_path, 'cert.pem')) and os.path.exists(os.path.join(cert_path, 'key.pem')):
+            context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+            context.load_cert_chain(
+                os.path.join(cert_path, 'cert.pem'), 
+                os.path.join(cert_path, 'key.pem')
+            )
+            print("Usando certificados SSL")
+    except Exception as e:
+        print(f"Error configurando SSL: {e}")
+        context = None
+    
+    # Iniciar el servidor
+    if context:
+        app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
+    else:
+        app.run(host='0.0.0.0', port=5000, debug=True) 

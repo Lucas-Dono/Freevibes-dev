@@ -193,7 +193,13 @@ app.get('/api/youtube/featured-playlists', async (req, res) => {
     const limit = req.query.limit || 10;
     const region = req.query.region || 'ES'; // Usar España como región por defecto
     console.log(`Obteniendo playlists destacadas de YouTube Music con límite ${limit} para región ${region}`);
-    const response = await axios.get(`http://localhost:5000/featured-playlists?limit=${limit}&region=${region}`);
+    
+    // Usar la URL base de la API de Python en lugar de hardcodear
+    const pythonBaseUrl = PYTHON_API_URL.replace('/api', '');
+    const response = await axios.get(`${pythonBaseUrl}/featured-playlists`, {
+      params: { limit, region }
+    });
+    
     res.json(response.data);
   } catch (error) {
     console.error('Error al obtener playlists destacadas de YouTube Music:', error);
@@ -203,10 +209,16 @@ app.get('/api/youtube/featured-playlists', async (req, res) => {
 
 app.get('/api/youtube/new-releases', async (req, res) => {
   try {
-    const limit = req.query.limit || 20;
-    const region = req.query.region || 'ES'; // Usar España como región por defecto
+    const limit = req.query.limit || 10;
+    const region = req.query.region || 'ES';
     console.log(`Obteniendo nuevos lanzamientos de YouTube Music con límite ${limit} para región ${region}`);
-    const response = await axios.get(`http://localhost:5000/new-releases?limit=${limit}&region=${region}`);
+    
+    // Usar la URL base de la API de Python en lugar de hardcodear
+    const pythonBaseUrl = PYTHON_API_URL.replace('/api', '');
+    const response = await axios.get(`${pythonBaseUrl}/new-releases`, {
+      params: { limit, region }
+    });
+    
     res.json(response.data);
   } catch (error) {
     console.error('Error al obtener nuevos lanzamientos de YouTube Music:', error);
@@ -216,10 +228,15 @@ app.get('/api/youtube/new-releases', async (req, res) => {
 
 app.get('/api/youtube/artists-by-genre', async (req, res) => {
   try {
-    const { genre, limit } = req.query;
-    const region = req.query.region || 'ES'; // Usar España como región por defecto
-    console.log(`Obteniendo artistas por género ${genre} con límite ${limit} para región ${region}`);
-    const response = await axios.get(`http://localhost:5000/artists-by-genre?genre=${genre}&limit=${limit}&region=${region}`);
+    const { genre, limit = 10, region = 'ES' } = req.query;
+    console.log(`Obteniendo artistas por género ${genre} de YouTube Music con límite ${limit} para región ${region}`);
+    
+    // Usar la URL base de la API de Python en lugar de hardcodear
+    const pythonBaseUrl = PYTHON_API_URL.replace('/api', '');
+    const response = await axios.get(`${pythonBaseUrl}/artists-by-genre`, {
+      params: { genre, limit, region }
+    });
+    
     res.json(response.data);
   } catch (error) {
     console.error('Error al obtener artistas por género de YouTube Music:', error);
@@ -232,8 +249,10 @@ app.get('/api/youtube/ping', (req, res) => {
   // Intentar conectar con el servicio Python usando una ruta que sabemos que existe
   console.log('[Server] Verificando disponibilidad del servicio Python...');
   
+  // Usar la URL base de la API de Python en lugar de hardcodear
+  const pythonBaseUrl = PYTHON_API_URL.replace('/api', '');
   // Intentar con la ruta /search que sabemos que existe en el servicio Python
-  axios.get('http://localhost:5000/search', { 
+  axios.get(`${pythonBaseUrl}/search`, { 
     params: { query: 'test', limit: 1 },
     timeout: 3000 
   })
@@ -269,8 +288,10 @@ app.get('/api/status', async (req, res) => {
   try {
     console.log('[Server] Verificando estado general de los servicios');
     
+    // Usar la URL base de la API de Python en lugar de hardcodear
+    const pythonBaseUrl = PYTHON_API_URL.replace('/api', '');
     // Intentar con la ruta /search que sabemos que existe en el servicio Python
-    const pythonStatus = await axios.get('http://localhost:5000/search', { 
+    const pythonStatus = await axios.get(`${pythonBaseUrl}/search`, { 
       params: { query: 'test', limit: 1 },
       timeout: 3000 
     })
@@ -292,9 +313,9 @@ app.get('/api/status', async (req, res) => {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-  res.json({
-    status: 'ok',
-    services: {
+    res.json({
+      status: 'ok',
+      services: {
         node_server: true, 
         youtube_music: false
       },
@@ -306,4 +327,5 @@ app.get('/api/status', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Servidor Node.js corriendo en http://localhost:${PORT}`);
+  console.log(`Utilizando API de Python en: ${PYTHON_API_URL}`);
 }); 

@@ -74,7 +74,23 @@ class IsomorphicCache {
       }
       
       // Si estamos en el navegador, también podríamos buscar en localStorage
-      // pero eso sería una implementación adicional opcional
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          const storedCache = localStorage.getItem(`cache_${key}`);
+          if (storedCache) {
+            try {
+              const { value, expiry } = JSON.parse(storedCache);
+              if (!expiry || Date.now() < expiry) {
+                return value;
+              }
+            } catch (e) {
+              console.error('[IsomorphicCache] Error al parsear valor de localStorage:', e);
+            }
+          }
+        } catch (e) {
+          console.error('[IsomorphicCache] Error al leer desde localStorage:', e);
+        }
+      }
       
       this.cacheMisses++;
       return null;
@@ -100,7 +116,13 @@ class IsomorphicCache {
       memCache[key] = { value, expires };
       
       // Si estamos en el navegador, podríamos guardar en localStorage también
-      // pero eso sería una implementación adicional opcional
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          localStorage.setItem(`cache_${key}`, JSON.stringify({ value, expiry: expires }));
+        } catch (e) {
+          console.error('[IsomorphicCache] Error al escribir en localStorage:', e);
+        }
+      }
       
       // Limpieza periódica
       this.periodicCleanup();

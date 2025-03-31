@@ -25,16 +25,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Cargar usuario desde localStorage al inicio
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
+    try {
+      if (typeof window === 'undefined' || !window.localStorage) {
+        setLoading(false);
+        return;
+      }
+      
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
         setUser(JSON.parse(storedUser));
-      } catch (err) {
-        console.error('Error al cargar usuario desde localStorage:', err);
+      }
+    } catch (err) {
+      console.error('Error al cargar usuario desde localStorage:', err);
+      if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.removeItem('user');
       }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -51,7 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       // Guardar en localStorage para persistencia
-      localStorage.setItem('user', JSON.stringify(mockUser));
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('user', JSON.stringify(mockUser));
+      }
       setUser(mockUser);
     } catch (err) {
       setError('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
@@ -67,8 +77,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // En una app real, aquí haríamos una llamada a la API para logout
       
       // Limpiar datos locales
-      localStorage.removeItem('user');
-      localStorage.removeItem('spotify_token');
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('spotify_token');
+      }
       setUser(null);
     } catch (err) {
       console.error('Error al cerrar sesión:', err);
@@ -91,7 +103,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       // Guardar en localStorage para persistencia
-      localStorage.setItem('user', JSON.stringify(mockUser));
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('user', JSON.stringify(mockUser));
+      }
       setUser(mockUser);
     } catch (err) {
       setError('Error al registrarse. Por favor, inténtalo de nuevo.');

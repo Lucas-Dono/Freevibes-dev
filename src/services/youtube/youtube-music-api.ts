@@ -9,7 +9,18 @@ import { Track } from '@/types/types';
 import { YTMusicResult } from './index';
 
 // URL del servidor Node.js que actúa como proxy para el microservicio Python
-const YTMUSIC_API_URL = process.env.YTMUSIC_API_URL || 'http://localhost:3001/api/youtube';
+const YTMUSIC_API_URL = (() => {
+  if (process.env.NODE_ENV === 'production') {
+    // En producción, podemos usar una ruta relativa o la URL externa configurada
+    if (process.env.USE_EXTERNAL_NODE_API === 'true') {
+      return process.env.NEXT_PUBLIC_NODE_API_URL ? `${process.env.NEXT_PUBLIC_NODE_API_URL}/api/youtube` : '/api/youtube';
+    }
+    // Si no usamos una API externa, usamos la API interna
+    return '/api/youtube';
+  }
+  // En desarrollo, usar la URL de localhost
+  return process.env.YTMUSIC_API_URL || 'http://localhost:3001/api/youtube';
+})();
 
 const baseURL = YTMUSIC_API_URL;
 const api = axios.create({ baseURL });

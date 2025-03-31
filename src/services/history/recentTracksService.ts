@@ -44,13 +44,15 @@ export class RecentTracksService {
       }
       
       // Intentar obtener del localStorage como fallback
-      const userData = localStorage.getItem('userData');
-      if (userData) {
-        try {
-          const user = JSON.parse(userData);
-          return user.id || user.email;
-        } catch (error) {
-          console.warn('Error al parsear userData del localStorage:', error);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            return user.id || user.email;
+          } catch (error) {
+            console.warn('Error al parsear userData del localStorage:', error);
+          }
         }
       }
       
@@ -245,6 +247,10 @@ export class RecentTracksService {
    */
   private static addToLocalStorage(trackData: any): void {
     try {
+      if (typeof window === 'undefined' || !window.localStorage) {
+        return;
+      }
+      
       // Obtener historial existente
       const existingHistory = localStorage.getItem('recentTracks');
       let tracks = [];
@@ -390,6 +396,10 @@ export class RecentTracksService {
    */
   private static getLocalHistory(limit: number = 10): EnrichedTrack[] {
     try {
+      if (typeof window === 'undefined' || !window.localStorage) {
+        return [];
+      }
+      
       const localHistory = localStorage.getItem('recentTracks');
       if (localHistory) {
         const parsedHistory = JSON.parse(localHistory);
@@ -419,6 +429,10 @@ export class RecentTracksService {
    */
   private static saveTracksToLocalStorage(tracks: EnrichedTrack[]): void {
     try {
+      if (typeof window === 'undefined' || !window.localStorage) {
+        return;
+      }
+      
       if (!tracks || !Array.isArray(tracks) || tracks.length === 0) return;
       
       // Simplificar tracks para almacenamiento local

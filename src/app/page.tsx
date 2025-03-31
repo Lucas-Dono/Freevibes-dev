@@ -8,7 +8,26 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/home');
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      
+      if (path !== '/' && path !== '/home' && path.length > 1) {
+        console.log('[RootPage] Detectada URL específica:', path);
+        
+        window.location.href = path;
+      } else {
+        router.push('/home');
+        
+        setTimeout(() => {
+          if (window.location.pathname === '/') {
+            console.log('[RootPage] Forzando navegación a /home');
+            window.location.href = '/home';
+          }
+        }, 300);
+      }
+    } else {
+      router.push('/home');
+    }
   }, [router]);
 
   return (

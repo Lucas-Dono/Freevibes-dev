@@ -57,8 +57,8 @@ def api_root():
 
 if __name__ == "__main__":
     try:
-        # Obtener puerto desde variables de entorno (para Render)
-        port = int(os.environ.get('PORT', 5000))
+        # Usar puerto 5000 para la API de Python siempre en desarrollo local
+        port = 5000
         debug = os.environ.get('FLASK_ENV', 'development') == 'development'
         
         print(f"Iniciando servidor YouTube Music API en http://0.0.0.0:{port}")

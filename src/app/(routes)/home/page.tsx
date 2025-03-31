@@ -42,6 +42,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: '12px',
   overflow: 'hidden',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  margin: '0 4px',
   '&:hover': {
     transform: 'translateY(-4px)',
     boxShadow: '0 12px 20px rgba(0, 0, 0, 0.3)',
@@ -291,7 +292,39 @@ export default function HomePage() {
   useEffect(() => {
     fetchPersonalRotation();
     fetchRecentlyPlayedTracks();
-  }, []);
+
+    // Agregar estilos personalizados para el carrusel
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .slick-slide {
+        padding: 0 10px;
+      }
+      .slick-list {
+        margin: 0 -10px;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Verificar que la ruta del navegador coincida con la ruta actual
+    const checkPathAndRedirect = () => {
+      const pathname = window.location.pathname;
+      // Si estamos en la página home pero la URL muestra otra ruta
+      if (pathname !== '/' && pathname !== '/home' && pathname.length > 1) {
+        console.log('Redirigiendo a la ruta correcta:', pathname);
+        router.push(pathname);
+      }
+    };
+    
+    // Ejecutar verificación después de que el componente se monte
+    checkPathAndRedirect();
+
+    return () => {
+      document.head.removeChild(style);
+      if (recentTracksTimer) {
+        clearTimeout(recentTracksTimer);
+      }
+    };
+  }, [router]);
 
   // Efecto para cargar datos según la pestaña activa
   useEffect(() => {
@@ -644,6 +677,9 @@ export default function HomePage() {
     slidesToScroll: 2,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    centerMode: false,
+    centerPadding: '20px',
+    cssEase: 'ease-out',
     responsive: [
       {
         breakpoint: 1400,
@@ -687,7 +723,7 @@ export default function HomePage() {
   const renderLoadingSkeletons = () => (
     <Slider {...sliderSettings}>
       {Array.from(new Array(6)).map((_: any, index: number) => (
-        <div key={`skeleton-${index}`}>
+        <div key={`skeleton-${index}`} style={{ padding: '0 12px' }}>
           <Card sx={{ 
             backgroundColor: 'rgba(255, 255, 255, 0.05)', 
             borderRadius: '8px',
@@ -962,31 +998,33 @@ export default function HomePage() {
           <Box 
             sx={{ 
               position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
+              inset: 0,
               display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
-              p: 1,
-              transform: 'translateY(50%)',
+              background: 'rgba(0, 0, 0, 0.3)',
               opacity: 0,
-              transition: 'opacity 0.3s, transform 0.3s',
-              '.MuiCard-root:hover &': {
-                opacity: 1,
-                transform: 'translateY(0)'
+              transition: 'opacity 0.3s',
+              '&:hover': {
+                opacity: 1
               }
             }}
           >
             <IconButton 
-              size="small"
+              size="medium"
               sx={{ 
                 backgroundColor: theme.palette.secondary.main,
                 color: 'white',
-                '&:hover': { backgroundColor: theme.palette.secondary.dark }
+                transform: 'scale(0.9)',
+                transition: 'transform 0.3s',
+                '&:hover': { 
+                  backgroundColor: theme.palette.secondary.dark,
+                  transform: 'scale(1)'
+                }
               }}
               onClick={(e) => handlePlayTrack(album.uri, e, album)}
             >
-              <PlayArrow fontSize="small" />
+              <PlayArrow />
             </IconButton>
           </Box>
         </Box>
@@ -1045,19 +1083,11 @@ export default function HomePage() {
               width: '100%',
               overflow: 'hidden'
             }}
-        onClick={(e) => handlePlayTrack(item.id, e, {
-          title: item.title,
-          artist: item.artist,
-          album: item.album,
-          cover: item.cover,
-          source: item.source,
-          id: item.id
-        })}
-      >
+          >
             <CardMedia
               component="img"
               image={item.cover || '/images/default-album.jpg'}
-            alt={item.title} 
+              alt={item.title} 
               sx={{ 
                 position: 'absolute', 
                 top: 0, 
@@ -1088,8 +1118,21 @@ export default function HomePage() {
                 sx={{ 
                   color: 'white',
                   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' }
+                  transform: 'scale(0.9)',
+                  transition: 'transform 0.3s',
+                  '&:hover': { 
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    transform: 'scale(1)'
+                  }
                 }}
+                onClick={(e) => handlePlayTrack(item.id, e, {
+                  title: item.title,
+                  artist: item.artist,
+                  album: item.album,
+                  cover: item.cover,
+                  source: item.source,
+                  id: item.id
+                })}
               >
                 <PlayArrow fontSize="large" />
               </IconButton>
@@ -1184,7 +1227,7 @@ export default function HomePage() {
     switch (activeTab) {
       case 0: // Nuevos lanzamientos
         return newReleases.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {newReleases.map((album: any) => (
               <AlbumCard key={album.id} album={album} />
             ))}
@@ -1197,7 +1240,7 @@ export default function HomePage() {
 
       case 1: // Escuchado recientemente
         return filteredRecentTracks.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {filteredRecentTracks.map((item: any, index: number) => (
               <RecentTrackCard key={`${item.id}-${index}`} item={item} />
             ))}
@@ -1225,7 +1268,7 @@ export default function HomePage() {
 
       case 2: // Playlists destacadas
         return featuredPlaylists.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {featuredPlaylists.map((playlist: any) => (
               <PlaylistCard key={playlist.id} playlist={playlist} />
             ))}
@@ -1238,7 +1281,7 @@ export default function HomePage() {
 
       case 3: // Artistas recomendados
         return recommendedArtists.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             {recommendedArtists.map((artist: any) => (
               <ArtistCard key={artist.id} artist={artist} />
             ))}
@@ -1265,15 +1308,6 @@ export default function HomePage() {
 
   // Determinar si mostrar sección personal basado en autenticación y datos
   const showPersonalSection = isAuthenticated && personalTracks.length > 0;
-
-  // Limpiar temporizador al desmontar el componente
-  useEffect(() => {
-    return () => {
-      if (recentTracksTimer) {
-        clearTimeout(recentTracksTimer);
-      }
-    };
-  }, [recentTracksTimer]);
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
@@ -1403,7 +1437,7 @@ export default function HomePage() {
         </Box>
         
         {/* Carrusel de Rotación Personal */}
-        <Box sx={{ px: 1, position: 'relative' }}>
+        <Box sx={{ px: 1, position: 'relative', mx: -2 }}>
           {loading.personal ? (
             renderLoadingSkeletons()
           ) : error.personal ? (
@@ -1421,22 +1455,24 @@ export default function HomePage() {
           ) : (
             <Slider {...sliderSettings}>
               {personalTracks.map((track) => (
-                <div key={track.id}>
+                <div key={track.id} style={{ padding: '0 12px' }}>
                   <StyledCard>
-                  <Box sx={{ position: 'relative' }}>
+                    <Box sx={{ position: 'relative' }}>
                       <StyledCardMedia
-                      image={track.album?.images[0]?.url || '/placeholder-album.jpg'}
-                      title={track.name}
-                    />
-                      <Box 
-                        sx={{ 
-                          position: 'absolute',
-                          top: 0,
-                          right: 0,
-                          p: 1,
-                        }}
-                      >
-                        {track.isTopTrack && (
+                        image={track.album?.images[0]?.url || '/placeholder-album.jpg'}
+                        title={track.name}
+                      />
+                      {/* Badge de favorito */}
+                      {track.isTopTrack && (
+                        <Box 
+                          sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            p: 1,
+                            zIndex: 1
+                          }}
+                        >
                           <Box
                             sx={{
                               bgcolor: 'rgba(0,0,0,0.6)',
@@ -1451,39 +1487,43 @@ export default function HomePage() {
                             <FavoriteRounded sx={{ fontSize: '0.85rem', mr: 0.5, color: theme.palette.secondary.main }} />
                             Favorito
                           </Box>
-                        )}
-                      </Box>
-                    <Box 
-                      sx={{ 
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        p: 1,
-                        transform: 'translateY(50%)',
-                        opacity: 0,
-                        transition: 'opacity 0.3s, transform 0.3s',
-                        '&:hover': {
-                          opacity: 1,
-                          transform: 'translateY(0)'
-                        }
-                      }}
-                    >
-                      <IconButton 
-                          size="small"
+                        </Box>
+                      )}
+                      
+                      {/* Overlay con botón play */}
+                      <Box 
                         sx={{ 
-                          backgroundColor: theme.palette.secondary.main,
-                          color: 'white',
-                          '&:hover': { backgroundColor: theme.palette.secondary.dark }
+                          position: 'absolute',
+                          inset: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: 'rgba(0, 0, 0, 0.3)',
+                          opacity: 0,
+                          transition: 'opacity 0.3s',
+                          '&:hover': {
+                            opacity: 1
+                          }
                         }}
-                          onClick={(e) => handlePlayTrack(track.uri, e, track)}
                       >
-                          <PlayArrow fontSize="small" />
-                      </IconButton>
+                        <IconButton 
+                          size="medium"
+                          sx={{ 
+                            backgroundColor: theme.palette.secondary.main,
+                            color: 'white',
+                            transform: 'scale(0.9)',
+                            transition: 'transform 0.3s',
+                            '&:hover': { 
+                              backgroundColor: theme.palette.secondary.dark,
+                              transform: 'scale(1)'
+                            }
+                          }}
+                          onClick={(e) => handlePlayTrack(track.uri, e, track)}
+                        >
+                          <PlayArrow />
+                        </IconButton>
+                      </Box>
                     </Box>
-                  </Box>
                     <CardContent sx={{ px: 0, py: 1 }}>
                       <Typography 
                         variant="body2" 
@@ -1491,17 +1531,17 @@ export default function HomePage() {
                         noWrap
                         data-track-name={track.name}
                       >
-                      {track.name}
-                    </Typography>
+                        {track.name}
+                      </Typography>
                       <Typography 
                         variant="caption" 
                         color="text.secondary" 
                         noWrap
                         data-track-artist={track.artists?.map((a: any) => a.name).join(', ')}
                       >
-                      {track.artists?.map((a: any) => a.name).join(', ')}
-                    </Typography>
-                  </CardContent>
+                        {track.artists?.map((a: any) => a.name).join(', ')}
+                      </Typography>
+                    </CardContent>
                   </StyledCard>
                 </div>
               ))}

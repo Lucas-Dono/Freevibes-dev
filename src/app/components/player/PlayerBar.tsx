@@ -183,9 +183,9 @@ export const PlayerBar: React.FC = () => {
                       {/* Visualización de YouTube */}
                       <div className="p-4 rounded-lg bg-black/30 mb-4 h-56 flex items-center justify-center">
                         {/* Aquí podríamos incrustar un iframe de YouTube con autoplay=0, pero mantenemos oculto el player principal */}
-                        <p className="text-gray-400 text-sm">
+                        <span className="text-gray-400 text-sm">
                           ID de YouTube: {currentTrack.youtubeId || 'No disponible'}
-                        </p>
+                        </span>
                       </div>
                       
                       {/* Información adicional */}

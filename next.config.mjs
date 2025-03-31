@@ -107,6 +107,23 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
+  
+  // Añadir trailing slash para mejorar compatibilidad con exportación estática
+  trailingSlash: true,
+  
+  // Asegurar que las rutas sean correctamente manejadas
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        destination: '/:path*',
+      },
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig; 

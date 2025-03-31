@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/app/lib/utils';
 
 const buttonVariants = cva(
@@ -41,13 +41,31 @@ const buttonVariants = cva(
   }
 );
 
+// Definimos los tipos de propiedades conflictivas para omitirlas
+type ConflictingTypes =
+  | 'onAnimationStart'
+  | 'onDragStart'
+  | 'onDragEnd'
+  | 'onDrag'
+  | 'style'; // y otras propiedades que puedan causar conflicto
+
+// Para el botón normal
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, ConflictingTypes>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   animate?: boolean;
+}
+
+// Para el motion.button
+export interface MotionButtonProps
+  extends Omit<HTMLMotionProps<'button'>, 'size'>,
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -83,13 +101,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (animate) {
+      // Utilizamos as any para evitar errores de tipo en la transición entre tipos
       return (
         <motion.button
           ref={ref}
           className={buttonClasses}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          {...props}
+          {...props as any}
         >
           {buttonContent}
         </motion.button>

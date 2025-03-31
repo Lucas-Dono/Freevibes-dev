@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
+import { getSpotifyAuthUrl } from '@/lib/auth-config';
 
 export default function LoginPage() {
   const [error, setError] = useState('');
@@ -14,9 +15,11 @@ export default function LoginPage() {
   
   // Verificar si hay un error en los parámetros de búsqueda
   useEffect(() => {
-    const errorMsg = searchParams.get('error');
-    if (errorMsg) {
-      setError(errorMsg);
+    if (searchParams) {
+      const errorMsg = searchParams.get('error');
+      if (errorMsg) {
+        setError(errorMsg);
+      }
     }
   }, [searchParams]);
 
@@ -25,6 +28,7 @@ export default function LoginPage() {
     
     // Generar un estado aleatorio para proteger contra ataques CSRF
     const state = Math.random().toString(36).substring(2, 15);
+    
     // Guardar el estado en una cookie
     Cookies.set('spotify_auth_state', state, { 
       expires: 1/24, // 1 hora
@@ -32,21 +36,8 @@ export default function LoginPage() {
       sameSite: 'lax'
     });
     
-    // Definir los scopes que necesitamos
-    const scopes = [
-      'user-read-private',
-      'user-read-email',
-      'user-library-read',
-      'playlist-read-private',
-      'playlist-read-collaborative',
-      'user-top-read'
-    ].join(' ');
-    
     // Obtener el client_id de las variables de entorno
     const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-    
-    // Usar siempre localhost
-    const redirectUri = 'http://localhost:3000/api/auth/spotify/callback';
     
     // Verificar que tenemos un client_id válido
     if (!clientId || clientId === 'tu-id-de-cliente-real') {
@@ -55,16 +46,15 @@ export default function LoginPage() {
       return;
     }
     
-    console.log('Usando redirect URI:', redirectUri);
-    console.log('Client ID:', clientId);
+    // Usar la nueva función para obtener la URL de autenticación
+    const authUrl = getSpotifyAuthUrl(state);
     
-    // Construir la URL de autorización manualmente para evitar problemas con URLSearchParams
-    const authUrl = 'https://accounts.spotify.com/authorize' + 
-      '?response_type=code' +
-      '&client_id=' + encodeURIComponent(clientId) +
-      '&scope=' + encodeURIComponent(scopes) + 
-      '&redirect_uri=' + encodeURIComponent(redirectUri) +
-      '&state=' + encodeURIComponent(state);
+    // Log para debugging
+    console.log('Iniciando autenticación con Spotify', { 
+      clientId, 
+      state,
+      authUrl 
+    });
     
     // Redirigir al usuario a la página de autenticación de Spotify
     window.location.href = authUrl;

@@ -72,8 +72,8 @@ interface GenreImageProps {
   artistName?: string; // Alias para artist
   trackTitle?: string; // Alias para title
   index?: number; // Posición del elemento en la lista
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   priority?: boolean;
   className?: string;
   showFallback?: boolean;
@@ -88,8 +88,8 @@ const GenreImage = ({
   artistName, 
   trackTitle,
   index = 0,
-  width = 200, 
-  height = 200, 
+  width, 
+  height, 
   priority = false,
   className,
   showFallback = true,
@@ -105,6 +105,26 @@ const GenreImage = ({
   // Obtener información de sección actual
   const pageType = getPageTypeFromPath(pathname || '/');
   const sectionType = asSectionType(genre || 'otros');
+
+  // Determinar dimensiones basadas en el tamaño predefinido
+  const getSizeDimensions = (): { width: string | number, height: string | number } => {
+    if (width !== undefined && height !== undefined) {
+      return { width, height }; // Si se proporcionan valores directos, usarlos
+    }
+    
+    switch (size) {
+      case 'small':
+        return { width: '100%', height: '100%' };
+      case 'medium':
+        return { width: '100%', height: '100%' };
+      case 'large':
+        return { width: '100%', height: '100%' };
+      default:
+        return { width: '100%', height: '100%' }; // Valores por defecto
+    }
+  };
+
+  const { width: finalWidth, height: finalHeight } = getSizeDimensions();
 
   useEffect(() => {
     // Configurar observer para detectar cuando la imagen es visible
@@ -280,8 +300,8 @@ const GenreImage = ({
       ref={imageRef}
       className={className}
       sx={{
-        width: width,
-        height: height,
+        width: finalWidth,
+        height: finalHeight,
         position: 'relative',
         borderRadius: '8px',
         overflow: 'hidden',
@@ -293,9 +313,13 @@ const GenreImage = ({
           src={imageUrl}
           alt={title || artist || genre || 'Genre image'}
           fill
-          style={{ objectFit: 'cover' }}
+          style={{ 
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%' 
+          }}
           priority={priority}
-          sizes={`${width}px`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       ) : showFallback ? (
         // Gradiente para fallback
@@ -331,16 +355,16 @@ const GenreImage = ({
             <>
               <Box sx={{ 
                 fontWeight: 'bold',
-                fontSize: Math.min(width / 10, 16), 
+                fontSize: typeof finalWidth === 'number' ? Math.min(finalWidth / 10, 16) : 16, 
                 textShadow: '0 0 4px rgba(0,0,0,0.7)',
                 textTransform: 'capitalize',
                 mb: 1
               }}>
                 {genre || artist || ''}
               </Box>
-              {(width >= 100 && height >= 100) && (
+              {(typeof finalWidth === 'number' && finalWidth >= 100 && typeof finalHeight === 'number' && finalHeight >= 100) && (
                 <Box sx={{ 
-                  fontSize: Math.min(width / 15, 12), 
+                  fontSize: typeof finalWidth === 'number' ? Math.min(finalWidth / 15, 12) : 12, 
                   opacity: 0.9,
                   textShadow: '0 0 4px rgba(0,0,0,0.7)'
                 }}>

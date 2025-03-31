@@ -88,6 +88,19 @@ export async function GET(request: NextRequest) {
     
     const { db } = await connectToDatabase();
     
+    // Si no se pudo conectar a la base de datos, devolver array vacío
+    if (!db) {
+      console.error('No se pudo conectar a la base de datos');
+      return NextResponse.json({ 
+        tracks: [],
+        total: 0,
+        page, 
+        limit,
+        hasMore: false,
+        error: 'Error de conexión a la base de datos'
+      });
+    }
+    
     // Para deduplicación efectiva, obtenemos más registros
     const fetchLimit = limit * 2;
     
@@ -149,6 +162,17 @@ export async function POST(request: NextRequest) {
     const userId = await getUserFromCookies();
     
     const { db } = await connectToDatabase();
+    
+    // Si no se pudo conectar a la base de datos, devolver un mensaje amigable
+    if (!db) {
+      console.error('No se pudo conectar a la base de datos para guardar historial');
+      return NextResponse.json({ 
+        success: false, 
+        message: 'No se pudo guardar el historial debido a un problema de conexión',
+        userId
+      }, { status: 200 }); // Usamos 200 para evitar errores en el cliente
+    }
+    
     const collection = db.collection('recentTracks');
     
     // Obtener datos del cuerpo
@@ -184,6 +208,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error añadiendo al historial:', error);
-    return NextResponse.json({ error: 'Error al añadir la canción al historial' }, { status: 500 });
+    return NextResponse.json({ 
+      success: false,
+      message: 'No se pudo guardar el historial, pero puedes seguir disfrutando la música'
+    }, { status: 200 }); // Usamos 200 para evitar errores en el cliente
   }
 } 

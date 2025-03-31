@@ -5,9 +5,21 @@
  * la API no oficial de YouTube Music.
  */
 import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 
-// URL del servidor Python de YouTube Music
-const YTMUSIC_SERVICE_URL = 'http://localhost:5000/api';
+// Determinar la URL del servicio de YouTube Music según el entorno
+const YTMUSIC_SERVICE_URL = (() => {
+  if (process.env.NODE_ENV === 'production') {
+    // En producción, podemos usar una API externa si está configurada
+    if (process.env.USE_EXTERNAL_PYTHON_API === 'true' && process.env.YTMUSIC_SERVICE_URL) {
+      return process.env.YTMUSIC_SERVICE_URL;
+    }
+    // De lo contrario, usar ruta relativa en el mismo servidor
+    return '/api/youtube-music';
+  }
+  // En desarrollo, usar la URL local
+  return process.env.YTMUSIC_SERVICE_URL || 'http://localhost:5000/api';
+})();
 
 export async function GET(request: NextRequest) {
   try {

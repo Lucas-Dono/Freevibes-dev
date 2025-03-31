@@ -125,42 +125,130 @@ export class YouTubeQuotaManager {
   }
   
   private saveState(): void {
-    if (typeof localStorage !== 'undefined') {
-      try {
+    try {
+      // Verificar si el estado parece estar bloqueado incorrectamente
+      const now = new Date();
+      
+      // Si ya se ha alcanzado o excedido la cuota pero es un error
+      // (la cuota usada supera la cuota máxima diaria), reiniciar el contador
+      if (this.usedToday > this.maxDailyQuota || 
+          (this.usedToday > 0 && this.resetTime && this.resetTime < now)) {
+        console.warn('YouTubeService: Estado de cuota parece incorrecto, reiniciando contador');
+        this.usedToday = 0;
+        
+        // Crear nueva fecha de reinicio (24 horas desde ahora)
+        const nextDay = new Date();
+        nextDay.setHours(nextDay.getHours() + 24);
+        this.resetTime = nextDay;
+      }
+      
+      // Guardar el estado solo si estamos en el navegador
+      if (typeof window !== 'undefined' && window.localStorage) {
         const state = {
           usedToday: this.usedToday,
-          resetTime: this.resetTime?.toISOString()
+          resetTime: this.resetTime?.toISOString(),
         };
-        localStorage.setItem('youtube_quota_state', JSON.stringify(state));
-      } catch (error) {
-        console.error('[YouTube Quota] Error guardando estado', error);
+        
+        localStorage.setItem('youtubeQuotaState', JSON.stringify(state));
+        console.log(`YouTubeService: Estado guardado. Usado hoy: ${this.usedToday}, Reinicio: ${this.resetTime?.toLocaleString()}`);
       }
+    } catch (error) {
+      console.error('YouTubeService: Error al guardar estado de cuota', error);
     }
   }
   
   private loadState(): void {
-    if (typeof localStorage !== 'undefined') {
-      try {
-        const savedState = localStorage.getItem('youtube_quota_state');
-        if (savedState) {
-          const state = JSON.parse(savedState);
-          this.usedToday = state.usedToday || 0;
-          if (state.resetTime) {
-            const resetTime = new Date(state.resetTime);
-            // Solo cargar si el tiempo de reset es en el futuro
-            if (resetTime > new Date()) {
-              this.resetTime = resetTime;
-            } else {
-              // Si ya pasó, crear uno nuevo y resetear la cuota
-              this.resetTime = this.calculateNextResetTime();
-              this.usedToday = 0;
-            }
-          }
-          if (this.DEBUG) console.log(`[YouTube Quota] Estado cargado: ${this.usedToday}/${this.maxDailyQuota} unidades`);
-        }
-      } catch (error) {
-        console.error('[YouTube Quota] Error cargando estado', error);
+    try {
+      // Verificar si estamos en el navegador
+      if (typeof window === 'undefined' || !window.localStorage) {
+        // Si estamos en el servidor, inicializar con valores predeterminados
+        this.usedToday = 0;
+        const nextDay = new Date();
+        nextDay.setHours(nextDay.getHours() + 24);
+        this.resetTime = nextDay;
+        return;
       }
+      
+      const stateStr = localStorage.getItem('youtubeQuotaState');
+      if (!stateStr) return;
+      
+      const state = JSON.parse(stateStr);
+      
+      // Verificar si el tiempo de reinicio ya pasó
+      const now = new Date();
+      if (state.resetTime) {
+        const resetTimeDate = new Date(state.resetTime);
+        
+        if (resetTimeDate <= now) {
+          // Si el tiempo de reinicio ya pasó, reiniciar el contador
+          this.usedToday = 0;
+          
+          // Crear nueva fecha de reinicio (24 horas desde ahora)
+          const nextDay = new Date();
+          nextDay.setHours(nextDay.getHours() + 24);
+          this.resetTime = nextDay;
+          
+          console.log('YouTubeService: Se reinició el contador de cuota porque pasó el tiempo de reinicio');
+        } else {
+          // Si los valores parecen estar corruptos (por ejemplo, usedToday excede maxDailyQuota)
+          // reiniciar el estado
+          if (state.usedToday > this.maxDailyQuota || !state.resetTime) {
+            console.warn('YouTubeService: Estado de cuota parece corrupto, reiniciando');
+            this.usedToday = 0;
+            
+            // Crear nueva fecha de reinicio (24 horas desde ahora)
+            const nextDay = new Date();
+            nextDay.setHours(nextDay.getHours() + 24);
+            this.resetTime = nextDay;
+          } else {
+            // Si todo parece estar bien, cargar los valores
+            this.usedToday = state.usedToday;
+            this.resetTime = new Date(state.resetTime);
+          }
+        }
+      } else {
+        // Si no hay tiempo de reinicio, crear uno nuevo
+        this.usedToday = 0;
+        const nextDay = new Date();
+        nextDay.setHours(nextDay.getHours() + 24);
+        this.resetTime = nextDay;
+      }
+      
+      console.log(`YouTubeService: Estado cargado. Usado hoy: ${this.usedToday}, Reinicio: ${this.resetTime?.toLocaleString()}`);
+    } catch (error) {
+      // Si hay un error al cargar el estado, reiniciar
+      console.error('YouTubeService: Error al cargar estado de cuota, reiniciando', error);
+      this.usedToday = 0;
+      
+      // Crear nueva fecha de reinicio (24 horas desde ahora)
+      const nextDay = new Date();
+      nextDay.setHours(nextDay.getHours() + 24);
+      this.resetTime = nextDay;
+    }
+  }
+  
+  /**
+   * Reinicia manualmente el contador de cuota
+   * @returns true si se reinició correctamente, false en caso contrario
+   */
+  public resetQuotaCounter(): boolean {
+    try {
+      console.log('YouTubeService: Reiniciando contador de cuota manualmente');
+      this.usedToday = 0;
+      
+      // Crear nueva fecha de reinicio (24 horas desde ahora)
+      const nextDay = new Date();
+      nextDay.setHours(nextDay.getHours() + 24);
+      this.resetTime = nextDay;
+      
+      // Solo guardar el estado si estamos en el navegador
+      if (typeof window !== 'undefined' && window.localStorage) {
+        this.saveState();
+      }
+      return true;
+    } catch (error) {
+      console.error('YouTubeService: Error al reiniciar contador de cuota', error);
+      return false;
     }
   }
   
@@ -183,7 +271,10 @@ export class YouTubeQuotaManager {
     if (this.DEBUG) {
       console.log(`[YouTube Quota] Usado: ${cost} unidades. Total: ${this.usedToday}/${this.maxDailyQuota}`);
     }
-    this.saveState();
+    // Solo guardar el estado si estamos en el navegador
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.saveState();
+    }
   }
   
   /**
@@ -273,6 +364,105 @@ export class YouTubeService {
   constructor() {
     this.quotaManager = YouTubeQuotaManager.getInstance();
     this.baseUrl = 'https://www.googleapis.com/youtube/v3';
+  }
+  
+  /**
+   * Busca videos en YouTube
+   * @param query Texto de búsqueda
+   * @param maxResults Número máximo de resultados (por defecto 5)
+   * @returns Respuesta de búsqueda de YouTube
+   */
+  async search(query: string, maxResults: number = 5): Promise<YouTubeSearchResponse> {
+    try {
+      console.log(`[YouTubeService] Buscando: "${query}"`);
+      
+      // Verificar si hay cuota disponible
+      if (!this.quotaManager.hasAvailableQuota(1)) {
+        console.warn('[YouTubeService] ⚠️ Cuota de YouTube agotada, usando caché o alternativas');
+        throw new Error('Cuota de YouTube agotada');
+      }
+      
+      // Sanitizar la consulta para mejorar los resultados de búsqueda
+      const sanitizedQuery = this.sanitizeSearchQuery(query);
+      
+      // Realizar la operación de búsqueda con el gestor de cuota
+      return await this.quotaManager.enqueueOperation(async () => {
+        const params = new URLSearchParams({
+          part: 'snippet',
+          maxResults: maxResults.toString(),
+          q: sanitizedQuery + " official", // Añadir "official" para priorizar canales oficiales
+          type: 'video',
+          videoCategoryId: '10', // Categoría 10 = Música
+          videoEmbeddable: 'true',
+          videoSyndicated: 'true', // Videos que pueden ser reproducidos fuera de youtube.com
+          key: this.quotaManager.apiKeyValue
+        });
+        
+        const response = await axios.get<YouTubeSearchResponse>(
+          `${this.baseUrl}/search?${params.toString()}`,
+          { timeout: API_TIMEOUTS.YOUTUBE }
+        );
+        
+        console.log(`[YouTubeService] Encontrados ${response.data.items.length} resultados para: "${query}"`);
+        
+        // Si no hay resultados, intentar una búsqueda más simple
+        if (response.data.items.length === 0) {
+          console.log(`[YouTubeService] Intentando búsqueda simplificada para: "${query}"`);
+          
+          // Simplificar aún más la consulta de búsqueda
+          const wordsToKeep = sanitizedQuery.split(' ').slice(0, 3).join(' ');
+          
+          const simpleParams = new URLSearchParams({
+            part: 'snippet',
+            maxResults: maxResults.toString(),
+            q: wordsToKeep + ' audio',
+            type: 'video',
+            videoCategoryId: '10', // Categoría 10 = Música
+            videoEmbeddable: 'true',
+            key: this.quotaManager.apiKeyValue
+          });
+          
+          const simpleResponse = await axios.get<YouTubeSearchResponse>(
+            `${this.baseUrl}/search?${simpleParams.toString()}`,
+            { timeout: API_TIMEOUTS.YOUTUBE }
+          );
+          
+          console.log(`[YouTubeService] Búsqueda simplificada encontró ${simpleResponse.data.items.length} resultados`);
+          return simpleResponse.data;
+        }
+        
+        return response.data;
+      }, 1); // Costo de cuota: 1 unidad por búsqueda
+    } catch (error) {
+      console.error(`[YouTubeService] Error en búsqueda:`, error);
+      
+      // Si hay error, devolver una respuesta vacía con formato correcto
+      return {
+        items: [],
+        pageInfo: {
+          totalResults: 0,
+          resultsPerPage: 0
+        }
+      };
+    }
+  }
+  
+  /**
+   * Sanitiza la consulta de búsqueda para mejorar resultados
+   * @param query Consulta original
+   * @returns Consulta sanitizada
+   */
+  private sanitizeSearchQuery(query: string): string {
+    if (!query) return '';
+    
+    return query
+      .replace(/\(.*?\)/g, '') // Eliminar contenido entre paréntesis
+      .replace(/\[.*?\]/g, '') // Eliminar contenido entre corchetes
+      .replace(/feat\.|ft\.|featuring/gi, '') // Eliminar feat, ft, featuring
+      .replace(/official\s*(video|audio|music\s*video)/gi, '') // Eliminar palabras como "official video"
+      .replace(/lyrics\s*(video)?/gi, '') // Eliminar "lyrics video" o "lyrics"
+      .replace(/\s+/g, ' ') // Reemplazar múltiples espacios con uno solo
+      .trim();
   }
   
   /**
@@ -460,6 +650,15 @@ export class YouTubeService {
         return null;
       }
     }, cost);
+  }
+
+  /**
+   * Reinicia manualmente el contador de cuota de YouTube
+   * Útil cuando el usuario encuentra problemas y quiere resetear el estado
+   */
+  resetYouTubeQuota(): void {
+    this.quotaManager.resetQuotaCounter();
+    console.log('Contador de cuota de YouTube reiniciado manualmente');
   }
 }
 

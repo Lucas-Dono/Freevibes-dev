@@ -6,11 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import MD5 from 'crypto-js/md5';
+import { getAppBaseUrl } from '@/lib/api-config';
 
 // Configuración de Last.fm 
 const API_KEY = process.env.LASTFM_API_KEY || '';
 const SHARED_SECRET = process.env.LASTFM_SHARED_SECRET || '';
-const REDIRECT_URI = process.env.LASTFM_REDIRECT_URI || 'http://localhost:3000/api/auth/lastfm/callback';
+const REDIRECT_URI = process.env.LASTFM_REDIRECT_URI || `${getAppBaseUrl()}/api/auth/lastfm/callback`;
 
 /**
  * Ruta GET para manejar el callback de autenticación de Last.fm

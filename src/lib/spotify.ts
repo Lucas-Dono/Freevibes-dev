@@ -72,7 +72,7 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
     
     if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
       const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
-      console.log(`[Spotify] Rate limiting: esperando ${waitTime}ms`);
+      console.log(`[Spotify] Rate limiting: esperando ${waitTime}ms antes de la solicitud a ${endpoint}`);
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
     
@@ -81,7 +81,7 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
     
     // Construir URL completa
     const url = `https://api.spotify.com/v1${endpoint}`;
-    console.log(`[Fetch] Llamando a Spotify URL: ${url}`);
+    console.log(`[Spotify] Iniciando solicitud a: ${url}`);
     
     const startTime = Date.now();
     const response = await fetch(url, {
@@ -92,51 +92,54 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
       },
     });
     
-    const elapsed = Date.now() - startTime;
-    console.log(`[Fetch] Tiempo de respuesta: ${elapsed}ms para ${endpoint}`);
+    const elapsedTime = Date.now() - startTime;
+    console.log(`[Spotify] Tiempo de respuesta: ${elapsedTime}ms para ${endpoint}`);
     
-    // Si la respuesta no es exitosa, manejar el error
-    if (!response.ok) {
-      console.log('[Fetch] Error en respuesta de Spotify:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url,
-      });
+    // Si el token ha expirado, intentar refrescarlo
+    if (response.status === 401) {
+      console.log('[Spotify] Token expirado, intentando refrescar...');
+      const refreshResponse = await fetch('/api/auth/spotify/refresh');
       
-      const errorData = await response.json();
-      console.log('[Fetch] Detalles de error de Spotify:', JSON.stringify(errorData, null, 2));
-      
-      // Manejar error 429 (demasiadas solicitudes) con reintento
-      if (response.status === 429) {
-        console.log('[Fetch] Error detallado:', errorData);
-        console.log('[Fetch] Mensaje específico de error:', errorData.error?.message);
+      if (refreshResponse.ok) {
+        const { access_token } = await refreshResponse.json();
+        console.log('[Spotify] Token refrescado exitosamente, reintentando solicitud original');
         
-        // Obtener el encabezado Retry-After si está disponible
-        const retryAfter = response.headers.get('Retry-After');
-        let retryDelay = retryAfter ? parseInt(retryAfter) * 1000 : 5000;
+        // Reintentar la solicitud con el nuevo token
+        const retryResponse = await fetch(url, {
+          ...options,
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+          },
+        });
         
-        console.log(`[Spotify] Rate limit excedido. Esperando ${retryDelay/1000} segundos antes de reintentar.`);
-        
-        // Esperar antes de reintentar
-        await new Promise(resolve => setTimeout(resolve, retryDelay));
-        
-        // Usar datos en caché como respaldo si están disponibles
-        if (cachedData) {
-          console.log('[Spotify] Usando datos en caché como respaldo mientras se espera el rate limit');
-          return cachedData.data;
+        if (!retryResponse.ok) {
+          const errorText = await retryResponse.text();
+          console.error(`[Spotify] Error ${retryResponse.status} en reintento:`, errorText);
+          throw new Error(`Error ${retryResponse.status}: ${errorText}`);
         }
         
-        // Si no hay caché, devolver una respuesta genérica de error
-        throw new Error(`Error en la llamada a Spotify: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+        const data = await retryResponse.json();
+        apiCache.set(cacheKey, {
+          data,
+          expiry: Date.now() + CACHE_DURATION
+        });
+        return data;
+      } else {
+        console.error('[Spotify] Error al refrescar token:', await refreshResponse.text());
+        throw new Error('Error al refrescar el token de acceso');
       }
-      
-      throw new Error(`Error en la llamada a Spotify: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
     }
     
-    // Procesar respuesta exitosa
-    const data = await response.json();
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[Spotify] Error ${response.status} en solicitud a ${endpoint}:`, errorText);
+      throw new Error(`Error ${response.status}: ${errorText}`);
+    }
     
-    // Guardar en caché
+    const data = await response.json();
+    console.log(`[Spotify] Solicitud completada exitosamente: ${endpoint}`);
+    
     apiCache.set(cacheKey, {
       data,
       expiry: Date.now() + CACHE_DURATION
@@ -144,7 +147,7 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
     
     return data;
   } catch (error) {
-    console.log(`[Fetch] Error al realizar petición a https://api.spotify.com/v1${endpoint}:`, error);
+    console.error('[Spotify] Error en fetchFromSpotify:', error);
     throw error;
   }
 }

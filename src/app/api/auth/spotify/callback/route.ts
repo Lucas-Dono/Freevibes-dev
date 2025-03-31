@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { upsertUserWithSpotifyInfo } from '@/lib/db/services/userService';
+import { getSpotifyCallbackUrl, getBaseUrl } from '@/lib/auth-config';
 
 export async function GET(request: NextRequest) {
   // Obtener los parámetros de la URL
@@ -37,7 +38,10 @@ export async function GET(request: NextRequest) {
     // Configuración para Spotify
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const redirectUri = 'http://localhost:3000/api/auth/spotify/callback';
+    
+    // Usar la nueva función para obtener la URL de callback
+    const redirectUri = getSpotifyCallbackUrl();
+    
     console.log('Usando redirect URI en callback:', redirectUri);
     
     if (!clientId || !clientSecret) {
@@ -102,20 +106,32 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
-      maxAge: tokenData.expires_in * 1000, // Convertir segundos a milisegundos
       path: '/',
     };
     
     // Establecer cookies
     const response = NextResponse.redirect(new URL('/home', request.url));
     
-    response.cookies.set('spotify_access_token', tokenData.access_token, cookieOptions);
-    response.cookies.set('spotify_refresh_token', tokenData.refresh_token, {
+    // Token de acceso - usar expires_in de Spotify
+    response.cookies.set('spotify_access_token', tokenData.access_token, {
       ...cookieOptions,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días
+      maxAge: tokenData.expires_in
+    });
+
+    // Timestamp de expiración
+    const expiresAt = Date.now() + (tokenData.expires_in * 1000);
+    response.cookies.set('spotify_access_token_expires', expiresAt.toString(), {
+      ...cookieOptions,
+      maxAge: tokenData.expires_in
     });
     
-    // Guardar información básica del perfil (no sensible) para acceso desde el cliente
+    // Token de refresco - 30 días
+    response.cookies.set('spotify_refresh_token', tokenData.refresh_token, {
+      ...cookieOptions,
+      maxAge: 30 * 24 * 60 * 60
+    });
+    
+    // Información básica del perfil - 30 días
     response.cookies.set('spotify_user', JSON.stringify({
       id: profileData.id,
       name: profileData.display_name,
@@ -123,7 +139,8 @@ export async function GET(request: NextRequest) {
       images: profileData.images,
     }), {
       ...cookieOptions,
-      httpOnly: false, // Accesible desde JavaScript
+      httpOnly: false,
+      maxAge: 30 * 24 * 60 * 60
     });
     
     return response;

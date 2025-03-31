@@ -1,10 +1,54 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/app/context/AuthContext';
+import { useNavigation } from '@/app/context/NavigationContext';
+
+// Componente personalizado de Link para manejar navegación y problemas de caché
+const NavigationLink = ({ href, children, className, onClick }: { 
+  href: string; 
+  children: React.ReactNode; 
+  className?: string;
+  onClick?: () => void;
+}) => {
+  const { navigateTo } = useNavigation();
+  const pathname = usePathname();
+  
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (onClick) onClick();
+    
+    // Identificar rutas problemáticas conocidas
+    const problematicRoutes = ['/explore', '/search', '/library'];
+    const isProblematicRoute = problematicRoutes.includes(href) || 
+                              problematicRoutes.some(route => href.startsWith(`${route}/`));
+    
+    // Forzar uso directo de href para rutas problemáticas
+    if (isProblematicRoute) {
+      console.log(`[Navbar] Navegando a ruta problemática: ${href} directamente con window.location`);
+      window.location.href = href;
+      return;
+    }
+    
+    // Usar el contexto de navegación para una navegación más robusta
+    if (pathname === href) {
+      // Si ya estamos en la misma página, solo refrescar
+      navigateTo(href, { forceRefresh: true });
+    } else {
+      // Para otras páginas, usar navegación normal
+      navigateTo(href);
+    }
+  };
+  
+  return (
+    <a href={href} onClick={handleClick} className={className}>
+      {children}
+    </a>
+  );
+};
 
 const navItems = [
   { 
@@ -31,15 +75,6 @@ const navItems = [
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5c0 1.38-1.12 2.5-2.5 2.5S10 13.88 10 12.5s1.12-2.5 2.5-2.5c.57 0 1.08.19 1.5.51V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z" />
-      </svg>
-    )
-  },
-  { 
-    name: 'Híbrido', 
-    href: '/hybrid',
-    icon: (
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
       </svg>
     )
   },
@@ -115,7 +150,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/home" className="flex items-center">
+            <NavigationLink href="/home" className="flex items-center">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -123,7 +158,7 @@ export const Navbar = () => {
               >
                 MusicVerse
               </motion.div>
-            </Link>
+            </NavigationLink>
           </div>
 
           {/* Desktop navigation */}
@@ -132,7 +167,7 @@ export const Navbar = () => {
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <Link
+                  <NavigationLink
                     key={item.name}
                     href={item.href}
                     className={`relative group flex items-center px-3 py-2 text-sm font-medium transition-colors duration-200`}
@@ -172,7 +207,7 @@ export const Navbar = () => {
                         className="absolute bottom-0 left-[15%] h-0.5 bg-white/30"
                       />
                     )}
-                  </Link>
+                  </NavigationLink>
                 );
               })}
             </div>
@@ -364,7 +399,7 @@ export const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Link
+                    <NavigationLink
                       href={item.href}
                       className={`flex items-center px-3 py-3 rounded-md text-base font-medium ${
                         isActive
@@ -381,7 +416,7 @@ export const Navbar = () => {
                           className="ml-auto w-1 h-5 rounded-full bg-[#1DB954]"
                         />
                       )}
-                    </Link>
+                    </NavigationLink>
                   </motion.div>
                 );
               })}

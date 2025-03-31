@@ -243,11 +243,12 @@ export default function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
             className="bg-card hover:bg-card/80 transition-colors rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-lg"
             onClick={() => handleGenreClick(genre)}
           >
-            <div className="aspect-square relative">
+            <div className="aspect-square relative overflow-hidden">
               <GenreImage 
                 genre={genre}
                 artistName={genre.charAt(0).toUpperCase() + genre.slice(1)}
                 size="large"
+                className="w-full h-full"
               />
               <div className="absolute inset-0 bg-black bg-opacity-10 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                 <div className="bg-white/80 rounded-full p-2 transform hover:scale-110 transition-transform duration-300">

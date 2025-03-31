@@ -69,6 +69,9 @@ module.exports = {
         'pulse-slow': 'pulse 6s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
         'marquee': 'marquee 25s linear infinite',
+        'sound-wave-1': 'sound-wave 1.2s ease-in-out infinite',
+        'sound-wave-2': 'sound-wave 1.2s ease-in-out infinite 0.2s',
+        'sound-wave-3': 'sound-wave 1.2s ease-in-out infinite 0.4s',
       },
       keyframes: {
         float: {
@@ -78,6 +81,10 @@ module.exports = {
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
+        },
+        'sound-wave': {
+          '0%, 100%': { height: '3px' },
+          '50%': { height: '12px' },
         },
       },
       backgroundImage: {
@@ -147,5 +154,8 @@ module.exports = {
       pattern: /(bg|text|border)-(white|black|gray-\d+)(\/\d+)?/,
       variants: ['hover', 'focus', 'active'],
     },
+    'animate-sound-wave-1',
+    'animate-sound-wave-2',
+    'animate-sound-wave-3',
   ],
 }; 

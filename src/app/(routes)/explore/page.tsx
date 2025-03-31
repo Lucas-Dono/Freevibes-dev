@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getCategories, getCategoryPlaylists } from '@/services/spotify';
 import { 
@@ -69,6 +69,27 @@ export default function ExplorePage() {
   const sourceManager = getSourceManager();
   const { playTrack } = usePlayer();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Efecto para estabilizar la navegación
+  useEffect(() => {
+    // Verificar que estamos en el cliente
+    if (typeof window === 'undefined') return;
+
+    const currentUrl = window.location.pathname;
+    // Si estamos en la ruta de exploración pero la URL es diferente
+    if (pathname !== currentUrl && currentUrl === '/explore') {
+      console.log('[ExplorePage] Estabilizando ruta de exploración');
+      
+      // Esta página ha sido cargada correctamente, evitamos redirecciones adicionales
+      sessionStorage.setItem('explore_page_loaded', 'true');
+    }
+
+    // Limpiar al desmontar
+    return () => {
+      sessionStorage.removeItem('explore_page_loaded');
+    };
+  }, [pathname]);
 
   // Efecto para obtener datos generales y recomendaciones
   useEffect(() => {
@@ -135,29 +156,31 @@ export default function ExplorePage() {
         
         // Realizar búsquedas en paralelo para cada término
         const searches = await Promise.all(
-          queries.map(query => 
-            spotifyApi.searchTracks(query, 10)
-              .then((results: any[]) => {
-                // Solo conservar tracks con imágenes de Spotify
-                return results
-                  .filter((item: any) => 
-                    item?.album?.images?.[0]?.url && 
-                    item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
-                  )
-                  .map((item: any) => ({
-                    id: item.id,
-                    title: item.name,
-                    artist: item.artists?.map((a: any) => a.name).join(', ') || 'Spotify Artist',
-                    album: item.album?.name || '',
-                    albumCover: item.album?.images?.[0]?.url || '',
-                    cover: item.album?.images?.[0]?.url || '',
-                    duration: item.duration_ms || 0,
-                    spotifyId: item.id,
-                    source: 'spotify'
-                  }));
-              })
-              .catch(() => [])
-          )
+          queries.map(async (query) => {
+            try {
+              const results = await spotifyApi.searchTracks(query, 10);
+              // Solo conservar tracks con imágenes de Spotify
+              return results
+                .filter((item: any) => 
+                  item?.album?.images?.[0]?.url && 
+                  item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
+                )
+                .map((item: any) => ({
+                  id: item.id,
+                  title: item.name,
+                  artist: item.artists?.map((a: any) => a.name).join(', ') || 'Spotify Artist',
+                  album: item.album?.name || '',
+                  albumCover: item.album?.images?.[0]?.url || '',
+                  cover: item.album?.images?.[0]?.url || '',
+                  duration: item.duration_ms || 0,
+                  spotifyId: item.id,
+                  source: 'spotify'
+                }));
+            } catch (error) {
+              console.error(`Error buscando ${query}:`, error);
+              return [];
+            }
+          })
         );
         
         // Combinar todos los resultados
@@ -236,29 +259,31 @@ export default function ExplorePage() {
         
         // Realizar búsquedas en paralelo para cada género
         const searches = await Promise.all(
-          selectedGenres.map(genre => 
-            spotifyApi.searchTracks(`genre:${genre}`, 10)
-              .then((results: any[]) => {
-                // Solo conservar tracks con imágenes de Spotify
-                return results
-                  .filter((item: any) => 
-                    item?.album?.images?.[0]?.url && 
-                    item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
-                  )
-                  .map((item: any) => ({
-                    id: item.id,
-                    title: item.name,
-                    artist: item.artists?.map((a: any) => a.name).join(', ') || 'Spotify Artist',
-                    album: item.album?.name || '',
-                    albumCover: item.album?.images?.[0]?.url || '',
-                    cover: item.album?.images?.[0]?.url || '',
-                    duration: item.duration_ms || 0,
-                    spotifyId: item.id,
-                    source: 'spotify'
-                  }));
-              })
-              .catch(() => [])
-          )
+          selectedGenres.map(async (genre) => {
+            try {
+              const results = await spotifyApi.searchTracks(`genre:${genre}`, 10);
+              // Solo conservar tracks con imágenes de Spotify
+              return results
+                .filter((item: any) => 
+                  item?.album?.images?.[0]?.url && 
+                  item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
+                )
+                .map((item: any) => ({
+                  id: item.id,
+                  title: item.name,
+                  artist: item.artists?.map((a: any) => a.name).join(', ') || 'Spotify Artist',
+                  album: item.album?.name || '',
+                  albumCover: item.album?.images?.[0]?.url || '',
+                  cover: item.album?.images?.[0]?.url || '',
+                  duration: item.duration_ms || 0,
+                  spotifyId: item.id,
+                  source: 'spotify'
+                }));
+            } catch (error) {
+              console.error(`Error buscando género ${genre}:`, error);
+              return [];
+            }
+          })
         );
         
         // Combinar todos los resultados

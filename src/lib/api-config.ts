@@ -7,8 +7,25 @@
  * @returns URL base configurada o la URL por defecto
  */
 export function getApiBaseUrl(): string {
-  // Usar la variable de entorno si está definida, o la URL local por defecto
+  // En producción, usar la variable de entorno o una ruta relativa
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_API_URL || '/api';
+  }
+  // En desarrollo, usar localhost
   return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+}
+
+/**
+ * Obtiene la URL base de la aplicación
+ * @returns URL base de la aplicación (sin trailing slash)
+ */
+export function getAppBaseUrl(): string {
+  // En producción, usar la variable de entorno o determinar dinámicamente
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_APP_URL || '';
+  }
+  // En desarrollo, usar localhost
+  return 'http://localhost:3000';
 }
 
 /**

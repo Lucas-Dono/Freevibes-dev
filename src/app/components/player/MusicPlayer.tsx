@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlayerControls } from './PlayerControls';
+import { usePlayer, LyricLine } from '@/contexts/PlayerContext';
+import Image from 'next/image';
 
 interface Song {
   id: string;
@@ -12,6 +14,7 @@ interface Song {
   cover: string;
   audioSrc: string;
   duration: number;
+  youtubeId?: string;
 }
 
 interface MusicPlayerProps {
@@ -46,6 +49,36 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const currentSong = playlist[currentSongIndex];
+  // Obtener las letras del contexto del reproductor
+  const { lyrics } = usePlayer();
+
+  // Referencia al timeout para actualizar letras
+  const lyricsUpdateInterval = useRef<NodeJS.Timeout | null>(null);
+
+  // Efecto para actualizar las letras continuamente
+  useEffect(() => {
+    // Solo activar el intervalo si estamos reproduciendo y tenemos letras
+    if (isPlaying && lyrics?.synced?.length > 0) {
+      // Crear un intervalo para actualizar las letras cada 100ms
+      lyricsUpdateInterval.current = setInterval(() => {
+        // Forzar actualización del componente para mostrar las letras actualizadas
+        // Esto funciona porque getCurrentLyrics se llamará con el tiempo actualizado
+        forceUpdate();
+      }, 100);
+    }
+    
+    // Limpiar el intervalo cuando se detenga la reproducción
+    return () => {
+      if (lyricsUpdateInterval.current) {
+        clearInterval(lyricsUpdateInterval.current);
+        lyricsUpdateInterval.current = null;
+      }
+    };
+  }, [isPlaying, lyrics]);
+  
+  // Función para forzar actualización del componente
+  const [, updateState] = useState<any>();
+  const forceUpdate = useCallback(() => updateState({}), []);
 
   // Configuración inicial del audio
   useEffect(() => {
@@ -354,26 +387,52 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
   // Find current lyrics based on time
   const getCurrentLyrics = () => {
-    const currentLyric = lyrics
-      .slice()
-      .reverse()
-      .find(lyric => currentTime >= lyric.time);
+    // Verificar que tengamos letras sincronizadas desde el contexto
+    if (!lyrics?.synced || lyrics.synced.length === 0) {
+      return "";
+    }
+    
+    // Buscar la letra actual basada en el tiempo de reproducción
+    // La letra actual es la última cuyo tiempo es menor o igual al tiempo actual
+    const currentTime = audioRef.current?.currentTime || 0;
+    
+    // Ordenar por tiempo y encontrar la letra actual
+    let currentLyric = null;
+    for (let i = 0; i < lyrics.synced.length; i++) {
+      if (lyrics.synced[i].time <= currentTime) {
+        currentLyric = lyrics.synced[i];
+      } else {
+        // Como las letras están ordenadas por tiempo, podemos salir del bucle
+        // cuando encontremos una letra con tiempo mayor al actual
+        break;
+      }
+    }
+    
+    // Agregar un console.log para depuración
+    if (currentLyric) {
+      console.log(`[MusicPlayer] 🎵 Tiempo actual: ${currentTime.toFixed(2)}s, Letra: "${currentLyric.text}", Tiempo letra: ${currentLyric.time.toFixed(2)}s`);
+    }
     
     return currentLyric ? currentLyric.text : "";
   };
 
-  // Simulated lyrics for demo purposes
-  const lyrics = [
-    { time: 0, text: "I've been tryna call" },
-    { time: 5, text: "I've been on my own for long enough" },
-    { time: 10, text: "Maybe you can show me how to love, maybe" },
-    { time: 15, text: "I'm going through withdrawals" },
-    { time: 20, text: "You don't even have to do too much" },
-    { time: 25, text: "You can turn me on with just a touch, baby" },
-    { time: 30, text: "I look around and Sin City's cold and empty" },
-    { time: 35, text: "No one's around to judge me" },
-    { time: 40, text: "I can't see clearly when you're gone" },
-  ];
+  const [imgError, setImgError] = useState(false);
+  
+  // Determinar la URL de la imagen
+  let imageUrl = currentSong.cover;
+  
+  // Si es un video de YouTube y tiene youtubeId, crear URL de miniatura
+  if (currentSong.youtubeId && !imageUrl) {
+    // Intentar usar maxresdefault primero, con fallback a hqdefault
+    imageUrl = imgError 
+      ? `https://i.ytimg.com/vi/${currentSong.youtubeId}/hqdefault.jpg` 
+      : `https://i.ytimg.com/vi/${currentSong.youtubeId}/maxresdefault.jpg`;
+  }
+  
+  // Si no hay imagen, usar un placeholder
+  if (!imageUrl) {
+    imageUrl = '/images/default-album.png';
+  }
 
   return (
     <motion.div 
@@ -407,11 +466,21 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
             className="relative rounded-md overflow-hidden shadow-lg mr-4"
             variants={coverVariants}
           >
-            <img 
-              src={currentSong.cover} 
-              alt={`${currentSong.title} cover`} 
-              className="w-full h-full object-cover"
-            />
+            <div className="h-full w-full rounded-full overflow-hidden bg-gray-800">
+              <Image
+                src={imageUrl}
+                alt={`${currentSong.title} cover`}
+                className="h-full w-full object-cover rounded-full"
+                width={300}
+                height={300}
+                priority
+                onError={() => {
+                  if (!imgError && currentSong.youtubeId) {
+                    setImgError(true);
+                  }
+                }}
+              />
+            </div>
             
             {!minimized && (
               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">

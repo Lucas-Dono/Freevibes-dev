@@ -248,55 +248,56 @@ export async function GET(request: NextRequest) {
 				try {
 					const endpoint = searchParams.get('endpoint');
 					if (!endpoint) {
-						return new Response(JSON.stringify({ error: 'Missing endpoint parameter' }), {
+						return new Response(JSON.stringify({ error: 'No se ha proporcionado un endpoint' }), {
 							status: 400,
 							headers: { 'Content-Type': 'application/json' }
 						});
 					}
 
-					// Construir el endpoint completo con todos los parámetros
-					let fullEndpoint = endpoint;
-					
-					// Verificar si ya hay parámetros en el endpoint
-					const hasQueryParams = endpoint.includes('?');
-					let firstParam = !hasQueryParams;
-					
-					// Si es una búsqueda, asegurarse de que tenga el parámetro type
-					let hasMissingTypeParam = false;
-					if (endpoint.includes('/search') && !endpoint.includes('type=') && !searchParams.has('type')) {
-						// Si no hay type en el endpoint ni en los parámetros, añadir un valor por defecto
-						console.log('Parámetro type no encontrado, añadiendo valor por defecto');
-						const separator = firstParam ? '?' : '&';
-						fullEndpoint += `${separator}type=track,artist`;
-						firstParam = false;
-						hasMissingTypeParam = false; // Ya no falta porque lo hemos añadido
-					}
-					
-					// Añadir todos los demás parámetros de la URL
-					searchParams.forEach((value, key) => {
-						if (key !== 'action' && key !== 'endpoint') {
-							// Agregar el separador correcto de parámetros (? o &)
-							const separator = firstParam ? '?' : '&';
-							fullEndpoint += `${separator}${key}=${encodeURIComponent(value)}`;
-							firstParam = false;
+					// Obtener el cliente de Spotify
+					try {
+						const sp = await getSpotify();
+						
+						// Construir el endpoint completo
+						let fullEndpoint = endpoint;
+						
+						// Si tenemos una solicitud de búsqueda y no tiene el parámetro type, agregarlo
+						if (fullEndpoint.startsWith('/search') && !fullEndpoint.includes('type=')) {
+							const separator = fullEndpoint.includes('?') ? '&' : '?';
+							fullEndpoint = `${fullEndpoint}${separator}type=track`;
 						}
-					});
-
-					// Verificar si es una búsqueda y aún falta el parámetro type
-					if (endpoint.includes('/search') && !fullEndpoint.includes('type=')) {
-						console.error('Falta el parámetro type en búsqueda de Spotify');
-						return new Response(JSON.stringify({ error: 'Missing parameter type for search' }), {
-							status: 400,
+						
+						// Validar el límite para que nunca exceda 50 (máximo permitido por Spotify)
+						if (fullEndpoint.includes('limit=')) {
+							// Extraer el valor del límite actual
+							const limitMatch = fullEndpoint.match(/limit=(\d+)/);
+							if (limitMatch && limitMatch[1]) {
+								const currentLimit = parseInt(limitMatch[1], 10);
+								
+								// Si el límite es mayor a 50, ajustarlo
+								if (currentLimit > 50) {
+									console.log(`[Spotify API] Ajustando límite de ${currentLimit} a 50 (máximo permitido por Spotify)`);
+									fullEndpoint = fullEndpoint.replace(/limit=\d+/, 'limit=50');
+								}
+							}
+						}
+						
+						console.log(`[Spotify API] Ejecutando solicitud directa a: ${fullEndpoint}`);
+						const result = await sp.makeRequest(fullEndpoint);
+						return new Response(JSON.stringify(result), {
+							status: 200,
+							headers: { 'Content-Type': 'application/json' }
+						});
+					} catch (error) {
+						console.error('[Spotify API] Error en solicitud directa:', error);
+						return new Response(JSON.stringify({ 
+							error: 'Error al realizar solicitud directa a Spotify',
+							details: (error as Error).message
+						}), {
+							status: 500,
 							headers: { 'Content-Type': 'application/json' }
 						});
 					}
-
-					console.log(`API: Ejecutando solicitud directa a Spotify: ${fullEndpoint}`);
-					
-					// Usar el endpoint completo con todos los parámetros
-					const result = await sp.makeRequest(fullEndpoint);
-					
-					return new Response(JSON.stringify(result));
 				} catch (error) {
 					console.error('Error en solicitud directa a Spotify:', error);
 					return new Response(JSON.stringify({ error: 'Error en solicitud directa a Spotify' }), {

@@ -24,13 +24,16 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mongoose": "^11.0.2",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/bcryptjs": "^2.4.6",
     "@types/crypto-js": "^4.2.2",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash.debounce": "^4.0.9",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "concurrently": "^8.2.2",
     "crypto-js": "^4.2.0",
     "framer-motion": "^10.16.4",
     "idb-keyval": "^6.2.1",
@@ -48,8 +51,7 @@
     "rxjs": "^7.8.2",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^2.1.0",
-    "uuid": "^11.1.0",
-    "concurrently": "^8.2.2"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

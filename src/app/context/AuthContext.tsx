@@ -37,61 +37,124 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Rutas especiales que no deberían ser redirigidas automáticamente
+const specialRoutes = ['/explore', '/search', '/library', '/home', '/artist', '/album', '/playlist', '/profile', '/user'];
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<SpotifyUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
+  // Comprobar si una ruta es especial
+  const isSpecialRoute = (path: string) => {
+    return specialRoutes.some(route => 
+      path === route || path.startsWith(`${route}/`)
+    );
+  };
+
   // Verificar si el usuario está autenticado al cargar la página
   useEffect(() => {
+    let isMounted = true;
+    
     async function loadUserFromCookies() {
+      if (!isMounted) return;
       setIsLoading(true);
       
       try {
         // Obtener información del usuario de la cookie
         const userDataCookie = Cookies.get('spotify_user');
+        const accessToken = Cookies.get('spotify_access_token');
+        const refreshToken = Cookies.get('spotify_refresh_token');
         
-        if (!userDataCookie) {
-          // Si no hay cookie de usuario, el usuario no está autenticado
-          if (pathname && pathname !== '/login' && !pathname.startsWith('/api/auth')) {
-            router.push('/login');
+        console.log('[Auth] Estado de cookies:', {
+          hasUserData: !!userDataCookie,
+          hasAccessToken: !!accessToken,
+          hasRefreshToken: !!refreshToken,
+          currentPath: pathname
+        });
+        
+        if (!userDataCookie || !accessToken || !refreshToken) {
+          console.log('[Auth] Faltan cookies de autenticación');
+          
+          // Solo redirigir a login si no estamos en una ruta pública o en proceso de carga
+          if (pathname && 
+              pathname !== '/login' && 
+              !pathname.startsWith('/api/auth') && 
+              !pathname.startsWith('/register') && 
+              !isSpecialRoute(pathname)) {
+            // Esperar un momento antes de redirigir para evitar redirecciones durante la carga
+            console.log(`[Auth] Redirigiendo a login desde ${pathname}`);
+            setTimeout(() => {
+              if (isMounted) {
+                router.push('/login');
+              }
+            }, 500);
           }
+          
+          if (!isMounted) return;
           setIsLoading(false);
           return;
         }
         
         // Parsear los datos del usuario
-        const userData = JSON.parse(userDataCookie) as SpotifyUser;
-        setUser(userData);
+        try {
+          const userData = JSON.parse(userDataCookie) as SpotifyUser;
+          if (!isMounted) return;
+          setUser(userData);
+        } catch (parseError) {
+          console.error('[Auth] Error al parsear datos del usuario:', parseError);
+          Cookies.remove('spotify_user');
+        }
         
         // Verificar si el token de acceso está por expirar (menos de 5 minutos)
         const accessTokenExpires = Cookies.get('spotify_access_token_expires');
         const now = new Date().getTime();
         
+        console.log('[Auth] Estado del token:', {
+          expiresAt: accessTokenExpires,
+          currentTime: now,
+          timeUntilExpiry: accessTokenExpires ? parseInt(accessTokenExpires) - now : null
+        });
+        
         if (!accessTokenExpires || now > parseInt(accessTokenExpires) - 5 * 60 * 1000) {
-          // Token expirado o por expirar, renovarlo
-          const refreshResponse = await fetch('/api/auth/spotify/refresh');
-          if (!refreshResponse.ok) {
-            // Si la renovación falla, redirigir al login
-            router.push('/login');
-            setIsLoading(false);
-            return;
+          console.log('[Auth] Token expirado o por expirar, intentando renovar');
+          // IMPORTANTE: Evitamos redirecciones aquí para permitir visualizar páginas
+          // incluso si el token no se puede renovar inmediatamente
+          try {
+            const refreshResponse = await fetch('/api/auth/spotify/refresh');
+            if (!refreshResponse.ok) {
+              console.error('[Auth] Error al renovar token');
+            } else {
+              console.log('[Auth] Token renovado exitosamente');
+            }
+          } catch (refreshError) {
+            console.error('[Auth] Error en solicitud de renovación:', refreshError);
           }
         }
       } catch (error) {
-        console.error('Error loading user from cookies:', error);
+        console.error('[Auth] Error al cargar usuario:', error);
         
-        // Si hay un error, redirigir al login excepto si ya está en login
-        if (pathname && pathname !== '/login' && !pathname.startsWith('/api/auth')) {
+        // Si hay un error, solo redirigir a login en casos específicos
+        if (pathname && 
+            pathname !== '/login' && 
+            !pathname.startsWith('/api/auth') && 
+            !pathname.startsWith('/register') && 
+            !isSpecialRoute(pathname)) {
+          console.log(`[Auth] Redirigiendo a login desde ${pathname} debido a error`);
           router.push('/login');
         }
-      } finally {
-        setIsLoading(false);
       }
+      
+      if (!isMounted) return;
+      setIsLoading(false);
     }
 
     loadUserFromCookies();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [pathname, router]);
 
   // Función para cerrar sesión

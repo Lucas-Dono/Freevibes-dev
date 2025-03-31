@@ -90,6 +90,11 @@ const PurpleSlider = styled(Slider)(({ theme }) => ({
 }));
 
 const formatTime = (seconds: number): string => {
+  // Asegurar que seconds sea un número válido
+  if (typeof seconds !== 'number' || isNaN(seconds) || !isFinite(seconds)) {
+    seconds = 0;
+  }
+  
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -226,7 +231,7 @@ export const PlayerBar = () => {
         }
       }
     }
-  }, [currentTime, lyrics.synced, autoScrollEnabled, isUserScrolling, currentLineIndex]);
+  }, [currentTime, lyrics.synced, autoScrollEnabled, isUserScrolling]);
   
   // Limpiar timeout cuando cambia la canción
   useEffect(() => {
@@ -538,7 +543,7 @@ export const PlayerBar = () => {
             >
               {isExpanded ? (
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                 </svg>
               ) : (
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -559,9 +564,9 @@ export const PlayerBar = () => {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="max-w-5xl mx-auto pt-8 px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="max-w-5xl mx-auto pt-8 px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Panel izquierdo - Vinilo/Cola de reproducción */}
-            <div className="flex flex-col">
+            <div className="flex flex-col h-[450px] overflow-hidden">
               <div className="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
                 <div className="flex space-x-2">
                   <button 
@@ -588,10 +593,10 @@ export const PlayerBar = () => {
               </div>
               
               {/* Contenido del panel izquierdo */}
-              <div className="flex-1 min-h-[400px]">
+              <div className="flex-1 min-h-0 overflow-hidden bg-black/20 rounded-lg border border-white/5">
                 {/* Vista Vinilo */}
                 {leftPanelTab === 'vinyl' && (
-                  <div className="flex flex-col items-center justify-start h-full">
+                  <div className="flex flex-col items-center justify-start h-full p-4">
                     <motion.div
                       className="w-64 h-64 rounded-full overflow-hidden shadow-lg relative mb-6"
                       initial={{ scale: 0.9, opacity: 0 }}
@@ -675,51 +680,63 @@ export const PlayerBar = () => {
                 
                 {/* Vista Cola de reproducción */}
                 {leftPanelTab === 'playlist' && (
-                  <div className="h-full">
-                    <div className="bg-gray-800/50 rounded-lg p-3 overflow-y-auto h-[400px]">
-                      {playlist && playlist.length > 1 ? (
-                        <div className="space-y-2">
+                  <div className="h-full overflow-hidden flex flex-col">
+                    <h2 className="text-lg font-medium px-4 py-3 border-b border-white/10">Cola de reproducción</h2>
+                    <div className="flex-1 overflow-y-auto scrollbar-hidden">
+                      {playlist && playlist.length > 0 ? (
+                        <div className="py-2">
                           {playlist.map((track, index) => (
-                            <motion.div 
-                              key={track.id}
-                              className="flex items-center p-2 hover:bg-white/10 rounded-md cursor-pointer group"
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.05 }}
-                              onClick={() => {
-                                if (playlist) playTrack(track);
-                              }}
+                            <div
+                              key={track.id || `${track.title}-${track.artist}`}
+                              className={`flex items-center gap-3 p-3 hover:bg-white/5 cursor-pointer relative ${
+                                currentTrack && currentTrack.title === track.title && currentTrack.artist === track.artist
+                                  ? 'bg-primary/10 border-l-4 border-primary'
+                                  : ''
+                              }`}
+                              onClick={() => playTrack(track)}
                             >
-                              <div className="w-10 h-10 rounded-md overflow-hidden mr-3 bg-gray-700 flex-shrink-0">
-                                {track.cover ? (
-                                  <img 
-                                    src={track.cover} 
-                                    alt={track.title} 
-                                    className="w-full h-full object-cover" 
-                                  />
-                                ) : (
-                                  <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                                      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6zm-2 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
-                                    </svg>
-                                  </div>
-                                )}
+                              <div className="w-10 h-10 shrink-0">
+                                <img 
+                                  src={track.cover || '/images/default-cover.jpg'} 
+                                  alt={track.title} 
+                                  className="w-full h-full object-cover rounded-md"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = '/images/default-cover.jpg';
+                                  }}
+                                />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-white truncate">{track.title}</p>
-                                <p className="text-xs text-gray-400 truncate">{track.artist}</p>
+                                <div 
+                                  className={`text-sm font-medium truncate ${
+                                    currentTrack && currentTrack.title === track.title && currentTrack.artist === track.artist
+                                      ? 'text-primary'
+                                      : ''
+                                  }`}
+                                >
+                                  {track.title}
+                                </div>
+                                <div className="text-xs text-gray-400 truncate">{track.artist}</div>
                               </div>
-                              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
-                            </motion.div>
+                              {currentTrack && currentTrack.title === track.title && currentTrack.artist === track.artist && (
+                                <div className="flex items-center gap-[2px] mr-2">
+                                  <div className="w-1 h-8 bg-primary rounded-full animate-sound-wave-1"></div>
+                                  <div className="w-1 h-10 bg-primary rounded-full animate-sound-wave-2"></div>
+                                  <div className="w-1 h-6 bg-primary rounded-full animate-sound-wave-3"></div>
+                                </div>
+                              )}
+                            </div>
                           ))}
+                          {/* Mensaje de fin de cola */}
+                          {playlist.length > 0 && (
+                            <div className="text-center text-xs text-gray-500 py-6 border-t border-white/5 mt-2">
+                              Fin de la cola de reproducción
+                            </div>
+                          )}
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center h-full text-gray-500">
-                          No hay más canciones en la cola
+                        <div className="flex flex-col items-center justify-center h-full">
+                          <p className="text-gray-500 text-sm">La cola está vacía</p>
                         </div>
                       )}
                     </div>
@@ -729,7 +746,7 @@ export const PlayerBar = () => {
             </div>
             
             {/* Panel derecho - Letra/Información */}
-            <div className="flex flex-col">
+            <div className="flex flex-col h-[450px] overflow-hidden">
               <div className="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
                 <div className="flex space-x-2">
                   <button 
@@ -756,11 +773,11 @@ export const PlayerBar = () => {
               </div>
               
               {/* Contenido del panel derecho */}
-              <div className="flex-1 min-h-[400px]">
+              <div className="flex-1 min-h-0 overflow-hidden bg-black/20 rounded-lg border border-white/5">
                 {/* Vista Letra */}
                 {rightPanelTab === 'lyrics' && (
-                  <div className="bg-gray-800/30 rounded-lg p-6 border border-white/5 h-full">
-                    <div className="h-[360px] overflow-y-auto lyrics-container px-10" ref={lyricsContainerRef}>
+                  <div className="h-full p-4">
+                    <div className="h-full overflow-y-auto lyrics-container px-6" ref={lyricsContainerRef}>
                       {lyrics.isLoading ? (
                         // Estado de carga
                         <div className="flex flex-col items-center justify-center h-full">
@@ -831,7 +848,7 @@ export const PlayerBar = () => {
                             const isCurrentLine = index === currentLineIndex;
                             
                             return (
-                              <motion.p 
+                              <motion.div 
                                 key={`${line.time}-${index}`}
                                 className={`relative transition-all duration-300 text-center py-1.5 ${
                                   isCurrentLine 
@@ -842,12 +859,14 @@ export const PlayerBar = () => {
                                 animate={{ 
                                   opacity: 1,
                                   scale: isCurrentLine ? 1.05 : 1,
-                                  textShadow: isCurrentLine ? '0 0 10px rgba(124, 58, 237, 0.6)' : 'none',
                                   backgroundColor: isCurrentLine ? 'rgba(124, 58, 237, 0.08)' : undefined
                                 }}
                                 transition={{
                                   scale: { type: "spring", stiffness: 300, damping: 30 },
                                   backgroundColor: { duration: 0.3 }
+                                }}
+                                style={{
+                                  textShadow: isCurrentLine ? '0 0 10px rgba(124, 58, 237, 0.6)' : 'none'
                                 }}
                                 onClick={() => handleLyricLineClick(line.time, index)}
                                 id={`lyric-line-${index}`}
@@ -868,7 +887,7 @@ export const PlayerBar = () => {
                                   />
                                 )}
                                 {line.text || "♪"}
-                              </motion.p>
+                              </motion.div>
                             );
                           })}
                         </div>
@@ -894,90 +913,88 @@ export const PlayerBar = () => {
                 
                 {/* Vista Información */}
                 {rightPanelTab === 'info' && (
-                  <div className="bg-gray-800/30 rounded-lg p-6 border border-white/5 h-full">
-                    <div className="h-[360px] overflow-y-auto">
-                      <motion.h2
-                        className="text-3xl font-bold mb-1 text-white"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                  <div className="h-full p-6 overflow-y-auto">
+                    <motion.h2
+                      className="text-3xl font-bold mb-1 text-white"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      {currentTrack.title}
+                    </motion.h2>
+                    <motion.h3
+                      className="text-xl text-gray-300 mb-4"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      {currentTrack.artist}
+                    </motion.h3>
+                    <motion.p
+                      className="text-gray-400 text-sm mb-6"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      Álbum: {currentTrack.album || "Desconocido"}
+                    </motion.p>
+                    
+                    {/* Información adicional del track */}
+                    <div className="space-y-4 text-gray-300">
+                      <motion.p 
+                        className="leading-relaxed"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: isPlaying ? 1 : 0.5 }}
+                        transition={{ delay: 0.3 }}
                       >
-                        {currentTrack.title}
-                      </motion.h2>
-                      <motion.h3
-                        className="text-xl text-gray-300 mb-4"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        {currentTrack.artist}
-                      </motion.h3>
-                      <motion.p
-                        className="text-gray-400 text-sm mb-6"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        Álbum: {currentTrack.album}
+                        <span className="text-white font-medium">ID de YouTube:</span><br />
+                        {currentTrack.youtubeId || "No disponible"}
                       </motion.p>
                       
-                      {/* Información adicional del track */}
-                      <div className="space-y-4 text-gray-300">
-                        <motion.p 
-                          className="leading-relaxed"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isPlaying ? 1 : 0.5 }}
-                          transition={{ delay: 0.3 }}
-                        >
-                          <span className="text-white font-medium">ID de YouTube:</span><br />
-                          {currentTrack.youtubeId || "No disponible"}
-                        </motion.p>
-                        
-                        <motion.p 
-                          className="leading-relaxed"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isPlaying ? 1 : 0.5 }}
-                          transition={{ delay: 0.4 }}
-                        >
-                          <span className="text-white font-medium">Duración:</span><br />
-                          {totalTimeFormatted}
-                        </motion.p>
-                      </div>
+                      <motion.p 
+                        className="leading-relaxed"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: isPlaying ? 1 : 0.5 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <span className="text-white font-medium">Duración:</span><br />
+                        {totalTimeFormatted}
+                      </motion.p>
+                    </div>
+                    
+                    {/* Controles adicionales */}
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <motion.button
+                        className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        Guardar
+                      </motion.button>
                       
-                      {/* Controles adicionales */}
-                      <div className="mt-6 flex flex-wrap gap-3">
-                        <motion.button
-                          className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                          </svg>
-                          Guardar
-                        </motion.button>
-                        
-                        <motion.button
-                          className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
-                          </svg>
-                          Compartir
-                        </motion.button>
-                        
-                        <motion.button
-                          className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" />
-                          </svg>
-                          Añadir a Playlist
-                        </motion.button>
-                      </div>
+                      <motion.button
+                        className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                        </svg>
+                        Compartir
+                      </motion.button>
+                      
+                      <motion.button
+                        className="bg-white/10 hover:bg-white/20 text-white rounded-full py-2 px-4 flex items-center"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" />
+                        </svg>
+                        Añadir a Playlist
+                      </motion.button>
                     </div>
                   </div>
                 )}

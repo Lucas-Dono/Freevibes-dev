@@ -1,6 +1,6 @@
-import { cookies } from 'next/headers';
+import { API_CONFIG } from '@/config/api-config';
 
-const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
+const SPOTIFY_API_BASE = API_CONFIG.SPOTIFY_API_BASE;
 
 interface SpotifyOptions {
     limit?: number;
@@ -716,14 +716,11 @@ export function createSpotifyApi(accessToken: string) {
  * Obtiene un cliente de Spotify con el token de acceso de las cookies
  * @returns Cliente de Spotify con funciones para llamar a la API
  */
-export async function getSpotify() {
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get('spotify_access_token')?.value;
-
-    if (!accessToken) {
-        throw new Error('No se encontró el token de acceso de Spotify');
-    }
-
-    console.log('Token de acceso obtenido de cookies');
-    return createSpotifyApi(accessToken);
-}
+export const getSpotify = async (accessToken?: string) => {
+  if (!accessToken) {
+    console.error('[getSpotify] No se proporcionó token de acceso');
+    throw new Error('No se proporcionó token de acceso');
+  }
+  
+  return createSpotifyApi(accessToken);
+};

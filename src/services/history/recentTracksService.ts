@@ -1,7 +1,6 @@
 import { IRecentTrack } from '@/models/RecentTrack';
 import { getMultiSourceTrackDetails, batchProcessQueries } from '@/services/recommendations/multi-source-recommender';
 import { Track } from '@/types/types';
-import { useAuth } from '@/app/context/AuthContext';
 import { connectToDatabase } from '@/lib/db/mongodb';
 
 // Interfaz para las pistas enriquecidas con información de APIs externas
@@ -100,12 +99,10 @@ export class RecentTracksService {
    */
   static async enrichHistoryTracks(historyTracks: IRecentTrack[]): Promise<EnrichedTrack[]> {
     try {
-      console.log(`[HistoryService] Procesando ${historyTracks.length} tracks de historial`);
       
       // Primero eliminar duplicados para evitar procesamiento innecesario
       const uniqueHistoryTracks = this.removeDuplicateTracks(historyTracks);
       
-      console.log(`[HistoryService] Enriqueciendo ${uniqueHistoryTracks.length} tracks únicos de historial`);
       
       // Preparar mapa de tracks por ID para mantener orden original
       const trackById: Record<string, IRecentTrack> = {};
@@ -127,7 +124,6 @@ export class RecentTracksService {
         queryToTrackIdMap[searchQuery].push(track.trackId);
       });
       
-      console.log(`[HistoryService] Procesando ${uniqueQueries.length} consultas únicas en lote`);
       
       // Procesar todas las consultas en lote
       const batchResults = await batchProcessQueries(uniqueQueries, { 
@@ -171,7 +167,6 @@ export class RecentTracksService {
         }
       }
       
-      console.log(`[HistoryService] Enriquecimiento completado: ${results.length} tracks únicos`);
       return results;
     } catch (error) {
       console.error('[HistoryService] Error enriqueciendo tracks:', error);
@@ -290,13 +285,12 @@ export class RecentTracksService {
   }
   
   /**
-   * Obtiene el historial de canciones
+   * Obtiene el historial de canciones escuchadas recientemente
    */
-  static async getHistory(limit: number = 10): Promise<EnrichedTrack[]> {
+  static async getHistory(limit: number = 10, retryCount = 0): Promise<EnrichedTrack[]> {
+    const MAX_RETRIES = 2; // Número máximo de reintentos
+    
     try {
-      console.log('Iniciando petición de historial al API...');
-      
-      // Añadir un tiempo de espera para dar tiempo a que el servidor responda
       const fetchPromise = fetch(`/api/history?limit=${limit}`, {
         method: 'GET',
         headers: {
@@ -310,11 +304,25 @@ export class RecentTracksService {
       const timeoutPromise = new Promise<Response>((_, reject) => {
         setTimeout(() => {
           reject(new Error('La petición ha excedido el tiempo límite'));
-        }, 10000); // 10 segundos de timeout
+        }, 15000); // Aumentar a 15 segundos de timeout
       });
       
       // Competir entre la petición y el timeout
-      const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+      let response: Response;
+      try {
+        response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+      } catch (timeoutError) {
+        console.warn(`Timeout al obtener historial del servidor (intento ${retryCount + 1}/${MAX_RETRIES + 1}):`, timeoutError);
+        
+        // Si no hemos excedido el número máximo de reintentos, intentar de nuevo
+        if (retryCount < MAX_RETRIES) {
+          // Esperar un tiempo antes de reintentar (backoff exponencial)
+          await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
+          return this.getHistory(limit, retryCount + 1);
+        }
+        
+        return this.getLocalHistory(limit);
+      }
       
       // Verificar si la respuesta es OK
       if (!response.ok) {
@@ -322,17 +330,20 @@ export class RecentTracksService {
         
         // Si el error es 401 (no autorizado), intentar con un reintento como invitado
         if (response.status === 401) {
-          console.log('Intentando reintento como invitado...');
-          const guestResponse = await fetch(`/api/history?limit=${limit}&guest=true`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-cache'
+          try {
+            const guestResponse = await fetch(`/api/history?limit=${limit}&guest=true`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache'
+              }
+            });
+            
+            if (guestResponse.ok) {
+              return this.processApiResponse(await guestResponse.json(), limit);
             }
-          });
-          
-          if (guestResponse.ok) {
-            return this.processApiResponse(await guestResponse.json(), limit);
+          } catch (guestError) {
+            console.warn('Error en reintento como invitado:', guestError);
           }
         }
         
@@ -341,9 +352,15 @@ export class RecentTracksService {
       }
       
       // Procesar respuesta exitosa
-      const data = await response.json();
-      return this.processApiResponse(data, limit);
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error('Error al procesar JSON de respuesta:', jsonError);
+        return this.getLocalHistory(limit);
+      }
       
+      return this.processApiResponse(data, limit);
     } catch (error) {
       console.error('Error al obtener historial:', error);
       return this.getLocalHistory(limit);
@@ -355,12 +372,10 @@ export class RecentTracksService {
    */
   private static processApiResponse(data: any, limit: number): EnrichedTrack[] {
     if (!data.tracks || !Array.isArray(data.tracks)) {
-      console.log('La API devolvió un formato no esperado. Usando historial local.');
       return this.getLocalHistory(limit);
     }
     
     if (data.tracks.length === 0) {
-      console.log('No hay canciones en el historial. Usando historial local.');
       return this.getLocalHistory(limit);
     }
     
@@ -394,7 +409,6 @@ export class RecentTracksService {
       if (localHistory) {
         const parsedHistory = JSON.parse(localHistory);
         if (Array.isArray(parsedHistory) && parsedHistory.length > 0) {
-          console.log('Usando historial almacenado localmente');
           
           // Convertir a EnrichedTrack y limitar al número solicitado
           const localTracks = parsedHistory

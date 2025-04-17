@@ -35,7 +35,6 @@ export async function findTrackImage(
   }
 
   const trackKey = `${artist}:${title}`;
-  console.log(`[TrackImageService] Buscando información para "${trackKey}"`);
 
   // Encolar la solicitud y procesarla cuando sea posible
   return new Promise((resolve) => {
@@ -127,7 +126,6 @@ async function searchAllApis(
       };
     }
     
-    console.log(`[TrackImageService] No se encontraron detalles para "${trackKey}" en ninguna API`);
     return null;
   } catch (error) {
     console.error(`[TrackImageService] Error buscando detalles:`, error);

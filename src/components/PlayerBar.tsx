@@ -28,6 +28,9 @@ import {
 } from '@mui/icons-material';
 import { usePlayer, Track } from '@/contexts/PlayerContext';
 
+// Data URL para imagen placeholder, evita solicitudes HTTP
+const placeholderDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg==';
+
 const PlayerBarContainer = styled(Box)(({ theme }) => ({
   height: '90px',
   backgroundColor: '#0f0f18',
@@ -110,7 +113,12 @@ export const PlayerBar = () => {
     setVolume,
     playlist,
     playTrack,
-    lyrics
+    lyrics,
+    createAutoPlaylist,
+    isShuffleEnabled,
+    isRepeatEnabled,
+    toggleShuffle,
+    toggleRepeat
   } = usePlayer();
 
   // Estados locales del componente
@@ -129,6 +137,43 @@ export const PlayerBar = () => {
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isProgrammaticScrollRef = useRef(false);
+  
+  // Agregar manejador de eventos de teclado para atajos
+  useEffect(() => {
+    // Solo configurar el event listener si hay una canción actual
+    if (!currentTrack) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Evitar actuar si el usuario está escribiendo en un input
+      if (e.target instanceof HTMLInputElement || 
+          e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (e.code) {
+        case 'Space': // Barra espaciadora para reproducir/pausar
+          e.preventDefault(); // Evitar scroll en la página
+          togglePlay();
+          break;
+        case 'ArrowRight': // Flecha derecha para siguiente canción
+          e.preventDefault();
+          nextTrack();
+          break;
+        case 'ArrowLeft': // Flecha izquierda para canción anterior
+          e.preventDefault();
+          previousTrack();
+          break;
+      }
+    };
+
+    // Agregar event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Eliminar event listener cuando se desmonte
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentTrack, togglePlay, nextTrack, previousTrack]);
   
   // Calcular progreso actual
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -154,22 +199,47 @@ export const PlayerBar = () => {
     };
   }, [isUserScrolling]);
   
+  // Log de debug para la playlist
+  useEffect(() => {
+    if (playlist) {
+      console.log("[PlayerBar] Playlist actualizada:", playlist.length, "canciones");
+    }
+  }, [playlist]);
+  
+  // Log de debug para la canción actual
+  useEffect(() => {
+    if (currentTrack) {
+      console.log("[PlayerBar] Canción actual actualizada:", currentTrack.title);
+    }
+  }, [currentTrack]);
+  
   // Memoizar la función handleUserScroll para evitar recreaciones innecesarias
   const memoizedHandleUserScroll = useCallback(() => {
-    setIsUserScrolling(true);
-    setAutoScrollEnabled(false);
-    
-    // Limpiar cualquier timeout existente
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
+    if (isProgrammaticScrollRef.current) {
+      isProgrammaticScrollRef.current = false;
+      return;
     }
     
-    // Establecer un nuevo timeout para reactivar el auto-scroll después de 3 segundos
-    scrollTimeoutRef.current = setTimeout(() => {
-      setIsUserScrolling(false);
-      setAutoScrollEnabled(true);
-    }, 3000);
-  }, []);
+    // Marcamos que el usuario está scrolleando manualmente
+    setIsUserScrolling(true);
+    
+    // Solo desactivamos el autocentrado y configuramos el temporizador
+    // si el autocentrado está activado actualmente
+    if (autoScrollEnabled) {
+      setAutoScrollEnabled(false);
+      
+      // Limpiar cualquier timeout existente
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // Establecer un nuevo timeout para reactivar el auto-scroll después de 3 segundos
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+        setAutoScrollEnabled(true);
+      }, 3000);
+    }
+  }, [autoScrollEnabled]);
   
   // Actualizar volumen cuando cambia en el contexto
   useEffect(() => {
@@ -217,6 +287,9 @@ export const PlayerBar = () => {
           const elementTop = element.offsetTop;
           const elementHeight = element.clientHeight;
           const containerHeight = container.clientHeight;
+          
+          // Marcar que el scroll está siendo programático para evitar activar el evento de scroll manual
+          isProgrammaticScrollRef.current = true;
           
           // Scroll simple para centrar el elemento
           container.scrollTo({
@@ -293,7 +366,6 @@ export const PlayerBar = () => {
       const clickPosition = e.clientX - rect.left;
       const percentage = (clickPosition / rect.width);
       const newTime = percentage * duration;
-      console.log("Seeking to:", newTime, "seconds");
       seekTo(newTime);
     }
   }, [duration, seekTo]);
@@ -321,8 +393,6 @@ export const PlayerBar = () => {
   }, [isMuted, setVolume]);
   
   const toggleExpand = useCallback(() => {
-    console.log("Toggling expanded view, current state:", isExpanded);
-    // Establecer explícitamente al estado opuesto al actual
     setIsExpanded(prevState => !prevState);
   }, []);
   
@@ -331,10 +401,17 @@ export const PlayerBar = () => {
     return null;
   }
 
-  // Validar URL de la portada
-  const coverUrl = currentTrack.cover || '/placeholder-album.jpg';
-  
-  console.log("PlayerBar rendering with currentTrack:", currentTrack.title, "isPlaying:", isPlaying);
+  // Validar URL de la portada con múltiples opciones de respaldo
+  let coverUrl = currentTrack.cover;
+  if (!coverUrl) {
+    if (currentTrack.albumCover) {
+      coverUrl = currentTrack.albumCover;
+    } else if (currentTrack.youtubeId) {
+      coverUrl = `https://i.ytimg.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
+    } else {
+      coverUrl = placeholderDataUrl;
+    }
+  }
   
   return (
     <motion.div
@@ -376,13 +453,13 @@ export const PlayerBar = () => {
               >
                 {currentTrack.title}
               </motion.h3>
-              <motion.p 
+              <motion.div 
                 className="text-gray-400 text-xs truncate"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
                 {currentTrack.artist}
-              </motion.p>
+              </motion.div>
             </div>
           </div>
           
@@ -457,10 +534,10 @@ export const PlayerBar = () => {
           </div>
           
           {/* Controles secundarios */}
-          <div className="flex items-center justify-end w-1/4 space-x-3">
-            <div className="relative">
+          <div className="flex items-center justify-center w-1/4 space-x-4">
+            <div className="relative flex items-center justify-center">
               <motion.button 
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white flex items-center justify-center"
                 onClick={handleToggleMute}
                 onMouseEnter={() => setIsVolumeVisible(true)}
                 onMouseLeave={() => setIsVolumeVisible(false)}
@@ -485,7 +562,8 @@ export const PlayerBar = () => {
               <AnimatePresence>
                 {isVolumeVisible && (
                   <motion.div 
-                    className="absolute bottom-full mb-2 -left-8 bg-gray-800 p-2 rounded-lg shadow-lg"
+                    className="absolute bottom-full mb-2 bg-gray-800 p-2 rounded-lg shadow-lg"
+                    style={{ left: '50%', transform: 'translateX(-50%)' }}
                     initial={{ opacity: 0, y: 10, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.9 }}
@@ -509,21 +587,26 @@ export const PlayerBar = () => {
               </AnimatePresence>
             </div>
             
+            {/* Botón de reproducción aleatoria */}
             <motion.button 
-              className="text-gray-400 hover:text-white"
-              whileHover={{ scale: 1.1, rotate: 180 }}
+              className={`${isShuffleEnabled ? 'text-primary' : 'text-gray-400'} hover:text-primary flex items-center justify-center`}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              transition={{ rotate: { duration: 0.5 } }}
+              onClick={toggleShuffle}
+              title={isShuffleEnabled ? "Desactivar reproducción aleatoria" : "Activar reproducción aleatoria"}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
               </svg>
             </motion.button>
             
+            {/* Botón de repetición */}
             <motion.button 
-              className="text-gray-400 hover:text-white"
+              className={`${isRepeatEnabled ? 'text-primary' : 'text-gray-400'} hover:text-primary flex items-center justify-center`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              onClick={toggleRepeat}
+              title={isRepeatEnabled ? "Desactivar repetición" : "Activar repetición"}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
@@ -531,14 +614,14 @@ export const PlayerBar = () => {
             </motion.button>
             
             <motion.button 
-              className="text-gray-400 hover:text-white"
+              className="text-gray-400 hover:text-white flex items-center justify-center"
               onClick={toggleExpand}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               {isExpanded ? (
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                 </svg>
               ) : (
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -681,12 +764,13 @@ export const PlayerBar = () => {
                         <div className="space-y-2">
                           {playlist.map((track, index) => (
                             <motion.div 
-                              key={track.id}
-                              className="flex items-center p-2 hover:bg-white/10 rounded-md cursor-pointer group"
+                              key={`playlist-item-${track.id}-${index}`}
+                              className={`flex items-center p-2 ${currentTrack && currentTrack.id === track.id ? 'bg-white/20' : 'hover:bg-white/10'} rounded-md cursor-pointer group`}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: index * 0.05 }}
                               onClick={() => {
+                                console.log(`[PlayerBar] Clic en track de playlist: ${track.title}`);
                                 if (playlist) playTrack(track);
                               }}
                             >
@@ -696,9 +780,18 @@ export const PlayerBar = () => {
                                     src={track.cover} 
                                     alt={track.title} 
                                     className="w-full h-full object-cover" 
+                                    onError={(e) => {
+                                      // Usar Data URL directamente en lugar de solicitar un archivo
+                                      const target = e.target as HTMLImageElement;
+                                      target.src = placeholderDataUrl;
+                                    }}
                                   />
                                 ) : (
-                                  <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+                                  <div className="w-full h-full flex items-center justify-center" 
+                                    style={{ 
+                                      backgroundImage: `url(${placeholderDataUrl})`,
+                                      backgroundSize: 'cover'
+                                    }}>
                                     <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                                       <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6zm-2 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
                                     </svg>
@@ -718,8 +811,39 @@ export const PlayerBar = () => {
                           ))}
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center h-full text-gray-500">
-                          No hay más canciones en la cola
+                        <div className="flex flex-col items-center justify-center h-full space-y-4 text-gray-500">
+                          <p>No hay más canciones en la cola</p>
+                          
+                          {/* Botón para regenerar recomendaciones */}
+                          {currentTrack && (
+                            <motion.button
+                              className="bg-primary hover:bg-primary/80 text-white rounded-full py-2 px-4 flex items-center mt-4"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={async () => {
+                                if (currentTrack) {
+                                  try {
+                                    console.log("[PlayerBar] Regenerando recomendaciones para:", currentTrack.title);
+                                    await createAutoPlaylist(currentTrack);
+                                    // Forzar actualización de la UI
+                                    setTimeout(() => {
+                                      setLeftPanelTab('vinyl');
+                                      setTimeout(() => {
+                                        setLeftPanelTab('playlist');
+                                      }, 100);
+                                    }, 1000);
+                                  } catch (error) {
+                                    console.error("[PlayerBar] Error al regenerar recomendaciones:", error);
+                                  }
+                                }
+                              }}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                              </svg>
+                              <span>Regenerar recomendaciones</span>
+                            </motion.button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -773,7 +897,11 @@ export const PlayerBar = () => {
                           {/* Indicador de estado de autocentrado */}
                           <div className="flex justify-between items-center mb-4">
                             <button 
-                              onClick={() => setAutoScrollEnabled(!autoScrollEnabled)}
+                              onClick={() => {
+                                // Al hacer clic en el botón, simplemente invertimos el estado sin configurar un timeout
+                                setAutoScrollEnabled(!autoScrollEnabled);
+                                // No activamos el estado de scrolling manual cuando se clickea el botón
+                              }}
                               className={`text-xs px-3 py-1 rounded-full transition-colors ${
                                 autoScrollEnabled 
                                   ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' 
@@ -793,15 +921,11 @@ export const PlayerBar = () => {
                                     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
                                   </svg>
                                   Activar centrado
+                                  {/* Solo mostramos el mensaje cuando el scroll es automático y se está reactivando temporalmente */}
+                                  {isUserScrolling && scrollTimeoutRef.current && <span className="ml-1 text-yellow-500 text-xs"> (Se reactivará en 3s)</span>}
                                 </span>
                               )}
                             </button>
-                            
-                            {!autoScrollEnabled && (
-                              <div className="text-xs text-gray-500">
-                                Se reactivará en 3s
-                              </div>
-                            )}
                           </div>
                           
                           {/* Indicador de ayuda para navegación por clic */}
@@ -831,7 +955,7 @@ export const PlayerBar = () => {
                             const isCurrentLine = index === currentLineIndex;
                             
                             return (
-                              <motion.p 
+                              <motion.div 
                                 key={`${line.time}-${index}`}
                                 className={`relative transition-all duration-300 text-center py-1.5 ${
                                   isCurrentLine 
@@ -868,7 +992,7 @@ export const PlayerBar = () => {
                                   />
                                 )}
                                 {line.text || "♪"}
-                              </motion.p>
+                              </motion.div>
                             );
                           })}
                         </div>
@@ -876,7 +1000,7 @@ export const PlayerBar = () => {
                         // Mostrar letras planas si no hay sincronizadas
                         <div className="text-gray-300 whitespace-pre-line">
                           {lyrics.plain.split('\n').map((line, i) => (
-                            <p key={i} className="mb-2">{line || "♪"}</p>
+                            <div key={i} className="mb-2">{line || "♪"}</div>
                           ))}
                         </div>
                       ) : (
@@ -885,7 +1009,7 @@ export const PlayerBar = () => {
                           <svg className="w-12 h-12 mb-3 opacity-50" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM16 18H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                           </svg>
-                          <p>No hay letras disponibles para esta canción</p>
+                          <div>No hay letras disponibles para esta canción</div>
                         </div>
                       )}
                     </div>
@@ -911,18 +1035,18 @@ export const PlayerBar = () => {
                       >
                         {currentTrack.artist}
                       </motion.h3>
-                      <motion.p
+                      <motion.div
                         className="text-gray-400 text-sm mb-6"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                       >
                         Álbum: {currentTrack.album}
-                      </motion.p>
+                      </motion.div>
                       
                       {/* Información adicional del track */}
                       <div className="space-y-4 text-gray-300">
-                        <motion.p 
+                        <motion.div 
                           className="leading-relaxed"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: isPlaying ? 1 : 0.5 }}
@@ -930,9 +1054,9 @@ export const PlayerBar = () => {
                         >
                           <span className="text-white font-medium">ID de YouTube:</span><br />
                           {currentTrack.youtubeId || "No disponible"}
-                        </motion.p>
+                        </motion.div>
                         
-                        <motion.p 
+                        <motion.div 
                           className="leading-relaxed"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: isPlaying ? 1 : 0.5 }}
@@ -940,7 +1064,7 @@ export const PlayerBar = () => {
                         >
                           <span className="text-white font-medium">Duración:</span><br />
                           {totalTimeFormatted}
-                        </motion.p>
+                        </motion.div>
                       </div>
                       
                       {/* Controles adicionales */}

@@ -10,6 +10,8 @@ import { getRecommendationsByGenre } from '@/services/recommendations';
 import { Track } from '@/types/types';
 // Importar nuestro nuevo componente GenreImage
 import GenreImage from '@/components/GenreImage';
+// Importamos el servicio universal
+import { playTrack as universalPlayTrack } from '@/services/player/playService';
 
 // Imágenes de fondo para géneros
 const genreImages: Record<string, string> = {
@@ -72,18 +74,30 @@ export default function GenrePage() {
     }
   }, [genre]);
 
-  // Función para reproducir una pista
-  const handlePlayTrack = (track: Track) => {
-    if (playTrack) {
-      playTrack(track);
+  // Función para reproducir una pista usando el servicio universal
+  const handlePlayTrack = async (track: Track) => {
+    try {
+      console.log(`[GenrePage] Intentando reproducir track: ${track.title} - ${track.artist}`);
+      // Usar el servicio universal para reproducción
+      await universalPlayTrack(track);
+    } catch (error) {
+      console.error(`[GenrePage] Error al reproducir track: ${track.title}`, error);
     }
   };
 
   // Función para reproducir todas las pistas como una playlist
-  const handlePlayAll = () => {
-    if (playTrack && tracks.length > 0) {
-      // Al reproducir la primera pista, se generará una playlist automáticamente
-      playTrack(tracks[0]);
+  const handlePlayAll = async () => {
+    if (tracks.length > 0) {
+      try {
+        console.log(`[GenrePage] Reproduciendo playlist completa de género: ${genre}`);
+        // Al reproducir la primera pista con el servicio universal
+        await universalPlayTrack(tracks[0]);
+        // Nota: La generación de playlist automática se maneja en el servicio
+      } catch (error) {
+        console.error(`[GenrePage] Error al iniciar playlist de género`, error);
+      }
+    } else {
+      console.warn(`[GenrePage] No hay tracks disponibles para reproducir`);
     }
   };
 

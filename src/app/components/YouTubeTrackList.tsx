@@ -37,7 +37,6 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
 
   // Manejar clic en una canción
   const handleTrackClick = (track: Track, index: number) => {
-    console.log("Clic en canción:", track.title, "youtubeId:", track.youtubeId || "no disponible");
     
     if (onTrackClick) {
       onTrackClick(track, index);

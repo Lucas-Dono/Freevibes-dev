@@ -1,0 +1,658 @@
+{
+  "artists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=musica%20italiana&type=artist&market=IT&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=musica%20italiana&type=artist&market=IT&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 21,
+    "items": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2e4nwiX8ZCU09LGLOpeqTH"
+        },
+        "followers": {
+          "href": null,
+          "total": 2743649
+        },
+        "genres": [
+          "latin pop",
+          "italo dance"
+        ],
+        "href": "https://api.spotify.com/v1/artists/2e4nwiX8ZCU09LGLOpeqTH",
+        "id": "2e4nwiX8ZCU09LGLOpeqTH",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb102bbbb1f908fd139e98c510",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174102bbbb1f908fd139e98c510",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178102bbbb1f908fd139e98c510",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Laura Pausini",
+        "popularity": 73,
+        "type": "artist",
+        "uri": "spotify:artist:2e4nwiX8ZCU09LGLOpeqTH"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3EA9hVIzKfFiQI0Kikz2wo"
+        },
+        "followers": {
+          "href": null,
+          "total": 3053301
+        },
+        "genres": [
+          "opera"
+        ],
+        "href": "https://api.spotify.com/v1/artists/3EA9hVIzKfFiQI0Kikz2wo",
+        "id": "3EA9hVIzKfFiQI0Kikz2wo",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebfb101ed2a035fcfa2bd6fee1",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174fb101ed2a035fcfa2bd6fee1",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178fb101ed2a035fcfa2bd6fee1",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Andrea Bocelli",
+        "popularity": 71,
+        "type": "artist",
+        "uri": "spotify:artist:3EA9hVIzKfFiQI0Kikz2wo"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/61J0BktHv7PuP3tjTPYXSX"
+        },
+        "followers": {
+          "href": null,
+          "total": 2392810
+        },
+        "genres": [
+          "italo dance"
+        ],
+        "href": "https://api.spotify.com/v1/artists/61J0BktHv7PuP3tjTPYXSX",
+        "id": "61J0BktHv7PuP3tjTPYXSX",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb314f9d52a5a1389b93669b9b",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174314f9d52a5a1389b93669b9b",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178314f9d52a5a1389b93669b9b",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Eros Ramazzotti",
+        "popularity": 71,
+        "type": "artist",
+        "uri": "spotify:artist:61J0BktHv7PuP3tjTPYXSX"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5l4nhyz8876RhgE2d18h65"
+        },
+        "followers": {
+          "href": null,
+          "total": 3939971
+        },
+        "genres": [
+          "italian singer-songwriter",
+          "singer-songwriter",
+          "italo dance"
+        ],
+        "href": "https://api.spotify.com/v1/artists/5l4nhyz8876RhgE2d18h65",
+        "id": "5l4nhyz8876RhgE2d18h65",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb6236b31052ab6d32689cd143",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051746236b31052ab6d32689cd143",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1786236b31052ab6d32689cd143",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Vasco Rossi",
+        "popularity": 67,
+        "type": "artist",
+        "uri": "spotify:artist:5l4nhyz8876RhgE2d18h65"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/11TplWqOPQBTmg2eiSLt1m"
+        },
+        "followers": {
+          "href": null,
+          "total": 2178146
+        },
+        "genres": [
+          "italian singer-songwriter",
+          "italo dance"
+        ],
+        "href": "https://api.spotify.com/v1/artists/11TplWqOPQBTmg2eiSLt1m",
+        "id": "11TplWqOPQBTmg2eiSLt1m",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb12a6bc7530946e34bb36ec85",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000517412a6bc7530946e34bb36ec85",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f17812a6bc7530946e34bb36ec85",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Tiziano Ferro",
+        "popularity": 65,
+        "type": "artist",
+        "uri": "spotify:artist:11TplWqOPQBTmg2eiSLt1m"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6EVyI0S0b1Ld2nm37m5x85"
+        },
+        "followers": {
+          "href": null,
+          "total": 209388
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/6EVyI0S0b1Ld2nm37m5x85",
+        "id": "6EVyI0S0b1Ld2nm37m5x85",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebb11ef713e00db56ccb769274",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174b11ef713e00db56ccb769274",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178b11ef713e00db56ccb769274",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Raffaella Carrà",
+        "popularity": 65,
+        "type": "artist",
+        "uri": "spotify:artist:6EVyI0S0b1Ld2nm37m5x85"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/0Y8KmFkKOgJybpVobn1onU"
+        },
+        "followers": {
+          "href": null,
+          "total": 1047689
+        },
+        "genres": [
+          "opera",
+          "classical",
+          "canzone napoletana"
+        ],
+        "href": "https://api.spotify.com/v1/artists/0Y8KmFkKOgJybpVobn1onU",
+        "id": "0Y8KmFkKOgJybpVobn1onU",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb7c79a26af7f4b435ec8c6b95",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051747c79a26af7f4b435ec8c6b95",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1787c79a26af7f4b435ec8c6b95",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Luciano Pavarotti",
+        "popularity": 64,
+        "type": "artist",
+        "uri": "spotify:artist:0Y8KmFkKOgJybpVobn1onU"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/0H1InhXaXQPL1aj0mvHemU"
+        },
+        "followers": {
+          "href": null,
+          "total": 348370
+        },
+        "genres": [
+          "rock en español",
+          "italian singer-songwriter"
+        ],
+        "href": "https://api.spotify.com/v1/artists/0H1InhXaXQPL1aj0mvHemU",
+        "id": "0H1InhXaXQPL1aj0mvHemU",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebd5a53078e1ba73d6228a1466",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174d5a53078e1ba73d6228a1466",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178d5a53078e1ba73d6228a1466",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Gianluca Grignani",
+        "popularity": 62,
+        "type": "artist",
+        "uri": "spotify:artist:0H1InhXaXQPL1aj0mvHemU"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/0dE9ooTNz8iEKIKItRI66t"
+        },
+        "followers": {
+          "href": null,
+          "total": 747708
+        },
+        "genres": [
+          "opera"
+        ],
+        "href": "https://api.spotify.com/v1/artists/0dE9ooTNz8iEKIKItRI66t",
+        "id": "0dE9ooTNz8iEKIKItRI66t",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebd5ce3d93025863d358017c4b",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174d5ce3d93025863d358017c4b",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178d5ce3d93025863d358017c4b",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Il Volo",
+        "popularity": 60,
+        "type": "artist",
+        "uri": "spotify:artist:0dE9ooTNz8iEKIKItRI66t"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4MR6tQyIrWK82b56cYPBDv"
+        },
+        "followers": {
+          "href": null,
+          "total": 241750
+        },
+        "genres": [
+          "italian singer-songwriter",
+          "italo dance",
+          "italo disco"
+        ],
+        "href": "https://api.spotify.com/v1/artists/4MR6tQyIrWK82b56cYPBDv",
+        "id": "4MR6tQyIrWK82b56cYPBDv",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb01b48d88cd48017e95ef67a3",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000517401b48d88cd48017e95ef67a3",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f17801b48d88cd48017e95ef67a3",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Ornella Vanoni",
+        "popularity": 58,
+        "type": "artist",
+        "uri": "spotify:artist:4MR6tQyIrWK82b56cYPBDv"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4llklDtTTyMYMY2LfFOkTI"
+        },
+        "followers": {
+          "href": null,
+          "total": 235662
+        },
+        "genres": [
+          "italian singer-songwriter",
+          "italo dance",
+          "canzone napoletana"
+        ],
+        "href": "https://api.spotify.com/v1/artists/4llklDtTTyMYMY2LfFOkTI",
+        "id": "4llklDtTTyMYMY2LfFOkTI",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb5ad2b161e1a68bc601e293ee",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051745ad2b161e1a68bc601e293ee",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1785ad2b161e1a68bc601e293ee",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Domenico Modugno",
+        "popularity": 52,
+        "type": "artist",
+        "uri": "spotify:artist:4llklDtTTyMYMY2LfFOkTI"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1u2U27ckhq5LxPzOy3ZHoa"
+        },
+        "followers": {
+          "href": null,
+          "total": 60655
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/1u2U27ckhq5LxPzOy3ZHoa",
+        "id": "1u2U27ckhq5LxPzOy3ZHoa",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb3f69c05af24aff67b6a5a6c3",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051743f69c05af24aff67b6a5a6c3",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1783f69c05af24aff67b6a5a6c3",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Franco Simone",
+        "popularity": 52,
+        "type": "artist",
+        "uri": "spotify:artist:1u2U27ckhq5LxPzOy3ZHoa"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/31Pfw9p5mZPeKqZSaiXzqk"
+        },
+        "followers": {
+          "href": null,
+          "total": 374917
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/31Pfw9p5mZPeKqZSaiXzqk",
+        "id": "31Pfw9p5mZPeKqZSaiXzqk",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273a0cfe4911850a7eb259aee55",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02a0cfe4911850a7eb259aee55",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851a0cfe4911850a7eb259aee55",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Nicola Di Bari",
+        "popularity": 51,
+        "type": "artist",
+        "uri": "spotify:artist:31Pfw9p5mZPeKqZSaiXzqk"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3Vk0FgkCtTJyHg5WcpGcWg"
+        },
+        "followers": {
+          "href": null,
+          "total": 695
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/3Vk0FgkCtTJyHg5WcpGcWg",
+        "id": "3Vk0FgkCtTJyHg5WcpGcWg",
+        "images": [],
+        "name": "Accademia Musicale Italiana",
+        "popularity": 36,
+        "type": "artist",
+        "uri": "spotify:artist:3Vk0FgkCtTJyHg5WcpGcWg"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5aIRiWt88IO9YUJjuifOaq"
+        },
+        "followers": {
+          "href": null,
+          "total": 23
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/5aIRiWt88IO9YUJjuifOaq",
+        "id": "5aIRiWt88IO9YUJjuifOaq",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b27360f237db38a381365f98dd30",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e0260f237db38a381365f98dd30",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000485160f237db38a381365f98dd30",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana",
+        "popularity": 7,
+        "type": "artist",
+        "uri": "spotify:artist:5aIRiWt88IO9YUJjuifOaq"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/7u0KUlvNusOHr4EKgNjJiZ"
+        },
+        "followers": {
+          "href": null,
+          "total": 108
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/7u0KUlvNusOHr4EKgNjJiZ",
+        "id": "7u0KUlvNusOHr4EKgNjJiZ",
+        "images": [],
+        "name": "Academia Musicale Italiana/Antonio Secchi",
+        "popularity": 7,
+        "type": "artist",
+        "uri": "spotify:artist:7u0KUlvNusOHr4EKgNjJiZ"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/0Fke3hlNt8LMt07Y8SBd0F"
+        },
+        "followers": {
+          "href": null,
+          "total": 1424
+        },
+        "genres": [
+          "traditional music"
+        ],
+        "href": "https://api.spotify.com/v1/artists/0Fke3hlNt8LMt07Y8SBd0F",
+        "id": "0Fke3hlNt8LMt07Y8SBd0F",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273467d71d4ad94523722642068",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02467d71d4ad94523722642068",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851467d71d4ad94523722642068",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Ambrogio Sparagna & Orchestra Popolare Italiana dell'Auditorium Parco della Musica",
+        "popularity": 7,
+        "type": "artist",
+        "uri": "spotify:artist:0Fke3hlNt8LMt07Y8SBd0F"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/39iK7Zl56dblyTXXtajJMi"
+        },
+        "followers": {
+          "href": null,
+          "total": 28
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/39iK7Zl56dblyTXXtajJMi",
+        "id": "39iK7Zl56dblyTXXtajJMi",
+        "images": [],
+        "name": "Corpo Musicale Della Marina Italiana",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:39iK7Zl56dblyTXXtajJMi"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3HNH5ggOJYsckH8Mr7GSL0"
+        },
+        "followers": {
+          "href": null,
+          "total": 79
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/3HNH5ggOJYsckH8Mr7GSL0",
+        "id": "3HNH5ggOJYsckH8Mr7GSL0",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273d7f6a38e0ded6ed0c99cf047",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02d7f6a38e0ded6ed0c99cf047",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851d7f6a38e0ded6ed0c99cf047",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Corpo musicale dell'Aeronautica Militare Italiana",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:3HNH5ggOJYsckH8Mr7GSL0"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4VICcgltFHw0Ey2xa2Vrak"
+        },
+        "followers": {
+          "href": null,
+          "total": 16
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/4VICcgltFHw0Ey2xa2Vrak",
+        "id": "4VICcgltFHw0Ey2xa2Vrak",
+        "images": [],
+        "name": "Corpo Musicale della R. Marina Italiana",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:4VICcgltFHw0Ey2xa2Vrak"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3Dg2BcDtdSp1ubqmaLzjUD"
+        },
+        "followers": {
+          "href": null,
+          "total": 34
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/3Dg2BcDtdSp1ubqmaLzjUD",
+        "id": "3Dg2BcDtdSp1ubqmaLzjUD",
+        "images": [],
+        "name": "Corpo musicale della Reale Marina Italiana",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:3Dg2BcDtdSp1ubqmaLzjUD"
+      }
+    ]
+  }
+}

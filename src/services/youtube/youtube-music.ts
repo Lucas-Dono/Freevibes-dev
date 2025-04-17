@@ -66,24 +66,24 @@ class YouTubeMusicService {
       // Usar la API de YouTube Music 
       const musicResults = await youtubeMusicAPI.searchTracks(enhancedQuery, limit * 2);
       
-      if (!musicResults || musicResults.length === 0) {
+      if (!musicResults || !musicResults.tracks || musicResults.tracks.length === 0) {
         return [];
       }
       
       // Convertir el formato de YouTube Music API a YTMusicResult
-      const ytMusicResults: YTMusicResult[] = musicResults.map(item => ({
-        videoId: item.id || item.videoId,
+      const ytMusicResults: YTMusicResult[] = musicResults.tracks.map(item => ({
+        videoId: item.id,
         title: item.title,
-        artist: item.artist || '',
-        album: item.album || '',
+        artist: item.artist,
+        duration: item.duration,
         thumbnails: [
-          { 
-            url: item.thumbnail || (item.thumbnails && item.thumbnails[0]?.url) || '',
-            width: item.thumbnails?.[0]?.width || 120,  // Valor predeterminado
-            height: item.thumbnails?.[0]?.height || 90   // Valor predeterminado
+          {
+            url: item.cover || '',
+            width: 120,  // Valor predeterminado
+            height: 90   // Valor predeterminado
           }
         ],
-        duration: item.duration || 0
+        album: item.album
       })).slice(0, limit);
       
       return ytMusicResults;

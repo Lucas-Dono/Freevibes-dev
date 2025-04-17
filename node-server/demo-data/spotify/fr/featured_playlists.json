@@ -1,0 +1,201 @@
+{
+  "message": "¡Las mejores playlists para ti! (Mock - fr_FR)",
+  "playlists": {
+    "href": "https://api.spotify.com/v1/browse/featured-playlists?country=FR&locale=fr_FR",
+    "items": [
+      {
+        "id": "mock_playlist_0",
+        "name": "Playlist Demo 1",
+        "description": "Playlist de demostración 1 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+1",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 25
+        }
+      },
+      {
+        "id": "mock_playlist_1",
+        "name": "Playlist Demo 2",
+        "description": "Playlist de demostración 2 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+2",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 26
+        }
+      },
+      {
+        "id": "mock_playlist_2",
+        "name": "Playlist Demo 3",
+        "description": "Playlist de demostración 3 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+3",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 27
+        }
+      },
+      {
+        "id": "mock_playlist_3",
+        "name": "Playlist Demo 4",
+        "description": "Playlist de demostración 4 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+4",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 28
+        }
+      },
+      {
+        "id": "mock_playlist_4",
+        "name": "Playlist Demo 5",
+        "description": "Playlist de demostración 5 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+5",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 29
+        }
+      },
+      {
+        "id": "mock_playlist_5",
+        "name": "Playlist Demo 6",
+        "description": "Playlist de demostración 6 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+6",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 30
+        }
+      },
+      {
+        "id": "mock_playlist_6",
+        "name": "Playlist Demo 7",
+        "description": "Playlist de demostración 7 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+7",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 31
+        }
+      },
+      {
+        "id": "mock_playlist_7",
+        "name": "Playlist Demo 8",
+        "description": "Playlist de demostración 8 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+8",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 32
+        }
+      },
+      {
+        "id": "mock_playlist_8",
+        "name": "Playlist Demo 9",
+        "description": "Playlist de demostración 9 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+9",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 33
+        }
+      },
+      {
+        "id": "mock_playlist_9",
+        "name": "Playlist Demo 10",
+        "description": "Playlist de demostración 10 para fr_FR",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Demo+Playlist+10",
+            "height": 600,
+            "width": 600
+          }
+        ],
+        "owner": {
+          "display_name": "freevibes Demo",
+          "id": "freevibes"
+        },
+        "tracks": {
+          "total": 34
+        }
+      }
+    ],
+    "limit": 10,
+    "offset": 0,
+    "total": 10
+  }
+}

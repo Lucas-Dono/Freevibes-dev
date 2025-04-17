@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import { useSession, signOut } from 'next-auth/react';
 import { useCustomNotifications } from '@/hooks/useCustomNotifications';
 import RegionSelector from '@/components/RegionSelector';
 
@@ -52,7 +52,9 @@ export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const user = session?.user;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
   const { 
@@ -79,6 +81,11 @@ export const Navbar: React.FC = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Función para cerrar sesión usando NextAuth
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/login' });
   };
 
   // Función para abrir el menú de notificaciones
@@ -138,7 +145,7 @@ export const Navbar: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 className="text-gradient font-bold text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
               >
-                MusicVerse
+                Freevibes
               </motion.div>
             </Link>
           </div>
@@ -321,25 +328,27 @@ export const Navbar: React.FC = () => {
 
                 {/* Avatar y menú de usuario */}
                 <div className="relative group">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center rounded-full focus:outline-none"
+                  {/* Dropdown toggle button */}
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                    id="user-menu-button"
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="true"
                   >
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white text-xs font-medium overflow-hidden">
-                      {user?.images && user.images.length > 0 ? (
+                    <span className="sr-only">Abrir menú de usuario</span>
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#1DB954] to-[#9C27B0] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
+                      {user?.name ? (
                         <img 
-                          src={user.images[0].url} 
-                          alt={user.name || 'Usuario'} 
+                          src={user.image || "https://i.pravatar.cc/150?img=12"} 
+                          alt={user.name} 
                           className="h-full w-full object-cover" 
                         />
                       ) : (
-                        <div className="flex items-center justify-center h-full w-full bg-gradient-to-br from-[#1DB954] to-[#1ed760]">
-                          {user?.name?.charAt(0).toUpperCase() || 'U'}
-                        </div>
+                        <span>{user?.email?.[0]?.toUpperCase() || 'U'}</span>
                       )}
                     </div>
-                  </motion.button>
+                  </button>
                   
                   {/* Menú desplegable */}
                   <div className="absolute right-0 mt-2 w-48 py-2 bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -355,7 +364,7 @@ export const Navbar: React.FC = () => {
                     </Link>
                     <div className="border-t border-gray-700 my-1"></div>
                     <button 
-                      onClick={logout}
+                      onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
                       Cerrar sesión
@@ -468,7 +477,7 @@ export const Navbar: React.FC = () => {
                   transition={{ delay: navItems.length * 0.05 }}
                 >
                   <button 
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="block w-full text-left mt-4 px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white flex items-center"
                   >
                     <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">

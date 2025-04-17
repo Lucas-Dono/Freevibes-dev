@@ -23,14 +23,12 @@ export async function getArtistTopTracks(artistName: string, limit: number = 20)
       throw new Error('Nombre de artista no proporcionado');
     }
     
-    console.log(`[Artist] Obteniendo canciones populares para: ${artistName}`);
     
     // Intentar obtener de caché primero
     const cacheKey = `artist_top:${artistName.toLowerCase()}:${limit}`;
     const cachedData = await recommendationsCache.get(cacheKey);
     
     if (cachedData) {
-      console.log(`[Artist] Cache hit para canciones de ${artistName}`);
       return JSON.parse(cachedData);
     }
     
@@ -43,7 +41,6 @@ export async function getArtistTopTracks(artistName: string, limit: number = 20)
     
     if (tracks.length === 0) {
       // Si no hay resultados, intentar una búsqueda más simple
-      console.log(`[Artist] No se encontraron tracks, intentando búsqueda simple`);
       const simpleSearch = await searchMultiSource(artistName, limit, {
         combineResults: true,
         preferArtist: artistName
@@ -69,7 +66,6 @@ export async function getArtistTopTracks(artistName: string, limit: number = 20)
       DEFAULT_CACHE_TTL
     );
     
-    console.log(`[Artist] Encontradas ${tracks.length} canciones para ${artistName}`);
     return tracks;
   } catch (error) {
     console.error(`[Artist] Error obteniendo tracks de artista:`, error);
@@ -80,7 +76,6 @@ export async function getArtistTopTracks(artistName: string, limit: number = 20)
       const cachedData = await recommendationsCache.get(cacheKey);
       
       if (cachedData) {
-        console.log(`[Artist] Usando caché expirada para ${artistName}`);
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
@@ -105,14 +100,12 @@ export async function getSimilarArtistTracks(artistName: string, limit: number =
       throw new Error('Nombre de artista no proporcionado');
     }
     
-    console.log(`[Artist] Obteniendo canciones de artistas similares a: ${artistName}`);
     
     // Intentar obtener de caché primero
     const cacheKey = `similar_artists:${artistName.toLowerCase()}:${limit}`;
     const cachedData = await recommendationsCache.get(cacheKey);
     
     if (cachedData) {
-      console.log(`[Artist] Cache hit para artistas similares a ${artistName}`);
       return JSON.parse(cachedData);
     }
     
@@ -138,7 +131,6 @@ export async function getSimilarArtistTracks(artistName: string, limit: number =
       }
     }
     
-    console.log(`[Artist] Género detectado para ${artistName}: ${artistGenre}`);
     
     // Buscar canciones similares usando el género detectado
     const tracks = await getRecommendationsByGenre(artistGenre, limit, {
@@ -157,7 +149,6 @@ export async function getSimilarArtistTracks(artistName: string, limit: number =
       DEFAULT_CACHE_TTL
     );
     
-    console.log(`[Artist] Encontradas ${tracks.length} canciones similares a ${artistName}`);
     return tracks;
   } catch (error) {
     console.error(`[Artist] Error obteniendo artistas similares:`, error);
@@ -168,7 +159,6 @@ export async function getSimilarArtistTracks(artistName: string, limit: number =
       const cachedData = await recommendationsCache.get(cacheKey);
       
       if (cachedData) {
-        console.log(`[Artist] Usando caché expirada para similares a ${artistName}`);
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
@@ -191,7 +181,6 @@ export async function getSimilarArtistTracks(artistName: string, limit: number =
  * @returns Lista de canciones fallback
  */
 function getArtistFallbackTracks(artistName: string, limit: number): Track[] {
-  console.log(`[Artist] Generando tracks fallback para ${artistName}`);
   
   const titles = ['Greatest Hit', 'Popular Song', 'Top Track', 'Fan Favorite', 'Classic'];
   const fallbackTracks: Track[] = [];

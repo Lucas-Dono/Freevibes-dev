@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Configuración de Last.fm desde variables de entorno
-const API_KEY = process.env.LASTFM_API_KEY || '4ef2cc2f144a00e44b7f1820f2768887'; // Usar clave de respaldo comprobada
+const API_KEY = process.env.LASTFM_API_KEY || '4ef2cc2f144a00e44b7f1820f2768887'; // Usar clave de respaldo
 const API_URL = 'https://ws.audioscrobbler.com/2.0/';
 
-// Log para depuración - ver qué API key está siendo usada realmente
-console.log(`[Last.fm] API Key configurada: ${API_KEY}`);
+// Lista de métodos permitidos para el proxy
+const ALLOWED_METHODS = [
+  'tag.gettoptracks',
+  'track.search',
+  'artist.search',
+  'album.search',
+  'track.getInfo',
+  'artist.getInfo',
+  'album.getInfo',
+  'chart.gettoptracks',
+  'geo.gettoptracks'
+];
 
 /**
  * Proxy para solicitudes a la API de Last.fm
@@ -15,199 +25,51 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const method = searchParams.get('method') || 'tag.gettoptracks';
-    const tag = searchParams.get('tag');
-    const limit = searchParams.get('limit') || '30';
-
-    console.log(`[Last.fm Proxy Debug] Recibida solicitud con método: ${method}, tag: ${tag}, limit: ${limit}`);
-
-    if (!method) {
-      return NextResponse.json({ error: 'Método requerido' }, { status: 400 });
+    
+    // Verificar que el método solicitado está permitido
+    if (!ALLOWED_METHODS.includes(method)) {
+      return NextResponse.json(
+        { error: `Método no permitido: ${method}` },
+        { status: 400 }
+      );
     }
 
-    // Si estamos buscando por tag, asegurarnos que sea un género válido
-    // Last.fm espera géneros musicales, no títulos completos de canciones
-    let processedTag = tag;
-    let alternativeTag = null;
-    let originalTag = tag;
-
-    if (tag && tag.length > 15) {
-      // Si parece un título de canción, extraer posibles términos de género
-      processedTag = simplifyTag(tag);
-      console.log(`[Last.fm Proxy] Tag original: "${tag}" convertido a: "${processedTag}"`);
-      
-      // Si el procesamiento cambió sustancialmente la etiqueta, guardar la original como alternativa
-      if (processedTag && processedTag.length < tag.length * 0.5) {
-        alternativeTag = tag.split(' ')[0]; // Usar primera palabra como alternativa
-        console.log(`[Last.fm Proxy] Guardando tag alternativo: ${alternativeTag}`);
+    // Construir los parámetros para Last.fm
+    const params = new URLSearchParams();
+    params.append('method', method);
+    params.append('api_key', API_KEY);
+    params.append('format', 'json');
+    
+    // Copiar todos los demás parámetros de la solicitud original
+    // Solución mejorada para procesar los parámetros
+    searchParams.forEach((value, key) => {
+      if (key !== 'method' && key !== 'api_key' && key !== 'format') {
+        params.append(key, value);
       }
+    });
+
+    console.log(`[LastFM API] Proxy para: ${method}, params: ${params.toString()}`);
+    
+    // Realizar solicitud a Last.fm
+    const response = await fetch(`${API_URL}?${params.toString()}`);
+    
+    if (!response.ok) {
+      console.error(`[LastFM API] Error ${response.status}: ${response.statusText}`);
+      return NextResponse.json(
+        { error: `Error en API de Last.fm: ${response.status}` },
+        { status: response.status }
+      );
     }
-
-    // Asegurarnos de usar al menos 10 resultados para tener más variedad
-    // Pero para solicitar más en caso de que algunos resultados sean filtrados
-    const requestLimit = Math.max(parseInt(limit) * 2, 20).toString();
-    const actualLimit = parseInt(limit);
-    console.log(`[Last.fm Proxy] Solicitando ${requestLimit} resultados (para filtrar a ${actualLimit})`);
-
-    // Construir URL para Last.fm exactamente como la que funciona en Postman
-    const urlParams = new URLSearchParams();
-    urlParams.append('method', method);
-    urlParams.append('api_key', API_KEY);
-    urlParams.append('format', 'json');
-
-    // Si hay un tag procesado, usar ese en lugar del original
-    if (processedTag) {
-      urlParams.append('tag', processedTag);
-    } else if (tag) {
-      urlParams.append('tag', tag);
-    }
-
-    // Agregar el límite si está especificado (usar el valor aumentado)
-    if (requestLimit) {
-      urlParams.append('limit', requestLimit);
-    }
-
-    // Copiar el resto de parámetros relevantes
-    const searchParamsEntries = Array.from(searchParams.entries());
-    for (const [key, value] of searchParamsEntries) {
-      if (!['method', 'api_key', 'format', 'tag', 'limit'].includes(key)) {
-        urlParams.append(key, value);
-      }
-    }
-
-    const lastfmUrl = `${API_URL}?${urlParams.toString()}`;
-    console.log(`[Last.fm Proxy] Llamando a: ${lastfmUrl}`);
-
-    // Función para procesar la respuesta de Last.fm
-    const fetchAndProcessLastFm = async (url: string): Promise<{data: any, source: string}> => {
-      console.log(`[Last.fm Proxy Debug] Iniciando fetch a: ${url}`);
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'MusicVerse/1.0.0'
-        },
-        cache: 'no-store'
-      });
-
-      console.log(`[Last.fm Proxy Debug] Respuesta recibida con status: ${response.status}`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`[Last.fm Proxy Error] Error HTTP: ${response.status} ${response.statusText}, Detalles: ${errorText}`);
-        throw new Error(`Error HTTP: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return { data, source: url };
-    };
-
-    try {
-      // Intentar con la etiqueta procesada primero
-      const result = await fetchAndProcessLastFm(lastfmUrl);
-      const data = result.data;
-      
-      // Verificar si hay suficientes resultados
-      const trackCount = data.tracks?.track?.length || 0;
-      console.log(`[Last.fm Proxy Debug] Datos recibidos correctamente - Cantidad: ${trackCount} canciones`);
-      
-      // Si hay suficientes resultados, procesarlos y devolverlos
-      if (trackCount > 0) {
-        // Limitar a la cantidad solicitada originalmente
-        if (data.tracks && data.tracks.track && data.tracks.track.length > actualLimit) {
-          data.tracks.track = data.tracks.track.slice(0, actualLimit);
-        }
-        
-        return NextResponse.json(data, {
-          headers: {
-            'Cache-Control': 'public, max-age=3600',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      } else if (alternativeTag) {
-        // Si no hay resultados y tenemos un tag alternativo, intentar con él
-        console.log(`[Last.fm Proxy] Sin resultados con tag principal, probando alternativo: ${alternativeTag}`);
-        
-        // Construir nueva URL con tag alternativo
-        const altUrlParams = new URLSearchParams();
-        altUrlParams.append('method', method);
-        altUrlParams.append('api_key', API_KEY);
-        altUrlParams.append('format', 'json');
-        altUrlParams.append('tag', alternativeTag);
-        altUrlParams.append('limit', requestLimit);
-        
-        const altLastfmUrl = `${API_URL}?${altUrlParams.toString()}`;
-        const altResult = await fetchAndProcessLastFm(altLastfmUrl);
-        const altData = altResult.data;
-        
-        // Verificar si hay suficientes resultados con el tag alternativo
-        const altTrackCount = altData.tracks?.track?.length || 0;
-        console.log(`[Last.fm Proxy Debug] Datos alternativos recibidos - Cantidad: ${altTrackCount} canciones`);
-        
-        if (altTrackCount > 0) {
-          // Limitar a la cantidad solicitada originalmente
-          if (altData.tracks && altData.tracks.track && altData.tracks.track.length > actualLimit) {
-            altData.tracks.track = altData.tracks.track.slice(0, actualLimit);
-          }
-          
-          return NextResponse.json(altData, {
-            headers: {
-              'Cache-Control': 'public, max-age=3600',
-              'Access-Control-Allow-Origin': '*'
-            }
-          });
-        }
-      }
-      
-      // Si llegamos aquí, ninguno de los intentos produjo resultados suficientes
-      // Intentar con un género genérico popular
-      const genericTag = determineGenericTag(originalTag || 'pop');
-      console.log(`[Last.fm Proxy] Sin resultados con tags específicos, probando género genérico: ${genericTag}`);
-      
-      const genUrlParams = new URLSearchParams();
-      genUrlParams.append('method', method);
-      genUrlParams.append('api_key', API_KEY);
-      genUrlParams.append('format', 'json');
-      genUrlParams.append('tag', genericTag);
-      genUrlParams.append('limit', requestLimit);
-      
-      const genLastfmUrl = `${API_URL}?${genUrlParams.toString()}`;
-      const genResult = await fetchAndProcessLastFm(genLastfmUrl);
-      const genData = genResult.data;
-      
-      // Verificar si hay suficientes resultados con el género genérico
-      const genTrackCount = genData.tracks?.track?.length || 0;
-      console.log(`[Last.fm Proxy Debug] Datos de género genérico recibidos - Cantidad: ${genTrackCount} canciones`);
-      
-      if (genTrackCount > 0) {
-        // Limitar a la cantidad solicitada originalmente
-        if (genData.tracks && genData.tracks.track && genData.tracks.track.length > actualLimit) {
-          genData.tracks.track = genData.tracks.track.slice(0, actualLimit);
-        }
-        
-        return NextResponse.json(genData, {
-          headers: {
-            'Cache-Control': 'public, max-age=3600',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-      
-      // Si todo lo anterior falló, devolver datos fallback
-      console.log(`[Last.fm Proxy] Sin resultados en ningún intento, usando fallback`);
-      return NextResponse.json(createFakeResponse(method, processedTag || genericTag || 'rock', actualLimit));
-    } catch (apiError) {
-      console.error(`[Last.fm Proxy] Error en llamada a API: ${apiError}`);
-      // Si falla la llamada a la API, usar datos fallback
-      return NextResponse.json(createFakeResponse(method, processedTag || tag || 'rock', actualLimit));
-    }
+    
+    // Devolver los datos tal cual vienen de Last.fm
+    const data = await response.json();
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('[Last.fm Proxy] Error:', error);
-    
-    // Si ocurre algún error, devolver datos fallback
-    const { searchParams } = new URL(request.url);
-    const methodParam = searchParams.get('method') || 'tag.gettoptracks';
-    const tagParam = searchParams.get('tag') || 'rock';
-    const limitParam = parseInt(searchParams.get('limit') || '30');
-    
-    return NextResponse.json(createFakeResponse(methodParam, tagParam, Math.max(limitParam, 10)));
+    console.error('[LastFM API] Error en proxy:', error);
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 }
+    );
   }
 }
 
@@ -265,7 +127,6 @@ function simplifyTag(tag: string): string {
             cleaned.startsWith(`${genre} `) || 
             cleaned.endsWith(` ${genre}`) || 
             cleaned === genre) {
-          console.log(`[Last.fm Proxy] Género encontrado: "${genre}"`);
           return genre;
         }
       }
@@ -278,14 +139,12 @@ function simplifyTag(tag: string): string {
       for (const [mainGenre, subgenres] of Object.entries(musicGenres)) {
         // Revisamos si la palabra coincide con el género principal
         if (word === mainGenre || word === mainGenre + 's') {
-          console.log(`[Last.fm Proxy] Palabra de género encontrada: "${mainGenre}"`);
           return mainGenre;
         }
         
         // O si coincide con algún subgénero
         for (const genre of subgenres) {
           if (genre.split(' ').includes(word)) {
-            console.log(`[Last.fm Proxy] Palabra de subgénero encontrada: "${genre}"`);
             return genre;
           }
         }
@@ -298,13 +157,11 @@ function simplifyTag(tag: string): string {
   
   for (const word of words) {
     if (word.length > 3 && !ignoredWords.includes(word)) {
-      console.log(`[Last.fm Proxy] Usando palabra significativa: "${word}"`);
       return word;
     }
   }
   
   // 4. Fallback final a un género popular genérico
-  console.log(`[Last.fm Proxy] No se encontró género, usando fallback "rock"`);
   return 'rock';
 }
 

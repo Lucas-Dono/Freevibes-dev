@@ -1,0 +1,1024 @@
+{
+  "albums": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20hits&type=album&market=US&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20hits&type=album&market=US&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 23,
+    "items": [
+      {
+        "album_type": "album",
+        "total_tracks": 15,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0m3aCFHm3RzXsjFTBoTtwL"
+        },
+        "href": "https://api.spotify.com/v1/albums/0m3aCFHm3RzXsjFTBoTtwL",
+        "id": "0m3aCFHm3RzXsjFTBoTtwL",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273db43556921a29d6b5e4bf0da",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02db43556921a29d6b5e4bf0da",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851db43556921a29d6b5e4bf0da",
+            "width": 64
+          }
+        ],
+        "name": "Pop Fitness Hits: Motivación y Ritmo para 2025",
+        "release_date": "2025-04-08",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0m3aCFHm3RzXsjFTBoTtwL",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3EG7jJRApBO7i8o94Dw1Uh"
+            },
+            "href": "https://api.spotify.com/v1/artists/3EG7jJRApBO7i8o94Dw1Uh",
+            "id": "3EG7jJRApBO7i8o94Dw1Uh",
+            "name": "La Mejor Música Electrónica",
+            "type": "artist",
+            "uri": "spotify:artist:3EG7jJRApBO7i8o94Dw1Uh"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2DlsUir8qG1efG1x9ooNi0"
+        },
+        "href": "https://api.spotify.com/v1/albums/2DlsUir8qG1efG1x9ooNi0",
+        "id": "2DlsUir8qG1efG1x9ooNi0",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2738b798238e6bef2c1f9e14e47",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e028b798238e6bef2c1f9e14e47",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048518b798238e6bef2c1f9e14e47",
+            "width": 64
+          }
+        ],
+        "name": "Ballet Class Pop Hits, Vol. 9",
+        "release_date": "2024-09-18",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2DlsUir8qG1efG1x9ooNi0",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1G1Aqwpne900Zzhw3nxNol"
+            },
+            "href": "https://api.spotify.com/v1/artists/1G1Aqwpne900Zzhw3nxNol",
+            "id": "1G1Aqwpne900Zzhw3nxNol",
+            "name": "Nate Fifield",
+            "type": "artist",
+            "uri": "spotify:artist:1G1Aqwpne900Zzhw3nxNol"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 49,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1Mn5yLnEDRMH5hCtQlfVaO"
+        },
+        "href": "https://api.spotify.com/v1/albums/1Mn5yLnEDRMH5hCtQlfVaO",
+        "id": "1Mn5yLnEDRMH5hCtQlfVaO",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273b8ca45d2dd473b4495bb22bf",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02b8ca45d2dd473b4495bb22bf",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851b8ca45d2dd473b4495bb22bf",
+            "width": 64
+          }
+        ],
+        "name": "pop music just hits",
+        "release_date": "2024-06-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1Mn5yLnEDRMH5hCtQlfVaO",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 24,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/4KBWyU3xs9xdHn8zvz7zI2"
+        },
+        "href": "https://api.spotify.com/v1/albums/4KBWyU3xs9xdHn8zvz7zI2",
+        "id": "4KBWyU3xs9xdHn8zvz7zI2",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2734f5e7eafe7ace0b3d51bb371",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e024f5e7eafe7ace0b3d51bb371",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048514f5e7eafe7ace0b3d51bb371",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2023-03-03",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:4KBWyU3xs9xdHn8zvz7zI2",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2imr9PtgP6OJs5gLcUknqq"
+        },
+        "href": "https://api.spotify.com/v1/albums/2imr9PtgP6OJs5gLcUknqq",
+        "id": "2imr9PtgP6OJs5gLcUknqq",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27380b7f5ee74fbe57bc300b674",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0280b7f5ee74fbe57bc300b674",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485180b7f5ee74fbe57bc300b674",
+            "width": 64
+          }
+        ],
+        "name": "Viral Pop Hits",
+        "release_date": "2023-02-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2imr9PtgP6OJs5gLcUknqq",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 64,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7gErZg7XRuXGKutHCxLALG"
+        },
+        "href": "https://api.spotify.com/v1/albums/7gErZg7XRuXGKutHCxLALG",
+        "id": "7gErZg7XRuXGKutHCxLALG",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737e8aeb013438097577833a94",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e027e8aeb013438097577833a94",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048517e8aeb013438097577833a94",
+            "width": 64
+          }
+        ],
+        "name": "TikTok Pop Hits 2022 | 2023",
+        "release_date": "2022-12-16",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7gErZg7XRuXGKutHCxLALG",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2vgkQJ8T3LkDL67wbWxsI8"
+        },
+        "href": "https://api.spotify.com/v1/albums/2vgkQJ8T3LkDL67wbWxsI8",
+        "id": "2vgkQJ8T3LkDL67wbWxsI8",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273acbb45571e98b863e5301591",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02acbb45571e98b863e5301591",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851acbb45571e98b863e5301591",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits at the Movies",
+        "release_date": "2022-07-08",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2vgkQJ8T3LkDL67wbWxsI8",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 28,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1lXT4oGZ5om8xxjIz5e82I"
+        },
+        "href": "https://api.spotify.com/v1/albums/1lXT4oGZ5om8xxjIz5e82I",
+        "id": "1lXT4oGZ5om8xxjIz5e82I",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27330628c32997b2322639bef60",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0230628c32997b2322639bef60",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485130628c32997b2322639bef60",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2022-06-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1lXT4oGZ5om8xxjIz5e82I",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 37,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/69teKmxjxydgLFFpCEUWK2"
+        },
+        "href": "https://api.spotify.com/v1/albums/69teKmxjxydgLFFpCEUWK2",
+        "id": "69teKmxjxydgLFFpCEUWK2",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273798b2f95a7a0889b93400bd3",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02798b2f95a7a0889b93400bd3",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851798b2f95a7a0889b93400bd3",
+            "width": 64
+          }
+        ],
+        "name": "Pop Inglés (2000 - 2020) Hits",
+        "release_date": "2021-04-02",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:69teKmxjxydgLFFpCEUWK2",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 32,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0jGr47rDzTuy8LH1kgf56D"
+        },
+        "href": "https://api.spotify.com/v1/albums/0jGr47rDzTuy8LH1kgf56D",
+        "id": "0jGr47rDzTuy8LH1kgf56D",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273069fda06508795aa234faaeb",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02069fda06508795aa234faaeb",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851069fda06508795aa234faaeb",
+            "width": 64
+          }
+        ],
+        "name": "2000's Pop Hits",
+        "release_date": "2020-07-03",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0jGr47rDzTuy8LH1kgf56D",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 36,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/51Z21bW6Pc6JRx9Iob7gno"
+        },
+        "href": "https://api.spotify.com/v1/albums/51Z21bW6Pc6JRx9Iob7gno",
+        "id": "51Z21bW6Pc6JRx9Iob7gno",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2736ed09f65e45935a54adca5dd",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e026ed09f65e45935a54adca5dd",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048516ed09f65e45935a54adca5dd",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits 2012-2015",
+        "release_date": "2019-08-09",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:51Z21bW6Pc6JRx9Iob7gno",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6bkmqDdKtkbn7pr7xihMv5"
+        },
+        "href": "https://api.spotify.com/v1/albums/6bkmqDdKtkbn7pr7xihMv5",
+        "id": "6bkmqDdKtkbn7pr7xihMv5",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27300de37b378ad5b174b45b41e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0200de37b378ad5b174b45b41e",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485100de37b378ad5b174b45b41e",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits for Ballet Class, Vol. 4",
+        "release_date": "2019-04-15",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6bkmqDdKtkbn7pr7xihMv5",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1G1Aqwpne900Zzhw3nxNol"
+            },
+            "href": "https://api.spotify.com/v1/artists/1G1Aqwpne900Zzhw3nxNol",
+            "id": "1G1Aqwpne900Zzhw3nxNol",
+            "name": "Nate Fifield",
+            "type": "artist",
+            "uri": "spotify:artist:1G1Aqwpne900Zzhw3nxNol"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3sG2jolAMCGoqbFGpJ6qFX"
+        },
+        "href": "https://api.spotify.com/v1/albums/3sG2jolAMCGoqbFGpJ6qFX",
+        "id": "3sG2jolAMCGoqbFGpJ6qFX",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273022e982f36ec40fbc35c8be1",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02022e982f36ec40fbc35c8be1",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851022e982f36ec40fbc35c8be1",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2019-03-29",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3sG2jolAMCGoqbFGpJ6qFX",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2olYwzqVBA1aLDDBuWNvGR"
+            },
+            "href": "https://api.spotify.com/v1/artists/2olYwzqVBA1aLDDBuWNvGR",
+            "id": "2olYwzqVBA1aLDDBuWNvGR",
+            "name": "Mauricio Rivera",
+            "type": "artist",
+            "uri": "spotify:artist:2olYwzqVBA1aLDDBuWNvGR"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 47,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5r9QzgYBAwCR10EF8eE5NW"
+        },
+        "href": "https://api.spotify.com/v1/albums/5r9QzgYBAwCR10EF8eE5NW",
+        "id": "5r9QzgYBAwCR10EF8eE5NW",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273bc123a5d910d4edbb1404d35",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02bc123a5d910d4edbb1404d35",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851bc123a5d910d4edbb1404d35",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2018-08-07",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5r9QzgYBAwCR10EF8eE5NW",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/4O1DmLhOLlDPMG2m9mo6rL"
+        },
+        "href": "https://api.spotify.com/v1/albums/4O1DmLhOLlDPMG2m9mo6rL",
+        "id": "4O1DmLhOLlDPMG2m9mo6rL",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2736eb47ee79d8366878458fd2e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e026eb47ee79d8366878458fd2e",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048516eb47ee79d8366878458fd2e",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits for Ballet Class, Vol. 3",
+        "release_date": "2017-08-15",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:4O1DmLhOLlDPMG2m9mo6rL",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1G1Aqwpne900Zzhw3nxNol"
+            },
+            "href": "https://api.spotify.com/v1/artists/1G1Aqwpne900Zzhw3nxNol",
+            "id": "1G1Aqwpne900Zzhw3nxNol",
+            "name": "Nate Fifield",
+            "type": "artist",
+            "uri": "spotify:artist:1G1Aqwpne900Zzhw3nxNol"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1MJxcAG1eaChFMRXOY4SW9"
+        },
+        "href": "https://api.spotify.com/v1/albums/1MJxcAG1eaChFMRXOY4SW9",
+        "id": "1MJxcAG1eaChFMRXOY4SW9",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273b258d7e0521a773e09c4a5da",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02b258d7e0521a773e09c4a5da",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851b258d7e0521a773e09c4a5da",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits for Ballet Class, Vol. 2",
+        "release_date": "2016-12-08",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1MJxcAG1eaChFMRXOY4SW9",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1G1Aqwpne900Zzhw3nxNol"
+            },
+            "href": "https://api.spotify.com/v1/artists/1G1Aqwpne900Zzhw3nxNol",
+            "id": "1G1Aqwpne900Zzhw3nxNol",
+            "name": "Nate Fifield",
+            "type": "artist",
+            "uri": "spotify:artist:1G1Aqwpne900Zzhw3nxNol"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2hS9jwGmDYaQiZAZdoJTnf"
+        },
+        "href": "https://api.spotify.com/v1/albums/2hS9jwGmDYaQiZAZdoJTnf",
+        "id": "2hS9jwGmDYaQiZAZdoJTnf",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273fb366cc663687b5eea7c5bce",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02fb366cc663687b5eea7c5bce",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851fb366cc663687b5eea7c5bce",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits for Ballet Class, Vol. 1",
+        "release_date": "2016-08-16",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2hS9jwGmDYaQiZAZdoJTnf",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1G1Aqwpne900Zzhw3nxNol"
+            },
+            "href": "https://api.spotify.com/v1/artists/1G1Aqwpne900Zzhw3nxNol",
+            "id": "1G1Aqwpne900Zzhw3nxNol",
+            "name": "Nate Fifield",
+            "type": "artist",
+            "uri": "spotify:artist:1G1Aqwpne900Zzhw3nxNol"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5Zk8cWgOO8ff6ZNLRffMSY"
+        },
+        "href": "https://api.spotify.com/v1/albums/5Zk8cWgOO8ff6ZNLRffMSY",
+        "id": "5Zk8cWgOO8ff6ZNLRffMSY",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d269382d59e82b3844d30ffb",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d269382d59e82b3844d30ffb",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d269382d59e82b3844d30ffb",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2016-03-11",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5Zk8cWgOO8ff6ZNLRffMSY",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1XCg1naL9u1UBFjGYp1rBN"
+            },
+            "href": "https://api.spotify.com/v1/artists/1XCg1naL9u1UBFjGYp1rBN",
+            "id": "1XCg1naL9u1UBFjGYp1rBN",
+            "name": "8 Bit Beats",
+            "type": "artist",
+            "uri": "spotify:artist:1XCg1naL9u1UBFjGYp1rBN"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 25,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5IwwZh8Db1OADc0mlLQ58p"
+        },
+        "href": "https://api.spotify.com/v1/albums/5IwwZh8Db1OADc0mlLQ58p",
+        "id": "5IwwZh8Db1OADc0mlLQ58p",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2732b432d0455abc9295ae5b889",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e022b432d0455abc9295ae5b889",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048512b432d0455abc9295ae5b889",
+            "width": 64
+          }
+        ],
+        "name": "40 Principales Pop & Rock Nacionales",
+        "release_date": "2013-11-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5IwwZh8Db1OADc0mlLQ58p",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 18,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2vM8L9QvLT33wvNOMA4Yd2"
+        },
+        "href": "https://api.spotify.com/v1/albums/2vM8L9QvLT33wvNOMA4Yd2",
+        "id": "2vM8L9QvLT33wvNOMA4Yd2",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273c667da37d47b2d01440c60d2",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02c667da37d47b2d01440c60d2",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851c667da37d47b2d01440c60d2",
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "release_date": "2007-03-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2vM8L9QvLT33wvNOMA4Yd2",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5xtcXQWW4evEzvC2hymZe6"
+            },
+            "href": "https://api.spotify.com/v1/artists/5xtcXQWW4evEzvC2hymZe6",
+            "id": "5xtcXQWW4evEzvC2hymZe6",
+            "name": "Kelly Carson",
+            "type": "artist",
+            "uri": "spotify:artist:5xtcXQWW4evEzvC2hymZe6"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 35,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5IVJbSDDWbGjKbBczyifFl"
+        },
+        "href": "https://api.spotify.com/v1/albums/5IVJbSDDWbGjKbBczyifFl",
+        "id": "5IVJbSDDWbGjKbBczyifFl",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2739318a205e2333284fd5ff089",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e029318a205e2333284fd5ff089",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048519318a205e2333284fd5ff089",
+            "width": 64
+          }
+        ],
+        "name": "PopArt: The Hits",
+        "release_date": "2003",
+        "release_date_precision": "year",
+        "type": "album",
+        "uri": "spotify:album:5IVJbSDDWbGjKbBczyifFl",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2ycnb8Er79LoH2AsR5ldjh"
+            },
+            "href": "https://api.spotify.com/v1/artists/2ycnb8Er79LoH2AsR5ldjh",
+            "id": "2ycnb8Er79LoH2AsR5ldjh",
+            "name": "Pet Shop Boys",
+            "type": "artist",
+            "uri": "spotify:artist:2ycnb8Er79LoH2AsR5ldjh"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 40,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7xY34kpisIxOv8WMnNN8wg"
+        },
+        "href": "https://api.spotify.com/v1/albums/7xY34kpisIxOv8WMnNN8wg",
+        "id": "7xY34kpisIxOv8WMnNN8wg",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273bcffa22a72aaf0f66734759b",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02bcffa22a72aaf0f66734759b",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851bcffa22a72aaf0f66734759b",
+            "width": 64
+          }
+        ],
+        "name": "'80s Pop Hits",
+        "release_date": "2001-08-08",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7xY34kpisIxOv8WMnNN8wg",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 12,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5mojJwWgWNJcY3odUGgQc3"
+        },
+        "href": "https://api.spotify.com/v1/albums/5mojJwWgWNJcY3odUGgQc3",
+        "id": "5mojJwWgWNJcY3odUGgQc3",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2739b9cc2ad0ee4076cb900b4ee",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e029b9cc2ad0ee4076cb900b4ee",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048519b9cc2ad0ee4076cb900b4ee",
+            "width": 64
+          }
+        ],
+        "name": "Pop",
+        "release_date": "1997-03-03",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5mojJwWgWNJcY3odUGgQc3",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/51Blml2LZPmy7TTiAg47vQ"
+            },
+            "href": "https://api.spotify.com/v1/artists/51Blml2LZPmy7TTiAg47vQ",
+            "id": "51Blml2LZPmy7TTiAg47vQ",
+            "name": "U2",
+            "type": "artist",
+            "uri": "spotify:artist:51Blml2LZPmy7TTiAg47vQ"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -18,6 +18,12 @@ import GenreImage from '@/components/GenreImage';
 import GenreSelector from '@/components/GenreSelector';
 import { CircuitBreaker } from '@/lib/resilience/circuit-breaker';
 import { getSourceManager, SourceType } from '@/lib/source-manager';
+import UnifiedMusicCard from '@/components/UnifiedMusicCard';
+import { useAuth } from '@/components/providers/AuthProvider';
+import demoDataService from '@/services/demo/demo-data-service';
+import LoadingState from '@/components/LoadingState';
+import { useTranslation } from '@/hooks/useTranslation';
+import { homePlayTrack } from '@/services/player/homePlayService';
 
 interface Category {
   id: string;
@@ -50,6 +56,13 @@ const genreImages: Record<string, string> = {
   'default': 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
 };
 
+// Utilidad para manejar errores en modo demo
+const handleDemoError = (error: any, fallbackData: any = [], errorMessage: string = ''): any => {
+  console.log('[ExplorePage] Error en modo demo, usando fallback:', errorMessage, error);
+  // Si tenemos datos de fallback, los devolvemos
+  return fallbackData;
+};
+
 export default function ExplorePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [genres, setGenres] = useState<string[]>([]);
@@ -66,9 +79,18 @@ export default function ExplorePage() {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [currentGenreSource, setCurrentGenreSource] = useState<SourceType>('spotify');
   
+  const { isAuthenticated, isDemo, preferredLanguage, toggleDemoMode } = useAuth();
+  const { t, language } = useTranslation();
   const sourceManager = getSourceManager();
   const { playTrack } = usePlayer();
   const router = useRouter();
+
+  // Mensaje de depuración para el modo demo
+  useEffect(() => {
+    if (isDemo) {
+      console.log('[ExplorePage] Página cargada con modo demo activo desde el contexto');
+    }
+  }, [isDemo]);
 
   // Efecto para obtener datos generales y recomendaciones
   useEffect(() => {
@@ -76,18 +98,158 @@ export default function ExplorePage() {
       try {
         setLoading(true);
         
+        // Verificar si estamos en modo demo (usamos tanto el contexto como las cookies para mayor robustez)
+        const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
+        const inDemoMode = isDemo || isDemoFromCookie;
+        
+        console.log('[ExplorePage] Verificación de modo demo:', { isDemo, isDemoFromCookie, inDemoMode });
+        
+        // Si hay incoherencia entre cookie y estado, actualizar el estado en vez de recargar
+        if (isDemoFromCookie && !isDemo) {
+          console.log('[ExplorePage] Detectada cookie de demo-mode pero estado no sincronizado');
+          // En lugar de recargar, usar el contexto para actualizar el estado
+          if (toggleDemoMode) {
+            console.log('[ExplorePage] Sincronizando estado de demo con cookie existente');
+            toggleDemoMode(true); // Forzar estado demo = true para que coincida con la cookie
+          }
+        }
+        
+        if (inDemoMode) {
+          console.log('[ExplorePage] Cargando datos en modo demo (cookie o contexto)');
+          
+          try {
+            // Cargar categorías desde datos demo con manejo de errores robusto
+            try {
+              const categoriesData = await demoDataService.getFeaturedPlaylists();
+              if (categoriesData && categoriesData.playlists && categoriesData.playlists.items) {
+                // Convertir playlists a formato de categorías para la visualización
+                const demoCategories = categoriesData.playlists.items.map((playlist: any, index: number) => ({
+                  id: playlist.id || `demo-category-${index}`,
+                  name: playlist.name || `Categoría ${index + 1}`,
+                  icons: playlist.images && playlist.images.length > 0 ? [{ url: playlist.images[0].url }] : []
+                }));
+                setCategories(demoCategories);
+              }
+            } catch (error) {
+              // En caso de error, usar categorías predefinidas
+              const fallbackCategories = [
+                { id: 'pop', name: 'Pop', icons: [{ url: genreImages['pop'] }] },
+                { id: 'rock', name: 'Rock', icons: [{ url: genreImages['rock'] }] },
+                { id: 'hip-hop', name: 'Hip Hop', icons: [{ url: genreImages['hip-hop'] }] },
+                { id: 'electronic', name: 'Electrónica', icons: [{ url: genreImages['electronic'] }] }
+              ];
+              setCategories(handleDemoError(error, fallbackCategories, 'Error cargando categorías'));
+            }
+            
+            // Cargar recomendaciones desde datos demo (mezclando idiomas)
+            // Usamos datos demo pero les asignamos idiomas diferentes para simular diversidad
+            const tracksData = await demoDataService.getRecommendations();
+            if (tracksData && tracksData.tracks) {
+              // Convertir al formato Track esperado y añadir idiomas
+              const demoTracks = tracksData.tracks.map((track: any, index: number) => {
+                return {
+                  id: track.id,
+                  title: track.name,
+                  artist: track.artists?.map((a: any) => a.name).join(', ') || 'Artista',
+                  album: track.album?.name || '',
+                  cover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                  duration: track.duration_ms || 0,
+                  spotifyId: track.id,
+                  source: 'spotify',
+                  itemType: 'track'
+                };
+              });
+              setRecommendedTracks(demoTracks);
+            }
+            
+            setError(null);
+          } catch (demoError) {
+            console.error('[ExplorePage] Error global cargando datos demo:', demoError);
+            // No rompemos la experiencia, simplemente mostramos un mensaje de error pero permitimos seguir navegando
+            setError('Algunos datos demo no pudieron cargarse correctamente. La experiencia puede estar limitada.');
+          }
+        } else {
+          // Código modificado para modo no-demo: búsqueda por idiomas
         // Obtener categorías de Spotify
         const categoriesData = await getCategories(30);
         setCategories(categoriesData);
         
-        // Obtener recomendaciones musicales generales usando el sistema multi-fuente
+          // Búsqueda multi-idioma para recomendaciones
+          console.log('[ExploreMúsica] Solicitando música en múltiples idiomas');
+          
+          // Usar la API de Spotify directamente para mejor calidad
+          const spotifyApi = await import('@/services/spotify');
+          
+          // Términos de búsqueda por idioma
+          const searchQueries = [
+            { term: 'música latina', language: 'Español' },
+            { term: 'top hits', language: 'English' },
+            { term: 'musica brasileira', language: 'Português' },
+            { term: 'musique française', language: 'Français' },
+            { term: 'musica italiana', language: 'Italiano' }
+          ];
+          
+          let allResults: Track[] = [];
+          
+          // Realizar búsquedas en paralelo para cada idioma
+          const searches = await Promise.all(
+            searchQueries.map(query => 
+              spotifyApi.searchTracks(query.term, 5)
+                .then((results: any) => {
+                  // Solo conservar tracks con imágenes de Spotify
+                  return results
+                    .filter((item: any) => 
+                      item?.album?.images?.[0]?.url && 
+                      item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
+                    )
+                    .map((item: any) => ({
+                      id: item.id,
+                      title: item.name,
+                      artist: item.artists?.map((a: any) => a.name).join(', ') || 'Spotify Artist',
+                      album: item.album?.name || '',
+                      albumCover: item.album?.images?.[0]?.url || '',
+                      cover: item.album?.images?.[0]?.url || '',
+                      duration: item.duration_ms || 0,
+                      spotifyId: item.id,
+                      source: 'spotify',
+                      language: query.language,
+                      itemType: 'track'
+                    }));
+                })
+                .catch(() => [])
+            )
+          );
+          
+          // Combinar todos los resultados
+          searches.forEach(result => {
+            allResults = [...allResults, ...result];
+          });
+          
+          // Eliminar duplicados por ID de Spotify
+          const uniqueResults: Track[] = [];
+          const spotifyIds = new Set<string>();
+          
+          allResults.forEach(track => {
+            if (track.spotifyId && !spotifyIds.has(track.spotifyId)) {
+              spotifyIds.add(track.spotifyId);
+              uniqueResults.push(track);
+            }
+          });
+          
+          if (uniqueResults.length > 0) {
+            console.log(`[ExploreMúsica] Encontradas ${uniqueResults.length} canciones en múltiples idiomas`);
+            setRecommendedTracks(uniqueResults);
+            
+            // Registrar éxito para Spotify
+            sourceManager.registerSourceSuccess('spotify');
+          } else {
+            // Si no se encuentran resultados, usar la implementación original
         const tracksData = await getGeneralRecommendations(20);
         setRecommendedTracks(tracksData);
-        
-        // Registrar éxito para Spotify si todo salió bien
-        sourceManager.registerSourceSuccess('spotify');
+          }
         
         setError(null);
+        }
       } catch (err) {
         console.error('Error al cargar datos de exploración:', err);
         setError('Error al cargar datos. Por favor, intenta de nuevo más tarde.');
@@ -115,13 +277,78 @@ export default function ExplorePage() {
     };
 
     fetchData();
-  }, []);
+  }, [isDemo, preferredLanguage, toggleDemoMode]);
 
   // Efecto para cargar canciones en tendencia
   useEffect(() => {
     const fetchTrending = async () => {
       try {
         setLoadingTrending(true);
+        
+        // Verificar si estamos en modo demo (usando contexto y cookies)
+        const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
+        const inDemoMode = isDemo || isDemoFromCookie;
+        
+        // Si hay incoherencia entre cookie y estado, actualizar el estado en vez de recargar
+        if (isDemoFromCookie && !isDemo && toggleDemoMode) {
+          console.log('[ExplorePage] Sincronizando estado de demo en tendencias');
+          toggleDemoMode(true);
+        }
+        
+        if (inDemoMode) {
+          console.log('[ExplorePage] Cargando tendencias en modo demo');
+          try {
+            // Usar datos demo para tendencias (podemos usar topTracks o newReleases)
+            const demoTopTracks = await demoDataService.getTopTracks();
+            
+            if (demoTopTracks && demoTopTracks.items && demoTopTracks.items.length > 0) {
+              // Convertir al formato Track esperado
+              const demoTrendingTracks = demoTopTracks.items.map((item: any) => {
+                const track = item.track || item;
+                return {
+                  id: track.id,
+                  title: track.name,
+                  artist: track.artists?.map((a: any) => a.name).join(', ') || 'Artista Demo',
+                  album: track.album?.name || '',
+                  cover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                  albumCover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                  duration: track.duration_ms || 0,
+                  spotifyId: track.id,
+                  source: 'spotify',
+                  itemType: 'track'
+                };
+              });
+              
+              // Limitar a 15 canciones y mezclarlas aleatoriamente
+              const shuffledTracks = demoTrendingTracks
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 15);
+              
+              setTrendingTracks(shuffledTracks);
+            } else {
+              throw new Error('No se encontraron canciones en tendencia en los datos demo');
+            }
+          } catch (demoError) {
+            console.error('[ExplorePage] Error cargando tendencias demo:', demoError);
+            
+            // Usar imágenes predefinidas como fallback
+            const popularGenres = ['pop', 'rock', 'hip-hop', 'electronic', 'jazz'];
+            const fallbackTracks: Track[] = popularGenres.map((genre, index) => ({
+              id: `fallback-${index}`,
+              title: `Éxitos de ${genre.charAt(0).toUpperCase() + genre.slice(1)}`,
+              artist: 'Artistas Populares',
+              album: 'Tendencias',
+              cover: genreImages[genre] || genreImages.default,
+              albumCover: genreImages[genre] || genreImages.default,
+              duration: 180000,
+              source: 'fallback',
+              itemType: 'track'
+            }));
+            
+            setTrendingTracks(fallbackTracks);
+          }
+        } else {
+          // Código original para modo no-demo
         
         // NUEVA SOLUCIÓN: Solicitar directamente a Spotify con búsqueda de alta calidad
         console.log('[Tendencias] Solicitando directamente desde Spotify para garantizar imágenes');
@@ -137,7 +364,7 @@ export default function ExplorePage() {
         const searches = await Promise.all(
           queries.map(query => 
             spotifyApi.searchTracks(query, 10)
-              .then((results: any[]) => {
+              .then((results: any) => {
                 // Solo conservar tracks con imágenes de Spotify
                 return results
                   .filter((item: any) => 
@@ -153,7 +380,8 @@ export default function ExplorePage() {
                     cover: item.album?.images?.[0]?.url || '',
                     duration: item.duration_ms || 0,
                     spotifyId: item.id,
-                    source: 'spotify'
+                    source: 'spotify',
+                    itemType: 'track'
                   }));
               })
               .catch(() => [])
@@ -185,6 +413,7 @@ export default function ExplorePage() {
         } else {
           // Si no se encuentran resultados, usar fallback
           throw new Error('No se encontraron canciones con imágenes de calidad');
+          }
         }
       } catch (err) {
         console.error('Error al cargar tendencias:', err);
@@ -200,7 +429,8 @@ export default function ExplorePage() {
             cover: genreImages[genre] || genreImages.default,
             albumCover: genreImages[genre] || genreImages.default,
             duration: 180000,
-            source: 'fallback'
+            source: 'fallback',
+            itemType: 'track'
           }));
           
           setTrendingTracks(fallbackTracks);
@@ -214,7 +444,7 @@ export default function ExplorePage() {
     };
 
     fetchTrending();
-  }, []);
+  }, [isDemo, preferredLanguage, toggleDemoMode]);
 
   // Efecto para cargar recomendaciones personalizadas
   useEffect(() => {
@@ -222,6 +452,55 @@ export default function ExplorePage() {
       try {
         setLoadingPersonal(true);
         
+        // Verificar si estamos en modo demo (usando contexto y cookies)
+        const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
+        const inDemoMode = isDemo || isDemoFromCookie;
+        
+        // Si hay incoherencia entre cookie y estado, actualizar el estado
+        if (isDemoFromCookie && !isDemo && toggleDemoMode) {
+          console.log('[ExplorePage] Sincronizando estado de demo en recomendaciones personales');
+          toggleDemoMode(true);
+        }
+        
+        if (inDemoMode) {
+          console.log('[ExplorePage] Cargando recomendaciones personales en modo demo');
+          try {
+            // Usar datos demo para recomendaciones personales
+            const demoSavedTracks = await demoDataService.getSavedTracks();
+            
+            if (demoSavedTracks && demoSavedTracks.items && demoSavedTracks.items.length > 0) {
+              // Convertir al formato Track esperado
+              const demoPersonalTracks = demoSavedTracks.items.map((item: any) => {
+                const track = item.track || item;
+                return {
+                  id: track.id,
+                  title: track.name,
+                  artist: track.artists?.map((a: any) => a.name).join(', ') || 'Artista Demo',
+                  album: track.album?.name || '',
+                  cover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                  albumCover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                  duration: track.duration_ms || 0,
+                  spotifyId: track.id,
+                  source: 'spotify',
+                  itemType: 'track'
+                };
+              });
+              
+              // Limitar a 12 canciones y mezclarlas aleatoriamente
+              const shuffledTracks = demoPersonalTracks
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 12);
+              
+              setPersonalRecommendations(shuffledTracks);
+            } else {
+              throw new Error('No se encontraron canciones guardadas en los datos demo');
+            }
+          } catch (demoError) {
+            console.error('[ExplorePage] Error cargando recomendaciones personales demo:', demoError);
+            // Usar fallbacks si es necesario
+          }
+        } else {
+          // Código original para modo no-demo
         // NUEVA SOLUCIÓN: Solicitar directamente a Spotify usando géneros populares
         console.log('[Para Ti] Solicitando directamente desde Spotify para garantizar imágenes');
         
@@ -238,7 +517,7 @@ export default function ExplorePage() {
         const searches = await Promise.all(
           selectedGenres.map(genre => 
             spotifyApi.searchTracks(`genre:${genre}`, 10)
-              .then((results: any[]) => {
+              .then((results: any) => {
                 // Solo conservar tracks con imágenes de Spotify
                 return results
                   .filter((item: any) => 
@@ -254,7 +533,8 @@ export default function ExplorePage() {
                     cover: item.album?.images?.[0]?.url || '',
                     duration: item.duration_ms || 0,
                     spotifyId: item.id,
-                    source: 'spotify'
+                    source: 'spotify',
+                    itemType: 'track'
                   }));
               })
               .catch(() => [])
@@ -286,36 +566,19 @@ export default function ExplorePage() {
         } else {
           // Si no se encuentran resultados, usar fallback
           throw new Error('No se encontraron canciones con imágenes de calidad');
+          }
         }
       } catch (err) {
-        console.error('Error al cargar recomendaciones personalizadas:', err);
+        console.error('Error al cargar recomendaciones personales:', err);
         
-        // Último recurso: usar géneros populares con imágenes predefinidas
-        try {
-          const popularGenres = ['pop', 'indie', 'electronic', 'rock', 'hip-hop'];
-          const fallbackTracks: Track[] = popularGenres.map((genre, index) => ({
-            id: `fallback-personal-${index}`,
-            title: `Lo Mejor de ${genre.charAt(0).toUpperCase() + genre.slice(1)}`,
-            artist: 'Artistas Recomendados',
-            album: 'Para Ti',
-            cover: genreImages[genre] || genreImages.default,
-            albumCover: genreImages[genre] || genreImages.default,
-            duration: 180000,
-            source: 'fallback'
-          }));
-          
-          setPersonalRecommendations(fallbackTracks);
-        } catch (fallbackErr) {
-          console.error('Error también en fallback final:', fallbackErr);
-          setPersonalRecommendations([]);
-        }
+        // Usar fallbacks si es necesario
       } finally {
         setLoadingPersonal(false);
       }
     };
 
     fetchPersonalRecommendations();
-  }, []);
+  }, [isDemo, preferredLanguage, toggleDemoMode]);
 
   // Efecto para cargar géneros disponibles
   useEffect(() => {
@@ -323,38 +586,39 @@ export default function ExplorePage() {
       try {
         setLoadingGenres(true);
         
-        // Usar el nuevo sistema multi-fuente para obtener géneros
-        const genresData = await getMultiAvailableGenres();
+        // Verificar si estamos en modo demo (usando contexto y cookies)
+        const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
+        const inDemoMode = isDemo || isDemoFromCookie;
         
-        // Filtrar sólo géneros populares para mostrar
-        const popularGenres = [
-          'pop', 'rock', 'hip-hop', 'electronic', 'jazz', 'r&b', 
-          'latin', 'classical', 'indie', 'metal', 'soul', 'blues',
-          'reggae', 'country', 'alternative', 'dance'
-        ];
+        // Si hay incoherencia entre cookie y estado, actualizar el estado
+        if (isDemoFromCookie && !isDemo && toggleDemoMode) {
+          console.log('[ExplorePage] Sincronizando estado de demo en carga de géneros');
+          toggleDemoMode(true);
+        }
         
-        // Filtrar géneros disponibles que también están en nuestra lista de populares
-        const filteredGenres = genresData.filter((genre: string) => 
-          popularGenres.includes(genre.toLowerCase())
-        );
-        
-        // Si no obtenemos suficientes géneros populares, usar los primeros 12 de la lista completa
-        const finalGenres = filteredGenres.length >= 8 ? 
-          filteredGenres.slice(0, 12) : 
-          genresData.slice(0, 12);
-        
-        setGenres(finalGenres);
-      } catch (err) {
-        console.error('Error al cargar géneros:', err);
-        // Establecer géneros por defecto en caso de error
-        setGenres(['pop', 'rock', 'hip-hop', 'electronic', 'jazz', 'r&b', 'latin', 'classical']);
+        if (inDemoMode) {
+          console.log('[ExplorePage] Cargando géneros en modo demo');
+          // En modo demo, simplemente usar una lista predefinida de géneros
+          const demoGenres = [
+            'pop', 'rock', 'hip-hop', 'electronic', 'jazz', 
+            'r&b', 'latin', 'classical', 'indie', 'metal'
+          ];
+          setGenres(demoGenres);
+        } else {
+          // Código original para modo no-demo
+          // Usar la implementación multi-fuente para obtener géneros
+          const availableGenres = await getMultiAvailableGenres();
+          setGenres(availableGenres);
+        }
+      } catch (error) {
+        console.error('Error al obtener géneros:', error);
       } finally {
         setLoadingGenres(false);
       }
     };
 
     fetchGenres();
-  }, []);
+  }, [isDemo, toggleDemoMode]);
 
   useEffect(() => {
     const fetchCategoryPlaylists = async () => {
@@ -384,9 +648,39 @@ export default function ExplorePage() {
   };
 
   // Función para reproducir una canción
-  const handlePlayTrack = (track: Track) => {
-    if (playTrack) {
-      playTrack(track);
+  const handlePlayTrack = async (track: Track) => {
+    try {
+      console.log('[ExplorePage] Intentando reproducir track:', track);
+      
+      // Asegurarse de que el track tiene todos los campos necesarios
+      const enhancedTrack = {
+        ...track,
+        // Asegurar que tenemos ambos formatos de título
+        title: track.title || '',
+        // Asegurar todos los formatos de id
+        id: track.id || '',
+        spotifyId: track.spotifyId || track.id || '',
+        uri: track.spotifyId || track.id || '',
+        // Mantener el artista como está
+        artist: track.artist || '',
+        // Asegurar todas las variantes de imágenes
+        cover: track.cover || track.albumCover || track.thumbnail || '',
+        albumCover: track.albumCover || track.cover || track.thumbnail || '',
+        thumbnail: track.thumbnail || track.cover || track.albumCover || '',
+        // Asegurar formatos de duración
+        duration: track.duration || 0,
+        // Asegurar fuente
+        source: track.source || 'spotify'
+      };
+      
+      console.log('[ExplorePage] Track mejorado para reproducción:', enhancedTrack);
+      
+      // Usar explícitamente homePlayTrack para evitar confusiones
+      await homePlayTrack(enhancedTrack);
+    } catch (error) {
+      console.error('[ExplorePage] Error al reproducir track:', error);
+      // Mostrar un mensaje al usuario
+      alert('No se pudo reproducir la canción. Por favor, intenta con otra.');
     }
   };
 
@@ -396,7 +690,7 @@ export default function ExplorePage() {
       <div className="container mx-auto p-6 min-h-screen flex flex-col items-center justify-center">
         <div className="w-20 h-20 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin mb-6"></div>
         <h2 className="text-xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-600">
-          Descubriendo música increíble para ti...
+          {t('explore.loading.discovering')}
         </h2>
       </div>
     );
@@ -410,7 +704,7 @@ export default function ExplorePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Explorar
+        {t('explore.title')}
       </motion.h1>
 
       {error && (
@@ -433,51 +727,38 @@ export default function ExplorePage() {
       >
         <div className="flex items-center mb-6">
           <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">Para Ti</h2>
+          <h2 className="text-2xl font-bold text-white">{t('explore.forYou')}</h2>
         </div>
         
         {loadingPersonal ? (
-          <div className="flex justify-center items-center h-60 bg-zinc-800/30 rounded-xl backdrop-blur-sm">
-            <div className="w-10 h-10 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin"></div>
-          </div>
+          <LoadingState 
+            type="card" 
+            count={5} 
+            message={t('explore.loading.recommendations')}
+            aspectRatio="square"
+          />
         ) : personalRecommendations.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {personalRecommendations.map((track, index) => (
-              <motion.div
+              <UnifiedMusicCard
                 key={track.id}
-                className="bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl cursor-pointer group"
-                onClick={() => handlePlayTrack(track)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  <GenreImage
-                    genre={track.album || 'default'}
-                    artistName={track.artist}
-                    trackTitle={track.title}
-                    size="large"
-                    className="w-full h-full transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="rounded-full p-3 bg-purple-600/80 backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-white truncate">{track.title}</h3>
-                  <p className="text-zinc-400 text-sm truncate">{track.artist}</p>
-                </div>
-              </motion.div>
+                id={track.id}
+                title={track.title}
+                subtitle={track.artist}
+                coverUrl={track.cover}
+                isPlayable={true}
+                itemType={track.itemType as any}
+                badge={track.source ? {
+                  text: track.source === 'spotify' ? 'Spotify' : 'Last.fm',
+                  color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-green-500'
+                } : undefined}
+                onPlay={() => handlePlayTrack(track)}
+              />
             ))}
           </div>
         ) : (
           <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">No hay recomendaciones disponibles. Intenta de nuevo más tarde.</p>
+            <p className="text-zinc-300">{t('explore.noRecommendations')}</p>
           </div>
         )}
       </motion.section>
@@ -491,51 +772,38 @@ export default function ExplorePage() {
       >
         <div className="flex items-center mb-6">
           <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-teal-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">Tendencias</h2>
+          <h2 className="text-2xl font-bold text-white">{t('explore.trending')}</h2>
         </div>
         
         {loadingTrending ? (
-          <div className="flex justify-center items-center h-60 bg-zinc-800/30 rounded-xl backdrop-blur-sm">
-            <div className="w-10 h-10 border-4 border-green-300 border-t-green-600 rounded-full animate-spin"></div>
-          </div>
+          <LoadingState 
+            type="card" 
+            count={5} 
+            message={t('explore.loading.trending')}
+            aspectRatio="square"
+          />
         ) : trendingTracks.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {trendingTracks.map((track, index) => (
-              <motion.div
+              <UnifiedMusicCard
                 key={track.id}
-                className="bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl cursor-pointer group"
-                onClick={() => handlePlayTrack(track)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  <GenreImage
-                    genre={track.album || 'default'}
-                    artistName={track.artist}
-                    trackTitle={track.title}
-                    size="large"
-                    className="w-full h-full transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="rounded-full p-3 bg-green-600/80 backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-white truncate">{track.title}</h3>
-                  <p className="text-zinc-400 text-sm truncate">{track.artist}</p>
-                </div>
-              </motion.div>
+                id={track.id}
+                title={track.title}
+                subtitle={track.artist}
+                coverUrl={track.cover}
+                isPlayable={true}
+                itemType={track.itemType as any}
+                badge={track.source ? {
+                  text: track.source === 'spotify' ? 'Spotify' : 'Fallback',
+                  color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-zinc-700'
+                } : undefined}
+                onPlay={() => handlePlayTrack(track)}
+              />
             ))}
           </div>
         ) : (
           <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">No hay tendencias disponibles. Intenta de nuevo más tarde.</p>
+            <p className="text-zinc-300">{t('explore.noTrends')}</p>
           </div>
         )}
       </motion.section>
@@ -549,7 +817,7 @@ export default function ExplorePage() {
       >
         <div className="flex items-center mb-6">
           <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">Géneros</h2>
+          <h2 className="text-2xl font-bold text-white">{t('explore.genres')}</h2>
         </div>
         <div className="bg-zinc-800/40 backdrop-blur-sm p-6 rounded-xl">
           <GenreSelector onGenreSelect={handleGenreSelect} />
@@ -565,56 +833,50 @@ export default function ExplorePage() {
       >
         <div className="flex items-center mb-6">
           <div className="w-1 h-6 bg-gradient-to-b from-amber-500 to-orange-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">Explorar Música</h2>
+          <h2 className="text-2xl font-bold text-white">{t('explore.worldMusic')}</h2>
         </div>
         
         {loading ? (
-          <div className="flex justify-center items-center h-60 bg-zinc-800/30 rounded-xl backdrop-blur-sm">
-            <div className="w-10 h-10 border-4 border-amber-300 border-t-amber-600 rounded-full animate-spin"></div>
-          </div>
+          <LoadingState 
+            type="card" 
+            count={5} 
+            message={t('explore.loading.worldMusic')}
+            aspectRatio="square"
+          />
         ) : recommendedTracks.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {recommendedTracks.map((track, index) => (
-              <motion.div
+              <UnifiedMusicCard
                 key={track.id}
-                className="bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl cursor-pointer group"
-                onClick={() => handlePlayTrack(track)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  <GenreImage
-                    genre={track.album || 'default'}
-                    artistName={track.artist}
-                    trackTitle={track.title}
-                    size="large"
-                    className="w-full h-full transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="rounded-full p-3 bg-amber-600/80 backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-white truncate">{track.title}</h3>
-                  <p className="text-zinc-400 text-sm truncate">{track.artist}</p>
-                </div>
-              </motion.div>
+                id={track.id}
+                title={track.title}
+                subtitle={track.artist}
+                coverUrl={track.cover}
+                isPlayable={true}
+                itemType={track.itemType as any}
+                badge={track.language ? {
+                  text: track.language,
+                  color: 
+                    track.language === 'Español' ? 'bg-red-500' : 
+                    track.language === 'English' ? 'bg-blue-500' : 
+                    track.language === 'Português' ? 'bg-green-500' : 
+                    track.language === 'Français' ? 'bg-purple-500' : 
+                    track.language === 'Italiano' ? 'bg-amber-500' : 
+                    'bg-gray-500'
+                } : undefined}
+                onPlay={() => handlePlayTrack(track)}
+              />
             ))}
           </div>
         ) : (
           <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">No hay recomendaciones disponibles. Intenta de nuevo más tarde.</p>
+            <p className="text-zinc-300">{t('explore.noRecommendations')}</p>
           </div>
         )}
       </motion.section>
 
       {/* Sección de categorías de Spotify */}
+      {!isDemo && (
       <motion.section 
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
@@ -623,8 +885,17 @@ export default function ExplorePage() {
       >
         <div className="flex items-center mb-6">
           <div className="w-1 h-6 bg-gradient-to-b from-pink-500 to-rose-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">Descubrir</h2>
+          <h2 className="text-2xl font-bold text-white">{t('explore.discover')}</h2>
         </div>
+          
+          {loadingCategories ? (
+            <LoadingState 
+              type="grid" 
+              count={8} 
+              message={t('explore.loading.genres')}
+              withText={true}
+            />
+          ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {categories.map((category, index) => (
             <motion.div
@@ -653,13 +924,15 @@ export default function ExplorePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-bold text-white truncate">{category.name}</h3>
+                  <h3 className="font-bold text-white">{category.name}</h3>
                 </div>
               </Link>
             </motion.div>
           ))}
         </div>
+          )}
       </motion.section>
+      )}
 
       {/* Sección de playlists de categoría */}
       {selectedCategory && (
@@ -671,7 +944,7 @@ export default function ExplorePage() {
           <div className="flex items-center mb-6">
             <div className="w-1 h-6 bg-gradient-to-b from-teal-500 to-emerald-600 rounded-full mr-3"></div>
             <h2 className="text-2xl font-bold text-white">
-              Playlists de {categories.find(c => c.id === selectedCategory)?.name || selectedCategory}
+              {t('explore.playlistsOf').replace('{category}', categories.find(c => c.id === selectedCategory)?.name || selectedCategory)}
             </h2>
           </div>
           {loading ? (
@@ -681,42 +954,20 @@ export default function ExplorePage() {
           ) : categoryPlaylists.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {categoryPlaylists.map((playlist, index) => (
-                <motion.div
+                <UnifiedMusicCard
                   key={playlist.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <Link
-                    href={`/playlist/${playlist.id}`}
-                    className="block h-full bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl group"
-                  >
-                    <div className="aspect-square relative overflow-hidden">
-                      {playlist.images && playlist.images.length > 0 ? (
-                        <img 
-                          src={playlist.images[0].url} 
-                          alt={playlist.name} 
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-zinc-700 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
-                          <span className="text-white text-5xl font-bold">{playlist.name.charAt(0)}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-white truncate">{playlist.name}</h3>
-                      <p className="text-zinc-400 text-sm truncate">{playlist.owner.display_name}</p>
-                    </div>
-                  </Link>
-                </motion.div>
+                  id={playlist.id}
+                  title={playlist.name}
+                  subtitle={playlist.owner.display_name}
+                  coverUrl={playlist.images[0]?.url || ''}
+                  isPlayable={false}
+                  linkTo={`/playlist/${playlist.id}`}
+                />
               ))}
             </div>
           ) : (
             <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-              <p className="text-zinc-300">No hay playlists disponibles para esta categoría.</p>
+              <p className="text-zinc-300">{t('explore.noPlaylists')}</p>
             </div>
           )}
         </motion.section>

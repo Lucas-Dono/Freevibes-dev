@@ -5,15 +5,34 @@ import * as userGenreService from '@/services/user/genres';
 
 export async function GET(request: Request) {
   try {
-    // Obtener el token de Spotify de las cookies
-    const spotifyToken = cookies().get('spotify_access_token')?.value;
+    // Verificar si estamos en modo demo
+    const cookieStore = cookies();
+    const isDemoMode = cookieStore.get('demo-mode')?.value === 'true' || 
+                       cookieStore.get('demoMode')?.value === 'true';
+    
+    // Verificar en las cabeceras si viene de un cliente (por si las cookies no están disponibles)
+    const demoHeader = request.headers.get('x-demo-mode') === 'true';
+    
+    if (isDemoMode || demoHeader) {
+      console.log('[API] Solicitud de recomendaciones en modo demo');
+      
+      // En modo demo, usar géneros por defecto variados
+      const demoGenres = ['pop', 'rock', 'latin', 'electronic', 'hip-hop'];
+      
+      // Obtener recomendaciones basadas en géneros demo
+      const recommendations = await getRecommendationsByUserGenres(demoGenres);
+      return NextResponse.json(recommendations);
+    }
+    
+    // Obtener el token de Spotify de las cookies solo si no estamos en modo demo
+    const spotifyToken = cookieStore.get('spotify_access_token')?.value;
     
     if (!spotifyToken) {
       return NextResponse.json({ error: 'Usuario no autenticado en Spotify' }, { status: 401 });
     }
     
     // Obtener el ID de Spotify del usuario
-    const spotifyUserId = cookies().get('spotify_user_id')?.value;
+    const spotifyUserId = cookieStore.get('spotify_user_id')?.value;
     
     if (!spotifyUserId) {
       // Si no tenemos un ID de usuario explícito, podemos usar algunos géneros por defecto

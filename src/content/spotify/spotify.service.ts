@@ -19,6 +19,19 @@ export class SpotifyService {
         }
       })
     );
-    return response.data;
+    
+    // Extraer los datos de la respuesta
+    if (response.data && typeof response.data === 'object') {
+      // Si 'data' es una propiedad de la respuesta, es nuestro tipo SpotifyResponse
+      if ('data' in response.data) {
+        return (response.data as any).data;
+      }
+      
+      // Si no hay una propiedad 'data', asumimos que la respuesta es directamente T
+      return response.data as unknown as T;
+    }
+    
+    // Fallback
+    return response.data as unknown as T;
   }
 } 

@@ -18,7 +18,6 @@ const TIMEOUT = 5000;
  */
 export async function getRecommendationsByGenre(genre: string, limit: number = 25): Promise<Track[]> {
   try {
-    console.log(`[Deezer] Obteniendo recomendaciones para género: ${genre}`);
     
     // Deezer permite buscar canciones por género usando el endpoint de búsqueda
     const searchEndpoint = `${PROXY_URL}?endpoint=search&q=${encodeURIComponent(genre)}&limit=${limit}`;
@@ -42,7 +41,6 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 2
     
     // Si no hay resultados, intentar con pistas relacionadas
     if (!data.data || data.data.length === 0) {
-      console.log(`[Deezer] Sin resultados para género ${genre}, probando con tracks relacionados`);
       return await getRelatedTracks(genre, limit);
     }
     
@@ -63,7 +61,6 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 2
  */
 async function getRelatedTracks(genre: string, limit: number): Promise<Track[]> {
   try {
-    console.log(`[Deezer] Buscando artistas para el género: ${genre}`);
     
     // Primero buscar artistas del género
     const artistSearchEndpoint = `${PROXY_URL}?endpoint=search/artist&q=${encodeURIComponent(genre)}&limit=5`;
@@ -85,13 +82,11 @@ async function getRelatedTracks(genre: string, limit: number): Promise<Track[]> 
     
     // Si no hay artistas, devolver fallback
     if (!data.data || data.data.length === 0) {
-      console.log(`[Deezer] Sin artistas para el género ${genre}, retornando fallback`);
       return getFallbackTracks(genre, limit);
     }
     
     // Buscar tracks del primer artista
     const artist = data.data[0];
-    console.log(`[Deezer] Obteniendo tracks para artista: ${artist.name}`);
     
     const tracksEndpoint = `${PROXY_URL}?endpoint=artist/${artist.id}/top&limit=${limit}`;
     
@@ -111,7 +106,6 @@ async function getRelatedTracks(genre: string, limit: number): Promise<Track[]> 
     const tracksData = await tracksResponse.json();
     
     if (!tracksData.data || tracksData.data.length === 0) {
-      console.log(`[Deezer] Sin tracks para el artista ${artist.name}, retornando fallback`);
       return getFallbackTracks(genre, limit);
     }
     
@@ -198,7 +192,6 @@ function getRelatedTerms(genre: string): string[] {
  * @returns Tracks fallback
  */
 function getFallbackTracks(genre: string, limit: number): Track[] {
-  console.log(`[Deezer] Generando tracks fallback para género: ${genre}`);
   
   const fallbackTracks: Track[] = [];
   

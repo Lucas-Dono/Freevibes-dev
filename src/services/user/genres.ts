@@ -32,7 +32,6 @@ export async function getUserGenres(userId: string): Promise<string[]> {
     }
 
     // Si no hay géneros guardados, intentar obtenerlos de Spotify
-    console.log('No se encontraron géneros en la base de datos, intentando obtener de Spotify');
     
     try {
       // Obtener los artistas top del usuario en Spotify
@@ -40,7 +39,6 @@ export async function getUserGenres(userId: string): Promise<string[]> {
       const topArtists = await sp.getMyTopArtists({ limit: 10, time_range: 'medium_term' });
       
       if (!topArtists.items || topArtists.items.length === 0) {
-        console.log('No se encontraron artistas top en Spotify');
         return [];
       }
       
@@ -63,7 +61,6 @@ export async function getUserGenres(userId: string): Promise<string[]> {
         const genreObjects = sortedGenres.map(name => ({ name }));
         user.favoriteGenres = genreObjects;
         await user.save();
-        console.log(`Géneros obtenidos de Spotify guardados en la base de datos: ${sortedGenres.join(', ')}`);
       }
       
       return sortedGenres;

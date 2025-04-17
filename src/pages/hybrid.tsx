@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { Track } from '@/types/types';
@@ -6,129 +6,153 @@ import { Navbar } from '@/components/Navbar';
 import HybridMusicCard from '@/components/HybridMusicCard';
 import { getHybridRecommendations, VALID_GENRES } from '@/services/recommendations';
 import { usePlayer } from '@/contexts/PlayerContext';
-import { AuthProvider } from '@/app/context/AuthContext';
+import { SessionProvider } from 'next-auth/react';
 import { PlayerProvider } from '@/contexts/PlayerContext';
 
-// Envoltura de página con los proveedores de contexto
-const HybridMusicPageWithProviders: NextPage = () => {
-  return (
-    <AuthProvider>
-      <PlayerProvider>
-        <HybridMusicContent />
-      </PlayerProvider>
-    </AuthProvider>
-  );
-};
+// Agregar esta configuración para excluir la página de la generación estática
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
-// Componente de contenido interno que usa los hooks de contexto
-const HybridMusicContent = () => {
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+// Componente de la página Hybrid que muestra recomendaciones híbridas
+const HybridPage: NextPage = () => {
+  const [recommendations, setRecommendations] = useState<Track[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [genre, setGenre] = useState<string>('pop');
-  const { playTrack } = usePlayer();
+  const [selectedGenre, setSelectedGenre] = useState<string>('pop');
+  
+  const player = usePlayer();
 
-  // Cargar recomendaciones cuando cambia el género
+  // Cargar recomendaciones al montar el componente o cuando cambia el género
   useEffect(() => {
     const fetchRecommendations = async () => {
       setLoading(true);
-      setError(null);
       try {
-        const recommendations = await getHybridRecommendations(genre, 24);
-        setTracks(recommendations);
+        console.log(`Cargando recomendaciones para género: ${selectedGenre}`);
+        const data = await getHybridRecommendations(selectedGenre);
+        console.log(`Recomendaciones cargadas: ${data.length} tracks`);
+        setRecommendations(data);
+        setError(null);
       } catch (err) {
-        console.error('Error al obtener recomendaciones:', err);
-        setError('No se pudieron cargar las recomendaciones. Inténtelo de nuevo más tarde.');
+        console.error("Error al cargar recomendaciones híbridas:", err);
+        setError("No se pudieron cargar las recomendaciones. Inténtalo más tarde.");
+        setRecommendations([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchRecommendations();
-  }, [genre]);
+  }, [selectedGenre]);
 
-  // Manejar la reproducción de una pista
-  const handlePlay = (track: Track) => {
-    if (playTrack) {
-      playTrack(track);
+  // Manejador para reproducir una pista
+  const handlePlayTrack = useCallback((track: Track) => {
+    console.log('Reproduciendo track en HybridPage:', track);
+    
+    if (player && player.playTrack) {
+      // Verificar si la pista tiene la información mínima necesaria
+      if (!track.id && track.youtubeId) {
+        track.id = track.youtubeId;
+      }
+      
+      // Reproducir la canción
+      player.playTrack(track);
+      
+      // También crear una lista de reproducción basada en las recomendaciones
+      // para que se pueda navegar entre canciones
+      if (recommendations.length > 0) {
+        player.playPlaylist(recommendations, recommendations.findIndex(t => 
+          t.id === track.id || t.youtubeId === track.id || t.youtubeId === track.youtubeId)
+        );
+      }
+    } else {
+      console.error('El contexto del reproductor no está disponible');
     }
+  }, [player, recommendations]);
+
+  // Manejador para cambiar el género seleccionado
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(event.target.value);
   };
 
   return (
     <>
       <Head>
-        <title>Descubre Música - Sistema Híbrido | MusicPlayer</title>
-        <meta name="description" content="Descubre nueva música con nuestro sistema híbrido de recomendaciones" />
+        <title>FreeVibes Music - Recomendaciones Híbridas</title>
+        <meta name="description" content="Descubre música nueva con nuestro sistema de recomendaciones híbrido que combina múltiples fuentes" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-zinc-900 text-white flex flex-col">
+      <main className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
         <Navbar />
         
-        <main className="flex-grow container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2 text-emerald-400">Descubre Nueva Música</h1>
-          <p className="text-gray-300 mb-6">Recomendaciones híbridas de Spotify y YouTube Music</p>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold mb-6 text-center">Descubrimiento Híbrido</h1>
           
-          <div className="mb-8">
-            <label htmlFor="genre-select" className="block text-sm font-medium mb-2">
-              Selecciona un género:
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {VALID_GENRES.map((genreName) => (
-                <button
-                  key={genreName}
-                  onClick={() => setGenre(genreName)}
-                  className={`px-4 py-2 rounded-full text-sm ${
-                    genre === genreName
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-zinc-700 text-gray-200 hover:bg-zinc-600'
-                  } transition-colors`}
-                >
-                  {genreName.charAt(0).toUpperCase() + genreName.slice(1)}
-                </button>
-              ))}
+          <div className="mb-8 flex justify-center">
+            <div className="w-full max-w-md">
+              <label htmlFor="genre-select" className="block mb-2 text-sm font-medium">
+                Selecciona un género:
+              </label>
+              <select
+                id="genre-select"
+                value={selectedGenre}
+                onChange={handleGenreChange}
+                className="bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 w-full"
+              >
+                {VALID_GENRES.map((genre) => (
+                  <option key={genre} value={genre}>
+                    {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {loading && (
-            <div className="flex justify-center items-center min-h-[300px]">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+          {loading ? (
+            <div className="flex justify-center my-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
             </div>
-          )}
-
-          {error && (
-            <div className="bg-red-800/30 border border-red-700 p-4 rounded-md text-white">
+          ) : error ? (
+            <div className="bg-red-900 text-white p-4 rounded-md my-6">
               {error}
             </div>
-          )}
-
-          {!loading && !error && tracks.length === 0 && (
-            <div className="bg-zinc-800 border border-zinc-700 p-4 rounded-md">
-              No se encontraron canciones para este género. Intenta con otro género.
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {recommendations.map((track) => (
+                <HybridMusicCard 
+                  key={`${track.id || track.youtubeId || Math.random().toString(36)}-${track.source || 'default'}`}
+                  track={track}
+                  onPlay={handlePlayTrack}
+                />
+              ))}
             </div>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            {!loading &&
-              tracks.map((track) => (
-                <HybridMusicCard 
-                  key={`${track.source}-${track.id}`} 
-                  track={track} 
-                  onPlay={handlePlay} 
-                />
-              ))}
-          </div>
-        </main>
-        
-        <footer className="bg-zinc-950 py-6 mt-8">
-          <div className="container mx-auto px-4">
-            <p className="text-center text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} MusicVerse - Sistema Híbrido de Recomendaciones Musicales
-            </p>
-          </div>
-        </footer>
-      </div>
+          {!loading && !error && recommendations.length === 0 && (
+            <div className="text-center my-12">
+              <p className="text-gray-400">No se encontraron recomendaciones para este género.</p>
+            </div>
+          )}
+        </div>
+      </main>
     </>
   );
 };
 
-export default HybridMusicPageWithProviders; 
+// Envolver la página con los proveedores necesarios
+const HybridPageWithProviders = () => (
+  <SessionProvider>
+    <PlayerProvider>
+      <HybridPage />
+    </PlayerProvider>
+  </SessionProvider>
+);
+
+export default HybridPageWithProviders;
+
+// Esta configuración le indica a Next.js que esta página debe ser renderizada en servidor
+// y nunca intentar pre-renderizarla estáticamente durante el build
+export const config = {
+  unstable_runtimeJS: true,
+  runtime: 'nodejs',
+}; 

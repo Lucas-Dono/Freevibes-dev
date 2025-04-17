@@ -25,7 +25,6 @@ class RedisCache implements CacheInterface {
     this.fallbackCache = new LocalCache();
     
     // Aquí configurariamos Redis si tuviéramos la URL
-    console.log('Redis no está configurado, usando caché local como fallback');
   }
   
   async get(key: string): Promise<string | null> {

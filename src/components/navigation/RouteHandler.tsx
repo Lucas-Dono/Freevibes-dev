@@ -22,7 +22,6 @@ export default function RouteHandler() {
     // Establecer prioridad en el orquestador de carga
     loadOrchestrator.setPriority(pageType, primarySection);
     
-    console.log(`[Navigation] Ruta actualizada: ${pathname} (${pageType}/${primarySection})`);
   }, [pathname]);
   
   // Este componente no renderiza nada visual, solo gestiona la lógica de navegación

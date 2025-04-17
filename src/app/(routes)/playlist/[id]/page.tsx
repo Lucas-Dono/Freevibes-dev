@@ -5,7 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { getPlaylistDetail } from '@/services/spotify';
+import axios from 'axios';
+import { getApiBaseUrl } from '@/lib/api-config';
+import { usePlayer } from '@/contexts/PlayerContext';
+import { playTrack as playTrackService } from '@/services/player/playService';
+import { Track as AppTrack } from '@/types/types';
+import { IconButton } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 interface Playlist {
   id: string;
@@ -44,6 +50,8 @@ export default function PlaylistPage() {
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const { playTrack: _playTrackFromContext_ } = usePlayer();
   
   useEffect(() => {
     const fetchPlaylistData = async () => {
@@ -52,14 +60,40 @@ export default function PlaylistPage() {
       try {
         setLoading(true);
         
-        // Obtener detalles de la playlist
-        const playlistData = await getPlaylistDetail(playlistId);
-        setPlaylist(playlistData);
+        // Obtener la URL base de la API
+        const apiBaseUrl = getApiBaseUrl();
         
-        setError(null);
-      } catch (err) {
+        // Obtener detalles de la playlist usando nuestra nueva API
+        const response = await axios.get(`${apiBaseUrl}/api/playlist/${playlistId}`, {
+          params: {
+            language: 'es' // Fallback a español si no hay idioma preferido
+          }
+        });
+        
+        if (response.data) {
+          setPlaylist(response.data);
+          setError(null);
+        } else {
+          throw new Error('No se obtuvo información de la playlist');
+        }
+      } catch (err: any) {
         console.error('Error al cargar datos de la playlist:', err);
-        setError('Error al cargar información de la playlist. Por favor, intenta de nuevo más tarde.');
+        
+        // Extraer mensaje de error
+        let errorMessage = 'Error al cargar información de la playlist. Por favor, intenta de nuevo más tarde.';
+        
+        if (err.response) {
+          if (err.response.status === 404) {
+            errorMessage = 'No se encontró la playlist solicitada.';
+          } else if (err.response.data && err.response.data.error) {
+            errorMessage = err.response.data.error;
+          }
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+        
+        setError(errorMessage);
+        setPlaylist(null);
       } finally {
         setLoading(false);
       }
@@ -92,6 +126,26 @@ export default function PlaylistPage() {
     return num.toString();
   };
 
+  const handlePlay = (apiTrack: Track) => {
+    if (!apiTrack) return;
+
+    // Crear un objeto básico con la info necesaria para el servicio
+    const trackInfoForService = {
+        id: apiTrack.id, // Spotify ID
+        title: apiTrack.name,
+        artists: apiTrack.artists.map(a => ({ id: a.id, name: a.name })),
+        album: apiTrack.album.name,
+        cover: apiTrack.album.images[0]?.url || '/img/default-track.jpg',
+        duration: apiTrack.duration_ms / 1000,
+        uri: `spotify:track:${apiTrack.id}`, // Incluir URI por si el servicio lo necesita
+        source: 'spotify' 
+        // El servicio se encargará de buscar youtubeId
+    };
+
+    console.log('[PlaylistPage] Llamando al SERVICIO playTrack con:', trackInfoForService);
+    playTrackService(trackInfoForService); // <-- Llamada al servicio importado
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-60vh">
@@ -102,8 +156,34 @@ export default function PlaylistPage() {
 
   if (error || !playlist) {
     return (
-      <div className="text-center py-10">
-        <p className="text-red-500">{error || 'No se encontró la playlist'}</p>
+      <div className="container mx-auto px-4 py-10">
+        <div className="p-4 mb-6 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 className="text-lg font-semibold">Error</h3>
+          </div>
+          <p className="mt-2">{error || 'No se encontró información de la playlist.'}</p>
+        </div>
+        
+        <div className="mt-8 p-6 bg-gray-800 rounded-lg">
+          <h3 className="text-xl font-bold mb-4">Modo Demo</h3>
+          <p className="mb-2">En el modo demo, puedes explorar playlists de diversos artistas.</p>
+          <p className="mb-4">Prueba volver a la página principal para encontrar playlists disponibles.</p>
+          
+          <div className="flex flex-wrap gap-4">
+            <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Ir a Inicio
+            </Link>
+            <button 
+              onClick={() => window.history.back()}
+              className="px-4 py-2 border border-gray-600 rounded hover:bg-gray-700"
+            >
+              Volver
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -186,53 +266,67 @@ export default function PlaylistPage() {
               <div className="mt-2">
                 {playlist.tracks.items.map((item, index) => (
                     <motion.div
-                    key={item.track.id || `track-${index}`}
+                      key={item.track.id || `track-${index}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2, delay: index * 0.03 }}
-                    className="grid grid-cols-[16px_1fr_1fr_1fr_auto] md:grid-cols-[16px_4fr_3fr_2fr_auto] gap-4 px-4 py-2 rounded-md hover:bg-white/5"
-                  >
-                    <div className="flex items-center justify-center text-gray-400">{index + 1}</div>
+                      transition={{ duration: 0.2, delay: index * 0.03 }}
+                      className="grid grid-cols-[40px_4fr_3fr_2fr_auto] gap-4 px-4 py-2 rounded-md hover:bg-white/5 group items-center"
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                    >
+                      <div className="flex items-center justify-center text-gray-400">
+                        {hoveredIndex === index ? (
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handlePlay(item.track)}
+                            className="text-white"
+                          >
+                            <PlayArrowIcon />
+                          </IconButton>
+                        ) : (
+                          <span>{index + 1}</span>
+                        )}
+                      </div>
                     
                     <div className="flex items-center min-w-0">
-                      <div className="w-10 h-10 relative mr-3 flex-shrink-0">
-                        <Image 
-                          src={item.track.album.images[0]?.url || '/img/default-album.jpg'} 
-                          alt={item.track.album.name}
+                      <div className="relative w-10 h-10 mr-3 flex-shrink-0">
+                        <Image
+                          src={item.track.album.images[0]?.url || '/img/default-track.jpg'}
+                          alt={item.track.name}
                           fill
-                          className="object-cover"
+                          className="object-cover rounded"
                         />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-white truncate">{item.track.name}</h3>
-                        <p className="text-gray-400 text-sm truncate">
-                          {item.track.artists.map((artist, i) => (
+                        <p className="text-white truncate font-medium group-hover:text-primary">{item.track.name}</p>
+                        <div className="text-gray-400 text-sm truncate">
+                          {item.track.artists.map((artist, idx) => (
                             <span key={artist.id}>
-                              {i > 0 && ', '}
                               <Link href={`/artist/${artist.id}`} className="hover:underline">
                                 {artist.name}
-                            </Link>
-                              </span>
+                              </Link>
+                              {idx < item.track.artists.length - 1 ? ', ' : ''}
+                            </span>
                           ))}
-                        </p>
                         </div>
                       </div>
-                      
-                    <div className="hidden md:flex items-center text-gray-400 min-w-0">
-                      <Link href={`/album/${item.track.album.id}`} className="truncate hover:underline">
+                    </div>
+                    
+                    <div className="hidden md:flex items-center min-w-0">
+                      <Link href={`/album/${item.track.album.id}`} className="text-gray-300 hover:underline truncate">
                         {item.track.album.name}
-                        </Link>
-                      </div>
-                      
-                    <div className="hidden md:flex items-center text-gray-400">
+                      </Link>
+                    </div>
+
+                    <div className="hidden md:flex items-center text-gray-400 text-sm">
                       {formatDate(item.added_at)}
-                      </div>
-                      
-                    <div className="flex items-center justify-end text-gray-400">
+                    </div>
+
+                    <div className="flex items-center justify-end text-gray-400 text-sm">
                       {formatDuration(item.track.duration_ms)}
-                      </div>
-                    </motion.div>
-                  ))}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           )}

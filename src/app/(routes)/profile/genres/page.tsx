@@ -275,10 +275,8 @@ export default function UserGenresPage() {
     const fetchGenres = async () => {
       setLoading(true);
       try {
-        console.log(`Obteniendo géneros para timeRange: ${timeRange}`);
         const data = await getUserGenres(timeRange);
         setGenresData(data);
-        console.log('Géneros obtenidos:', data);
         
         // Verificar si necesitamos selección manual
         if (data.hasUserInput) {

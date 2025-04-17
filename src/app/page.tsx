@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CircularProgress, Box, Typography } from '@mui/material';
+import { APP_NAME } from '@/app/config';
 
 export default function Page() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function Page() {
       }}
     >
       <Typography variant="h4" color="secondary" sx={{ mb: 4, fontWeight: 'bold' }}>
-        MusicVerse
+        {APP_NAME}
       </Typography>
       <CircularProgress color="secondary" />
       <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>

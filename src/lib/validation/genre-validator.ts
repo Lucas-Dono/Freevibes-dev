@@ -25,7 +25,6 @@ export async function validarGenero(
   // Si tenemos un resultado reciente (menos de 24 horas), usarlo
   const cacheKey = `${source}:${genre}`;
   if (cachedResults[cacheKey] && (Date.now() - cachedResults[cacheKey].timestamp) < 24 * 60 * 60 * 1000) {
-    console.log(`Usando validación en caché para género ${genre} (${source}): ${cachedResults[cacheKey].valid}`);
     return cachedResults[cacheKey].valid;
   }
   
@@ -35,7 +34,6 @@ export async function validarGenero(
   try {
     if (source === 'spotify') {
       // Para Spotify, intenta obtener tracks para este género
-      console.log(`Validando género de Spotify: ${genre}`);
       const response = await fetchConReintentos(
         `https://api.spotify.com/v1/search?q=genre%3A${encodeURIComponent(genre)}&type=track&limit=1`,
         { 
@@ -54,17 +52,14 @@ export async function validarGenero(
       }
     } else if (source === 'lastfm') {
       // Implementación para validar géneros en Last.fm
-      console.log(`Validando género en Last.fm: ${genre}`);
       // Aquí iría la implementación específica para Last.fm
       isValid = true; // Por defecto asumimos que Last.fm es válido
     } else if (source === 'youtube') {
       // Implementación para validar géneros en YouTube Music
-      console.log(`Validando género en YouTube Music: ${genre}`);
       // Aquí iría la implementación específica para YouTube Music
       isValid = true; // Por defecto asumimos que YouTube Music es válido
     } else if (source === 'deezer') {
       // Implementación para validar géneros en Deezer
-      console.log(`Validando género en Deezer: ${genre}`);
       // Aquí iría la implementación específica para Deezer
       isValid = true; // Por defecto asumimos que Deezer es válido
     }
@@ -82,7 +77,6 @@ export async function validarGenero(
   
   await genreCache.set(CACHE_KEY_VALID_GENRES, JSON.stringify(cachedResults), CACHE_TTL_HOURS);
   
-  console.log(`Género ${genre} (${source}) validado: ${isValid}`);
   return isValid;
 }
 
@@ -103,12 +97,10 @@ export async function obtenerGenerosValidados(
   // Si el género canario es válido, podemos asumir que todos son válidos
   // y evitar sobrecargar la API con múltiples peticiones
   if (canarioValido) {
-    console.log(`Género canario ${generoCanario} válido, asumiendo que todos los géneros son válidos`);
     return generos;
   }
   
   // Si el canario falla, validar cada género individualmente
-  console.log(`Género canario fallido, validando géneros individualmente`);
   
   // Validar géneros en paralelo con límite para no sobrecargar
   const resultados = await Promise.all(

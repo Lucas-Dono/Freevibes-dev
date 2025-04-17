@@ -256,4 +256,66 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+}
+
+/* Estilos para placeholders de imágenes */
+.placeholder-album {
+  background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+}
+
+.placeholder-album::before {
+  content: "🎵";
+  font-size: 2rem;
+}
+
+.placeholder-artist {
+  background: linear-gradient(135deg, #333333 0%, #222222 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  position: relative;
+}
+
+.placeholder-artist::before {
+  content: "👤";
+  font-size: 2rem;
+}
+
+.placeholder-playlist {
+  background: linear-gradient(135deg, #3a3a3a 0%, #282828 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  position: relative;
+}
+
+.placeholder-playlist::before {
+  content: "📋";
+  font-size: 2rem;
+}
+
+.placeholder-genre {
+  background: linear-gradient(135deg, #444444 0%, #232323 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  position: relative;
+}
+
+.placeholder-genre::before {
+  content: "🎸";
+  font-size: 2rem;
 } 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { API_CONFIG } from '@/config/api-config';
 
-const API_URL = 'https://api.deezer.com';
+const API_URL = API_CONFIG.DEEZER_API_BASE;
 
 /**
  * Proxy para solicitudes a la API de Deezer
@@ -44,7 +45,6 @@ export async function GET(request: NextRequest) {
       deezerUrl += `?${paramString}`;
     }
     
-    console.log(`[Proxy] Redirigiendo petición Deezer: ${endpoint}, q=${query}`);
     
     // Establecer un tiempo de espera para la solicitud (7 segundos)
     const controller = new AbortController();
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(deezerUrl, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'MusicVerse/1.0'
+        'User-Agent': 'freevibes/1.0'
       }
     });
     

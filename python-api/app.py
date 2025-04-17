@@ -10,11 +10,11 @@ from dotenv import load_dotenv
 # Cargar variables de entorno
 load_dotenv()
 
-# Configuración para CORS en producción
-if os.environ.get('CORS_ORIGIN'):
-    from flask_cors import CORS
-    cors_origin = os.environ.get('CORS_ORIGIN', '*').split(',')
-    CORS(app, resources={r"/*": {"origins": cors_origin}})
+# Comentamos esta configuración CORS porque ya está configurada en youtube_music_api.py
+# if os.environ.get('CORS_ORIGIN'):
+#     from flask_cors import CORS
+#     cors_origin = os.environ.get('CORS_ORIGIN', '*').split(',')
+#     CORS(app, resources={r"/*": {"origins": cors_origin}})
 
 # Agregar una ruta raíz para verificación de disponibilidad
 @app.route('/')
@@ -58,7 +58,7 @@ def api_root():
 if __name__ == "__main__":
     try:
         # Obtener puerto desde variables de entorno (para Render)
-        port = int(os.environ.get('PORT', 5000))
+        port = os.environ.get('PORT', 5000)
         debug = os.environ.get('FLASK_ENV', 'development') == 'development'
         
         print(f"Iniciando servidor YouTube Music API en http://0.0.0.0:{port}")

@@ -36,7 +36,6 @@ export const hybridRecommender = {
       // Un género normalmente no contiene espacios ni caracteres especiales
       const isValidGenre = /^[a-zA-Z0-9-&]+$/.test(genre.trim());
       const searchQuery = isValidGenre ? `genre:${genre}` : genre;
-      console.log(`Usando query de búsqueda para YouTube Music: ${searchQuery}`);
       
       // Obtener canciones de YouTube Music API usando search() que sí existe
       const youtubePromise = youtubeMusic.getRecommendationsByGenre(genre, youtubeLimit);
@@ -180,7 +179,6 @@ export class HybridRecommender {
     try {
       // Validar que sea un género real antes de buscar
       if (!isValidGenre(genre)) {
-        console.log(`[HybridRecommender] "${genre}" no parece ser un género válido`);
         
         // Si no es un género válido, buscar como una canción o artista normal
         return this.getMultiSourceRecommendations(genre, limit);
@@ -197,7 +195,6 @@ export class HybridRecommender {
       if (memCached && (now - memCached.timestamp < GENRE_CACHE_TTL)) {
         // Solo mostrar log si se habilita el debug
         if (ENABLE_CACHE_DEBUG) {
-          console.log(`[HybridRecommender] Usando caché en memoria para género "${genre}"`);
         }
         return memCached.tracks;
       }
@@ -216,16 +213,12 @@ export class HybridRecommender {
           
           // Solo mostrar log si se habilita el debug
           if (ENABLE_CACHE_DEBUG) {
-            console.log(`[HybridRecommender] Usando caché persistente para género "${genre}"`);
           }
           return tracks;
         }
       } catch (cacheError) {
         console.warn(`[HybridRecommender] Error accediendo a caché para "${genre}":`, cacheError);
       }
-      
-      // Este log se mantiene porque es una búsqueda real a la API
-      console.log(`[HybridRecommender] Buscando recomendaciones para género "${genre}"`);
       
       // Buscar recomendaciones de ambas fuentes en paralelo
       const [spotifyTracks, youtubeTracks] = await Promise.allSettled([

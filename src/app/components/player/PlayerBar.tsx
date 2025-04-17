@@ -3,12 +3,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/lib/auth/useAuth';
 import { usePlayer, Track } from '@/contexts/PlayerContext';
 
 export const PlayerBar: React.FC = () => {
   const pathname = usePathname();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated: authStatus } = useAuth();
+  const isAuthenticated = user !== null || authStatus;
   
   // Obtener información del reproductor desde el contexto
   const { 
@@ -115,8 +116,6 @@ export const PlayerBar: React.FC = () => {
   // Validar la URL de la portada para evitar errores
   const coverUrl = currentTrack?.cover || '/placeholder-album.jpg';
   
-  console.log("PlayerBar rendering with currentTrack:", currentTrack.title, "isPlaying:", isPlaying);
-  
   return (
     <AnimatePresence>
       <motion.div 
@@ -139,7 +138,9 @@ export const PlayerBar: React.FC = () => {
                 <div className="max-w-7xl mx-auto p-6">
                   <div className="flex">
                     {/* Portada ampliada e información del álbum */}
-                    <div className="w-1/3 pr-8">
+                    <div 
+                      className="w-1/3 pr-8"
+                    >
                       <motion.div 
                         className="relative aspect-square rounded-lg overflow-hidden shadow-2xl mb-4"
                         initial={{ scale: 0.9, opacity: 0 }}
@@ -160,43 +161,45 @@ export const PlayerBar: React.FC = () => {
                       >
                         {currentTrack.title}
                       </motion.h2>
-                      <motion.p 
+                      <motion.div 
                         className="text-gray-400"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
                       >
                         {currentTrack.artist}
-                      </motion.p>
-                      <motion.p 
+                      </motion.div>
+                      <motion.div 
                         className="text-gray-500 text-sm"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.4 }}
                       >
                         {currentTrack.album}
-                      </motion.p>
+                      </motion.div>
                     </div>
                     
                     {/* Controles ampliados y visualizaciones */}
-                    <div className="flex-1">
+                    <div 
+                      className="flex-1"
+                    >
                       {/* Visualización de YouTube */}
                       <div className="p-4 rounded-lg bg-black/30 mb-4 h-56 flex items-center justify-center">
                         {/* Aquí podríamos incrustar un iframe de YouTube con autoplay=0, pero mantenemos oculto el player principal */}
-                        <p className="text-gray-400 text-sm">
+                        <div className="text-gray-400 text-sm">
                           ID de YouTube: {currentTrack.youtubeId || 'No disponible'}
-                        </p>
+                        </div>
                       </div>
                       
                       {/* Información adicional */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="p-3 rounded-lg bg-black/20">
                           <h3 className="text-gray-300 text-xs mb-1">Duración</h3>
-                          <p className="text-white font-medium">{totalTimeFormatted}</p>
+                          <div className="text-white font-medium">{totalTimeFormatted}</div>
                         </div>
                         <div className="p-3 rounded-lg bg-black/20">
                           <h3 className="text-gray-300 text-xs mb-1">Album</h3>
-                          <p className="text-white font-medium truncate">{currentTrack.album || 'Desconocido'}</p>
+                          <div className="text-white font-medium truncate">{currentTrack.album || 'Desconocido'}</div>
                         </div>
                       </div>
                     </div>
@@ -259,14 +262,14 @@ export const PlayerBar: React.FC = () => {
                 >
                   {currentTrack.title}
                 </motion.h3>
-                <motion.p 
+                <motion.div 
                   className="text-gray-400 text-xs truncate"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
                   {currentTrack.artist}
-                </motion.p>
+                </motion.div>
               </div>
             </div>
             
@@ -292,21 +295,18 @@ export const PlayerBar: React.FC = () => {
                   onClick={handleTogglePlay}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
+                  animate={{ scale: isPlaying ? [1, 1.2, 1] : 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {isPlaying ? (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                      </svg>
-                    ) : (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    )}
-                  </motion.div>
+                  {isPlaying ? (
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
                 </motion.button>
                 
                 {/* Botón siguiente */}

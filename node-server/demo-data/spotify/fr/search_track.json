@@ -1,0 +1,1997 @@
+{
+  "tracks": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=chanson%20fran%C3%A7aise&type=track&market=FR&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=chanson%20fran%C3%A7aise&type=track&market=FR&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 25,
+    "items": [
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1WPcVNert9hn7mHsPKDn7j"
+              },
+              "href": "https://api.spotify.com/v1/artists/1WPcVNert9hn7mHsPKDn7j",
+              "id": "1WPcVNert9hn7mHsPKDn7j",
+              "name": "Édith Piaf",
+              "type": "artist",
+              "uri": "spotify:artist:1WPcVNert9hn7mHsPKDn7j"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2k3nz0I7mJzegtkooii4za"
+          },
+          "href": "https://api.spotify.com/v1/albums/2k3nz0I7mJzegtkooii4za",
+          "id": "2k3nz0I7mJzegtkooii4za",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2733d69a1082b9d676263912178"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e023d69a1082b9d676263912178"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048513d69a1082b9d676263912178"
+            }
+          ],
+          "is_playable": true,
+          "name": "Eternelle",
+          "release_date": "1987-10-31",
+          "release_date_precision": "day",
+          "total_tracks": 38,
+          "type": "album",
+          "uri": "spotify:album:2k3nz0I7mJzegtkooii4za"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1WPcVNert9hn7mHsPKDn7j"
+            },
+            "href": "https://api.spotify.com/v1/artists/1WPcVNert9hn7mHsPKDn7j",
+            "id": "1WPcVNert9hn7mHsPKDn7j",
+            "name": "Édith Piaf",
+            "type": "artist",
+            "uri": "spotify:artist:1WPcVNert9hn7mHsPKDn7j"
+          }
+        ],
+        "disc_number": 2,
+        "duration_ms": 142280,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ116000530"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3dkIE8P7hvl3tHl9KSb6dA"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3dkIE8P7hvl3tHl9KSb6dA",
+        "id": "3dkIE8P7hvl3tHl9KSb6dA",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Non, je ne regrette rien",
+        "popularity": 67,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3dkIE8P7hvl3tHl9KSb6dA"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/64LCTpIu9Iji2EPaxxPpxF"
+              },
+              "href": "https://api.spotify.com/v1/artists/64LCTpIu9Iji2EPaxxPpxF",
+              "id": "64LCTpIu9Iji2EPaxxPpxF",
+              "name": "Joe Dassin",
+              "type": "artist",
+              "uri": "spotify:artist:64LCTpIu9Iji2EPaxxPpxF"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/32ZaJ7p8xvsYE8udh6vyOg"
+          },
+          "href": "https://api.spotify.com/v1/albums/32ZaJ7p8xvsYE8udh6vyOg",
+          "id": "32ZaJ7p8xvsYE8udh6vyOg",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2739520be730c64292246fc1d78"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e029520be730c64292246fc1d78"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048519520be730c64292246fc1d78"
+            }
+          ],
+          "is_playable": true,
+          "name": "Joe Dassin",
+          "release_date": "1975-11-22",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:32ZaJ7p8xvsYE8udh6vyOg"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/64LCTpIu9Iji2EPaxxPpxF"
+            },
+            "href": "https://api.spotify.com/v1/artists/64LCTpIu9Iji2EPaxxPpxF",
+            "id": "64LCTpIu9Iji2EPaxxPpxF",
+            "name": "Joe Dassin",
+            "type": "artist",
+            "uri": "spotify:artist:64LCTpIu9Iji2EPaxxPpxF"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 206240,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ087500860"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1GeszH3DWCOKwK0d8D5gEZ"
+        },
+        "href": "https://api.spotify.com/v1/tracks/1GeszH3DWCOKwK0d8D5gEZ",
+        "id": "1GeszH3DWCOKwK0d8D5gEZ",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Et si tu n'existais pas",
+        "popularity": 63,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:1GeszH3DWCOKwK0d8D5gEZ"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4a16JEaHldo5vZuRojtGTZ"
+              },
+              "href": "https://api.spotify.com/v1/artists/4a16JEaHldo5vZuRojtGTZ",
+              "id": "4a16JEaHldo5vZuRojtGTZ",
+              "name": "Charles Trenet",
+              "type": "artist",
+              "uri": "spotify:artist:4a16JEaHldo5vZuRojtGTZ"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2BgO56jZnE4xbfvlZOjK0L"
+          },
+          "href": "https://api.spotify.com/v1/albums/2BgO56jZnE4xbfvlZOjK0L",
+          "id": "2BgO56jZnE4xbfvlZOjK0L",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2738555817419b10e2b4757c242"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e028555817419b10e2b4757c242"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048518555817419b10e2b4757c242"
+            }
+          ],
+          "is_playable": true,
+          "name": "Disque D'or",
+          "release_date": "1992",
+          "release_date_precision": "year",
+          "total_tracks": 14,
+          "type": "album",
+          "uri": "spotify:album:2BgO56jZnE4xbfvlZOjK0L"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4a16JEaHldo5vZuRojtGTZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/4a16JEaHldo5vZuRojtGTZ",
+            "id": "4a16JEaHldo5vZuRojtGTZ",
+            "name": "Charles Trenet",
+            "type": "artist",
+            "uri": "spotify:artist:4a16JEaHldo5vZuRojtGTZ"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 192160,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ114700080"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6zlMAsPgiG81sZzsYVFwL3"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6zlMAsPgiG81sZzsYVFwL3",
+        "id": "6zlMAsPgiG81sZzsYVFwL3",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Douce France",
+        "popularity": 53,
+        "preview_url": null,
+        "track_number": 8,
+        "type": "track",
+        "uri": "spotify:track:6zlMAsPgiG81sZzsYVFwL3"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+              },
+              "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+              "id": "2hgP9Ap2tc10R5jrQaEpMT",
+              "name": "Charles Aznavour",
+              "type": "artist",
+              "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2szpoLHcGMCP4TjJvARnRC"
+          },
+          "href": "https://api.spotify.com/v1/albums/2szpoLHcGMCP4TjJvARnRC",
+          "id": "2szpoLHcGMCP4TjJvARnRC",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2730f9f1c97b5643b84256b562b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e020f9f1c97b5643b84256b562b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048510f9f1c97b5643b84256b562b"
+            }
+          ],
+          "is_playable": true,
+          "name": "Non, je n'ai rien oublié",
+          "release_date": "1971-01-01",
+          "release_date_precision": "day",
+          "total_tracks": 9,
+          "type": "album",
+          "uri": "spotify:album:2szpoLHcGMCP4TjJvARnRC"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 237080,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ117100480"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5rajdvjD8siZB2eFlPVSs1"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5rajdvjD8siZB2eFlPVSs1",
+        "id": "5rajdvjD8siZB2eFlPVSs1",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Mourir d'aimer",
+        "popularity": 53,
+        "preview_url": null,
+        "track_number": 5,
+        "type": "track",
+        "uri": "spotify:track:5rajdvjD8siZB2eFlPVSs1"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+              },
+              "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+              "id": "35nUzvEFgf2TzqnRdIMYjg",
+              "name": "Variété Française",
+              "type": "artist",
+              "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/00Kwx4BvhjavOQeeG9gZjw"
+              },
+              "href": "https://api.spotify.com/v1/artists/00Kwx4BvhjavOQeeG9gZjw",
+              "id": "00Kwx4BvhjavOQeeG9gZjw",
+              "name": "Chansons Françaises",
+              "type": "artist",
+              "uri": "spotify:artist:00Kwx4BvhjavOQeeG9gZjw"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0zWK4H1DjIUL0WXrRZuj52"
+              },
+              "href": "https://api.spotify.com/v1/artists/0zWK4H1DjIUL0WXrRZuj52",
+              "id": "0zWK4H1DjIUL0WXrRZuj52",
+              "name": "French Café Ensemble",
+              "type": "artist",
+              "uri": "spotify:artist:0zWK4H1DjIUL0WXrRZuj52"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2D2YcLslG12mbwUxagG4jC"
+          },
+          "href": "https://api.spotify.com/v1/albums/2D2YcLslG12mbwUxagG4jC",
+          "id": "2D2YcLslG12mbwUxagG4jC",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273e1106f4035a8cc008a525174"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02e1106f4035a8cc008a525174"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851e1106f4035a8cc008a525174"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chansons françaises pour faire la fête",
+          "release_date": "2017-06-23",
+          "release_date_precision": "day",
+          "total_tracks": 20,
+          "type": "album",
+          "uri": "spotify:album:2D2YcLslG12mbwUxagG4jC"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+            },
+            "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+            "id": "35nUzvEFgf2TzqnRdIMYjg",
+            "name": "Variété Française",
+            "type": "artist",
+            "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 209133,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FR80T0800741"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4YhCgtXkCFRpjFMKTrPQey"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4YhCgtXkCFRpjFMKTrPQey",
+        "id": "4YhCgtXkCFRpjFMKTrPQey",
+        "is_local": false,
+        "is_playable": true,
+        "name": "C'est beau la bourgeoisie",
+        "popularity": 53,
+        "preview_url": null,
+        "track_number": 9,
+        "type": "track",
+        "uri": "spotify:track:4YhCgtXkCFRpjFMKTrPQey"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+              },
+              "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+              "id": "2hgP9Ap2tc10R5jrQaEpMT",
+              "name": "Charles Aznavour",
+              "type": "artist",
+              "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/48wFUnl7K9Gzc6eeZVsXmy"
+              },
+              "href": "https://api.spotify.com/v1/artists/48wFUnl7K9Gzc6eeZVsXmy",
+              "id": "48wFUnl7K9Gzc6eeZVsXmy",
+              "name": "L'Orchestre Paul Mauriat",
+              "type": "artist",
+              "uri": "spotify:artist:48wFUnl7K9Gzc6eeZVsXmy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2jEjCqQw7AHAgv9NTyedwk"
+          },
+          "href": "https://api.spotify.com/v1/albums/2jEjCqQw7AHAgv9NTyedwk",
+          "id": "2jEjCqQw7AHAgv9NTyedwk",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273cd67b4615f939e74b0a5d872"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02cd67b4615f939e74b0a5d872"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851cd67b4615f939e74b0a5d872"
+            }
+          ],
+          "is_playable": true,
+          "name": "Le monde de la chanson, Vol. 27: Charles Aznavour, Vol. 2 \"O toi la vie!\"",
+          "release_date": "2020-01-10",
+          "release_date_precision": "day",
+          "total_tracks": 20,
+          "type": "album",
+          "uri": "spotify:album:2jEjCqQw7AHAgv9NTyedwk"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/48wFUnl7K9Gzc6eeZVsXmy"
+            },
+            "href": "https://api.spotify.com/v1/artists/48wFUnl7K9Gzc6eeZVsXmy",
+            "id": "48wFUnl7K9Gzc6eeZVsXmy",
+            "name": "L'Orchestre Paul Mauriat",
+            "type": "artist",
+            "uri": "spotify:artist:48wFUnl7K9Gzc6eeZVsXmy"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 219204,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "DEL111901670"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5zh3ERfWfCHNEVM9y4mbvX"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5zh3ERfWfCHNEVM9y4mbvX",
+        "id": "5zh3ERfWfCHNEVM9y4mbvX",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Tu t'laissez aller",
+        "popularity": 50,
+        "preview_url": null,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:5zh3ERfWfCHNEVM9y4mbvX"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7yyIR9coVU196KLJT9Mj6T"
+              },
+              "href": "https://api.spotify.com/v1/artists/7yyIR9coVU196KLJT9Mj6T",
+              "id": "7yyIR9coVU196KLJT9Mj6T",
+              "name": "Chansons d´Accordeon",
+              "type": "artist",
+              "uri": "spotify:artist:7yyIR9coVU196KLJT9Mj6T"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5w4k9Vz93h1ZJKRdp2zFn6"
+          },
+          "href": "https://api.spotify.com/v1/albums/5w4k9Vz93h1ZJKRdp2zFn6",
+          "id": "5w4k9Vz93h1ZJKRdp2zFn6",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27336703fefa1e2c2e529fef75c"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0236703fefa1e2c2e529fef75c"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485136703fefa1e2c2e529fef75c"
+            }
+          ],
+          "is_playable": true,
+          "name": "Nuits Françaises",
+          "release_date": "2023-10-13",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:5w4k9Vz93h1ZJKRdp2zFn6"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7yyIR9coVU196KLJT9Mj6T"
+            },
+            "href": "https://api.spotify.com/v1/artists/7yyIR9coVU196KLJT9Mj6T",
+            "id": "7yyIR9coVU196KLJT9Mj6T",
+            "name": "Chansons d´Accordeon",
+            "type": "artist",
+            "uri": "spotify:artist:7yyIR9coVU196KLJT9Mj6T"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 147624,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SE5W32308721"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/62UxKGAaoPpbWxopsCpUar"
+        },
+        "href": "https://api.spotify.com/v1/tracks/62UxKGAaoPpbWxopsCpUar",
+        "id": "62UxKGAaoPpbWxopsCpUar",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Nuits Françaises",
+        "popularity": 48,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:62UxKGAaoPpbWxopsCpUar"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4a16JEaHldo5vZuRojtGTZ"
+              },
+              "href": "https://api.spotify.com/v1/artists/4a16JEaHldo5vZuRojtGTZ",
+              "id": "4a16JEaHldo5vZuRojtGTZ",
+              "name": "Charles Trenet",
+              "type": "artist",
+              "uri": "spotify:artist:4a16JEaHldo5vZuRojtGTZ"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0lFb6bBBCGagIFrblxhjE3"
+          },
+          "href": "https://api.spotify.com/v1/albums/0lFb6bBBCGagIFrblxhjE3",
+          "id": "0lFb6bBBCGagIFrblxhjE3",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2736521548db739ed323d2a1970"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e026521548db739ed323d2a1970"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048516521548db739ed323d2a1970"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chansons sans époques: 1964 - 1968 (Remasterisé en 2017)",
+          "release_date": "2017-10-12",
+          "release_date_precision": "day",
+          "total_tracks": 22,
+          "type": "album",
+          "uri": "spotify:album:0lFb6bBBCGagIFrblxhjE3"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4a16JEaHldo5vZuRojtGTZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/4a16JEaHldo5vZuRojtGTZ",
+            "id": "4a16JEaHldo5vZuRojtGTZ",
+            "name": "Charles Trenet",
+            "type": "artist",
+            "uri": "spotify:artist:4a16JEaHldo5vZuRojtGTZ"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 193586,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ041701237"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0WYNxfmeHtYss2iUaiEDCJ"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0WYNxfmeHtYss2iUaiEDCJ",
+        "id": "0WYNxfmeHtYss2iUaiEDCJ",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Si tu vas à Paris - Remasterisé en 2017",
+        "popularity": 48,
+        "preview_url": null,
+        "track_number": 8,
+        "type": "track",
+        "uri": "spotify:track:0WYNxfmeHtYss2iUaiEDCJ"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/64LCTpIu9Iji2EPaxxPpxF"
+              },
+              "href": "https://api.spotify.com/v1/artists/64LCTpIu9Iji2EPaxxPpxF",
+              "id": "64LCTpIu9Iji2EPaxxPpxF",
+              "name": "Joe Dassin",
+              "type": "artist",
+              "uri": "spotify:artist:64LCTpIu9Iji2EPaxxPpxF"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3BRgfYZqKjLoqmEt1jZSHa"
+          },
+          "href": "https://api.spotify.com/v1/albums/3BRgfYZqKjLoqmEt1jZSHa",
+          "id": "3BRgfYZqKjLoqmEt1jZSHa",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27398be7dbe7527754efdcd7ad7"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0298be7dbe7527754efdcd7ad7"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485198be7dbe7527754efdcd7ad7"
+            }
+          ],
+          "is_playable": true,
+          "name": "Joe Dassin Éternel...",
+          "release_date": "2005-08-15",
+          "release_date_precision": "day",
+          "total_tracks": 23,
+          "type": "album",
+          "uri": "spotify:album:3BRgfYZqKjLoqmEt1jZSHa"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/64LCTpIu9Iji2EPaxxPpxF"
+            },
+            "href": "https://api.spotify.com/v1/artists/64LCTpIu9Iji2EPaxxPpxF",
+            "id": "64LCTpIu9Iji2EPaxxPpxF",
+            "name": "Joe Dassin",
+            "type": "artist",
+            "uri": "spotify:artist:64LCTpIu9Iji2EPaxxPpxF"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 207080,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ087500860"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3vIl0TRgS1UpxSTL8a19WF"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3vIl0TRgS1UpxSTL8a19WF",
+        "id": "3vIl0TRgS1UpxSTL8a19WF",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Et si tu n'existais pas",
+        "popularity": 47,
+        "preview_url": null,
+        "track_number": 7,
+        "type": "track",
+        "uri": "spotify:track:3vIl0TRgS1UpxSTL8a19WF"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+              },
+              "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+              "id": "1mbgj8ERPs8lWi7t5cYrdy",
+              "name": "Zaz",
+              "type": "artist",
+              "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1uV6kr7RrDmiffQoxLOg8s"
+          },
+          "href": "https://api.spotify.com/v1/albums/1uV6kr7RrDmiffQoxLOg8s",
+          "id": "1uV6kr7RrDmiffQoxLOg8s",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d9c128ff1209802afde47fd6"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d9c128ff1209802afde47fd6"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d9c128ff1209802afde47fd6"
+            }
+          ],
+          "is_playable": true,
+          "name": "Isa",
+          "release_date": "2021-10-22",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:1uV6kr7RrDmiffQoxLOg8s"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 171173,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ042100841"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/00N4nzw54Xz4ZwtcDzqHJK"
+        },
+        "href": "https://api.spotify.com/v1/tracks/00N4nzw54Xz4ZwtcDzqHJK",
+        "id": "00N4nzw54Xz4ZwtcDzqHJK",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Imagine",
+        "popularity": 47,
+        "preview_url": null,
+        "track_number": 2,
+        "type": "track",
+        "uri": "spotify:track:00N4nzw54Xz4ZwtcDzqHJK"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3skN1JzAWSzzeeXe6Kxvna"
+          },
+          "href": "https://api.spotify.com/v1/albums/3skN1JzAWSzzeeXe6Kxvna",
+          "id": "3skN1JzAWSzzeeXe6Kxvna",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517fe0b9c3098a70df0b8fc5a5"
+            }
+          ],
+          "is_playable": true,
+          "name": "Hits chanson française",
+          "release_date": "2020-05-01",
+          "release_date_precision": "day",
+          "total_tracks": 39,
+          "type": "album",
+          "uri": "spotify:album:3skN1JzAWSzzeeXe6Kxvna"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/22HVxZPA6UhBp8wahxDA6I"
+            },
+            "href": "https://api.spotify.com/v1/artists/22HVxZPA6UhBp8wahxDA6I",
+            "id": "22HVxZPA6UhBp8wahxDA6I",
+            "name": "France Gall",
+            "type": "artist",
+            "uri": "spotify:artist:22HVxZPA6UhBp8wahxDA6I"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 153346,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ026500100"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/26tXIAnv90FCv1eJiCUusH"
+        },
+        "href": "https://api.spotify.com/v1/tracks/26tXIAnv90FCv1eJiCUusH",
+        "id": "26tXIAnv90FCv1eJiCUusH",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Poupée de cire, poupée de son",
+        "popularity": 46,
+        "preview_url": null,
+        "track_number": 11,
+        "type": "track",
+        "uri": "spotify:track:26tXIAnv90FCv1eJiCUusH"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1si0MhutSLRlQbxiBV08tz"
+              },
+              "href": "https://api.spotify.com/v1/artists/1si0MhutSLRlQbxiBV08tz",
+              "id": "1si0MhutSLRlQbxiBV08tz",
+              "name": "Sacha Distel",
+              "type": "artist",
+              "uri": "spotify:artist:1si0MhutSLRlQbxiBV08tz"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7L0nSUsf4eVG6HDpbN4Ye4"
+          },
+          "href": "https://api.spotify.com/v1/albums/7L0nSUsf4eVG6HDpbN4Ye4",
+          "id": "7L0nSUsf4eVG6HDpbN4Ye4",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27339828f776112cb1da8028537"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0239828f776112cb1da8028537"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485139828f776112cb1da8028537"
+            }
+          ],
+          "is_playable": true,
+          "name": "Oh quelle nuit + 17 succès de Sacha Distel (Chanson française)",
+          "release_date": "1959",
+          "release_date_precision": "year",
+          "total_tracks": 18,
+          "type": "album",
+          "uri": "spotify:album:7L0nSUsf4eVG6HDpbN4Ye4"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1si0MhutSLRlQbxiBV08tz"
+            },
+            "href": "https://api.spotify.com/v1/artists/1si0MhutSLRlQbxiBV08tz",
+            "id": "1si0MhutSLRlQbxiBV08tz",
+            "name": "Sacha Distel",
+            "type": "artist",
+            "uri": "spotify:artist:1si0MhutSLRlQbxiBV08tz"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 148480,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRC681005150"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0mj20Nu9FV2M09PqisAbdD"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0mj20Nu9FV2M09PqisAbdD",
+        "id": "0mj20Nu9FV2M09PqisAbdD",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Oui, oui, oui, oui",
+        "popularity": 44,
+        "preview_url": null,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:0mj20Nu9FV2M09PqisAbdD"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5ru2x3pjrNn67D22BRwlFP"
+              },
+              "href": "https://api.spotify.com/v1/artists/5ru2x3pjrNn67D22BRwlFP",
+              "id": "5ru2x3pjrNn67D22BRwlFP",
+              "name": "Yves Montand",
+              "type": "artist",
+              "uri": "spotify:artist:5ru2x3pjrNn67D22BRwlFP"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/797ZZpUPBiTGrGBMIijxW6"
+          },
+          "href": "https://api.spotify.com/v1/albums/797ZZpUPBiTGrGBMIijxW6",
+          "id": "797ZZpUPBiTGrGBMIijxW6",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27348e53f4073be771be0016224"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0248e53f4073be771be0016224"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485148e53f4073be771be0016224"
+            }
+          ],
+          "is_playable": true,
+          "name": "C'est si bon + 49 succès de Yves Montand (Chanson française)",
+          "release_date": "1955",
+          "release_date_precision": "year",
+          "total_tracks": 50,
+          "type": "album",
+          "uri": "spotify:album:797ZZpUPBiTGrGBMIijxW6"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5ru2x3pjrNn67D22BRwlFP"
+            },
+            "href": "https://api.spotify.com/v1/artists/5ru2x3pjrNn67D22BRwlFP",
+            "id": "5ru2x3pjrNn67D22BRwlFP",
+            "name": "Yves Montand",
+            "type": "artist",
+            "uri": "spotify:artist:5ru2x3pjrNn67D22BRwlFP"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 200946,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRC681007320"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5GZPlZytoXP8mKPoDoyFCw"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5GZPlZytoXP8mKPoDoyFCw",
+        "id": "5GZPlZytoXP8mKPoDoyFCw",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Les feuilles mortes",
+        "popularity": 43,
+        "preview_url": null,
+        "track_number": 6,
+        "type": "track",
+        "uri": "spotify:track:5GZPlZytoXP8mKPoDoyFCw"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3skN1JzAWSzzeeXe6Kxvna"
+          },
+          "href": "https://api.spotify.com/v1/albums/3skN1JzAWSzzeeXe6Kxvna",
+          "id": "3skN1JzAWSzzeeXe6Kxvna",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517fe0b9c3098a70df0b8fc5a5"
+            }
+          ],
+          "is_playable": true,
+          "name": "Hits chanson française",
+          "release_date": "2020-05-01",
+          "release_date_precision": "day",
+          "total_tracks": 39,
+          "type": "album",
+          "uri": "spotify:album:3skN1JzAWSzzeeXe6Kxvna"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6bebPrkEPr2xEkiHP3QkNT"
+            },
+            "href": "https://api.spotify.com/v1/artists/6bebPrkEPr2xEkiHP3QkNT",
+            "id": "6bebPrkEPr2xEkiHP3QkNT",
+            "name": "Fréro Delavega",
+            "type": "artist",
+            "uri": "spotify:artist:6bebPrkEPr2xEkiHP3QkNT"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 178986,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRUM71401363"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4KT6rWA9kZ5XNytkKAfrWe"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4KT6rWA9kZ5XNytkKAfrWe",
+        "id": "4KT6rWA9kZ5XNytkKAfrWe",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Le chant des sirènes",
+        "popularity": 41,
+        "preview_url": null,
+        "track_number": 31,
+        "type": "track",
+        "uri": "spotify:track:4KT6rWA9kZ5XNytkKAfrWe"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+              },
+              "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+              "id": "1mbgj8ERPs8lWi7t5cYrdy",
+              "name": "Zaz",
+              "type": "artist",
+              "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7iXV74Ij5lEvt6Msi4e12z"
+          },
+          "href": "https://api.spotify.com/v1/albums/7iXV74Ij5lEvt6Msi4e12z",
+          "id": "7iXV74Ij5lEvt6Msi4e12z",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27343ddfb314d892a8f3864a57f"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0243ddfb314d892a8f3864a57f"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485143ddfb314d892a8f3864a57f"
+            }
+          ],
+          "is_playable": true,
+          "name": "Paris",
+          "release_date": "2014-11-07",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:7iXV74Ij5lEvt6Msi4e12z"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 245895,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FR2PY1403300"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4Q2juIchkZx8kwyW8vbkGs"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4Q2juIchkZx8kwyW8vbkGs",
+        "id": "4Q2juIchkZx8kwyW8vbkGs",
+        "is_local": false,
+        "is_playable": true,
+        "name": "J'aime Paris au mois de mai (feat. Charles Aznavour)",
+        "popularity": 38,
+        "preview_url": null,
+        "track_number": 11,
+        "type": "track",
+        "uri": "spotify:track:4Q2juIchkZx8kwyW8vbkGs"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+              },
+              "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+              "id": "1mbgj8ERPs8lWi7t5cYrdy",
+              "name": "Zaz",
+              "type": "artist",
+              "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/7iXV74Ij5lEvt6Msi4e12z"
+          },
+          "href": "https://api.spotify.com/v1/albums/7iXV74Ij5lEvt6Msi4e12z",
+          "id": "7iXV74Ij5lEvt6Msi4e12z",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27343ddfb314d892a8f3864a57f"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0243ddfb314d892a8f3864a57f"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485143ddfb314d892a8f3864a57f"
+            }
+          ],
+          "is_playable": true,
+          "name": "Paris",
+          "release_date": "2014-11-07",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:7iXV74Ij5lEvt6Msi4e12z"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1n02UdnML6G4wR162YsSRi"
+            },
+            "href": "https://api.spotify.com/v1/artists/1n02UdnML6G4wR162YsSRi",
+            "id": "1n02UdnML6G4wR162YsSRi",
+            "name": "Nikki Yanofsky",
+            "type": "artist",
+            "uri": "spotify:artist:1n02UdnML6G4wR162YsSRi"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 242657,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FR2PY1403270"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0zxwDxNMlmQLsqyRCIoCd7"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0zxwDxNMlmQLsqyRCIoCd7",
+        "id": "0zxwDxNMlmQLsqyRCIoCd7",
+        "is_local": false,
+        "is_playable": true,
+        "name": "I Love Paris / J'aime Paris (feat. Nikki Yanofsky)",
+        "popularity": 35,
+        "preview_url": null,
+        "track_number": 8,
+        "type": "track",
+        "uri": "spotify:track:0zxwDxNMlmQLsqyRCIoCd7"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2KbsMCeNs0OkgVdiqVoffJ"
+          },
+          "href": "https://api.spotify.com/v1/albums/2KbsMCeNs0OkgVdiqVoffJ",
+          "id": "2KbsMCeNs0OkgVdiqVoffJ",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27335b48bbe6c85b65505defae1"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0235b48bbe6c85b65505defae1"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485135b48bbe6c85b65505defae1"
+            }
+          ],
+          "is_playable": true,
+          "name": "Tubes Chanson Française",
+          "release_date": "2021-01-22",
+          "release_date_precision": "day",
+          "total_tracks": 36,
+          "type": "album",
+          "uri": "spotify:album:2KbsMCeNs0OkgVdiqVoffJ"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4JQHNk6teUNYxC27Bg0UPI"
+            },
+            "href": "https://api.spotify.com/v1/artists/4JQHNk6teUNYxC27Bg0UPI",
+            "id": "4JQHNk6teUNYxC27Bg0UPI",
+            "name": "Patricia Kaas",
+            "type": "artist",
+            "uri": "spotify:artist:4JQHNk6teUNYxC27Bg0UPI"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 228040,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ028700010"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4bBK4HzDQjhx5JpCAByE4z"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4bBK4HzDQjhx5JpCAByE4z",
+        "id": "4bBK4HzDQjhx5JpCAByE4z",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Mademoiselle chante le blues",
+        "popularity": 33,
+        "preview_url": null,
+        "track_number": 36,
+        "type": "track",
+        "uri": "spotify:track:4bBK4HzDQjhx5JpCAByE4z"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5ru2x3pjrNn67D22BRwlFP"
+              },
+              "href": "https://api.spotify.com/v1/artists/5ru2x3pjrNn67D22BRwlFP",
+              "id": "5ru2x3pjrNn67D22BRwlFP",
+              "name": "Yves Montand",
+              "type": "artist",
+              "uri": "spotify:artist:5ru2x3pjrNn67D22BRwlFP"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1vRXGiuZopcMVKvZOGwgjF"
+          },
+          "href": "https://api.spotify.com/v1/albums/1vRXGiuZopcMVKvZOGwgjF",
+          "id": "1vRXGiuZopcMVKvZOGwgjF",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27338bbc0a7d91aa00ce9499ade"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0238bbc0a7d91aa00ce9499ade"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485138bbc0a7d91aa00ce9499ade"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chanson française",
+          "release_date": "2015-06-15",
+          "release_date_precision": "day",
+          "total_tracks": 24,
+          "type": "album",
+          "uri": "spotify:album:1vRXGiuZopcMVKvZOGwgjF"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5ru2x3pjrNn67D22BRwlFP"
+            },
+            "href": "https://api.spotify.com/v1/artists/5ru2x3pjrNn67D22BRwlFP",
+            "id": "5ru2x3pjrNn67D22BRwlFP",
+            "name": "Yves Montand",
+            "type": "artist",
+            "uri": "spotify:artist:5ru2x3pjrNn67D22BRwlFP"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 165400,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ036800530"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3C529oknMJ0kzWaSyyzv7O"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3C529oknMJ0kzWaSyyzv7O",
+        "id": "3C529oknMJ0kzWaSyyzv7O",
+        "is_local": false,
+        "is_playable": true,
+        "name": "À bicyclette",
+        "popularity": 31,
+        "preview_url": null,
+        "track_number": 17,
+        "type": "track",
+        "uri": "spotify:track:3C529oknMJ0kzWaSyyzv7O"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+              },
+              "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+              "id": "1mbgj8ERPs8lWi7t5cYrdy",
+              "name": "Zaz",
+              "type": "artist",
+              "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5VXsO0AdwwtazdWJfEP1Ag"
+          },
+          "href": "https://api.spotify.com/v1/albums/5VXsO0AdwwtazdWJfEP1Ag",
+          "id": "5VXsO0AdwwtazdWJfEP1Ag",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27363283d96de70d2e6273da91c"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0263283d96de70d2e6273da91c"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485163283d96de70d2e6273da91c"
+            }
+          ],
+          "is_playable": true,
+          "name": "Isa (Nouvelle édition)",
+          "release_date": "2022-12-09",
+          "release_date_precision": "day",
+          "total_tracks": 17,
+          "type": "album",
+          "uri": "spotify:album:5VXsO0AdwwtazdWJfEP1Ag"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 171173,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ042100841"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4CmHo9uGmKYQ6QnQZPqPU0"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4CmHo9uGmKYQ6QnQZPqPU0",
+        "id": "4CmHo9uGmKYQ6QnQZPqPU0",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Imagine",
+        "popularity": 28,
+        "preview_url": null,
+        "track_number": 2,
+        "type": "track",
+        "uri": "spotify:track:4CmHo9uGmKYQ6QnQZPqPU0"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/46FhgRKNLcnmNuMyK3m3RE"
+              },
+              "href": "https://api.spotify.com/v1/artists/46FhgRKNLcnmNuMyK3m3RE",
+              "id": "46FhgRKNLcnmNuMyK3m3RE",
+              "name": "Orquesta Música Maravillosa",
+              "type": "artist",
+              "uri": "spotify:artist:46FhgRKNLcnmNuMyK3m3RE"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4TbdFsvfkqznr13Zi956fo"
+          },
+          "href": "https://api.spotify.com/v1/albums/4TbdFsvfkqznr13Zi956fo",
+          "id": "4TbdFsvfkqznr13Zi956fo",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2733186435fe8189908fbf0abb7"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e023186435fe8189908fbf0abb7"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048513186435fe8189908fbf0abb7"
+            }
+          ],
+          "is_playable": true,
+          "name": "Grandes Orquestas Vol.2",
+          "release_date": "2015-09-03",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:4TbdFsvfkqznr13Zi956fo"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/46FhgRKNLcnmNuMyK3m3RE"
+            },
+            "href": "https://api.spotify.com/v1/artists/46FhgRKNLcnmNuMyK3m3RE",
+            "id": "46FhgRKNLcnmNuMyK3m3RE",
+            "name": "Orquesta Música Maravillosa",
+            "type": "artist",
+            "uri": "spotify:artist:46FhgRKNLcnmNuMyK3m3RE"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 162933,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "QM6P41528081"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4mVJaWKfle3V21llPZ2brn"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4mVJaWKfle3V21llPZ2brn",
+        "id": "4mVJaWKfle3V21llPZ2brn",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Chanson d'Amour",
+        "popularity": 27,
+        "preview_url": null,
+        "track_number": 12,
+        "type": "track",
+        "uri": "spotify:track:4mVJaWKfle3V21llPZ2brn"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2KbsMCeNs0OkgVdiqVoffJ"
+          },
+          "href": "https://api.spotify.com/v1/albums/2KbsMCeNs0OkgVdiqVoffJ",
+          "id": "2KbsMCeNs0OkgVdiqVoffJ",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27335b48bbe6c85b65505defae1"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0235b48bbe6c85b65505defae1"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485135b48bbe6c85b65505defae1"
+            }
+          ],
+          "is_playable": true,
+          "name": "Tubes Chanson Française",
+          "release_date": "2021-01-22",
+          "release_date_precision": "day",
+          "total_tracks": 36,
+          "type": "album",
+          "uri": "spotify:album:2KbsMCeNs0OkgVdiqVoffJ"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3Uitc0uNSbhVrqJON4NCMY"
+            },
+            "href": "https://api.spotify.com/v1/artists/3Uitc0uNSbhVrqJON4NCMY",
+            "id": "3Uitc0uNSbhVrqJON4NCMY",
+            "name": "Michel Fugain",
+            "type": "artist",
+            "uri": "spotify:artist:3Uitc0uNSbhVrqJON4NCMY"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 165800,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ076403126"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/1627JHBIwVbFTZyyDBAkpK"
+        },
+        "href": "https://api.spotify.com/v1/tracks/1627JHBIwVbFTZyyDBAkpK",
+        "id": "1627JHBIwVbFTZyyDBAkpK",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Je n'aurai pas le temps",
+        "popularity": 26,
+        "preview_url": null,
+        "track_number": 9,
+        "type": "track",
+        "uri": "spotify:track:1627JHBIwVbFTZyyDBAkpK"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7jD2kuFguuwFISy4F5KfGX"
+              },
+              "href": "https://api.spotify.com/v1/artists/7jD2kuFguuwFISy4F5KfGX",
+              "id": "7jD2kuFguuwFISy4F5KfGX",
+              "name": "Jacqueline François",
+              "type": "artist",
+              "uri": "spotify:artist:7jD2kuFguuwFISy4F5KfGX"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5kKp0z0LOyeaj04lqlrm9n"
+          },
+          "href": "https://api.spotify.com/v1/albums/5kKp0z0LOyeaj04lqlrm9n",
+          "id": "5kKp0z0LOyeaj04lqlrm9n",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737f4c637869f34801f8d59d57"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027f4c637869f34801f8d59d57"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517f4c637869f34801f8d59d57"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chanson française",
+          "release_date": "2015-06-15",
+          "release_date_precision": "day",
+          "total_tracks": 29,
+          "type": "album",
+          "uri": "spotify:album:5kKp0z0LOyeaj04lqlrm9n"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7jD2kuFguuwFISy4F5KfGX"
+            },
+            "href": "https://api.spotify.com/v1/artists/7jD2kuFguuwFISy4F5KfGX",
+            "id": "7jD2kuFguuwFISy4F5KfGX",
+            "name": "Jacqueline François",
+            "type": "artist",
+            "uri": "spotify:artist:7jD2kuFguuwFISy4F5KfGX"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 170453,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ035500320"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/58glJc5R1d3FAudMKEwPYW"
+        },
+        "href": "https://api.spotify.com/v1/tracks/58glJc5R1d3FAudMKEwPYW",
+        "id": "58glJc5R1d3FAudMKEwPYW",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La fille d'Ipanema",
+        "popularity": 25,
+        "preview_url": null,
+        "track_number": 22,
+        "type": "track",
+        "uri": "spotify:track:58glJc5R1d3FAudMKEwPYW"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3rbOOc4VJ3BFxQXKppOuQP"
+              },
+              "href": "https://api.spotify.com/v1/artists/3rbOOc4VJ3BFxQXKppOuQP",
+              "id": "3rbOOc4VJ3BFxQXKppOuQP",
+              "name": "Jeanne Moreau",
+              "type": "artist",
+              "uri": "spotify:artist:3rbOOc4VJ3BFxQXKppOuQP"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0ADEAYvBCErEzJ3wS2OvC2"
+          },
+          "href": "https://api.spotify.com/v1/albums/0ADEAYvBCErEzJ3wS2OvC2",
+          "id": "0ADEAYvBCErEzJ3wS2OvC2",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27389ab58aab0a6deb22970682f"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0289ab58aab0a6deb22970682f"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485189ab58aab0a6deb22970682f"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chanson française",
+          "release_date": "2015-06-15",
+          "release_date_precision": "day",
+          "total_tracks": 23,
+          "type": "album",
+          "uri": "spotify:album:0ADEAYvBCErEzJ3wS2OvC2"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3rbOOc4VJ3BFxQXKppOuQP"
+            },
+            "href": "https://api.spotify.com/v1/artists/3rbOOc4VJ3BFxQXKppOuQP",
+            "id": "3rbOOc4VJ3BFxQXKppOuQP",
+            "name": "Jeanne Moreau",
+            "type": "artist",
+            "uri": "spotify:artist:3rbOOc4VJ3BFxQXKppOuQP"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 181266,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ026500030"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/168wEhVDY81aVxxjNDngxZ"
+        },
+        "href": "https://api.spotify.com/v1/tracks/168wEhVDY81aVxxjNDngxZ",
+        "id": "168wEhVDY81aVxxjNDngxZ",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Je suis vous tous qui m'écoutez",
+        "popularity": 21,
+        "preview_url": null,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:168wEhVDY81aVxxjNDngxZ"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3skN1JzAWSzzeeXe6Kxvna"
+          },
+          "href": "https://api.spotify.com/v1/albums/3skN1JzAWSzzeeXe6Kxvna",
+          "id": "3skN1JzAWSzzeeXe6Kxvna",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027fe0b9c3098a70df0b8fc5a5"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517fe0b9c3098a70df0b8fc5a5"
+            }
+          ],
+          "is_playable": true,
+          "name": "Hits chanson française",
+          "release_date": "2020-05-01",
+          "release_date_precision": "day",
+          "total_tracks": 39,
+          "type": "album",
+          "uri": "spotify:album:3skN1JzAWSzzeeXe6Kxvna"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 247280,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ116500180"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3TpLezFrQswdFNhfeR6aUq"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3TpLezFrQswdFNhfeR6aUq",
+        "id": "3TpLezFrQswdFNhfeR6aUq",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La bohème",
+        "popularity": 18,
+        "preview_url": null,
+        "track_number": 2,
+        "type": "track",
+        "uri": "spotify:track:3TpLezFrQswdFNhfeR6aUq"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5W2azFmEww74Bkmp2QUMMu"
+              },
+              "href": "https://api.spotify.com/v1/artists/5W2azFmEww74Bkmp2QUMMu",
+              "id": "5W2azFmEww74Bkmp2QUMMu",
+              "name": "Boris Vian",
+              "type": "artist",
+              "uri": "spotify:artist:5W2azFmEww74Bkmp2QUMMu"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3NV5eSC7lHEqYcbpfwBwhe"
+          },
+          "href": "https://api.spotify.com/v1/albums/3NV5eSC7lHEqYcbpfwBwhe",
+          "id": "3NV5eSC7lHEqYcbpfwBwhe",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d2165bc9dfecf9099dca7f65"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d2165bc9dfecf9099dca7f65"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d2165bc9dfecf9099dca7f65"
+            }
+          ],
+          "is_playable": true,
+          "name": "Chanson Française",
+          "release_date": "2010-01-01",
+          "release_date_precision": "day",
+          "total_tracks": 23,
+          "type": "album",
+          "uri": "spotify:album:3NV5eSC7lHEqYcbpfwBwhe"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5W2azFmEww74Bkmp2QUMMu"
+            },
+            "href": "https://api.spotify.com/v1/artists/5W2azFmEww74Bkmp2QUMMu",
+            "id": "5W2azFmEww74Bkmp2QUMMu",
+            "name": "Boris Vian",
+            "type": "artist",
+            "uri": "spotify:artist:5W2azFmEww74Bkmp2QUMMu"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 96466,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "FRZ035700800"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3DRXlMLW1Z0wrfQ01dnOUy"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3DRXlMLW1Z0wrfQ01dnOUy",
+        "id": "3DRXlMLW1Z0wrfQ01dnOUy",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Mozart avec nous - Inédit",
+        "popularity": 7,
+        "preview_url": null,
+        "track_number": 23,
+        "type": "track",
+        "uri": "spotify:track:3DRXlMLW1Z0wrfQ01dnOUy"
+      }
+    ]
+  }
+}

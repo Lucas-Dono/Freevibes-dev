@@ -39,7 +39,6 @@ export class SearchService {
       if (cached && (now - cached.timestamp < SearchService.MEMORY_CACHE_TTL)) {
         // Solo mostrar log si se habilita el debug
         if (ENABLE_CACHE_DEBUG) {
-          console.log(`[SearchService] Usando caché en memoria para "${query}"`);
         }
         return cached.data;
       }
@@ -57,7 +56,6 @@ export class SearchService {
           
           // Solo mostrar log si se habilita el debug
           if (ENABLE_CACHE_DEBUG) {
-            console.log(`[SearchService] Usando caché persistente para "${query}"`);
           }
           return parsedData;
         }
@@ -68,7 +66,6 @@ export class SearchService {
       // Región del usuario para búsquedas contextuales
       const region = getCountryCode();
       // Este log se mantiene porque es una búsqueda real a la API
-      console.log(`[SearchService] Buscando "${query}" con región: ${region}`);
 
       // Buscar en paralelo en ambas fuentes
       const [spotifyResults, youtubeMusicResults] = await Promise.allSettled([
@@ -167,7 +164,6 @@ export class SearchService {
       
       // Solo mostrar log si se habilita el debug
       if (ENABLE_CACHE_DEBUG) {
-        console.log(`[SearchService] Limpieza de caché: ${expiredCount} expirados, ${toRemove} antiguos eliminados`);
       }
     }
   }

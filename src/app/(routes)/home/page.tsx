@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { 
   Box, 
   Typography, 
   Container, 
   Grid, 
-  Card, 
+  Card,
   CardContent, 
   CardMedia,
   Button,
@@ -22,8 +22,8 @@ import {
   Avatar,
   Alert
 } from '@mui/material';
-import { PlayArrow, Search, Refresh, FavoriteRounded, ChevronLeft, ChevronRight, AccessTime } from '@mui/icons-material';
-import { getUserPersonalRotation, getFeaturedPlaylists, getSavedTracks, getNewReleases } from '@/services/spotify';
+import { PlayArrow, Search, Refresh, FavoriteRounded, ChevronLeft, ChevronRight, AccessTime, Login } from '@mui/icons-material';
+import { getUserPersonalRotation, getFeaturedPlaylists, getSavedTracks, getNewReleases, searchArtists, searchMultiType, getTopTracks } from '@/services/spotify';
 import { youtubeMusicAPI } from '@/services/youtube';
 import Slider from "react-slick";
 // Importar estilos para el carrusel
@@ -33,7 +33,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { RecentTracksService, EnrichedTrack } from '@/services/history/recentTracksService';
 import { ClockIcon, SpotifyIcon, DeezerIcon, LastFmIcon, YoutubeIcon, RefreshIcon, MusicNoteIcon } from '@/components/icons/MusicIcons';
-import { useAuth } from '@/app/context/AuthContext';
+import useSpotify from '@/hooks/useSpotify';
+import { signIn } from 'next-auth/react';
+import Cookies from 'js-cookie';
+import UnifiedMusicCard, { createTrackCard } from '@/components/UnifiedMusicCard';
+import Image from 'next/image';
+import { useAuth } from '@/components/providers/AuthProvider';
+import demoDataService from '@/services/demo/demo-data-service';
+import Star from '@/components/icons/Star';
+import { useArtistNavigation } from '@/hooks/useArtistNavigation';
+import axios from 'axios';
+import { getApiBaseUrl } from '@/lib/api-config';
+import { useTranslation } from '@/hooks/useTranslation';
+import FeaturedPlaylists from '@/components/FeaturedPlaylists';
+import { useCustomNotifications } from '@/hooks/useCustomNotifications';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.background.paper, 0.5),
@@ -161,18 +174,42 @@ const PrevArrow = (props: any) => {
   );
 };
 
-// Artista recomendado
+// Componente para mostrar alerta de login cuando se requiere autenticación
+const LoginAlert = ({ onLogin }: { onLogin: () => void }) => {
+  const { t } = useTranslation();
+  
+  return (
+    <Alert 
+      severity="warning" 
+      sx={{ mb: 3, '& .MuiAlert-message': { width: '100%' } }}
+      action={
+        <Button 
+          color="warning" 
+          variant="outlined" 
+          size="small"
+          onClick={onLogin}
+        >
+          {t('auth.login')}
+        </Button>
+      }
+    >
+      {t('auth.spotifyAuthRequired')}
+    </Alert>
+  );
+};
+
+// Zona de descubrimiento
 const recommendedArtist = {
   name: 'Arctic Monkeys',
   description: 'Banda de rock',
-  image: 'https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f',
+  image: '/img/arctic-monkeys.webp', // Cambiado a imagen local
 };
 
 // Datos para Géneros destacados
 const featuredGenre = {
   name: 'Indie Rock',
-  image: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-4.0.3',
-  artistCount: 42,
+  image: '/img/indie-rock.webp', // Cambiado a imagen local
+  artistCount: 4200,
 };
   
   // Definir un tipo para las pistas personales
@@ -186,6 +223,26 @@ const featuredGenre = {
     artists: Array<{ name: string; id: string }>;
     isTopTrack?: boolean;
     duration_ms?: number;
+    uri?: string;
+  }
+  
+  // Definir un tipo para unificar diferentes elementos en la rotación personal
+  interface MixedContentItem {
+    id: string;
+    name: string;
+    type: 'track' | 'artist' | 'playlist' | 'album';
+    images?: Array<{ url: string }>;
+    image?: string;
+    coverUrl?: string;
+    artists?: Array<{ name: string; id: string }>;
+    album?: {
+      name: string;
+      images: Array<{ url: string }>;
+    };
+    owner?: {
+      display_name: string;
+    };
+    description?: string;
     uri?: string;
   }
   
@@ -224,17 +281,46 @@ const featuredGenre = {
     });
   };
   
+// Función de utilidad para obtener la URL de imagen de un artista
+function getArtistImageUrl(artist: any) {
+  // Si tiene propiedad images y hay al menos una imagen
+  if (artist.images && artist.images.length > 0 && artist.images[0].url) {
+    console.log(`[ArtistCard] Usando imagen de images[0].url para ${artist.name}`);
+    return artist.images[0].url;
+  }
+  
+  // Si tiene una imagen directa en la propiedad image
+  if (artist.image) {
+    console.log(`[ArtistCard] Usando imagen de image para ${artist.name}`);
+    return artist.image;
+  }
+  
+  // Si hay una imagen en image_url
+  if (artist.image_url) {
+    console.log(`[ArtistCard] Usando imagen de image_url para ${artist.name}`);
+    return artist.image_url;
+  }
+  
+  // Usar placeholder si no hay imagen
+  console.warn(`[ArtistCard] No se encontró imagen para ${artist.name}, usando placeholder`);
+  return "https://placehold.co/400x400/purple/white?text=Artista";
+}
+
 export default function HomePage() {
-  const theme = useTheme();
+  const { isAuthenticated, isDemo, preferredLanguage } = useAuth();
+  const { t, language } = useTranslation();
+  const { session: spotifySession, isAuthenticated: spotifyAuth } = useSpotify();
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
-  const userId = user?.id || '';
+  const theme = useTheme();
+  const userId = spotifySession?.user?.id || '';
   
   const [activeTab, setActiveTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Estados unificados
   const [personalTracks, setPersonalTracks] = useState<PersonalTrack[]>([]);
+  // Reemplazar por un estado para contenido mixto
+  const [personalContent, setPersonalContent] = useState<MixedContentItem[]>([]);
   const [recentTracks, setRecentTracks] = useState<EnrichedTrack[]>([]);
   const [featuredPlaylists, setFeaturedPlaylists] = useState<any[]>([]);
   const [newReleases, setNewReleases] = useState<any[]>([]);
@@ -245,6 +331,7 @@ export default function HomePage() {
   const [exploreError, setExploreError] = useState('');
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const [authError, setAuthError] = useState(false);
 
   // Estados de carga y error
   const [loading, setLoading] = useState({
@@ -254,12 +341,13 @@ export default function HomePage() {
     newReleases: false,
     artists: false
   });
-  const [error, setError] = useState({
-    personal: null as string | null,
-    recent: null as string | null,
-    featured: null as string | null,
-    newReleases: null as string | null,
-    artists: null as string | null
+  const [isTabLoading, setIsTabLoading] = useState(false);
+  const [error, setError] = useState<{ personal: string | null; recent: string | null; featured: string | null; newReleases: string | null; artists: string | null; }>({
+    personal: null,
+    recent: null,
+    featured: null,
+    newReleases: null,
+    artists: null
   });
   
   // Lista de géneros predefinidos con nombres amigables
@@ -288,74 +376,97 @@ export default function HomePage() {
   const [recentTracksMinLoadingTime, setRecentTracksMinLoadingTime] = useState(true);
   const [recentTracksTimer, setRecentTracksTimer] = useState<any>(null);
 
+  const [cookieData, setCookieData] = useState<any>({});
+
+  const { musicNotifications } = useCustomNotifications();
+
   useEffect(() => {
+    console.log('[HomePage] Cargando página Home');
+    console.log('[HomePage] Estado de autenticación:', { isAuthenticated, isLoading: !!spotifyAuth });
+    
+    // Verificar cookies disponibles
+    const cookies = {
+      hasRefreshToken: !!Cookies.get('spotify_refresh_token'),
+      hasAuthToken: !!Cookies.get('auth_token'),
+      hasUser: !!Cookies.get('spotify_user'),
+      hasExpiration: !!Cookies.get('spotify_token_expiration'),
+    };
+    
+    setCookieData(cookies);
+    console.log('[HomePage] Cookies disponibles:', cookies);
+
+    // Forzar una carga inicial de la rotación personal
     fetchPersonalRotation();
     fetchRecentlyPlayedTracks();
-  }, []);
+  }, [isAuthenticated, spotifyAuth]);
+
+  // Si estamos en modo demo, configura el idioma en el servicio de datos demo
+  useEffect(() => {
+    if (isDemo && preferredLanguage) {
+      demoDataService.setLanguage(preferredLanguage);
+      console.log(`[Home] Modo demo activo con idioma: ${preferredLanguage}`);
+      
+      // Asegurarnos de cargar datos demo para la rotación personal
+      setTimeout(() => {
+        if (personalContent.length === 0 && !loading.personal) {
+          console.log('[Home] Forzando carga de datos en modo demo');
+          fetchPersonalRotation();
+        }
+      }, 1000);
+    }
+  }, [isDemo, preferredLanguage]);
 
   // Efecto para cargar datos según la pestaña activa
   useEffect(() => {
     loadTabContent(activeTab);
   }, [activeTab]);
 
-  // Función para cargar el contenido de la pestaña seleccionada
+  // Efecto para cargar playlists destacadas
+  useEffect(() => {
+    const loadFeaturedPlaylists = async () => {
+      try {
+        const playlists = await fetchFeaturedPlaylists(preferredLanguage || 'es');
+        setFeaturedPlaylists(playlists);
+      } catch (error) {
+        console.error('Error cargando playlists destacadas:', error);
+      }
+    };
+    
+    loadFeaturedPlaylists();
+  }, [preferredLanguage]);
+
   const loadTabContent = async (tabIndex: number) => {
     try {
+      console.log(`Cargando contenido para pestaña ${tabIndex}`);
       setExploreLoading(true);
       setExploreError('');
+      
+      // Dar un breve tiempo para que otras operaciones (como la verificación de disponibilidad) se completen
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       switch (tabIndex) {
-        case 0: // Nuevos lanzamientos
+        case 0: // Canciones populares
           if (newReleases.length === 0) {
-            console.log('Cargando nuevos lanzamientos...');
+            console.log('Cargando canciones populares...');
             try {
-              // Primero intentamos con Spotify para tener base de datos
-              const spotifyData = await getNewReleases(20);
-              let releases: any[] = [];
+              // Utilizamos getTopTracks en lugar de getNewReleases
+              const spotifyData = await getTopTracks(20);
+              console.log('Datos de canciones populares recibidos:', spotifyData);
               
-              if (spotifyData && spotifyData.albums && spotifyData.albums.items && spotifyData.albums.items.length > 0) {
-                releases = [...spotifyData.albums.items];
-                console.log('Nuevos lanzamientos de Spotify cargados:', releases.length);
-              }
-              
-              // Obtenemos lanzamientos de YouTube Music también
-              try {
-                console.log('Intentando obtener nuevos lanzamientos de YouTube Music...');
-                const ytMusicReleases = await youtubeMusicAPI.getNewReleases(20);
-                if (ytMusicReleases && ytMusicReleases.length > 0) {
-                  console.log('YouTube Music devolvió', ytMusicReleases.length, 'nuevos lanzamientos');
-                  
-                  // Filtrar solo aquellos con imágenes válidas
-                  const validReleases = ytMusicReleases.filter(release => 
-                    release.images && 
-                    release.images.length > 0 && 
-                    release.images[0].url && 
-                    release.images[0].url.length > 0
-                  );
-                  
-                  if (validReleases.length > 0) {
-                    // Añadimos los lanzamientos de YouTube Music a los de Spotify
-                    releases = [...releases, ...validReleases];
-                    console.log('Nuevos lanzamientos de YouTube Music cargados:', validReleases.length);
+              if (spotifyData && spotifyData.items && spotifyData.items.length > 0) {
+                // Marcar todas las canciones como tipo 'track'
+                const tracks = spotifyData.items.map((track: any) => ({
+                  ...track,
+                  type: 'track'  // Aseguramos que todos sean tipo track
+                }));
+                
+                setNewReleases(tracks);
+                console.log('Canciones populares cargadas:', tracks.length);
                   } else {
-                    console.warn('Filtradas todas las entradas de YouTube Music por falta de imágenes');
-                  }
-                } else {
-                  console.warn('YouTube Music no devolvió nuevos lanzamientos');
-                }
-              } catch (ytError) {
-                console.error('Error al cargar nuevos lanzamientos de YouTube Music:', ytError);
-              }
-              
-              if (releases.length > 0) {
-                // Aplicar filtro de duplicados antes de actualizar el estado
-                setNewReleases(removeDuplicateTracks(releases));
-                console.log('Total de nuevos lanzamientos cargados:', releases.length);
-              } else {
-                console.warn('No se obtuvieron nuevos lanzamientos válidos');
+                console.warn('No se obtuvieron canciones populares válidas');
               }
             } catch (error) {
-              console.error('Error al cargar nuevos lanzamientos:', error);
+              console.error('Error al cargar canciones populares:', error);
               // No establecer error para permitir que los datos de fallback se muestren
             }
           }
@@ -364,79 +475,24 @@ export default function HomePage() {
         case 1: // Escuchado recientemente
           if (recentlyPlayed.length === 0) {
             console.log('Cargando canciones escuchadas recientemente...');
-            
-            // Iniciar temporizador de carga mínima (10 segundos)
+            // Configurar un tiempo máximo para el indicador de carga
             setRecentTracksMinLoadingTime(true);
+            
+            // Establecer un temporizador de seguridad para desactivar el loading después de 10 segundos
+            if (recentTracksTimer) {
+              clearTimeout(recentTracksTimer);
+            }
+            
             const timer = setTimeout(() => {
               setRecentTracksMinLoadingTime(false);
             }, 10000);
             
             setRecentTracksTimer(timer);
             
-            try {
-              // Intentar primero con historial propio
-              console.log('Intentando cargar historial local primero...');
-              try {
-                const tracks = await RecentTracksService.getHistory(20);
-                if (tracks && tracks.length > 0) {
-                  // Aplicar filtro de duplicados antes de actualizar el estado
-                  setRecentlyPlayed(removeDuplicateTracks(tracks));
-                  console.log('Canciones del historial local cargadas:', tracks.length);
-                  
-                  // Limpiar el temporizador ya que los datos se cargaron correctamente
-                  clearTimeout(timer);
-                  setRecentTracksMinLoadingTime(false);
-                  break; // Salimos del case si tuvimos éxito
-                }
-              } catch (historyError) {
-                console.error('Error al cargar historial local:', historyError);
-              }
-              
-              // Si no hay datos en el historial, intentar con Spotify
-              console.log('Intentando cargar historial de Spotify...');
-              // Utilizar getSavedTracks como alternativa, ya que getRecentlyPlayedTracks no está disponible
-              const tracks = await getSavedTracks(20);
-              if (tracks && tracks.length > 0) {
-                // Convertir a formato de historial
-                const recentFormat = tracks.map((track: any) => ({
-                  id: track.id,
-                  title: track.name,
-                  artist: track.artists?.[0]?.name || 'Desconocido',
-                  album: track.album?.name || '',
-                  cover: track.album?.images?.[0]?.url || '',
-                  duration: track.duration_ms || 0,
-                  playedAt: new Date().getTime(),
-                  source: 'spotify'
-                }));
-                
-                // Aplicar filtro de duplicados antes de actualizar el estado
-                setRecentlyPlayed(removeDuplicateTracks(recentFormat));
-                console.log('Canciones guardadas cargadas como fallback:', recentFormat.length);
-                
-                // Limpiar el temporizador ya que los datos se cargaron correctamente
-                clearTimeout(timer);
-                setRecentTracksMinLoadingTime(false);
-              } else {
-                console.warn('No se obtuvieron canciones recientes de Spotify');
-              }
-            } catch (error) {
-              console.error('Error al cargar canciones recientes:', error);
-              // Intentar con el historial local como último recurso
-              try {
-                const tracks = await RecentTracksService.getHistory(20);
-                if (tracks && tracks.length > 0) {
-                  // Aplicar filtro de duplicados antes de actualizar el estado
-                  setRecentlyPlayed(removeDuplicateTracks(tracks));
-                  console.log('Canciones del historial local cargadas como último recurso:', tracks.length);
-                  
-                  // Limpiar el temporizador ya que los datos se cargaron correctamente
-                  clearTimeout(timer);
-                  setRecentTracksMinLoadingTime(false);
-                }
-              } catch (historyError) {
-                console.error('Error al cargar historial local:', historyError);
-              }
-            }
+            fetchRecentlyPlayedTracks();
+          } else {
+            // Si ya tenemos datos, asegurarse de que no se muestre el indicador de loading
+            setRecentTracksMinLoadingTime(false);
           }
           break;
           
@@ -444,54 +500,11 @@ export default function HomePage() {
           if (featuredPlaylists.length === 0) {
             console.log('Cargando playlists destacadas...');
             try {
-              let allPlaylists: any[] = [];
-              
-              // Obtener playlists de Spotify
-              const spotifyData = await getFeaturedPlaylists(20);
-              if (spotifyData && spotifyData.items && spotifyData.items.length > 0) {
-                // Agregar el origen a cada playlist
-                const spotifyPlaylists = spotifyData.items.map((playlist: any) => ({
-                  ...playlist,
-                  source: 'spotify'
-                }));
-                
-                allPlaylists = [...spotifyPlaylists];
-                console.log('Playlists destacadas de Spotify cargadas:', allPlaylists.length);
-              }
-              
-              // Obtener playlists destacadas de YouTube Music
-              try {
-                console.log('Intentando obtener playlists destacadas de YouTube Music...');
-                const ytMusicPlaylists = await youtubeMusicAPI.getFeaturedPlaylists(20);
-                if (ytMusicPlaylists && ytMusicPlaylists.length > 0) {
-                  console.log('YouTube Music devolvió', ytMusicPlaylists.length, 'playlists');
-                  
-                  // Convertir el formato de YouTube Music al formato esperado
-                  const formattedYtPlaylists = ytMusicPlaylists
-                    .filter((playlist: any) => playlist.thumbnails && playlist.thumbnails.length > 0)
-                    .map((playlist: any) => ({
-                      id: playlist.playlistId || `yt-${playlist.title.replace(/\s+/g, '_').toLowerCase()}`,
-                      name: playlist.title,
-                      description: playlist.description || `Playlist de YouTube Music`,
-                      images: [{ url: playlist.thumbnails[0]?.url || '' }],
-                      owner: { display_name: playlist.author || 'YouTube Music' },
-                      tracks: { total: playlist.trackCount || 0 },
-                      source: 'youtube'
-                    }));
-                  
-                  if (formattedYtPlaylists.length > 0) {
-                    allPlaylists = [...allPlaylists, ...formattedYtPlaylists];
-                    console.log('Playlists destacadas de YouTube Music cargadas:', formattedYtPlaylists.length);
-                  }
-                }
-              } catch (ytError) {
-                console.error('Error al cargar playlists de YouTube Music:', ytError);
-              }
-              
-              if (allPlaylists.length > 0) {
-                setFeaturedPlaylists(removeDuplicateTracks(allPlaylists));
-                console.log('Total de playlists destacadas cargadas:', allPlaylists.length);
-              } else {
+              const playlistsData = await getFeaturedPlaylists(20);
+              if (playlistsData && playlistsData.playlists && playlistsData.playlists.items) {
+                setFeaturedPlaylists(playlistsData.playlists.items);
+                console.log('Playlists destacadas cargadas:', playlistsData.playlists.items.length);
+                } else {
                 console.warn('No se obtuvieron playlists destacadas válidas');
               }
             } catch (error) {
@@ -505,96 +518,40 @@ export default function HomePage() {
           if (recommendedArtists.length === 0) {
             console.log('Cargando artistas recomendados...');
             try {
-              // Obtener los géneros favoritos del usuario primero (si es posible)
-              let userGenres: string[] = [];
-              try {
-                const response = await fetch('/api/user/genres');
-                if (response.ok) {
-                  const genresData = await response.json();
-                  userGenres = genresData.genres || [];
-                  console.log('Géneros del usuario obtenidos:', userGenres);
-                }
-              } catch (genresError) {
-                console.error('Error al obtener géneros del usuario:', genresError);
-              }
-              
-              // Obtener artistas basados en géneros del usuario o preferencias
+              // Intentar obtener artistas basados en géneros
+              const userGenres = ['pop', 'rock', 'hiphop', 'electronic', 'latin'];
               let artists: any[] = [];
               
-              if (userGenres.length > 0) {
-                // Limitar a máximo 3 géneros para evitar demasiadas solicitudes
-                const selectedGenres = userGenres.slice(0, 3);
-                console.log('Obteniendo artistas por géneros del usuario (limitados):', selectedGenres);
-                
-                // Realizar una sola solicitud con todos los géneros juntos en lugar de múltiples
-                try {
-                  // Usar el primer género como principal para evitar demasiadas solicitudes
-                  const mainGenre = selectedGenres[0];
-                  const genreArtists = await youtubeMusicAPI.searchByGenre(mainGenre, 15);
-                  
-                  if (genreArtists && Array.isArray(genreArtists)) {
-                    // Validar artistas con imágenes
-                    const validGenreArtists = genreArtists.filter((artist: any) => 
-                      artist && artist.images && artist.images.length > 0 && artist.images[0].url
-                    );
-                    
-                    if (validGenreArtists.length > 0) {
-                      artists = Array.from(new Set(
-                        validGenreArtists.map((a: any) => JSON.stringify(a))
-                      )).map((a: string) => JSON.parse(a));
-                      
-                      console.log('Artistas recomendados por género principal cargados:', artists.length);
-                    }
-              }
-            } catch (error) {
-                  console.error(`Error obteniendo artistas para género principal:`, error);
-                }
-              }
+              // Seleccionar un género aleatorio
+              const mainGenre = userGenres[Math.floor(Math.random() * userGenres.length)];
               
-              // Si no hay suficientes artistas, complementar con artistas predefinidos
-              const artistsNeeded = 16 - artists.length;
-              if (artistsNeeded > 0) {
-                console.log(`Necesitamos ${artistsNeeded} artistas más para completar.`);
-                // Usar searchByGenre como alternativa a getTopArtists con género "popular"
+              // Verificar si estamos en modo demo
+              if (isDemo) {
+                console.log(`[Home] Modo demo: Cargando artistas desde datos demo para ${mainGenre}`);
                 try {
-                  const moreArtists = await youtubeMusicAPI.searchByGenre('popular', artistsNeeded);
+                  // Usar directamente los datos demo para artistas
+                  const demoArtistsData = await demoDataService.getSearchResults('artist');
+                  artists = demoArtistsData?.artists?.items || [];
+                  console.log(`[Home] Artistas demo cargados:`, artists.length);
+                } catch (error) {
+                  console.error(`[Home] Error al cargar artistas demo:`, error);
+                }
+              } else {
+                // Modo normal: usar la API de Spotify
+                try {
+                  console.log(`Buscando artistas para género: ${mainGenre}`);
+                  const artistsData = await searchArtists(mainGenre);
                   
-                  if (moreArtists && Array.isArray(moreArtists)) {
-                    // Filtrar artistas con imágenes inválidas
-                    const validMoreArtists = moreArtists.filter((artist: any) => 
-                      artist && artist.images && artist.images.length > 0 && artist.images[0].url
-                    );
-                    
-                    // Añadir solo artistas que no estén ya en la lista
-                    if (validMoreArtists.length > 0) {
-                      const existingIds = new Set(artists.map((a: any) => a.id));
-                      for (const artist of validMoreArtists) {
-                        if (!existingIds.has(artist.id)) {
-                          artists.push(artist);
-                          existingIds.add(artist.id);
-                          
-                          if (artists.length >= 16) break;
-                        }
-                      }
-                      
-                      console.log('Artistas adicionales cargados:', validMoreArtists.length);
-                    }
+                  if (artistsData && artistsData.artists && artistsData.artists.items) {
+                    artists = artistsData.artists.items;
+                    console.log(`Artistas encontrados para ${mainGenre}:`, artists.length);
                   }
                 } catch (error) {
-                  console.error("Error al obtener artistas adicionales:", error);
+                  console.error(`Error al buscar artistas para ${mainGenre}:`, error);
                 }
               }
               
-              if (artists.length > 0) {
-                // Aplicar filtro de duplicados a artistas, usando el ID como identificador único
-                const uniqueArtists = artists.filter((artist, index, self) => 
-                  index === self.findIndex((a) => a.id === artist.id)
-                );
-                setRecommendedArtists(uniqueArtists);
-                console.log('Total de artistas recomendados cargados:', uniqueArtists.length);
-              } else {
-                console.warn('No se obtuvieron artistas recomendados válidos');
-              }
+              setRecommendedArtists(artists);
             } catch (error) {
               console.error('Error al cargar artistas recomendados:', error);
               // No establecer error para permitir que los datos de fallback se muestren
@@ -609,27 +566,201 @@ export default function HomePage() {
       setExploreLoading(false);
     } catch (error) {
       console.error('Cargando contenido de pestaña:', error);
+      
+      // Verificar si es un error de autenticación
+      if (error instanceof Error && error.message.includes('No autenticado')) {
+        console.warn('Error de autenticación detectado en carga de contenido');
+        setAuthError(true);
+        setExploreError('Se requiere iniciar sesión con Spotify para acceder a este contenido.');
+      } else {
       setExploreError('Ocurrió un error al cargar el contenido. Por favor intenta de nuevo.');
+      }
+      
       setExploreLoading(false);
       setRecentTracksMinLoadingTime(false); // Asegurar que se detenga el loading mínimo en caso de error
     }
   };
 
   const fetchPersonalRotation = async () => {
-      try {
-      setLoading(prev => ({ ...prev, personal: true }));
-      // Obtener la rotación personal del usuario (mezcla de top tracks y recomendaciones)
-      const tracks = await getUserPersonalRotation(12); // Aumentamos a 12 para tener más elementos en el carrusel
-      // Aplicar filtro de duplicados antes de actualizar el estado
-      setPersonalTracks(removeDuplicateTracks(tracks));
-      setError(prev => ({ ...prev, personal: null }));
-    } catch (err) {
-      console.error('Error al cargar la rotación personal:', err);
-      setError(prev => ({ ...prev, personal: 'No se pudieron cargar las canciones. Por favor, inténtalo de nuevo más tarde.' }));
-      } finally {
-      setLoading(prev => ({ ...prev, personal: false }));
+    setLoading(prev => ({ ...prev, personal: true }));
+    try {
+      console.log('[Home] Cargando rotación personal mixta');
+      let tracks: any[] = [];
+      let artists: any[] = [];
+      let playlists: any[] = [];
+      let albums: any[] = [];
+      
+      if (isDemo) {
+        // En modo demo, obtener datos de archivos JSON
+        console.log('[Home] Cargando datos demo para rotación personal mixta');
+        try {
+          // Cargar tracks
+          const demoTopTracks = await demoDataService.getTopTracks();
+          console.log('[Home] Estructura de demoTopTracks:', JSON.stringify(demoTopTracks).substring(0, 150));
+          
+          // Extraer correctamente las canciones - verificando la estructura
+          if (demoTopTracks && demoTopTracks.items && Array.isArray(demoTopTracks.items)) {
+            tracks = demoTopTracks.items;
+          } else if (Array.isArray(demoTopTracks)) {
+            tracks = demoTopTracks;
+          } else {
+            console.warn('[Home] Estructura inesperada de demoTopTracks:', demoTopTracks);
+            tracks = [];
+          }
+          
+          // Cargar artistas (utilizando las funciones disponibles en el servicio demo)
+          try {
+            // El servicio demo no tiene getTopArtists, usamos los resultados de búsqueda de artistas
+            const demoArtistsData = await demoDataService.getSearchResults('artist');
+            artists = demoArtistsData?.artists?.items || [];
+          } catch (e) {
+            console.warn('[Home] Error al cargar artistas demo:', e);
+            artists = [];
+          }
+          
+          // Cargar álbumes (usando new_releases como fuente de álbumes)
+          try {
+            const demoAlbums = await demoDataService.getNewReleases();
+            albums = demoAlbums && demoAlbums.albums && demoAlbums.albums.items 
+              ? demoAlbums.albums.items 
+              : [];
+        } catch (e) {
+            console.warn('[Home] Error al cargar álbumes demo:', e);
+            albums = [];
+          }
+          
+        } catch (e) {
+          console.warn('[Home] Error al cargar contenido demo para rotación personal:', e);
+        }
+      } else {
+        // Obtener datos reales de las APIs
+        try {
+          // Cargar tracks de forma paralela
+          const [personalRotation, userSavedTracks] = await Promise.all([
+            getUserPersonalRotation(8),
+            getSavedTracks(8)
+          ]);
+          
+          tracks = [...(Array.isArray(personalRotation) ? personalRotation : []), 
+                    ...(Array.isArray(userSavedTracks) ? userSavedTracks : [])];
+          tracks = removeDuplicateTracks(tracks);
+          
+          // Obtener playlists destacadas
+          try {
+            const playlists_data = await getFeaturedPlaylists(5);
+            if (playlists_data && playlists_data.playlists && playlists_data.playlists.items) {
+              playlists = playlists_data.playlists.items;
+            }
+        } catch (e) {
+            console.warn('[Home] Error al cargar playlists destacadas:', e);
+          }
+          
+          // Obtener nuevos lanzamientos como álbumes
+          try {
+            const newAlbums = await getNewReleases(5);
+            if (newAlbums && newAlbums.albums && newAlbums.albums.items) {
+              albums = newAlbums.albums.items;
+            }
+          } catch (e) {
+            console.warn('[Home] Error al cargar nuevos lanzamientos:', e);
+          }
+          
+          // Obtener artistas recomendados basados en géneros populares
+          const userGenres = ['pop', 'rock', 'latin', 'indie', 'electronic'];
+          const randomGenre = userGenres[Math.floor(Math.random() * userGenres.length)];
+          
+          try {
+            // Corregimos la llamada a searchArtists: no acepta un objeto como segundo parámetro
+            const artistsData = await searchArtists(randomGenre, 5);
+            if (artistsData && artistsData.artists && artistsData.artists.items) {
+              artists = artistsData.artists.items;
+            }
+          } catch (e) {
+            console.warn('[Home] Error al cargar artistas recomendados:', e);
+          }
+        } catch (e) {
+          console.error('[Home] Error al obtener datos para rotación personal:', e);
+        }
       }
-    };
+      
+      console.log('[Home] Datos obtenidos para rotación personal mixta:', {
+        tracks: tracks.length,
+        artists: artists.length,
+        playlists: playlists.length,
+        albums: albums.length
+      });
+      
+      // Convertir todo a formato MixedContentItem
+      const mixedItems: MixedContentItem[] = [
+        // Convertir tracks - con mejor manejo de propiedades
+        ...tracks.map(track => {
+          // Depurar el objeto track
+          console.log('[Home] Estructura de track:', JSON.stringify(track).substring(0, 150));
+          
+          return {
+            id: track.id || `track-${Math.random()}`,
+            name: track.name || track.title || 'Canción sin título',
+            type: 'track' as const,
+            images: track.album?.images || [],
+            coverUrl: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+            artists: track.artists || [{ name: track.artist || 'Artista desconocido', id: '' }],
+            album: track.album,
+            uri: track.uri || `spotify:track:${track.id}`
+          };
+        }),
+        
+        // Convertir artistas
+        ...artists.map(artist => ({
+          id: artist.id,
+          name: artist.name || 'Artista desconocido',
+          type: 'artist' as const,
+          images: artist.images || [],
+          image: artist.images?.[0]?.url || '/placeholder-artist.jpg',
+          description: artist.description || `Artista de ${artist.genres?.[0] || 'música'}`
+        })),
+        
+        // Convertir playlists
+        ...playlists.map(playlist => ({
+          id: playlist.id,
+          name: playlist.name || 'Playlist sin título',
+          type: 'playlist' as const,
+          images: playlist.images || [],
+          coverUrl: playlist.images?.[0]?.url || '/placeholder-playlist.jpg',
+          owner: playlist.owner,
+          description: playlist.description || 'Playlist'
+        })),
+        
+        // Convertir álbumes
+        ...albums.map(album => ({
+          id: album.id,
+          name: album.name || 'Álbum sin título',
+          type: 'album' as const,
+          images: album.images || [],
+          coverUrl: album.images?.[0]?.url || '/placeholder-album.jpg',
+          artists: album.artists || []
+        }))
+      ];
+      
+      // Mezclar aleatoriamente los elementos
+      const shuffledItems = mixedItems.sort(() => 0.5 - Math.random());
+      
+      // Seleccionar hasta 20 elementos para mostrar
+      setPersonalContent(shuffledItems.slice(0, 20));
+      
+      // Mantener el estado anterior para compatibilidad
+      setPersonalTracks(tracks.slice(0, 20));
+      
+      setError(prev => ({ ...prev, personal: null }));
+      setAuthError(false); // Resetear error de autenticación si la petición fue exitosa
+    } catch (error) {
+      console.error('[Home] Error al cargar rotación personal mixta:', error);
+      setError(prev => ({ ...prev, personal: 'No se pudo cargar tu rotación personal. Por favor, inténtalo de nuevo más tarde.' }));
+      setPersonalContent([]); // Asegurarse de que el estado tenga un array vacío
+      setPersonalTracks([]); // Mantener el estado anterior vacío para compatibilidad
+    } finally {
+      setLoading(prev => ({ ...prev, personal: false }));
+    }
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -638,9 +769,9 @@ export default function HomePage() {
   // Configuración del carrusel
   const sliderSettings = {
     dots: false,
-    infinite: personalTracks.length > 6,
+    infinite: personalTracks.length > 4,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 5,
     slidesToScroll: 2,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -648,33 +779,26 @@ export default function HomePage() {
       {
         breakpoint: 1400,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 4,
           slidesToScroll: 2,
         }
       },
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 2,
         }
       },
       {
         breakpoint: 900,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
         }
       },
       {
-        breakpoint: 480,
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -706,44 +830,216 @@ export default function HomePage() {
   );
 
   // Componente para mostrar un artista
-  const ArtistCard = ({ artist }: { artist: any }) => (
-    <Grid item xs={6} sm={4} md={3} lg={2}>
-      <StyledCard>
-        <Box sx={{ p: 2, textAlign: 'center' }}>
-          <Box 
-            component="img" 
-            src={artist.images?.[0]?.url || '/placeholder-artist.jpg'} 
-            alt={artist.name || 'Artista'}
-            sx={{ 
-              width: '100%',
-              aspectRatio: '1/1',
-              borderRadius: '50%',
-              mb: 2,
-              objectFit: 'cover'
-            }}
-          />
-          <Typography variant="body1" fontWeight="medium" noWrap>
-            {artist.name || 'Artista Desconocido'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {artist.genres?.[0] || 'Música'}
-          </Typography>
-        </Box>
-      </StyledCard>
-    </Grid>
-  );
+  const ArtistCard = ({ artist }: { artist: any }) => {
+    const { navigateToArtist } = useArtistNavigation();
+    
+    const artistImage = getArtistImageUrl(artist);
+    
+    console.log(`[ArtistCard] Renderizando artista:`, {
+      name: artist.name,
+      id: artist.id,
+      imageUrl: artistImage,
+      popularity: artist.popularity
+    });
+    
+    // Convertir la popularidad a una escala de 1-5 estrellas (3 estrellas por defecto si no hay info)
+    const starRating = artist.popularity ? Math.round(artist.popularity / 20) : 3;
+    
+    // Identificar la fuente del artista (YouTube, Spotify o fallback) - mantener para compatibilidad
+    const artistSource = artist.source || (artist.id?.startsWith('spotify:') ? 'spotify' : 'unknown');
+    const isFallback = artist.isFallback || artist.id?.startsWith('fallback-') || artistSource === 'fallback';
+    
+    const handleArtistClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      console.log(`[ArtistCard] Clic en tarjeta de artista: ${artist.name} (${artist.id})`);
+      
+      navigateToArtist(artist.id, artist.name, {
+        redirigirABusqueda: true,
+        mostrarDetalles: true,
+        usarNavegacionDirecta: true,
+        urlFallback: '/home'
+      }).then(result => {
+        console.log(`[ArtistCard] Resultado de navegación:`, result);
+      }).catch(err => {
+        console.error(`[ArtistCard] Error en navegación:`, err);
+      });
+    };
+    
+    return (
+      <div 
+        className="artist-card group bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden cursor-pointer shadow-xl hover:shadow-2xl hover:translate-y-[-5px] transform h-full"
+        onClick={handleArtistClick}
+      >
+          <div className="aspect-square relative overflow-hidden">
+            <Image 
+              src={artistImage}
+              alt={artist.name}
+              width={300}
+              height={300}
+              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 rounded-t-xl"
+              onError={(e) => {
+                console.error(`[ArtistCard] Error al cargar imagen para ${artist.name}:`, artistImage);
+                // Reemplazar con imagen de placeholder
+                const target = e.target as HTMLImageElement;
+                target.src = "https://placehold.co/400x400/purple/white?text=Artista";
+              }}
+            />
+            
+            {/* Gradiente de superposición */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end">
+              <div className="p-4 w-full">
+                <h3 className="text-white font-bold line-clamp-1">
+                  {artist.name}
+                </h3>
+                <div className="flex items-center mt-1">
+                  {/* Mostrar estrellas basadas en popularidad */}
+                  {Array.from({ length: starRating }).map((_, index) => (
+                    <Star key={index} className="h-4 w-4 text-yellow-400" />
+                  ))}
+                  {Array.from({ length: 5 - starRating }).map((_, index) => (
+                    <Star key={index} className="h-4 w-4 text-gray-600" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    );
+  };
 
   // Función para cargar el historial de canciones escuchadas
   const fetchRecentlyPlayedTracks = async () => {
     setLoading(prev => ({ ...prev, recent: true }));
     try {
-      const tracks = await RecentTracksService.getHistory(20); // Obtenemos las 20 más recientes
+      // Verificar si estamos en modo demo
+      if (isDemo) {
+        console.log('[Home] Modo demo: Generando historial de canciones');
+        try {
+          // Intentar obtener datos demo de múltiples fuentes
+          let demoTracks = [];
+          
+          // 1. Intentar obtener datos del servicio demo
+          try {
+            // Usar datos de canciones populares del servicio demo
+            const topTracksData = await demoDataService.getTopTracks();
+            if (topTracksData && topTracksData.items && topTracksData.items.length > 0) {
+              demoTracks = topTracksData.items.slice(0, 15);
+              console.log('[Home] Obtenidas canciones populares del servicio demo:', demoTracks.length);
+            }
+          } catch (error) {
+            console.warn('[Home] Error al obtener canciones populares del servicio demo:', error);
+          }
+          
+          // 2. Si no hay suficientes tracks, añadir datos de búsqueda
+          if (demoTracks.length < 15) {
+            try {
+              const searchResults = await demoDataService.getSearchResults('track');
+              if (searchResults && searchResults.tracks && searchResults.tracks.items) {
+                const searchTracks = searchResults.tracks.items.slice(0, 15 - demoTracks.length);
+                demoTracks = [...demoTracks, ...searchTracks];
+                console.log('[Home] Añadidos tracks de búsqueda:', searchTracks.length);
+              }
+            } catch (error) {
+              console.warn('[Home] Error al obtener resultados de búsqueda:', error);
+            }
+          }
+          
+          // 3. Si aún no hay suficientes, usar getTopTracks como último recurso
+          if (demoTracks.length < 5) {
+            try {
+              console.log('[Home] Usando getTopTracks como último recurso');
+              const spotifyData = await getTopTracks(25);
+              if (spotifyData && spotifyData.items && spotifyData.items.length > 0) {
+                demoTracks = spotifyData.items;
+              }
+            } catch (error) {
+              console.warn('[Home] Error al obtener tracks con getTopTracks:', error);
+            }
+          }
+          
+          // Transformar canciones populares en formato de historial reciente
+          if (demoTracks.length > 0) {
+            const recentTracksData = demoTracks.map((track: any, index: number) => {
+              // Generar tiempo aleatorio en las últimas 24 horas
+              const hoursAgo = Math.random() * 24;
+              const timestamp = Date.now() - (hoursAgo * 60 * 60 * 1000);
+              
+              // Enriquecer track con información adicional
+              return {
+                id: track.id || `track-${Math.random().toString(36).substr(2, 9)}`,
+                trackId: track.id,
+                trackName: track.name || track.title || 'Track Demo',
+                artistName: track.artists?.[0]?.name || track.artist || 'Artista Demo',
+                artistId: track.artists?.[0]?.id || 'artist-demo',
+                albumName: track.album?.name || 'Álbum Demo',
+                albumId: track.album?.id || 'album-demo',
+                albumCover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                cover: track.album?.images?.[0]?.url || '/placeholder-album.jpg',
+                duration: track.duration_ms || 180000,
+                uri: track.uri || `spotify:track:${track.id}`,
+                spotifyId: track.uri?.split(':')[2] || track.id,
+                // Tiempo aleatorio en las últimas 24 horas
+                playedAt: timestamp,
+                // Fuente aleatoria entre estas opciones
+                source: ['spotify', 'youtube', 'deezer'][Math.floor(Math.random() * 3)],
+                // Indicar que es un track de demo
+                isDemo: true,
+                // Para ordenar aleatoriamente
+                sortIndex: Math.random()
+              };
+            });
+            
+            // Ordenar los tracks por tiempo de reproducción (más recientes primero)
+            recentTracksData.sort((a: any, b: any) => b.playedAt - a.playedAt);
+            
+            // Limitar a 20 tracks y actualizar estado
+            setRecentlyPlayed(removeDuplicateTracks(recentTracksData as EnrichedTrack[]).slice(0, 20));
+            console.log('[Home] Historial demo generado con', recentTracksData.length, 'canciones');
+          } else {
+            console.warn('[Home] No se pudieron obtener canciones para el historial demo');
+            setRecentlyPlayed([]);
+          }
+        } catch (error) {
+          console.error('[Home] Error al generar historial demo:', error);
+          setRecentlyPlayed([]);
+        } finally {
+          setLoading(prev => ({ ...prev, recent: false }));
+          // Asegurarse de desactivar el tiempo mínimo de carga
+          setTimeout(() => {
+            setRecentTracksMinLoadingTime(false);
+          }, 500);
+        }
+        return;
+      }
+      
+      // Para modo normal, mantener la implementación original
+      // Agregar un timeout local adicional como respaldo
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('Timeout local al obtener historial'));
+        }, 12000); // 12 segundos (un poco más que el timeout del servicio)
+      });
+
+      // Competir entre la petición al servicio y el timeout local
+      const tracks = await Promise.race([
+        RecentTracksService.getHistory(20),
+        timeoutPromise
+      ]);
+      
       // Aplicar filtro de duplicados antes de actualizar el estado
       setRecentlyPlayed(removeDuplicateTracks(tracks));
     } catch (error) {
       console.error('Error al cargar historial de escucha:', error);
+      // Usar un array vacío en caso de error para evitar que la UI se rompa
+      setRecentlyPlayed([]);
+      // Opcional: mostrar un mensaje de error al usuario
+      setExploreError('No se pudo cargar el historial. Inténtalo de nuevo más tarde.');
     } finally {
       setLoading(prev => ({ ...prev, recent: false }));
+      // Asegurar que el indicador de tiempo mínimo de carga se desactive
+      setTimeout(() => {
+        setRecentTracksMinLoadingTime(false);
+      }, 1000);
     }
   };
 
@@ -853,6 +1149,7 @@ export default function HomePage() {
               const event = new CustomEvent('playTrack', { detail: track });
               window.dispatchEvent(event);
               console.log('Evento playTrack disparado correctamente');
+              musicNotifications.onTrackPlay(trackName, artistName);
             } catch (error) {
               console.error('Error al disparar evento playTrack:', error);
             }
@@ -897,260 +1194,104 @@ export default function HomePage() {
   };
 
   // Componente para mostrar una playlist
-  const PlaylistCard = ({ playlist }: { playlist: any }) => (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card sx={{ 
-        backgroundColor: 'rgba(255,255,255,0.05)',
-        borderRadius: '8px',
-        display: 'flex',
-        transition: 'transform 0.3s',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          backgroundColor: 'rgba(255,255,255,0.08)',
-        },
-        height: '100%'
-      }}>
-        <Box sx={{ 
-          width: 100, 
-          height: 100,
-          flexShrink: 0,
-          m: 2
-        }}>
-          <img 
-            src={playlist.images?.[0]?.url || '/placeholder-playlist.jpg'} 
-            alt={playlist.name}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              objectFit: 'cover',
-              borderRadius: '4px'
-            }}
-          />
-        </Box>
-        <Box sx={{ p: 2, flexGrow: 1 }}>
-          <Typography variant="body1" fontWeight="medium" noWrap>
-            {playlist.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-          }}>
-            {playlist.description || `Por ${playlist.owner?.display_name || 'Spotify'}`}
-          </Typography>
-          {playlist.tracks?.total && (
-            <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 1 }}>
-              {playlist.tracks.total} canciones
-            </Typography>
-          )}
-        </Box>
-      </Card>
-    </Grid>
-  );
+  const PlaylistCard = ({ playlist }: { playlist: any }) => {
+    const cardData = {
+      id: playlist.id,
+      title: playlist.name,
+      subtitle: playlist.artist || playlist.owner?.display_name || '',
+      coverUrl: playlist.images?.[0]?.url || '/placeholder-playlist.jpg',
+      isPlayable: false,
+      linkTo: `/playlist/${playlist.id}`
+    };
+    
+    return <UnifiedMusicCard {...cardData} />;
+  };
 
   // Componente para mostrar un álbum/track
-  const AlbumCard = ({ album }: { album: any }) => (
-    <Grid item xs={6} sm={4} md={3} lg={2.4}>
-      <StyledCard>
-        <Box sx={{ position: 'relative' }}>
-          <StyledCardMedia
-            image={album.images?.[0]?.url || '/placeholder-album.jpg'}
-            title={album.name}
-          />
-          <Box 
-            sx={{ 
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              p: 1,
-              transform: 'translateY(50%)',
-              opacity: 0,
-              transition: 'opacity 0.3s, transform 0.3s',
-              '.MuiCard-root:hover &': {
-                opacity: 1,
-                transform: 'translateY(0)'
-              }
-            }}
-          >
-            <IconButton 
-              size="small"
-              sx={{ 
-                backgroundColor: theme.palette.secondary.main,
-                color: 'white',
-                '&:hover': { backgroundColor: theme.palette.secondary.dark }
-              }}
-              onClick={(e) => handlePlayTrack(album.uri, e, album)}
-            >
-              <PlayArrow fontSize="small" />
-            </IconButton>
-          </Box>
-        </Box>
-        <CardContent sx={{ px: 0, py: 1 }}>
-          <Typography 
-            variant="body2" 
-            fontWeight="medium" 
-            noWrap
-            data-track-name={album.name}
-          >
-            {album.name}
-          </Typography>
-          <Typography 
-            variant="caption" 
-            color="text.secondary" 
-            noWrap
-            data-track-artist={album.artists?.map((a: any) => a.name).join(', ') || album.album?.artists?.map((a: any) => a.name).join(', ')}
-          >
-            {album.artists?.map((a: any) => a.name).join(', ') || album.album?.artists?.map((a: any) => a.name).join(', ')}
-          </Typography>
-        </CardContent>
-      </StyledCard>
-    </Grid>
-  );
+  const AlbumCard = ({ album }: { album: any }) => {
+    const cardData = {
+      id: album.id,
+      title: album.name,
+      subtitle: album.artists?.[0]?.name || 'Artista desconocido',
+      coverUrl: album.images?.[0]?.url || '/placeholder-album.jpg',
+      isPlayable: true,
+      linkTo: `/album/${album.id}`,
+      onPlay: (e: React.MouseEvent) => {
+        e.stopPropagation();
+        // Logic to play the album
+      }
+    };
+    
+    return <UnifiedMusicCard {...cardData} />;
+  };
 
   // Componente mejorado para la tarjeta de canción escuchada recientemente
   const RecentTrackCard = ({ item }: { item: EnrichedTrack }) => {
-    const formattedDate = new Date(item.playedAt).toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    // Usar las propiedades correctas según EnrichedTrack
+    const { id, title, artist, album, cover, playedAt, source = 'default', spotifyId, sourceData } = item;
+    
+    // Intentar obtener uri de forma más estructurada:
+    // 1. Primero desde sourceData (que está en el modelo IRecentTrack)
+    // 2. Luego desde el spotifyId (construyendo un URI de Spotify)
+    // 3. Finalmente como fallback desde la propiedad directa (para datos demo)
+    const uri = sourceData?.uri || 
+                (spotifyId ? `spotify:track:${spotifyId}` : (item as any).uri);
+    
+    // Determinar color de la insignia según la fuente
+    const getBadgeColor = (source: string) => {
+      switch (source.toLowerCase()) {
+        case 'spotify': return 'bg-green-600';
+        case 'youtube': return 'bg-red-600';
+        case 'lastfm': return 'bg-red-800';
+        case 'deezer': return 'bg-pink-600';
+        default: return 'bg-purple-600';
+      }
+    };
+    
+    // Convertir playedAt a número de forma segura
+    const getTimestamp = (played: number | Date | string | undefined): number => {
+      if (typeof played === 'undefined') return Date.now();
+      if (typeof played === 'number') return played;
+      if (played instanceof Date) return played.getTime();
+      // Si es un string o cualquier otro tipo, intentamos parsear a Date
+      try {
+        return new Date(played).getTime();
+      } catch {
+        return Date.now(); // Fallback a la hora actual
+      }
+    };
+    
+    // Obtener el timestamp
+    const timestamp = getTimestamp(playedAt);
+    
+    // Crear datos para la tarjeta unificada
+    const cardData = {
+      id: `recent-${id || timestamp}`,
+      title: title || 'Canción desconocida',
+      subtitle: artist || 'Artista desconocido',
+      coverUrl: cover || '/placeholder-album.jpg',
+      badge: {
+        text: source.charAt(0).toUpperCase() + source.slice(1).toLowerCase(),
+        color: getBadgeColor(source)
+      },
+      isPlayable: true,
+      onClick: (e: React.MouseEvent) => handlePlayTrack(spotifyId || uri, e, { 
+        name: title, 
+        artist: artist,
+        album: album,
+        cover: cover,
+        uri: uri || (spotifyId ? `spotify:track:${spotifyId}` : undefined),
+        spotifyId: spotifyId
+      })
+    };
     
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <Card
-          sx={{ 
-            height: '100%', 
-            display: 'flex', 
-            flexDirection: 'column',
-            transition: 'all 0.3s', 
-            '&:hover': { 
-              transform: 'translateY(-4px)',
-              boxShadow: 6 
-            },
-            borderRadius: 2,
-            overflow: 'hidden',
-            backgroundColor: 'background.paper',
-          }}
-        >
-          <Box 
-            sx={{ 
-              position: 'relative', 
-              paddingTop: '100%', // Ratio 1:1 para la imagen
-              width: '100%',
-              overflow: 'hidden'
-            }}
-        onClick={(e) => handlePlayTrack(item.id, e, {
-          title: item.title,
-          artist: item.artist,
-          album: item.album,
-          cover: item.cover,
-          source: item.source,
-          id: item.id
-        })}
-      >
-            <CardMedia
-              component="img"
-              image={item.cover || '/images/default-album.jpg'}
-            alt={item.title} 
-              sx={{ 
-                position: 'absolute', 
-                top: 0, 
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
-            <Box 
-              sx={{ 
-                position: 'absolute', 
-                top: 0, 
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.3)',
-                opacity: 0,
-                transition: 'opacity 0.3s',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                '&:hover': { opacity: 1 }
-              }}
-            >
-              <IconButton 
-                size="large"
-                sx={{ 
-                  color: 'white',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' }
-                }}
-              >
-                <PlayArrow fontSize="large" />
-              </IconButton>
-            </Box>
-          </Box>
-          
-          <CardContent sx={{ flexGrow: 1, p: 2 }}>
-            <Typography 
-              variant="body1" 
-              fontWeight="bold" 
-              gutterBottom
-              noWrap
-              title={item.title}
-            >
-              {item.title}
-            </Typography>
-            
-            <Typography 
-              variant="body2" 
-              color="text.secondary" 
-              noWrap
-              title={item.artist}
-            >
-              {item.artist}
-            </Typography>
-            
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-              <Box 
-                sx={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: '0.75rem',
-                  color: 'text.secondary',
-                  mr: 1
-                }}
-              >
-                <AccessTime fontSize="small" sx={{ mr: 0.5, fontSize: '0.875rem' }} />
-                {formattedDate}
-              </Box>
-              
-              <Box 
-                sx={{ 
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: '0.75rem',
-                  color: 'text.secondary',
-                  ml: 'auto'
-                }}
-              >
-                {item.source === 'spotify' && (
-                  <img src="/image/spotify-icon.png" alt="Spotify" style={{ width: 16, height: 16, marginRight: 4 }} />
-                )}
-                {item.source === 'youtube' && (
-                  <img src="/image/youtube-icon.png" alt="YouTube" style={{ width: 16, height: 16, marginRight: 4 }} />
-                )}
-                {item.source && <span style={{ textTransform: 'capitalize' }}>{item.source}</span>}
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-      </Grid>
+      <div className="flex flex-col">
+        <UnifiedMusicCard {...cardData} />
+        <TimeLabel variant="caption" className="mt-1">
+          <ClockIcon className="inline-block mr-1 w-3 h-3" /> {formatRelativeTime(timestamp)}
+        </TimeLabel>
+      </div>
     );
   };
 
@@ -1175,33 +1316,51 @@ export default function HomePage() {
             sx={{ mt: 2 }}
             onClick={() => loadTabContent(activeTab)}
           >
-            Intentar de nuevo
+            {t('common.tryAgain')}
           </Button>
         </Box>
       );
     }
 
     switch (activeTab) {
-      case 0: // Nuevos lanzamientos
+      case 0: // Canciones populares
         return newReleases.length > 0 ? (
-          <Grid container spacing={3}>
-            {newReleases.map((album: any) => (
-              <AlbumCard key={album.id} album={album} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {newReleases.map((track: any) => (
+              <div key={track.id} className="mb-4">
+                <UnifiedMusicCard
+                  id={track.id}
+                  title={track.name}
+                  subtitle={track.artists?.[0]?.name || 'Artista desconocido'}
+                  coverUrl={track.album?.images?.[0]?.url || '/placeholder-album.jpg'}
+                  isPlayable={true}
+                  linkTo={`/track/${track.id}`}
+                  itemType="track"
+                  onPlay={(e) => {
+                    e.stopPropagation();
+                    if (track.uri) {
+                      handlePlayTrack(track.uri, e, track);
+                    }
+                  }}
+                />
+              </div>
             ))}
-          </Grid>
+          </div>
         ) : (
           <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography color="text.secondary">No hay nuevos lanzamientos disponibles</Typography>
+            <Typography color="text.secondary">No hay canciones populares disponibles</Typography>
           </Box>
         );
 
       case 1: // Escuchado recientemente
         return filteredRecentTracks.length > 0 ? (
-          <Grid container spacing={3}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {filteredRecentTracks.map((item: any, index: number) => (
-              <RecentTrackCard key={`${item.id}-${index}`} item={item} />
+              <div key={`${item.id}-${index}`} className="mb-4">
+                <RecentTrackCard item={item} />
+              </div>
             ))}
-          </Grid>
+          </div>
         ) : (
           <Box sx={{ textAlign: 'center', py: 6 }}>
             <Typography color="text.secondary">No hay canciones escuchadas recientemente</Typography>
@@ -1212,47 +1371,66 @@ export default function HomePage() {
               sx={{ mt: 2 }}
               onClick={() => {
                 setRecentTracksMinLoadingTime(true);
-                fetchRecentlyPlayedTracks();
-                const loadingTimer = setTimeout(() => {
+                
+                // Limpiar temporizador anterior si existe
+                if (recentTracksTimer) {
+                  clearTimeout(recentTracksTimer);
+                }
+                
+                // Crear un nuevo temporizador y guardarlo
+                const newTimer = setTimeout(() => {
                   setRecentTracksMinLoadingTime(false);
                 }, 10000);
+                
+                setRecentTracksTimer(newTimer);
+                
+                // Cargar los datos
+                fetchRecentlyPlayedTracks();
               }}
             >
-              Intentar de nuevo
+              {t('common.tryAgain')}
             </Button>
           </Box>
         );
 
       case 2: // Playlists destacadas
         return featuredPlaylists.length > 0 ? (
-          <Grid container spacing={3}>
-            {featuredPlaylists.map((playlist: any) => (
-              <PlaylistCard key={playlist.id} playlist={playlist} />
-            ))}
-          </Grid>
+          // Usar el componente FeaturedPlaylists que ahora puede manejar tanto playlists como álbumes
+          <FeaturedPlaylists 
+            playlists={featuredPlaylists} 
+            title={t('home.featuredPlaylists')}
+          />
         ) : (
           <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography color="text.secondary">No hay playlists destacadas disponibles</Typography>
+            <Typography color="text.secondary">
+              {t('home.noFeaturedPlaylists')}
+            </Typography>
           </Box>
         );
 
       case 3: // Artistas recomendados
         return recommendedArtists.length > 0 ? (
-          <Grid container spacing={3}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {recommendedArtists.map((artist: any) => (
-              <ArtistCard key={artist.id} artist={artist} />
+              <div key={artist.id} className="mb-4">
+                <ArtistCard artist={artist} />
+              </div>
             ))}
-          </Grid>
+          </div>
         ) : (
           <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography color="text.secondary">No hay artistas recomendados disponibles</Typography>
+            <Typography color="text.secondary">
+              {t('home.noRecommendedArtists')}
+            </Typography>
           </Box>
         );
 
       default:
         return (
           <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography color="text.secondary">Selecciona una categoría para explorar más música</Typography>
+            <Typography color="text.secondary">
+              {t('home.selectCategory')}
+            </Typography>
           </Box>
         );
     }
@@ -1264,7 +1442,7 @@ export default function HomePage() {
   };
 
   // Determinar si mostrar sección personal basado en autenticación y datos
-  const showPersonalSection = isAuthenticated && personalTracks.length > 0;
+  const showPersonalSection = isAuthenticated || isDemo;
 
   // Limpiar temporizador al desmontar el componente
   useEffect(() => {
@@ -1275,10 +1453,135 @@ export default function HomePage() {
     };
   }, [recentTracksTimer]);
 
-  return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+  // Función para manejar el inicio de sesión
+  const handleLogin = () => {
+    console.log('[HomePage] Redirigiendo a login');
+    signIn('spotify', { callbackUrl: '/home' });
+  };
+
+  // Función para recargar los datos y reintentar
+  const handleRetry = () => {
+    setAuthError(false);
+    setPersonalTracks([]);
+    setNewReleases([]);
+    setFeaturedPlaylists([]);
+    fetchPersonalRotation();
+    loadTabContent(activeTab);
+  };
+
+  // Componente para mostrar un elemento de contenido mixto
+  const MixedContentCard = ({ item }: { item: MixedContentItem }) => {
+    const getImageUrl = () => {
+      // Orden de prioridad para obtener la imagen
+      if (item.coverUrl) return item.coverUrl;
+      if (item.images && item.images[0] && item.images[0].url) return item.images[0].url;
+      if (item.image) return item.image;
       
+      // Por tipo de elemento
+      switch (item.type) {
+        case 'track': return '/placeholder-album.jpg';
+        case 'artist': return '/placeholder-artist.jpg';
+        case 'playlist': return '/placeholder-playlist.jpg';
+        case 'album': return '/placeholder-album.jpg';
+        default: return '/placeholder-album.jpg';
+      }
+    };
+    
+    const getSubtitle = () => {
+      switch (item.type) {
+        case 'track':
+          if (item.artists && item.artists.length > 0) {
+            return item.artists.map(a => a.name).join(', ');
+          }
+          return 'Artista desconocido';
+        case 'artist':
+          return 'Artista';
+        case 'playlist':
+          return item.owner?.display_name || 'Playlist';
+        case 'album':
+          if (item.artists && item.artists.length > 0) {
+            return item.artists.map(a => a.name).join(', ');
+          }
+          return 'Artista desconocido';
+        default:
+          return '';
+      }
+    };
+    
+    const getLinkTo = () => {
+      switch (item.type) {
+        case 'track':
+          return `/track/${item.id}`;
+        case 'artist':
+          return `/artist/${item.id}`;
+        case 'playlist':
+          return `/playlist/${item.id}`;
+        case 'album':
+          return `/album/${item.id}`;
+      }
+    };
+    
+    const handleItemPlay = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (item.type === 'track' && item.uri) {
+        handlePlayTrack(item.uri, e, item);
+      }
+    };
+    
+    return (
+      <UnifiedMusicCard
+        id={item.id}
+        title={item.name}
+        subtitle={getSubtitle()}
+        coverUrl={getImageUrl()}
+        isPlayable={item.type === 'track'}
+        linkTo={getLinkTo()}
+        itemType={item.type}
+        onPlay={handleItemPlay}
+      />
+    );
+  };
+
+  // Función actualizada para obtener playlists destacadas de nuestra nueva API
+  const fetchFeaturedPlaylists = async (language = 'es', limit = 10) => {
+    try {
+      console.log(`[HomePage] Obteniendo playlists destacadas (idioma: ${language}, límite: ${limit})`);
+      setLoading(prev => ({ ...prev, featured: true }));
+      
+      // Obtener la URL base de la API
+      const apiBaseUrl = getApiBaseUrl();
+      
+      // Llamar a nuestro nuevo endpoint de playlists
+      const response = await axios.get(`${apiBaseUrl}/api/playlists`, {
+        params: { language, limit },
+        timeout: 10000
+      });
+      
+      if (response.data && Array.isArray(response.data)) {
+        console.log(`[HomePage] Se encontraron ${response.data.length} playlists destacadas`);
+        return response.data;
+      } else {
+        console.warn('[HomePage] La respuesta de playlists no contiene un array', response.data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error obteniendo playlists destacadas:', error);
+      setError(prev => ({ ...prev, featured: 'Error al obtener playlists destacadas' }));
+      return [];
+    } finally {
+      setLoading(prev => ({ ...prev, featured: false }));
+    }
+  };
+
+  return (
+    <Container maxWidth="xl">
+      {/* Mostrar alerta de autenticación si es necesario */}
+      {authError && <LoginAlert onLogin={handleLogin} />}
+      
+      <Grid container spacing={3}>
       {/* Primera sección - Banner y rotación personal */}
+        <Grid item xs={12}>
       <Box sx={{ mb: 6 }}>
         {/* Banner principal */}
         <Box 
@@ -1288,7 +1591,7 @@ export default function HomePage() {
             borderRadius: '16px',
             overflow: 'hidden',
             mb: 4,
-            background: 'linear-gradient(to right, rgba(25,25,34,0.9), rgba(25,25,34,0.7))',
+                background: 'rgba(0,0,0,0.1)',
             display: 'flex',
             alignItems: 'center'
           }}
@@ -1301,19 +1604,28 @@ export default function HomePage() {
               right: 0,
               bottom: 0,
               zIndex: 0,
-              opacity: 0.5,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070)',
+                  opacity: 1,
+                  background: 'url(https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)',
               backgroundSize: 'cover',
-              backgroundPosition: 'center'
+                  backgroundPosition: 'center',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2))'
+                  }
             }}
           />
           
           <Box sx={{ position: 'relative', zIndex: 1, px: 4 }}>
             <Typography variant="h3" fontWeight="bold" color="white">
-              Bienvenido a MusicVerse
+              {t('home.welcome')}
             </Typography>
             <Typography variant="h6" color="rgba(255,255,255,0.8)" sx={{ mb: 2 }}>
-              Descubre nueva música y disfruta de tus canciones favoritas
+              {t('home.description')}
             </Typography>
             <Box 
               component="form"
@@ -1339,7 +1651,7 @@ export default function HomePage() {
               <input 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Buscar músicos, canciones..." 
+                placeholder={t('search.searchPlaceholder')} 
                 style={{ 
                   backgroundColor: 'transparent',
                   border: 'none',
@@ -1367,153 +1679,83 @@ export default function HomePage() {
           </Box>
         </Box>
         
-        {/* Tu Rotación Personal */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5" fontWeight="bold">
-            Tu Rotación Personal
-            <Typography 
-              component="span" 
-              variant="body2" 
-              sx={{ 
-                ml: 1, 
-                color: 'text.secondary',
-                display: 'inline-block',
-                verticalAlign: 'middle'
-              }}
-            >
-              Basado en tu historial de escucha
-            </Typography>
-          </Typography>
-          <Box>
-            <IconButton 
-              color="secondary" 
-              onClick={fetchPersonalRotation} 
-              disabled={loading.personal}
-              sx={{ mr: 1 }}
-              title="Refrescar recomendaciones"
-            >
-              <Refresh />
-            </IconButton>
-            <Link href="/library" passHref>
-          <Button color="secondary" sx={{ textTransform: 'none' }}>
-            Ver todo
-          </Button>
-            </Link>
-          </Box>
-        </Box>
+            {/* Sección rotación personal */}
+            {showPersonalSection && (
+              <Paper 
+                elevation={0}
+                sx={{ 
+                  p: 3, 
+                  mb: 4, 
+                  borderRadius: 4,
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+                    {isDemo 
+                      ? t('demo.demoModeRotation')
+                      : t('home.personalRotation')}
+                  </Typography>
+                  {!isDemo && !isAuthenticated && (
+                    <Button 
+                      variant="outlined" 
+                      color="secondary" 
+                      startIcon={<Login />}
+                      onClick={handleLogin}
+                    >
+                      {t('auth.login')}
+                    </Button>
+                  )}
+                </Box>
         
-        {/* Carrusel de Rotación Personal */}
-        <Box sx={{ px: 1, position: 'relative' }}>
           {loading.personal ? (
             renderLoadingSkeletons()
           ) : error.personal ? (
-            <Box sx={{ width: '100%', p: 3, textAlign: 'center' }}>
-              <Typography color="error">{error.personal}</Typography>
-              <Button 
-                variant="outlined" 
-                onClick={fetchPersonalRotation} 
-                sx={{ mt: 2 }}
-                startIcon={<Refresh />}
-              >
-                Intentar de nuevo
-              </Button>
-            </Box>
+            <Alert 
+              severity="error" 
+              action={
+                <Button color="inherit" size="small" onClick={handleRetry}>
+                  {t('common.retry')}
+                </Button>
+              }
+            >
+              {error.personal}
+            </Alert>
+          ) : personalContent.length > 0 ? (
+            <div 
+              onContextMenu={(e: React.MouseEvent) => {
+                // Permitir que el evento se propague normalmente
+                // para que lo capturen los elementos hijos
+                e.stopPropagation();
+                return true;
+              }}
+            >
+              <Slider {...sliderSettings}>
+                {personalContent.map((item, index) => (
+                  <div key={`${item.id}-${index}`} className="px-2">
+                    <MixedContentCard item={item} />
+                  </div>
+                ))}
+              </Slider>
+            </div>
           ) : (
-            <Slider {...sliderSettings}>
-              {personalTracks.map((track) => (
-                <div key={track.id}>
-                  <StyledCard>
-                  <Box sx={{ position: 'relative' }}>
-                      <StyledCardMedia
-                      image={track.album?.images[0]?.url || '/placeholder-album.jpg'}
-                      title={track.name}
-                    />
-                      <Box 
-                        sx={{ 
-                          position: 'absolute',
-                          top: 0,
-                          right: 0,
-                          p: 1,
-                        }}
-                      >
-                        {track.isTopTrack && (
-                          <Box
-                            sx={{
-                              bgcolor: 'rgba(0,0,0,0.6)',
-                              color: 'white',
-                              fontSize: '0.7rem',
-                              p: '4px 8px',
-                              borderRadius: '4px',
-                              display: 'flex',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <FavoriteRounded sx={{ fontSize: '0.85rem', mr: 0.5, color: theme.palette.secondary.main }} />
-                            Favorito
-                          </Box>
-                        )}
-                      </Box>
-                    <Box 
-                      sx={{ 
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        p: 1,
-                        transform: 'translateY(50%)',
-                        opacity: 0,
-                        transition: 'opacity 0.3s, transform 0.3s',
-                        '&:hover': {
-                          opacity: 1,
-                          transform: 'translateY(0)'
-                        }
-                      }}
-                    >
-                      <IconButton 
-                          size="small"
-                        sx={{ 
-                          backgroundColor: theme.palette.secondary.main,
-                          color: 'white',
-                          '&:hover': { backgroundColor: theme.palette.secondary.dark }
-                        }}
-                          onClick={(e) => handlePlayTrack(track.uri, e, track)}
-                      >
-                          <PlayArrow fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                    <CardContent sx={{ px: 0, py: 1 }}>
-                      <Typography 
-                        variant="body2" 
-                        fontWeight="medium" 
-                        noWrap
-                        data-track-name={track.name}
-                      >
-                      {track.name}
-                    </Typography>
-                      <Typography 
-                        variant="caption" 
-                        color="text.secondary" 
-                        noWrap
-                        data-track-artist={track.artists?.map((a: any) => a.name).join(', ')}
-                      >
-                      {track.artists?.map((a: any) => a.name).join(', ')}
-                    </Typography>
-                  </CardContent>
-                  </StyledCard>
-                </div>
-              ))}
-            </Slider>
+            <Alert severity="info">
+              {isDemo 
+                ? t('home.demoModeContent')
+                : t('home.emptyContent')
+              }
+            </Alert>
           )}
-        </Box>
-      </Box>
+        </Paper>
+      )}
+    </Box>
+        </Grid>
       
       {/* Segunda sección - Explora Música */}
-      <Box sx={{ mb: 4 }}>
+        <Grid item xs={12}>
         <Typography variant="h4" component="h1" fontWeight="bold" sx={{ mb: 2 }}>
-          Explora Música
+          {t('home.exploreMusic')}
         </Typography>
         
         {/* Pestañas de navegación */}
@@ -1535,10 +1777,10 @@ export default function HomePage() {
               }
             }}
           >
-            <Tab label="Nuevos lanzamientos" />
-            <Tab label="Escuchado recientemente" />
-            <Tab label="Playlists destacadas" />
-            <Tab label="Artistas recomendados" />
+            <Tab label={t('home.popularSongs')} />
+            <Tab label={t('home.recentlyPlayed')} />
+            <Tab label={t('home.featuredPlaylists')} />
+            <Tab label={t('home.recommendedArtist')} />
           </Tabs>
         </Box>
         
@@ -1546,18 +1788,19 @@ export default function HomePage() {
         <Box sx={{ minHeight: '400px' }}>
           {renderTabContent()}
         </Box>
-      </Box>
+        </Grid>
       
       {/* Zona de descubrimiento */}
+        <Grid item xs={12}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
-        Zona de Descubrimiento
+        {t('home.discoveryZone')}
       </Typography>
       
       <Grid container spacing={3}>
         {/* Artista recomendado */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
-            Artista Recomendado
+            {t('home.recommendedArtist')}
           </Typography>
           <Paper sx={{ 
             p: 2, 
@@ -1579,13 +1822,15 @@ export default function HomePage() {
             />
             <Box>
               <Typography variant="h6">{recommendedArtist.name}</Typography>
-              <Typography variant="body2" color="text.secondary">{recommendedArtist.description}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {language === 'es' ? 'Banda de rock' : 'Rock band'}
+              </Typography>
               <Button 
                 variant="text" 
                 color="secondary" 
                 sx={{ mt: 1, pl: 0, textTransform: 'none' }}
               >
-                Escuchar ahora
+                {t('home.listenNow')}
               </Button>
             </Box>
           </Paper>
@@ -1594,7 +1839,7 @@ export default function HomePage() {
         {/* Género destacado */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
-            Género Destacado
+            {t('home.featuredGenre')}
           </Typography>
           <Paper sx={{ 
             position: 'relative', 
@@ -1638,7 +1883,7 @@ export default function HomePage() {
                 {featuredGenre.name}
               </Typography>
               <Typography variant="body2" color="white">
-                {featuredGenre.artistCount} artistas para descubrir
+                {featuredGenre.artistCount} {t('home.artistsToDiscover')}
               </Typography>
             </Box>
           </Paper>
@@ -1648,9 +1893,30 @@ export default function HomePage() {
       {/* Información basada en el historial */}
       <Box sx={{ mt: 4 }}>
         <Typography variant="body2" color="text.secondary">
-          Basado en tu historial de escucha, creemos que te gustaría explorar más música de este estilo.
+          {t('home.listeningHistory')}
         </Typography>
       </Box>
+        </Grid>
+      </Grid>
     </Container>
   );
+}
+
+// Función global auxiliar para obtener playlists destacadas (para uso externo)
+async function getFeaturedPlaylistsGlobal(language: string) {
+  try {
+    const apiBaseUrl = getApiBaseUrl();
+    
+    const response = await axios.get(`${apiBaseUrl}/api/playlists`, {
+      params: {
+        language,
+        limit: 6
+      }
+    });
+    
+    return response.data || [];
+  } catch (error) {
+    console.error('Error obteniendo playlists destacadas:', error);
+    return [];
+  }
 } 

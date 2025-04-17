@@ -29,7 +29,6 @@ async function checkYouTubeMusicAvailability() {
     // Comprobar si el objeto existe 
     if (!youtubeMusic) {
       isYouTubeMusicAvailable = false;
-      console.log('[Config] YouTube Music API no está disponible (objeto no encontrado)');
       return false;
     }
 
@@ -37,7 +36,6 @@ async function checkYouTubeMusicAvailability() {
     if (typeof youtubeMusic.isAvailable === 'function') {
       isYouTubeMusicAvailable = youtubeMusic.isAvailable();
       if (!isYouTubeMusicAvailable) {
-        console.log('[Config] YouTube Music API no está disponible según el propio servicio');
         return false;
       }
     } else {
@@ -47,15 +45,12 @@ async function checkYouTubeMusicAvailability() {
       });
       
       if (availableMethods.length > 0) {
-        console.log(`[Config] YouTube Music API tiene ${availableMethods.length} métodos disponibles`);
         isYouTubeMusicAvailable = true;
       } else {
-        console.log('[Config] YouTube Music API no tiene métodos disponibles');
         isYouTubeMusicAvailable = false;
       }
     }
   } catch (error) {
-    console.log('[Config] Error verificando YouTube Music:', error);
     isYouTubeMusicAvailable = false;
   }
   
@@ -65,7 +60,6 @@ async function checkYouTubeMusicAvailability() {
 
 // Llamar a la verificación al inicio
 checkYouTubeMusicAvailability().then(() => {
-  console.log(`[Config] Estado de YouTube Music: ${isYouTubeMusicAvailable ? 'disponible' : 'no disponible'}`);
 });
 
 /**
@@ -247,7 +241,6 @@ export async function getRecommendationsByGenre(
       throw new Error('Género no proporcionado');
     }
     
-    console.log(`[Multi] Obteniendo recomendaciones para género: ${genre} (limit=${limit})`);
     
     // Limpiar y normalizar el género
     const normalizedGenre = normalizeGenre(genre);
@@ -287,7 +280,6 @@ export async function getRecommendationsByGenre(
       const cachedData = await recommendationsCache.get(cacheKey);
       
       if (cachedData) {
-        console.log(`[Multi] Cache hit para género: ${normalizedGenre}`);
         return JSON.parse(cachedData);
       }
     }
@@ -297,7 +289,6 @@ export async function getRecommendationsByGenre(
     // Un género normalmente no contiene espacios ni caracteres especiales
     const isValidGenre = /^[a-zA-Z0-9-&]+$/.test(normalizedGenre.trim());
     const searchQuery = isValidGenre ? `genre:${normalizedGenre}` : normalizedGenre;
-    console.log(`[Multi] Usando query de búsqueda: ${searchQuery}`);
     
     // Realizar búsqueda multi-fuente
     let tracks = await searchMultiSource(searchQuery, limit, {
@@ -308,7 +299,6 @@ export async function getRecommendationsByGenre(
     
     // Si no hay resultados suficientes, probar otra búsqueda diferente
     if (tracks.length < Math.min(limit, 10)) {
-      console.log(`[Multi] Pocos resultados (${tracks.length}), intentando búsqueda alternativa`);
       const alternateQuery = `${normalizedGenre} music`;
       const moreTracks = await searchMultiSource(alternateQuery, limit, {
         ...options,
@@ -425,7 +415,6 @@ export async function getRecommendationsByGenre(
       await cacheAvailableGenre(normalizedGenre);
     }
     
-    console.log(`[Multi] Obtenidas ${finalTracks.length} recomendaciones para ${normalizedGenre}`);
     return finalTracks;
   } catch (error) {
     console.error(`[Multi] Error obteniendo recomendaciones para género ${genre}:`, error);
@@ -437,7 +426,6 @@ export async function getRecommendationsByGenre(
       const cachedData = await recommendationsCache.get(cacheKey);
       
       if (cachedData) {
-        console.log(`[Multi] Usando caché expirada para género ${normalizedGenre}`);
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
@@ -458,7 +446,6 @@ async function cacheAvailableGenre(genre: string): Promise<void> {
     // Verificar si el género ya está en la lista
     if (!availableGenres.includes(genre)) {
       availableGenres.push(genre);
-      console.log(`[Multi] Género ${genre} añadido a la lista de disponibles`);
       
       // Guardar en caché local solo para esta sesión
       const cacheKey = `available_genres`;
@@ -490,7 +477,6 @@ export async function getAvailableGenres(): Promise<string[]> {
     
     if (cachedData) {
       availableGenres = JSON.parse(cachedData);
-      console.log(`[Multi] Géneros disponibles recuperados de caché: ${availableGenres.length}`);
       return availableGenres;
     }
     
@@ -543,7 +529,6 @@ function normalizeGenre(genre: string): string {
  * @returns Lista de tracks fallback
  */
 function getGenreFallbackTracks(genre: string, limit: number): Track[] {
-  console.log(`[Multi] Generando tracks fallback para género: ${genre}`);
   
   const normalizedGenre = normalizeGenre(genre);
   const fallbackTracks: Track[] = [];
@@ -768,7 +753,6 @@ async function enhanceTrackImages(tracks: Track[]): Promise<Track[]> {
       return tracks;
     }
     
-    console.log(`[Multi] Buscando imágenes para ${tracksNeedingImages.length} tracks sin portada`);
     
     // Usar YouTube como fuente alternativa de imágenes
     const quotaStatus = youtube.getQuotaStatus();
@@ -798,12 +782,10 @@ async function enhanceTrackImages(tracks: Track[]): Promise<Track[]> {
           await new Promise(resolve => setTimeout(resolve, 200));
         }
         
-        console.log(`[Multi] Mejoradas ${tracksNeedingImages.length} imágenes con YouTube`);
       } catch (error) {
         console.error('[Multi] Error buscando imágenes en YouTube:', error);
       }
     } else {
-      console.log('[Multi] Omitiendo búsqueda de imágenes en YouTube (deshabilitado, sin cuota o demasiados tracks)');
     }
     
     return tracks;
@@ -826,7 +808,6 @@ export async function enhanceTracksWithYouTubeIds(
 ): Promise<Track[]> {
   try {
     if (!SOURCES_CONFIG.youtube) {
-      console.log('[Multi] YouTube deshabilitado, omitiendo enhanceTracksWithYouTubeIds');
       return tracks;
     }
     
@@ -858,7 +839,6 @@ export async function enhanceTracksWithYouTubeIds(
       }
     });
     
-    console.log(`[Multi] Enriqueciendo ${uniqueTracks.length} tracks con YouTube IDs (de ${tracks.length} originales)`);
     
     // Enriquecer tracks en batch
     const enrichedTracks = await youtube.enrichTracksWithYouTubeIds(uniqueTracks);
@@ -919,7 +899,6 @@ export async function batchProcessQueries(
       preferredSource 
     } = options;
     
-    console.log(`[BatchProcessor] Procesando ${queries.length} consultas en lote`);
     
     // Resultado final: clave = consulta, valor = tracks
     const results: Record<string, Track[]> = {};
@@ -932,7 +911,6 @@ export async function batchProcessQueries(
       
       if (cached && now - cached.timestamp < TRACK_DETAILS_CACHE_TTL) {
         if (ENABLE_CACHE_DEBUG) {
-          console.log(`[BatchProcessor] Usando caché para: "${query}"`);
         }
         results[query] = cached.data;
         return true; // Encontrado en caché
@@ -951,7 +929,6 @@ export async function batchProcessQueries(
       return results;
     }
     
-    console.log(`[BatchProcessor] ${pendingQueries.length} consultas pendientes requieren búsqueda en API`);
     
     // Procesar consultas pendientes en paralelo, pero con límite de concurrencia
     const maxConcurrent = 2; // Máximo 2 solicitudes concurrentes para evitar sobrecarga

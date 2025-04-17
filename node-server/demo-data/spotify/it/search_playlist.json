@@ -1,0 +1,792 @@
+{
+  "playlists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=musica%20italiana&type=playlist&market=IT&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=musica%20italiana&type=playlist&market=IT&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 20,
+    "items": [
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6KEyh20AGkhNWHhkANMW9u"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6KEyh20AGkhNWHhkANMW9u",
+        "id": "6KEyh20AGkhNWHhkANMW9u",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e020cc6c988fd82c98281e537a1ab67616d00001e026fe5eb859b38facc2c1cadc5ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02f3c7e4934b8dd9eedf69e6e5",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e020cc6c988fd82c98281e537a1ab67616d00001e026fe5eb859b38facc2c1cadc5ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02f3c7e4934b8dd9eedf69e6e5",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e020cc6c988fd82c98281e537a1ab67616d00001e026fe5eb859b38facc2c1cadc5ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02f3c7e4934b8dd9eedf69e6e5",
+            "width": 60
+          }
+        ],
+        "name": "CANCIONES ITALIANAS FAMOSAS",
+        "owner": {
+          "display_name": "Franco Marinelli",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/fpm1954"
+          },
+          "href": "https://api.spotify.com/v1/users/fpm1954",
+          "id": "fpm1954",
+          "type": "user",
+          "uri": "spotify:user:fpm1954"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAABkBFDPuFJ+2kobGqspediGPFbGQFC",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6KEyh20AGkhNWHhkANMW9u/tracks",
+          "total": 118
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6KEyh20AGkhNWHhkANMW9u"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/3LJNer3DQpuFMR1lSt12qp"
+        },
+        "href": "https://api.spotify.com/v1/playlists/3LJNer3DQpuFMR1lSt12qp",
+        "id": "3LJNer3DQpuFMR1lSt12qp",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c0bbe516cb152fd7c9eb2c994",
+            "width": null
+          }
+        ],
+        "name": "Italy trip vibes🇮🇹🍕👯‍♀️",
+        "owner": {
+          "display_name": "Aleksandra Andrzejewska",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/11141648088"
+          },
+          "href": "https://api.spotify.com/v1/users/11141648088",
+          "id": "11141648088",
+          "type": "user",
+          "uri": "spotify:user:11141648088"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAHAsvOS32y/BpRHDAxPAT/HbZuZNq",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/3LJNer3DQpuFMR1lSt12qp/tracks",
+          "total": 22
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:3LJNer3DQpuFMR1lSt12qp"
+      },
+      {
+        "collaborative": false,
+        "description": "Grandes éxitos de la música italiana",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/5WVDLc5u6yhHXPqR5CdiDa"
+        },
+        "href": "https://api.spotify.com/v1/playlists/5WVDLc5u6yhHXPqR5CdiDa",
+        "id": "5WVDLc5u6yhHXPqR5CdiDa",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c6dd96405fc9f0ae89983b6cc",
+            "width": null
+          }
+        ],
+        "name": "Grandes Éxitos Italianos",
+        "owner": {
+          "display_name": "Victor Manuel Ares Pineiro",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/victormanuelap"
+          },
+          "href": "https://api.spotify.com/v1/users/victormanuelap",
+          "id": "victormanuelap",
+          "type": "user",
+          "uri": "spotify:user:victormanuelap"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAPkMLJ+x0YL555cgTkTiFlj1T/M78",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/5WVDLc5u6yhHXPqR5CdiDa/tracks",
+          "total": 49
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:5WVDLc5u6yhHXPqR5CdiDa"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/2n1Z2FRiGmmsvoBPyIdLG9"
+        },
+        "href": "https://api.spotify.com/v1/playlists/2n1Z2FRiGmmsvoBPyIdLG9",
+        "id": "2n1Z2FRiGmmsvoBPyIdLG9",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c97c5cc14ba75e8f207ae6c1d",
+            "width": null
+          }
+        ],
+        "name": "Old Italian classics🇮🇹",
+        "owner": {
+          "display_name": "Ethan Kissling",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/31bdkat5qitpyyl6djoil6wcqa3a"
+          },
+          "href": "https://api.spotify.com/v1/users/31bdkat5qitpyyl6djoil6wcqa3a",
+          "id": "31bdkat5qitpyyl6djoil6wcqa3a",
+          "type": "user",
+          "uri": "spotify:user:31bdkat5qitpyyl6djoil6wcqa3a"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAZBf8mi9xeWF7+04Zmpega3+3rhJe",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/2n1Z2FRiGmmsvoBPyIdLG9/tracks",
+          "total": 53
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:2n1Z2FRiGmmsvoBPyIdLG9"
+      },
+      {
+        "collaborative": false,
+        "description": "Le migliori hit in Italia! Estate 2025, Italia, Italia in Alta Rotazione, Sanremo 2025, Hit Italia, Top 50 Italia, Tormentoni, Nuove Uscite, Pop Italia|  Olly, Achille Lauro, Fedez, Bresh, Gazzelle, Coez, Pinguini Tattici Nucleari",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0ZpYVvLjtMReufEoGwtvqC"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0ZpYVvLjtMReufEoGwtvqC",
+        "id": "0ZpYVvLjtMReufEoGwtvqC",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da847dca05e49213f0a927e0479f",
+            "width": null
+          }
+        ],
+        "name": "Italiane 2025 🇮🇹 Top 50 Italia",
+        "owner": {
+          "display_name": "RadioPlaylist",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/radiortl"
+          },
+          "href": "https://api.spotify.com/v1/users/radiortl",
+          "id": "radiortl",
+          "type": "user",
+          "uri": "spotify:user:radiortl"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAK02vHvK62s4bAW4kowaMoZd3EDpcwF",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0ZpYVvLjtMReufEoGwtvqC/tracks",
+          "total": 114
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0ZpYVvLjtMReufEoGwtvqC"
+      },
+      {
+        "collaborative": false,
+        "description": "Sanremo - Musica Pop - Top 50 Italia - Italiane - Hits Italia - Top Italia 2025 - Hit Del Momento - Canzoni Italiane",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/065NSxcopkTPYnSSDaLYif"
+        },
+        "href": "https://api.spotify.com/v1/playlists/065NSxcopkTPYnSSDaLYif",
+        "id": "065NSxcopkTPYnSSDaLYif",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72cbd4e1c93b81470632964916b",
+            "width": null
+          }
+        ],
+        "name": "Top Italia 🇮🇹 Pop Italiano 2025",
+        "owner": {
+          "display_name": "AMP Records",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/ujqpgmanktzo5zx9wvc99g791"
+          },
+          "href": "https://api.spotify.com/v1/users/ujqpgmanktzo5zx9wvc99g791",
+          "id": "ujqpgmanktzo5zx9wvc99g791",
+          "type": "user",
+          "uri": "spotify:user:ujqpgmanktzo5zx9wvc99g791"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAavziBQKhLPazDBfsvyYVw/eFNZPWA",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/065NSxcopkTPYnSSDaLYif/tracks",
+          "total": 61
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:065NSxcopkTPYnSSDaLYif"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/4jCjLWmPwgunfeL3dix7OU"
+        },
+        "href": "https://api.spotify.com/v1/playlists/4jCjLWmPwgunfeL3dix7OU",
+        "id": "4jCjLWmPwgunfeL3dix7OU",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e02228264ef165a3de1041d0c22ab67616d00001e026eb302a8e5699610b8b01563ab67616d00001e02cd93da2ca0a0f88296432011ab67616d00001e02df242af1feadab5d937a488e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e02228264ef165a3de1041d0c22ab67616d00001e026eb302a8e5699610b8b01563ab67616d00001e02cd93da2ca0a0f88296432011ab67616d00001e02df242af1feadab5d937a488e",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e02228264ef165a3de1041d0c22ab67616d00001e026eb302a8e5699610b8b01563ab67616d00001e02cd93da2ca0a0f88296432011ab67616d00001e02df242af1feadab5d937a488e",
+            "width": 60
+          }
+        ],
+        "name": "Música italiana alegre",
+        "owner": {
+          "display_name": "J&M",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/maficorn"
+          },
+          "href": "https://api.spotify.com/v1/users/maficorn",
+          "id": "maficorn",
+          "type": "user",
+          "uri": "spotify:user:maficorn"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAD7AV2bG+8w+9KtFEvLTCpzjf1+Er",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/4jCjLWmPwgunfeL3dix7OU/tracks",
+          "total": 14
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:4jCjLWmPwgunfeL3dix7OU"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/5Itgn3giG2VN5UpMTE8Ctq"
+        },
+        "href": "https://api.spotify.com/v1/playlists/5Itgn3giG2VN5UpMTE8Ctq",
+        "id": "5Itgn3giG2VN5UpMTE8Ctq",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02be679b5ff450cd6f778d7217ab67616d00001e02e46c669e434e80209396680bab67616d00001e02fdd3417e2c3e4a4d54aa62b1",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02be679b5ff450cd6f778d7217ab67616d00001e02e46c669e434e80209396680bab67616d00001e02fdd3417e2c3e4a4d54aa62b1",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02be679b5ff450cd6f778d7217ab67616d00001e02e46c669e434e80209396680bab67616d00001e02fdd3417e2c3e4a4d54aa62b1",
+            "width": 60
+          }
+        ],
+        "name": "Las Mejores Canciones Italianas",
+        "owner": {
+          "display_name": "luispanario",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/luispanario"
+          },
+          "href": "https://api.spotify.com/v1/users/luispanario",
+          "id": "luispanario",
+          "type": "user",
+          "uri": "spotify:user:luispanario"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAAnwv3v9Y2pEKD4k0+dSPvXUNc6wy",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/5Itgn3giG2VN5UpMTE8Ctq/tracks",
+          "total": 54
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:5Itgn3giG2VN5UpMTE8Ctq"
+      },
+      {
+        "collaborative": false,
+        "description": "Musica Discoteca - Estate 2025 - Canzoni da ballare - Party Italiano - Trenino - pepepepepe - Tormentoni estivi vecchi - Revival - Party Hits - Hit Estive - Party di Capodanno - Festa di compleanno - House Party - Musica Dance - Weekend Vibes - Aperitivo Time 💃 ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/3Y5k2eBhLRU9MpEa5S9GTL"
+        },
+        "href": "https://api.spotify.com/v1/playlists/3Y5k2eBhLRU9MpEa5S9GTL",
+        "id": "3Y5k2eBhLRU9MpEa5S9GTL",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84c3b220e2ed79b986cb874e89",
+            "width": null
+          }
+        ],
+        "name": "Festa Italiana 🇮🇹 Canzoni Discoteca 2000-2025 🚀",
+        "owner": {
+          "display_name": "39marco93",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/39marco93"
+          },
+          "href": "https://api.spotify.com/v1/users/39marco93",
+          "id": "39marco93",
+          "type": "user",
+          "uri": "spotify:user:39marco93"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAACIKc3UbIo6ellx2ofPMKlSezaSaEg",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/3Y5k2eBhLRU9MpEa5S9GTL/tracks",
+          "total": 100
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:3Y5k2eBhLRU9MpEa5S9GTL"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0wILaR2VeFC2LQVFj3TDbO"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0wILaR2VeFC2LQVFj3TDbO",
+        "id": "0wILaR2VeFC2LQVFj3TDbO",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e0258094d42657ecf800dbdf2bfab67616d00001e02970aaff728ea74e10b3ee7eaab67616d00001e02df242af1feadab5d937a488e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e0258094d42657ecf800dbdf2bfab67616d00001e02970aaff728ea74e10b3ee7eaab67616d00001e02df242af1feadab5d937a488e",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e0258094d42657ecf800dbdf2bfab67616d00001e02970aaff728ea74e10b3ee7eaab67616d00001e02df242af1feadab5d937a488e",
+            "width": 60
+          }
+        ],
+        "name": "Clasicos Italianos🇮🇪",
+        "owner": {
+          "display_name": "Yenia Osses Silva",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/12169004269"
+          },
+          "href": "https://api.spotify.com/v1/users/12169004269",
+          "id": "12169004269",
+          "type": "user",
+          "uri": "spotify:user:12169004269"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAXcbLtRkjw8FSfShPZcDM3/rcDbpq",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0wILaR2VeFC2LQVFj3TDbO/tracks",
+          "total": 91
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0wILaR2VeFC2LQVFj3TDbO"
+      },
+      {
+        "collaborative": false,
+        "description": "Seleccionadas para tí",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1yX2QB2PN1doy1bDlzd76s"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1yX2QB2PN1doy1bDlzd76s",
+        "id": "1yX2QB2PN1doy1bDlzd76s",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000d72c9c44bb71dd301fae6c4e18ba",
+            "width": null
+          }
+        ],
+        "name": "Musica Italiana Romantica",
+        "owner": {
+          "display_name": "Jaime.Enjoy",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/ramos.m.jaime"
+          },
+          "href": "https://api.spotify.com/v1/users/ramos.m.jaime",
+          "id": "ramos.m.jaime",
+          "type": "user",
+          "uri": "spotify:user:ramos.m.jaime"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAev04RAqAzzIpR7MsxvJjbHQxnjvk",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1yX2QB2PN1doy1bDlzd76s/tracks",
+          "total": 72
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1yX2QB2PN1doy1bDlzd76s"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1lj8IJR2m79XI541sMxvFL"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1lj8IJR2m79XI541sMxvFL",
+        "id": "1lj8IJR2m79XI541sMxvFL",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0208c5860fad1d317338537d35ab67616d00001e02670be3d2da256b0450b17656ab67616d00001e02afe91fe411adf1a72eb1b84dab67616d00001e02e46c669e434e80209396680b",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0208c5860fad1d317338537d35ab67616d00001e02670be3d2da256b0450b17656ab67616d00001e02afe91fe411adf1a72eb1b84dab67616d00001e02e46c669e434e80209396680b",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0208c5860fad1d317338537d35ab67616d00001e02670be3d2da256b0450b17656ab67616d00001e02afe91fe411adf1a72eb1b84dab67616d00001e02e46c669e434e80209396680b",
+            "width": 60
+          }
+        ],
+        "name": "Musica italiana años 60-70-80",
+        "owner": {
+          "display_name": "toniquet",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/d6tqtb30txigppp57ownktj8z"
+          },
+          "href": "https://api.spotify.com/v1/users/d6tqtb30txigppp57ownktj8z",
+          "id": "d6tqtb30txigppp57ownktj8z",
+          "type": "user",
+          "uri": "spotify:user:d6tqtb30txigppp57ownktj8z"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAO/SF4JZ6L0NWQxkQ7fZvEnFNSCtW",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1lj8IJR2m79XI541sMxvFL/tracks",
+          "total": 54
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1lj8IJR2m79XI541sMxvFL"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/30xeydiDoi2T9F1son7bRh"
+        },
+        "href": "https://api.spotify.com/v1/playlists/30xeydiDoi2T9F1son7bRh",
+        "id": "30xeydiDoi2T9F1son7bRh",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da841314cfc73c9fb40cfc43ee7a",
+            "width": null
+          }
+        ],
+        "name": "Un Italiano Vero 🇮🇹",
+        "owner": {
+          "display_name": "Pablo Fernandez Acevedo",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/pablethe7991"
+          },
+          "href": "https://api.spotify.com/v1/users/pablethe7991",
+          "id": "pablethe7991",
+          "type": "user",
+          "uri": "spotify:user:pablethe7991"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAALkmxTlSMNGqjpFYOadG4tAuRJjVF",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/30xeydiDoi2T9F1son7bRh/tracks",
+          "total": 31
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:30xeydiDoi2T9F1son7bRh"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1ixVL544sKxd5gRC27owap"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1ixVL544sKxd5gRC27owap",
+        "id": "1ixVL544sKxd5gRC27owap",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e025a410ed481f7e851c2e99a6bab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02d919d138f6e83aba728bd697",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e025a410ed481f7e851c2e99a6bab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02d919d138f6e83aba728bd697",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e021001d7559f5fb1b98db8ce4fab67616d00001e025a410ed481f7e851c2e99a6bab67616d00001e027e69f0cf9685328522e66e14ab67616d00001e02d919d138f6e83aba728bd697",
+            "width": 60
+          }
+        ],
+        "name": "CANCIONES ITALIANAS FAMOSAS ",
+        "owner": {
+          "display_name": "fce1951",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/fce1951"
+          },
+          "href": "https://api.spotify.com/v1/users/fce1951",
+          "id": "fce1951",
+          "type": "user",
+          "uri": "spotify:user:fce1951"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAAhGVqzhm0wZEi188X8omIP1PqAt9",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1ixVL544sKxd5gRC27owap/tracks",
+          "total": 83
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1ixVL544sKxd5gRC27owap"
+      },
+      {
+        "collaborative": false,
+        "description": "Imagine being sat in Remy&#x27;s restaurant, sipping coffee, eating ratatouille and working towards a deadline that is close enough to be exciting, but not too close to be stressful. That&#x27;s the Ratatouille Playlist. &quot;...a carefully curated, skillfully distilled masterpiece&quot; - Me",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/3eNJh3OaIxpZAn5HurDQmc"
+        },
+        "href": "https://api.spotify.com/v1/playlists/3eNJh3OaIxpZAn5HurDQmc",
+        "id": "3eNJh3OaIxpZAn5HurDQmc",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84b37e40382246125b0d3d841f",
+            "width": null
+          }
+        ],
+        "name": "Ratatouille Playlist",
+        "owner": {
+          "display_name": "Imogen",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/11120171214"
+          },
+          "href": "https://api.spotify.com/v1/users/11120171214",
+          "id": "11120171214",
+          "type": "user",
+          "uri": "spotify:user:11120171214"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAM+SC18NRXbAV5SySJvA6np9XxoxW",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/3eNJh3OaIxpZAn5HurDQmc/tracks",
+          "total": 39
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:3eNJh3OaIxpZAn5HurDQmc"
+      },
+      {
+        "collaborative": false,
+        "description": "Contatti: mail | petrilloandrea82@libero.it IG | andreapetrillo1982 La mia selezione delle migliori canzoni di questo genere per l&#x27;Italia. Contatti: https:&#x2F;&#x2F;www.facebook.com&#x2F;andrea.petrillo.98&#x2F;",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/4OWJEDVXzQhRKh9BBsSzCj"
+        },
+        "href": "https://api.spotify.com/v1/playlists/4OWJEDVXzQhRKh9BBsSzCj",
+        "id": "4OWJEDVXzQhRKh9BBsSzCj",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72cc6e24918aab8c8a29f1d0553",
+            "width": null
+          }
+        ],
+        "name": "Musica Italiana 2025 🎶",
+        "owner": {
+          "display_name": "Andrea Petrillo",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/11182587895"
+          },
+          "href": "https://api.spotify.com/v1/users/11182587895",
+          "id": "11182587895",
+          "type": "user",
+          "uri": "spotify:user:11182587895"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAYReRBIaFExGcXevavcFrmz//fgCCL",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/4OWJEDVXzQhRKh9BBsSzCj/tracks",
+          "total": 60
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:4OWJEDVXzQhRKh9BBsSzCj"
+      },
+      {
+        "collaborative": false,
+        "description": "Puoi trovarci anche con: successi italiani attuali 2025 - canzoni italiane famose 2025 - migliori cantanti italiani - musica italiana tendenza - top musica italiana 2025 - hit del momento italia 2025 - musica italiana recente 2025 - cantanti italiani emergenti 2025 - migliore canzone italiana 2025",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1G1O7YxuEyXn7M5bAwWeqX"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1G1O7YxuEyXn7M5bAwWeqX",
+        "id": "1G1O7YxuEyXn7M5bAwWeqX",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c25876e5388231d71c36a1ef5",
+            "width": null
+          }
+        ],
+        "name": "Canzoni Italiane 2025 - Migliore Musica Italiana del Momento 2025 (Successi Musicali Italiani)",
+        "owner": {
+          "display_name": "Redlist Playlists",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/7bntwjdswpqhrnqr0gssydbd0"
+          },
+          "href": "https://api.spotify.com/v1/users/7bntwjdswpqhrnqr0gssydbd0",
+          "id": "7bntwjdswpqhrnqr0gssydbd0",
+          "type": "user",
+          "uri": "spotify:user:7bntwjdswpqhrnqr0gssydbd0"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAYJeU7adIqeUUUDJ8n2r+/glpeAjaa",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1G1O7YxuEyXn7M5bAwWeqX/tracks",
+          "total": 80
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1G1O7YxuEyXn7M5bAwWeqX"
+      },
+      {
+        "collaborative": false,
+        "description": "Un poco de de Jazz, Bossanova, Musica Cubana, Baladas Italianas y Mexicanas. De todo un poco.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1HOZW0HRHSAJtIkYd07ffV"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1HOZW0HRHSAJtIkYd07ffV",
+        "id": "1HOZW0HRHSAJtIkYd07ffV",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84ed89dba09ce3e3fe72fa4d56",
+            "width": null
+          }
+        ],
+        "name": "Vermudez",
+        "owner": {
+          "display_name": "valen.kaaaa",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/v.grondona"
+          },
+          "href": "https://api.spotify.com/v1/users/v.grondona",
+          "id": "v.grondona",
+          "type": "user",
+          "uri": "spotify:user:v.grondona"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAATgt4OWLKPNCb6LTvYCxLj884kjJN",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1HOZW0HRHSAJtIkYd07ffV/tracks",
+          "total": 62
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1HOZW0HRHSAJtIkYd07ffV"
+      },
+      {
+        "collaborative": false,
+        "description": "Playlist ufficiale di Radio DEEJAY - Italia Top 30 - Hit radiofoniche - Hit europee - Hit della musica dance italiana - Musica dance elettronica - Musica house - Classifica Radio - Ultimi 30 brani che sono stati al n. 1 - I 30 migliori d'Italia - Radio Capital - Radio 105 - RTL 102.5 - RDS",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/5mK52AkY0TclZP0ClyEiVa"
+        },
+        "href": "https://api.spotify.com/v1/playlists/5mK52AkY0TclZP0ClyEiVa",
+        "id": "5mK52AkY0TclZP0ClyEiVa",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8412437a554490b7057b32a01a",
+            "width": null
+          }
+        ],
+        "name": "RADIO DEEJAY 2025 [Aggiornamento Settimanale]",
+        "owner": {
+          "display_name": "Sounds of Someday | SOS",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/5wi87sgd8qz0wa2nhozzbwq74"
+          },
+          "href": "https://api.spotify.com/v1/users/5wi87sgd8qz0wa2nhozzbwq74",
+          "id": "5wi87sgd8qz0wa2nhozzbwq74",
+          "type": "user",
+          "uri": "spotify:user:5wi87sgd8qz0wa2nhozzbwq74"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAHxAUovQBJnsdO74/EPjV97JLrDkcS",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/5mK52AkY0TclZP0ClyEiVa/tracks",
+          "total": 80
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:5mK52AkY0TclZP0ClyEiVa"
+      },
+      {
+        "collaborative": false,
+        "description": "Éxitos Eros Ramazzotti  : La mejor música del gran referente de la música italiana, Eros Ramazzotti. Sus éxitos en español y todas las canciones más importantes de su carrera. Incluye sus mejores baladas románticas en español. Escucha lo mejor de Eros Ramazzotti en esta playlist.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1dqygY6F7s0JAjmMr8CFxx"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1dqygY6F7s0JAjmMr8CFxx",
+        "id": "1dqygY6F7s0JAjmMr8CFxx",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da842cf7a215c34374bc134c8180",
+            "width": null
+          }
+        ],
+        "name": "EROS RAMAZZOTTI - EXITOS EN ESPAÑOL ",
+        "owner": {
+          "display_name": "Filtr Italy",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/sonymusicitaly"
+          },
+          "href": "https://api.spotify.com/v1/users/sonymusicitaly",
+          "id": "sonymusicitaly",
+          "type": "user",
+          "uri": "spotify:user:sonymusicitaly"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAA5xAxSse/BzI1p1QqLxNumjHLpUhR",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1dqygY6F7s0JAjmMr8CFxx/tracks",
+          "total": 37
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1dqygY6F7s0JAjmMr8CFxx"
+      }
+    ]
+  }
+}

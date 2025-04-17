@@ -83,13 +83,38 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (animate) {
+      const { 
+        onClick, 
+        disabled, 
+        type, 
+        form,
+        formAction,
+        formEncType,
+        formMethod,
+        formNoValidate,
+        formTarget,
+        name,
+        value,
+        ...otherProps 
+      } = props;
+      
       return (
         <motion.button
           ref={ref}
           className={buttonClasses}
+          onClick={onClick}
+          disabled={disabled}
+          type={type}
+          form={form}
+          formAction={formAction}
+          formEncType={formEncType}
+          formMethod={formMethod}
+          formNoValidate={formNoValidate}
+          formTarget={formTarget}
+          name={name}
+          value={value}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          {...props}
         >
           {buttonContent}
         </motion.button>

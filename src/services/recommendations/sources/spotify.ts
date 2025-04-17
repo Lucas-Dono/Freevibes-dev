@@ -39,43 +39,56 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 3
     
     // Usamos el endpoint de genre-recommendations que implementaremos en la API
     const apiBaseUrl = getApiBaseUrl();
-    const response = await fetch(
-      `${apiBaseUrl}/spotify?action=genre-recommendations&genre=${encodeURIComponent(genre)}&limit=${limit}`,
-      { cache: 'no-store' }
-    );
     
-    if (!response.ok) {
-      console.error(`[Spotify] Error al obtener recomendaciones (${response.status}): ${response.statusText}`);
+    // Verificar si el género existe antes de hacer la solicitud
+    if (!genre || genre.trim() === '') {
+      console.error(`[Spotify] Error: género vacío o no válido`);
+      return await searchTracksByGenre('pop', limit); // Usar pop como alternativa segura
+    }
+    
+    // Intentar hacer la solicitud con manejo de errores mejorado
+    try {
+      const response = await fetch(
+        `${apiBaseUrl}/spotify?action=genre-recommendations&genre=${encodeURIComponent(genre)}&limit=${limit}`,
+        { cache: 'no-store' }
+      );
       
-      if (response.status === 401) {
-        const errorData = await response.json();
-        if (errorData.redirect) {
-          console.log(`[Spotify] Redirigiendo para autenticación: ${errorData.redirect}`);
-          if (typeof window !== 'undefined') {
-            window.location.href = errorData.redirect;
+      if (!response.ok) {
+        console.error(`[Spotify] Error al obtener recomendaciones (${response.status}): ${response.statusText}`);
+        
+        if (response.status === 401) {
+          const errorData = await response.json();
+          if (errorData.redirect) {
+            console.log(`[Spotify] Redirigiendo para autenticación: ${errorData.redirect}`);
+            if (typeof window !== 'undefined') {
+              window.location.href = errorData.redirect;
+            }
           }
+          return [];
         }
-        return [];
+        
+        // Si el error es 400 Bad Request o 404 Not Found, intentaremos con búsqueda alternativa
+        if (response.status === 400 || response.status === 404) {
+          console.log(`[Spotify] Intentando búsqueda alternativa para género: ${genre} (error ${response.status})`);
+          return await searchTracksByGenre(genre, limit);
+        }
+        
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       
-      // Si el error es 400 Bad Request o 404 Not Found, intentaremos con búsqueda alternativa
-      if (response.status === 400 || response.status === 404) {
-        console.log(`[Spotify] Intentando búsqueda alternativa para género: ${genre}`);
+      const data = await response.json();
+      const tracks = data.tracks || [];
+      
+      if (!tracks.length) {
+        console.log(`[Spotify] Sin resultados para género ${genre}, probando búsqueda alternativa`);
         return await searchTracksByGenre(genre, limit);
       }
       
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    const tracks = data.tracks || [];
-    
-    if (!tracks.length) {
-      console.log(`[Spotify] Sin resultados para género ${genre}, probando búsqueda alternativa`);
+      return tracks;
+    } catch (requestError) {
+      console.error(`[Spotify] Error en la solicitud de recomendaciones:`, requestError);
       return await searchTracksByGenre(genre, limit);
     }
-    
-    return tracks;
   } catch (error) {
     console.error(`[Spotify] Error en getRecommendationsByGenre:`, error);
     

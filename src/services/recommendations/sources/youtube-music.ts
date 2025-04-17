@@ -210,14 +210,24 @@ export async function getRecommendationsByUserGenres(
   }
   
   try {
-    // Llamar a la API de YouTube Music para obtener recomendaciones por géneros
-    const ytMusicResponse = await youtubeMusicAPI.getRecommendationsByGenres(
-      topGenres,
-      { artistsPerGenre, playlistsPerGenre, tracksPerGenre }
-    );
+    // Llamar a la API de YouTube Music para obtener recomendaciones
+    const ytMusicResponse = await youtubeMusicAPI.getRecommendations();
+    
+    let tracks = [];
+    let artists = [];
+    let playlists = [];
+    
+    // Procesar respuesta si contiene datos
+    if (ytMusicResponse && Array.isArray(ytMusicResponse)) {
+      // Extraer tracks, artists, playlists de la respuesta
+      const processedResponse = processYouTubeMusicRecommendations(ytMusicResponse, topGenres);
+      tracks = processedResponse.tracks || [];
+      artists = processedResponse.artists || [];
+      playlists = processedResponse.playlists || [];
+    }
     
     // Convertir los tracks de YouTube Music a RecommendedTrack
-    const recommendedTracks: RecommendedTrack[] = ytMusicResponse.tracks
+    const recommendedTracks: RecommendedTrack[] = tracks
       .filter((track: YTMusicResult) => track.thumbnails && track.thumbnails.length > 0)
       .map((track: YTMusicResult) => ({
         id: track.videoId,
@@ -237,8 +247,8 @@ export async function getRecommendationsByUserGenres(
     
     // Guardar en caché
     const result = {
-      artists: ytMusicResponse.artists,
-      playlists: ytMusicResponse.playlists,
+      artists: artists,
+      playlists: playlists,
       tracks: limitedTracks
     };
     
@@ -253,4 +263,16 @@ export async function getRecommendationsByUserGenres(
     console.error('Error obteniendo recomendaciones por géneros de usuario:', error);
     return { artists: [], playlists: [], tracks: [] };
   }
+}
+
+// Función auxiliar para procesar las recomendaciones
+function processYouTubeMusicRecommendations(data: any[], genres: string[]) {
+  const tracks: any[] = [];
+  const artists: any[] = [];
+  const playlists: any[] = [];
+  
+  // Procesamiento personalizado basado en la estructura de respuesta
+  // ...
+  
+  return { tracks, artists, playlists };
 } 

@@ -1,0 +1,2067 @@
+{
+  "tracks": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20hits&type=track&market=US&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20hits&type=track&market=US&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 25,
+    "items": [
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms"
+              },
+              "href": "https://api.spotify.com/v1/artists/1HY2Jd0NmPuamShAr6KMms",
+              "id": "1HY2Jd0NmPuamShAr6KMms",
+              "name": "Lady Gaga",
+              "type": "artist",
+              "uri": "spotify:artist:1HY2Jd0NmPuamShAr6KMms"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2I6LyArz82waG94e9V5B9d"
+          },
+          "href": "https://api.spotify.com/v1/albums/2I6LyArz82waG94e9V5B9d",
+          "id": "2I6LyArz82waG94e9V5B9d",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27325304f6dc9dea023ce4b985c"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0225304f6dc9dea023ce4b985c"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485125304f6dc9dea023ce4b985c"
+            }
+          ],
+          "is_playable": true,
+          "name": "Abracadabra",
+          "release_date": "2025-02-03",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:2I6LyArz82waG94e9V5B9d"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms"
+            },
+            "href": "https://api.spotify.com/v1/artists/1HY2Jd0NmPuamShAr6KMms",
+            "id": "1HY2Jd0NmPuamShAr6KMms",
+            "name": "Lady Gaga",
+            "type": "artist",
+            "uri": "spotify:artist:1HY2Jd0NmPuamShAr6KMms"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 223398,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USUM72412581"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5ZLUm9eab8y3tqQ1OhQSHI"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5ZLUm9eab8y3tqQ1OhQSHI",
+        "id": "5ZLUm9eab8y3tqQ1OhQSHI",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Abracadabra",
+        "popularity": 92,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5ZLUm9eab8y3tqQ1OhQSHI"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp"
+              },
+              "href": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp",
+              "id": "0EmeFodog0BfCgMzAIvKQp",
+              "name": "Shakira",
+              "type": "artist",
+              "uri": "spotify:artist:0EmeFodog0BfCgMzAIvKQp"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5hcKSTqKOLuzJgYIQileAe"
+          },
+          "href": "https://api.spotify.com/v1/albums/5hcKSTqKOLuzJgYIQileAe",
+          "id": "5hcKSTqKOLuzJgYIQileAe",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273bfcff1dd252b22bba16a2a5d"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02bfcff1dd252b22bba16a2a5d"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851bfcff1dd252b22bba16a2a5d"
+            }
+          ],
+          "is_playable": true,
+          "name": "Donde Estan Los Ladrones",
+          "release_date": "1998-09-29",
+          "release_date_precision": "day",
+          "total_tracks": 11,
+          "type": "album",
+          "uri": "spotify:album:5hcKSTqKOLuzJgYIQileAe"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp"
+            },
+            "href": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp",
+            "id": "0EmeFodog0BfCgMzAIvKQp",
+            "name": "Shakira",
+            "type": "artist",
+            "uri": "spotify:artist:0EmeFodog0BfCgMzAIvKQp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 267826,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "COS019800787"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7jxHeJLVpnP7S08JFF4GBi"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7jxHeJLVpnP7S08JFF4GBi",
+        "id": "7jxHeJLVpnP7S08JFF4GBi",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Ciega, Sordomuda",
+        "popularity": 81,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:7jxHeJLVpnP7S08JFF4GBi"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0tmwSHipWxN12fsoLcFU3B"
+              },
+              "href": "https://api.spotify.com/v1/artists/0tmwSHipWxN12fsoLcFU3B",
+              "id": "0tmwSHipWxN12fsoLcFU3B",
+              "name": "Manuel Turizo",
+              "type": "artist",
+              "uri": "spotify:artist:0tmwSHipWxN12fsoLcFU3B"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1TpGeAzOJgAGdPkcWl95r2"
+          },
+          "href": "https://api.spotify.com/v1/albums/1TpGeAzOJgAGdPkcWl95r2",
+          "id": "1TpGeAzOJgAGdPkcWl95r2",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273c9f744b0d62da795bc21d04a"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02c9f744b0d62da795bc21d04a"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851c9f744b0d62da795bc21d04a"
+            }
+          ],
+          "is_playable": true,
+          "name": "La Bachata",
+          "release_date": "2022-05-26",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:1TpGeAzOJgAGdPkcWl95r2"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0tmwSHipWxN12fsoLcFU3B"
+            },
+            "href": "https://api.spotify.com/v1/artists/0tmwSHipWxN12fsoLcFU3B",
+            "id": "0tmwSHipWxN12fsoLcFU3B",
+            "name": "Manuel Turizo",
+            "type": "artist",
+            "uri": "spotify:artist:0tmwSHipWxN12fsoLcFU3B"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 162637,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "QZDYA1800087"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5ww2BF9slyYgNOk37BlC4u"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5ww2BF9slyYgNOk37BlC4u",
+        "id": "5ww2BF9slyYgNOk37BlC4u",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La Bachata",
+        "popularity": 80,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5ww2BF9slyYgNOk37BlC4u"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+              },
+              "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+              "id": "0AqlFI0tz2DsEoJlKSIiT9",
+              "name": "Emilia",
+              "type": "artist",
+              "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2qo8j9yZIsx66yDuUho2jp"
+          },
+          "href": "https://api.spotify.com/v1/albums/2qo8j9yZIsx66yDuUho2jp",
+          "id": "2qo8j9yZIsx66yDuUho2jp",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273bfb94590c914538b193f6931"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02bfb94590c914538b193f6931"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851bfb94590c914538b193f6931"
+            }
+          ],
+          "is_playable": true,
+          "name": ".mp3",
+          "release_date": "2023-11-03",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:2qo8j9yZIsx66yDuUho2jp"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+            },
+            "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+            "id": "0AqlFI0tz2DsEoJlKSIiT9",
+            "name": "Emilia",
+            "type": "artist",
+            "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+            "id": "7vXDAI8JwjW531ouMGbfcp",
+            "name": "TINI",
+            "type": "artist",
+            "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 140625,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USSD12300584"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6Es8Sk3xe1HiJ2MXCfHHwR"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6Es8Sk3xe1HiJ2MXCfHHwR",
+        "id": "6Es8Sk3xe1HiJ2MXCfHHwR",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La_Original.mp3",
+        "popularity": 73,
+        "preview_url": null,
+        "track_number": 5,
+        "type": "track",
+        "uri": "spotify:track:6Es8Sk3xe1HiJ2MXCfHHwR"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5me0Irg2ANcsgc93uaYrpb"
+              },
+              "href": "https://api.spotify.com/v1/artists/5me0Irg2ANcsgc93uaYrpb",
+              "id": "5me0Irg2ANcsgc93uaYrpb",
+              "name": "The Notorious B.I.G.",
+              "type": "artist",
+              "uri": "spotify:artist:5me0Irg2ANcsgc93uaYrpb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5XqEf16OrHdmMoNS1b6WDg"
+          },
+          "href": "https://api.spotify.com/v1/albums/5XqEf16OrHdmMoNS1b6WDg",
+          "id": "5XqEf16OrHdmMoNS1b6WDg",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273639fea4197e676cfe9512e04"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02639fea4197e676cfe9512e04"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851639fea4197e676cfe9512e04"
+            }
+          ],
+          "is_playable": true,
+          "name": "Greatest Hits",
+          "release_date": "2007-03-02",
+          "release_date_precision": "day",
+          "total_tracks": 17,
+          "type": "album",
+          "uri": "spotify:album:5XqEf16OrHdmMoNS1b6WDg"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5me0Irg2ANcsgc93uaYrpb"
+            },
+            "href": "https://api.spotify.com/v1/artists/5me0Irg2ANcsgc93uaYrpb",
+            "id": "5me0Irg2ANcsgc93uaYrpb",
+            "name": "The Notorious B.I.G.",
+            "type": "artist",
+            "uri": "spotify:artist:5me0Irg2ANcsgc93uaYrpb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 249866,
+        "explicit": true,
+        "external_ids": {
+          "isrc": "USBB40706423"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/63BcfK6YAzJYeISaTPr6IO"
+        },
+        "href": "https://api.spotify.com/v1/tracks/63BcfK6YAzJYeISaTPr6IO",
+        "id": "63BcfK6YAzJYeISaTPr6IO",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Big Poppa - 2007 Remaster",
+        "popularity": 73,
+        "preview_url": null,
+        "track_number": 2,
+        "type": "track",
+        "uri": "spotify:track:63BcfK6YAzJYeISaTPr6IO"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1DxLCyH42yaHKGK3cl5bvG"
+              },
+              "href": "https://api.spotify.com/v1/artists/1DxLCyH42yaHKGK3cl5bvG",
+              "id": "1DxLCyH42yaHKGK3cl5bvG",
+              "name": "Maria Becerra",
+              "type": "artist",
+              "uri": "spotify:artist:1DxLCyH42yaHKGK3cl5bvG"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/6wDJCPLe4cheYx7dWJQavb"
+          },
+          "href": "https://api.spotify.com/v1/albums/6wDJCPLe4cheYx7dWJQavb",
+          "id": "6wDJCPLe4cheYx7dWJQavb",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d5e5c90215385815a0e23af8"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d5e5c90215385815a0e23af8"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d5e5c90215385815a0e23af8"
+            }
+          ],
+          "is_playable": true,
+          "name": "IMAN (Two Of Us)",
+          "release_date": "2024-05-16",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:6wDJCPLe4cheYx7dWJQavb"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1DxLCyH42yaHKGK3cl5bvG"
+            },
+            "href": "https://api.spotify.com/v1/artists/1DxLCyH42yaHKGK3cl5bvG",
+            "id": "1DxLCyH42yaHKGK3cl5bvG",
+            "name": "Maria Becerra",
+            "type": "artist",
+            "uri": "spotify:artist:1DxLCyH42yaHKGK3cl5bvG"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 122405,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USWL12401428"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3sra6aEWWDXUiy46fWQobH"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3sra6aEWWDXUiy46fWQobH",
+        "id": "3sra6aEWWDXUiy46fWQobH",
+        "is_local": false,
+        "is_playable": true,
+        "name": "IMAN (Two Of Us)",
+        "popularity": 67,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3sra6aEWWDXUiy46fWQobH"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+              },
+              "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+              "id": "0AqlFI0tz2DsEoJlKSIiT9",
+              "name": "Emilia",
+              "type": "artist",
+              "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2UZIAOlrnyZmyzt1nuXr9y"
+              },
+              "href": "https://api.spotify.com/v1/artists/2UZIAOlrnyZmyzt1nuXr9y",
+              "id": "2UZIAOlrnyZmyzt1nuXr9y",
+              "name": "Nicki Nicole",
+              "type": "artist",
+              "uri": "spotify:artist:2UZIAOlrnyZmyzt1nuXr9y"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0Oe35eRgVyLthOLW1vurye"
+          },
+          "href": "https://api.spotify.com/v1/albums/0Oe35eRgVyLthOLW1vurye",
+          "id": "0Oe35eRgVyLthOLW1vurye",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d21ee3e4fb77b130dce99d6e"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d21ee3e4fb77b130dce99d6e"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d21ee3e4fb77b130dce99d6e"
+            }
+          ],
+          "is_playable": true,
+          "name": "intoxicao",
+          "release_date": "2022-05-30",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:0Oe35eRgVyLthOLW1vurye"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+            },
+            "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+            "id": "0AqlFI0tz2DsEoJlKSIiT9",
+            "name": "Emilia",
+            "type": "artist",
+            "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2UZIAOlrnyZmyzt1nuXr9y"
+            },
+            "href": "https://api.spotify.com/v1/artists/2UZIAOlrnyZmyzt1nuXr9y",
+            "id": "2UZIAOlrnyZmyzt1nuXr9y",
+            "name": "Nicki Nicole",
+            "type": "artist",
+            "uri": "spotify:artist:2UZIAOlrnyZmyzt1nuXr9y"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 168508,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USSD12200284"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2Znff2J1fAgQhXXEMW7y5V"
+        },
+        "href": "https://api.spotify.com/v1/tracks/2Znff2J1fAgQhXXEMW7y5V",
+        "id": "2Znff2J1fAgQhXXEMW7y5V",
+        "is_local": false,
+        "is_playable": true,
+        "name": "intoxicao",
+        "popularity": 64,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:2Znff2J1fAgQhXXEMW7y5V"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6I8TDGeUmmLom8auKPzMdX"
+              },
+              "href": "https://api.spotify.com/v1/artists/6I8TDGeUmmLom8auKPzMdX",
+              "id": "6I8TDGeUmmLom8auKPzMdX",
+              "name": "CA7RIEL & Paco Amoroso",
+              "type": "artist",
+              "uri": "spotify:artist:6I8TDGeUmmLom8auKPzMdX"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/348pk4o3EhKmsSahzuClSf"
+              },
+              "href": "https://api.spotify.com/v1/artists/348pk4o3EhKmsSahzuClSf",
+              "id": "348pk4o3EhKmsSahzuClSf",
+              "name": "CA7RIEL",
+              "type": "artist",
+              "uri": "spotify:artist:348pk4o3EhKmsSahzuClSf"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3E7NGbzUGlOjgYY8nvtijR"
+              },
+              "href": "https://api.spotify.com/v1/artists/3E7NGbzUGlOjgYY8nvtijR",
+              "id": "3E7NGbzUGlOjgYY8nvtijR",
+              "name": "Paco Amoroso",
+              "type": "artist",
+              "uri": "spotify:artist:3E7NGbzUGlOjgYY8nvtijR"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1XX2taUAddEZQX4QinYxX2"
+          },
+          "href": "https://api.spotify.com/v1/albums/1XX2taUAddEZQX4QinYxX2",
+          "id": "1XX2taUAddEZQX4QinYxX2",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27340349e09eb8cc8cac72f7959"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0240349e09eb8cc8cac72f7959"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485140349e09eb8cc8cac72f7959"
+            }
+          ],
+          "is_playable": true,
+          "name": "BAÑO MARÍA",
+          "release_date": "2024-04-17",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:1XX2taUAddEZQX4QinYxX2"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6I8TDGeUmmLom8auKPzMdX"
+            },
+            "href": "https://api.spotify.com/v1/artists/6I8TDGeUmmLom8auKPzMdX",
+            "id": "6I8TDGeUmmLom8auKPzMdX",
+            "name": "CA7RIEL & Paco Amoroso",
+            "type": "artist",
+            "uri": "spotify:artist:6I8TDGeUmmLom8auKPzMdX"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+            "id": "7vXDAI8JwjW531ouMGbfcp",
+            "name": "TINI",
+            "type": "artist",
+            "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 140957,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "US5022400033"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0gTyeWsGE071NCvkq36roh"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0gTyeWsGE071NCvkq36roh",
+        "id": "0gTyeWsGE071NCvkq36roh",
+        "is_local": false,
+        "is_playable": true,
+        "name": "AGUA",
+        "popularity": 60,
+        "preview_url": null,
+        "track_number": 5,
+        "type": "track",
+        "uri": "spotify:track:0gTyeWsGE071NCvkq36roh"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+              },
+              "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+              "id": "0AqlFI0tz2DsEoJlKSIiT9",
+              "name": "Emilia",
+              "type": "artist",
+              "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+              },
+              "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+              "id": "7vXDAI8JwjW531ouMGbfcp",
+              "name": "TINI",
+              "type": "artist",
+              "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/54okOxhsxH5Lmxgdv4WwKN"
+          },
+          "href": "https://api.spotify.com/v1/albums/54okOxhsxH5Lmxgdv4WwKN",
+          "id": "54okOxhsxH5Lmxgdv4WwKN",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2732983489963bd8eb4d18916fc"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e022983489963bd8eb4d18916fc"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048512983489963bd8eb4d18916fc"
+            }
+          ],
+          "is_playable": true,
+          "name": "La_Original.mp3",
+          "release_date": "2023-11-02",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:54okOxhsxH5Lmxgdv4WwKN"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0AqlFI0tz2DsEoJlKSIiT9"
+            },
+            "href": "https://api.spotify.com/v1/artists/0AqlFI0tz2DsEoJlKSIiT9",
+            "id": "0AqlFI0tz2DsEoJlKSIiT9",
+            "name": "Emilia",
+            "type": "artist",
+            "uri": "spotify:artist:0AqlFI0tz2DsEoJlKSIiT9"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+            "id": "7vXDAI8JwjW531ouMGbfcp",
+            "name": "TINI",
+            "type": "artist",
+            "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 140625,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USSD12300584"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6VjagyaPDsRal64aHXNIUY"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6VjagyaPDsRal64aHXNIUY",
+        "id": "6VjagyaPDsRal64aHXNIUY",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La_Original.mp3",
+        "popularity": 59,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:6VjagyaPDsRal64aHXNIUY"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+              },
+              "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+              "id": "1uj8EOCKAXn4w2TR7CVnQb",
+              "name": "Pablo Cepeda",
+              "type": "artist",
+              "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1VKTFfVYpTNLzyMNJCJanb"
+          },
+          "href": "https://api.spotify.com/v1/albums/1VKTFfVYpTNLzyMNJCJanb",
+          "id": "1VKTFfVYpTNLzyMNJCJanb",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2730e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e020e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048510e852a3fa68ea69fe0a271e7"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bossa Nova Pop Hits",
+          "release_date": "2023-03-24",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:1VKTFfVYpTNLzyMNJCJanb"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+            "id": "1uj8EOCKAXn4w2TR7CVnQb",
+            "name": "Pablo Cepeda",
+            "type": "artist",
+            "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 204000,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SEBGA2300260"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/383RfStICCeB7iCZVKkcc5"
+        },
+        "href": "https://api.spotify.com/v1/tracks/383RfStICCeB7iCZVKkcc5",
+        "id": "383RfStICCeB7iCZVKkcc5",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Blinding Lights",
+        "popularity": 58,
+        "preview_url": null,
+        "track_number": 6,
+        "type": "track",
+        "uri": "spotify:track:383RfStICCeB7iCZVKkcc5"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+              },
+              "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+              "id": "1uj8EOCKAXn4w2TR7CVnQb",
+              "name": "Pablo Cepeda",
+              "type": "artist",
+              "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1H2rcmLVAoMyiuh9ponsYA"
+          },
+          "href": "https://api.spotify.com/v1/albums/1H2rcmLVAoMyiuh9ponsYA",
+          "id": "1H2rcmLVAoMyiuh9ponsYA",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27300afb0112bbef64eb1bfb45b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0200afb0112bbef64eb1bfb45b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485100afb0112bbef64eb1bfb45b"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bossa Nova Pop Hits Vol. 2",
+          "release_date": "2023-07-14",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:1H2rcmLVAoMyiuh9ponsYA"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+            "id": "1uj8EOCKAXn4w2TR7CVnQb",
+            "name": "Pablo Cepeda",
+            "type": "artist",
+            "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 221333,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SEBGA2303667"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3LVfYGjdOShjzdcjMPyOfC"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3LVfYGjdOShjzdcjMPyOfC",
+        "id": "3LVfYGjdOShjzdcjMPyOfC",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Just the Two of Us",
+        "popularity": 57,
+        "preview_url": null,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:3LVfYGjdOShjzdcjMPyOfC"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+              },
+              "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+              "id": "1uj8EOCKAXn4w2TR7CVnQb",
+              "name": "Pablo Cepeda",
+              "type": "artist",
+              "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1H2rcmLVAoMyiuh9ponsYA"
+          },
+          "href": "https://api.spotify.com/v1/albums/1H2rcmLVAoMyiuh9ponsYA",
+          "id": "1H2rcmLVAoMyiuh9ponsYA",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27300afb0112bbef64eb1bfb45b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0200afb0112bbef64eb1bfb45b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485100afb0112bbef64eb1bfb45b"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bossa Nova Pop Hits Vol. 2",
+          "release_date": "2023-07-14",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:1H2rcmLVAoMyiuh9ponsYA"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+            "id": "1uj8EOCKAXn4w2TR7CVnQb",
+            "name": "Pablo Cepeda",
+            "type": "artist",
+            "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 234157,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SEBGA2303668"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6nuRNZZxbt9u7eCVfh5tHH"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6nuRNZZxbt9u7eCVfh5tHH",
+        "id": "6nuRNZZxbt9u7eCVfh5tHH",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Say You Won't Let Go",
+        "popularity": 57,
+        "preview_url": null,
+        "track_number": 4,
+        "type": "track",
+        "uri": "spotify:track:6nuRNZZxbt9u7eCVfh5tHH"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/26dSoYclwsYLMAKD3tpOr4"
+              },
+              "href": "https://api.spotify.com/v1/artists/26dSoYclwsYLMAKD3tpOr4",
+              "id": "26dSoYclwsYLMAKD3tpOr4",
+              "name": "Britney Spears",
+              "type": "artist",
+              "uri": "spotify:artist:26dSoYclwsYLMAKD3tpOr4"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3caKTh2tJMowPiMz0cguLI"
+          },
+          "href": "https://api.spotify.com/v1/albums/3caKTh2tJMowPiMz0cguLI",
+          "id": "3caKTh2tJMowPiMz0cguLI",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27338a33970ad21a2a1d1315875"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0238a33970ad21a2a1d1315875"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485138a33970ad21a2a1d1315875"
+            }
+          ],
+          "is_playable": true,
+          "name": "Greatest Hits: My Prerogative",
+          "release_date": "2004-11-08",
+          "release_date_precision": "day",
+          "total_tracks": 27,
+          "type": "album",
+          "uri": "spotify:album:3caKTh2tJMowPiMz0cguLI"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/26dSoYclwsYLMAKD3tpOr4"
+            },
+            "href": "https://api.spotify.com/v1/artists/26dSoYclwsYLMAKD3tpOr4",
+            "id": "26dSoYclwsYLMAKD3tpOr4",
+            "name": "Britney Spears",
+            "type": "artist",
+            "uri": "spotify:artist:26dSoYclwsYLMAKD3tpOr4"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 213893,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USJI10400852"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2JxftzENN2rhpXxnOmtQBR"
+        },
+        "href": "https://api.spotify.com/v1/tracks/2JxftzENN2rhpXxnOmtQBR",
+        "id": "2JxftzENN2rhpXxnOmtQBR",
+        "is_local": false,
+        "is_playable": true,
+        "name": "My Prerogative",
+        "popularity": 57,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:2JxftzENN2rhpXxnOmtQBR"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+              },
+              "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+              "id": "1uj8EOCKAXn4w2TR7CVnQb",
+              "name": "Pablo Cepeda",
+              "type": "artist",
+              "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1VKTFfVYpTNLzyMNJCJanb"
+          },
+          "href": "https://api.spotify.com/v1/albums/1VKTFfVYpTNLzyMNJCJanb",
+          "id": "1VKTFfVYpTNLzyMNJCJanb",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2730e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e020e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048510e852a3fa68ea69fe0a271e7"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bossa Nova Pop Hits",
+          "release_date": "2023-03-24",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:1VKTFfVYpTNLzyMNJCJanb"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+            "id": "1uj8EOCKAXn4w2TR7CVnQb",
+            "name": "Pablo Cepeda",
+            "type": "artist",
+            "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 233500,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SEBGA2300264"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5dYQ1sZtZweMRMaAhL4m5J"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5dYQ1sZtZweMRMaAhL4m5J",
+        "id": "5dYQ1sZtZweMRMaAhL4m5J",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Wake Me Up",
+        "popularity": 57,
+        "preview_url": null,
+        "track_number": 10,
+        "type": "track",
+        "uri": "spotify:track:5dYQ1sZtZweMRMaAhL4m5J"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2imr9PtgP6OJs5gLcUknqq"
+          },
+          "href": "https://api.spotify.com/v1/albums/2imr9PtgP6OJs5gLcUknqq",
+          "id": "2imr9PtgP6OJs5gLcUknqq",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27380b7f5ee74fbe57bc300b674"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0280b7f5ee74fbe57bc300b674"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485180b7f5ee74fbe57bc300b674"
+            }
+          ],
+          "is_playable": true,
+          "name": "Viral Pop Hits",
+          "release_date": "2023-02-01",
+          "release_date_precision": "day",
+          "total_tracks": 30,
+          "type": "album",
+          "uri": "spotify:album:2imr9PtgP6OJs5gLcUknqq"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7cYEt1pqMgXJdq00hAwVpT"
+            },
+            "href": "https://api.spotify.com/v1/artists/7cYEt1pqMgXJdq00hAwVpT",
+            "id": "7cYEt1pqMgXJdq00hAwVpT",
+            "name": "Chase Atlantic",
+            "type": "artist",
+            "uri": "spotify:artist:7cYEt1pqMgXJdq00hAwVpT"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 228786,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USWB11701711"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/04Uct7NTIMxCI4sd03tbRt"
+        },
+        "href": "https://api.spotify.com/v1/tracks/04Uct7NTIMxCI4sd03tbRt",
+        "id": "04Uct7NTIMxCI4sd03tbRt",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Swim",
+        "popularity": 56,
+        "preview_url": null,
+        "track_number": 19,
+        "type": "track",
+        "uri": "spotify:track:04Uct7NTIMxCI4sd03tbRt"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+              },
+              "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+              "id": "1uj8EOCKAXn4w2TR7CVnQb",
+              "name": "Pablo Cepeda",
+              "type": "artist",
+              "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1VKTFfVYpTNLzyMNJCJanb"
+          },
+          "href": "https://api.spotify.com/v1/albums/1VKTFfVYpTNLzyMNJCJanb",
+          "id": "1VKTFfVYpTNLzyMNJCJanb",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2730e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e020e852a3fa68ea69fe0a271e7"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048510e852a3fa68ea69fe0a271e7"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bossa Nova Pop Hits",
+          "release_date": "2023-03-24",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:1VKTFfVYpTNLzyMNJCJanb"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uj8EOCKAXn4w2TR7CVnQb"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uj8EOCKAXn4w2TR7CVnQb",
+            "id": "1uj8EOCKAXn4w2TR7CVnQb",
+            "name": "Pablo Cepeda",
+            "type": "artist",
+            "uri": "spotify:artist:1uj8EOCKAXn4w2TR7CVnQb"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 219461,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "SEBGA2300258"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7BLE771hJnZTzURnWFtmrB"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7BLE771hJnZTzURnWFtmrB",
+        "id": "7BLE771hJnZTzURnWFtmrB",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Easy On Me",
+        "popularity": 55,
+        "preview_url": null,
+        "track_number": 4,
+        "type": "track",
+        "uri": "spotify:track:7BLE771hJnZTzURnWFtmrB"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/51Z21bW6Pc6JRx9Iob7gno"
+          },
+          "href": "https://api.spotify.com/v1/albums/51Z21bW6Pc6JRx9Iob7gno",
+          "id": "51Z21bW6Pc6JRx9Iob7gno",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2736ed09f65e45935a54adca5dd"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e026ed09f65e45935a54adca5dd"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048516ed09f65e45935a54adca5dd"
+            }
+          ],
+          "is_playable": true,
+          "name": "Pop Hits 2012-2015",
+          "release_date": "2019-08-09",
+          "release_date_precision": "day",
+          "total_tracks": 36,
+          "type": "album",
+          "uri": "spotify:album:51Z21bW6Pc6JRx9Iob7gno"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/698hF4vcwHwPy8ltmXermq"
+            },
+            "href": "https://api.spotify.com/v1/artists/698hF4vcwHwPy8ltmXermq",
+            "id": "698hF4vcwHwPy8ltmXermq",
+            "name": "Far East Movement",
+            "type": "artist",
+            "uri": "spotify:artist:698hF4vcwHwPy8ltmXermq"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s"
+            },
+            "href": "https://api.spotify.com/v1/artists/1uNFoZAHBGtllmzznpCI3s",
+            "id": "1uNFoZAHBGtllmzznpCI3s",
+            "name": "Justin Bieber",
+            "type": "artist",
+            "uri": "spotify:artist:1uNFoZAHBGtllmzznpCI3s"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 239120,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USUM71201831"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5ZGekegWxH1c6l5YRdcuTU"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5ZGekegWxH1c6l5YRdcuTU",
+        "id": "5ZGekegWxH1c6l5YRdcuTU",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Live My Life",
+        "popularity": 53,
+        "preview_url": null,
+        "track_number": 11,
+        "type": "track",
+        "uri": "spotify:track:5ZGekegWxH1c6l5YRdcuTU"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+              },
+              "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+              "id": "22P1OY4TRFRwhP0q29loQ8",
+              "name": "Lali",
+              "type": "artist",
+              "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2nc62Mll62aIDw3wUiAHW3"
+          },
+          "href": "https://api.spotify.com/v1/albums/2nc62Mll62aIDw3wUiAHW3",
+          "id": "2nc62Mll62aIDw3wUiAHW3",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27333a20faf53f2eefcd6b4a7c3"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0233a20faf53f2eefcd6b4a7c3"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485133a20faf53f2eefcd6b4a7c3"
+            }
+          ],
+          "is_playable": true,
+          "name": "LALI",
+          "release_date": "2023-04-13",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:2nc62Mll62aIDw3wUiAHW3"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+            },
+            "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+            "id": "22P1OY4TRFRwhP0q29loQ8",
+            "name": "Lali",
+            "type": "artist",
+            "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 154867,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ARF102200180"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2HQWMYkuy8Rm0uweatfe8F"
+        },
+        "href": "https://api.spotify.com/v1/tracks/2HQWMYkuy8Rm0uweatfe8F",
+        "id": "2HQWMYkuy8Rm0uweatfe8F",
+        "is_local": false,
+        "is_playable": true,
+        "name": "N5",
+        "popularity": 52,
+        "preview_url": null,
+        "track_number": 9,
+        "type": "track",
+        "uri": "spotify:track:2HQWMYkuy8Rm0uweatfe8F"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+              },
+              "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+              "id": "22P1OY4TRFRwhP0q29loQ8",
+              "name": "Lali",
+              "type": "artist",
+              "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2nc62Mll62aIDw3wUiAHW3"
+          },
+          "href": "https://api.spotify.com/v1/albums/2nc62Mll62aIDw3wUiAHW3",
+          "id": "2nc62Mll62aIDw3wUiAHW3",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27333a20faf53f2eefcd6b4a7c3"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0233a20faf53f2eefcd6b4a7c3"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485133a20faf53f2eefcd6b4a7c3"
+            }
+          ],
+          "is_playable": true,
+          "name": "LALI",
+          "release_date": "2023-04-13",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:2nc62Mll62aIDw3wUiAHW3"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+            },
+            "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+            "id": "22P1OY4TRFRwhP0q29loQ8",
+            "name": "Lali",
+            "type": "artist",
+            "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 191863,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ARF102300059"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5Dor1ZjCnBYmC136ytDzJp"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5Dor1ZjCnBYmC136ytDzJp",
+        "id": "5Dor1ZjCnBYmC136ytDzJp",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Obsesión",
+        "popularity": 50,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5Dor1ZjCnBYmC136ytDzJp"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6I8TDGeUmmLom8auKPzMdX"
+              },
+              "href": "https://api.spotify.com/v1/artists/6I8TDGeUmmLom8auKPzMdX",
+              "id": "6I8TDGeUmmLom8auKPzMdX",
+              "name": "CA7RIEL & Paco Amoroso",
+              "type": "artist",
+              "uri": "spotify:artist:6I8TDGeUmmLom8auKPzMdX"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+              },
+              "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+              "id": "7vXDAI8JwjW531ouMGbfcp",
+              "name": "TINI",
+              "type": "artist",
+              "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2daYTVco0NxVypNAiVnlbt"
+          },
+          "href": "https://api.spotify.com/v1/albums/2daYTVco0NxVypNAiVnlbt",
+          "id": "2daYTVco0NxVypNAiVnlbt",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273da52db354090da4be2197cdc"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02da52db354090da4be2197cdc"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851da52db354090da4be2197cdc"
+            }
+          ],
+          "is_playable": true,
+          "name": "AGUA",
+          "release_date": "2024-05-30",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:2daYTVco0NxVypNAiVnlbt"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6I8TDGeUmmLom8auKPzMdX"
+            },
+            "href": "https://api.spotify.com/v1/artists/6I8TDGeUmmLom8auKPzMdX",
+            "id": "6I8TDGeUmmLom8auKPzMdX",
+            "name": "CA7RIEL & Paco Amoroso",
+            "type": "artist",
+            "uri": "spotify:artist:6I8TDGeUmmLom8auKPzMdX"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+            "id": "7vXDAI8JwjW531ouMGbfcp",
+            "name": "TINI",
+            "type": "artist",
+            "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 140957,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "US5022400033"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/04eJJNfLPEC8bvTnJeyxGO"
+        },
+        "href": "https://api.spotify.com/v1/tracks/04eJJNfLPEC8bvTnJeyxGO",
+        "id": "04eJJNfLPEC8bvTnJeyxGO",
+        "is_local": false,
+        "is_playable": true,
+        "name": "AGUA",
+        "popularity": 46,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:04eJJNfLPEC8bvTnJeyxGO"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3ou3XMRNmyDSy6gnC1bSgN"
+              },
+              "href": "https://api.spotify.com/v1/artists/3ou3XMRNmyDSy6gnC1bSgN",
+              "id": "3ou3XMRNmyDSy6gnC1bSgN",
+              "name": "TAICHU",
+              "type": "artist",
+              "uri": "spotify:artist:3ou3XMRNmyDSy6gnC1bSgN"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+              },
+              "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+              "id": "22P1OY4TRFRwhP0q29loQ8",
+              "name": "Lali",
+              "type": "artist",
+              "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/6EyvfUT1Fw4ibKocckl5DE"
+          },
+          "href": "https://api.spotify.com/v1/albums/6EyvfUT1Fw4ibKocckl5DE",
+          "id": "6EyvfUT1Fw4ibKocckl5DE",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273fa9c9ab9926822d1dbb891ce"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02fa9c9ab9926822d1dbb891ce"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851fa9c9ab9926822d1dbb891ce"
+            }
+          ],
+          "is_playable": true,
+          "name": "S.O.S",
+          "release_date": "2024-05-29",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:6EyvfUT1Fw4ibKocckl5DE"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3ou3XMRNmyDSy6gnC1bSgN"
+            },
+            "href": "https://api.spotify.com/v1/artists/3ou3XMRNmyDSy6gnC1bSgN",
+            "id": "3ou3XMRNmyDSy6gnC1bSgN",
+            "name": "TAICHU",
+            "type": "artist",
+            "uri": "spotify:artist:3ou3XMRNmyDSy6gnC1bSgN"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+            },
+            "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+            "id": "22P1OY4TRFRwhP0q29loQ8",
+            "name": "Lali",
+            "type": "artist",
+            "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 182432,
+        "explicit": true,
+        "external_ids": {
+          "isrc": "UYB282416002"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4qVFJdnzV5xhdGpD6RBvEr"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4qVFJdnzV5xhdGpD6RBvEr",
+        "id": "4qVFJdnzV5xhdGpD6RBvEr",
+        "is_local": false,
+        "is_playable": true,
+        "name": "S.O.S",
+        "popularity": 46,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:4qVFJdnzV5xhdGpD6RBvEr"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+              },
+              "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+              "id": "7vXDAI8JwjW531ouMGbfcp",
+              "name": "TINI",
+              "type": "artist",
+              "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/40qHcVnx8VFQxi9uVzVa4Z"
+          },
+          "href": "https://api.spotify.com/v1/albums/40qHcVnx8VFQxi9uVzVa4Z",
+          "id": "40qHcVnx8VFQxi9uVzVa4Z",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273074bd0b4d11add8438235365"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02074bd0b4d11add8438235365"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851074bd0b4d11add8438235365"
+            }
+          ],
+          "is_playable": true,
+          "name": "posta",
+          "release_date": "2024-04-04",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:40qHcVnx8VFQxi9uVzVa4Z"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+            "id": "7vXDAI8JwjW531ouMGbfcp",
+            "name": "TINI",
+            "type": "artist",
+            "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 121290,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USHR12347096"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7gmATHjiYdt4s9lNdji8nj"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7gmATHjiYdt4s9lNdji8nj",
+        "id": "7gmATHjiYdt4s9lNdji8nj",
+        "is_local": false,
+        "is_playable": true,
+        "name": "posta",
+        "popularity": 45,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:7gmATHjiYdt4s9lNdji8nj"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2vgkQJ8T3LkDL67wbWxsI8"
+          },
+          "href": "https://api.spotify.com/v1/albums/2vgkQJ8T3LkDL67wbWxsI8",
+          "id": "2vgkQJ8T3LkDL67wbWxsI8",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273acbb45571e98b863e5301591"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02acbb45571e98b863e5301591"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851acbb45571e98b863e5301591"
+            }
+          ],
+          "is_playable": true,
+          "name": "Pop Hits at the Movies",
+          "release_date": "2022-07-08",
+          "release_date_precision": "day",
+          "total_tracks": 30,
+          "type": "album",
+          "uri": "spotify:album:2vgkQJ8T3LkDL67wbWxsI8"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C"
+            },
+            "href": "https://api.spotify.com/v1/artists/0du5cEVh5yTK9QJze8zA0C",
+            "id": "0du5cEVh5yTK9QJze8zA0C",
+            "name": "Bruno Mars",
+            "type": "artist",
+            "uri": "spotify:artist:0du5cEVh5yTK9QJze8zA0C"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 257720,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USAT21102075"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/05KetlQOUclRNmecmsh2Of"
+        },
+        "href": "https://api.spotify.com/v1/tracks/05KetlQOUclRNmecmsh2Of",
+        "id": "05KetlQOUclRNmecmsh2Of",
+        "is_local": false,
+        "is_playable": true,
+        "name": "It Will Rain",
+        "popularity": 44,
+        "preview_url": null,
+        "track_number": 11,
+        "type": "track",
+        "uri": "spotify:track:05KetlQOUclRNmecmsh2Of"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6jkpUSaE5SFwUWWZyUe0dv"
+              },
+              "href": "https://api.spotify.com/v1/artists/6jkpUSaE5SFwUWWZyUe0dv",
+              "id": "6jkpUSaE5SFwUWWZyUe0dv",
+              "name": "Carla Barone",
+              "type": "artist",
+              "uri": "spotify:artist:6jkpUSaE5SFwUWWZyUe0dv"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2UWTR4LoZ1NU4AiZYs9MQR"
+          },
+          "href": "https://api.spotify.com/v1/albums/2UWTR4LoZ1NU4AiZYs9MQR",
+          "id": "2UWTR4LoZ1NU4AiZYs9MQR",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27322101c897444bcabe99a7482"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0222101c897444bcabe99a7482"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485122101c897444bcabe99a7482"
+            }
+          ],
+          "is_playable": true,
+          "name": "Pop Hits 90'S 2000'S",
+          "release_date": "2020-05-20",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:2UWTR4LoZ1NU4AiZYs9MQR"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6jkpUSaE5SFwUWWZyUe0dv"
+            },
+            "href": "https://api.spotify.com/v1/artists/6jkpUSaE5SFwUWWZyUe0dv",
+            "id": "6jkpUSaE5SFwUWWZyUe0dv",
+            "name": "Carla Barone",
+            "type": "artist",
+            "uri": "spotify:artist:6jkpUSaE5SFwUWWZyUe0dv"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 179294,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ES03S2004617"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/78uq3jvLSZLDSxNOZInLAT"
+        },
+        "href": "https://api.spotify.com/v1/tracks/78uq3jvLSZLDSxNOZInLAT",
+        "id": "78uq3jvLSZLDSxNOZInLAT",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Kiss Me",
+        "popularity": 31,
+        "preview_url": null,
+        "track_number": 4,
+        "type": "track",
+        "uri": "spotify:track:78uq3jvLSZLDSxNOZInLAT"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6jkpUSaE5SFwUWWZyUe0dv"
+              },
+              "href": "https://api.spotify.com/v1/artists/6jkpUSaE5SFwUWWZyUe0dv",
+              "id": "6jkpUSaE5SFwUWWZyUe0dv",
+              "name": "Carla Barone",
+              "type": "artist",
+              "uri": "spotify:artist:6jkpUSaE5SFwUWWZyUe0dv"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2UWTR4LoZ1NU4AiZYs9MQR"
+          },
+          "href": "https://api.spotify.com/v1/albums/2UWTR4LoZ1NU4AiZYs9MQR",
+          "id": "2UWTR4LoZ1NU4AiZYs9MQR",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27322101c897444bcabe99a7482"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0222101c897444bcabe99a7482"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485122101c897444bcabe99a7482"
+            }
+          ],
+          "is_playable": true,
+          "name": "Pop Hits 90'S 2000'S",
+          "release_date": "2020-05-20",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:2UWTR4LoZ1NU4AiZYs9MQR"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6jkpUSaE5SFwUWWZyUe0dv"
+            },
+            "href": "https://api.spotify.com/v1/artists/6jkpUSaE5SFwUWWZyUe0dv",
+            "id": "6jkpUSaE5SFwUWWZyUe0dv",
+            "name": "Carla Barone",
+            "type": "artist",
+            "uri": "spotify:artist:6jkpUSaE5SFwUWWZyUe0dv"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 244032,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ES03S2004615"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4IvAP01vNQ5zAS2BNZ9MnT"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4IvAP01vNQ5zAS2BNZ9MnT",
+        "id": "4IvAP01vNQ5zAS2BNZ9MnT",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Sleeping Satellite",
+        "popularity": 31,
+        "preview_url": null,
+        "track_number": 2,
+        "type": "track",
+        "uri": "spotify:track:4IvAP01vNQ5zAS2BNZ9MnT"
+      }
+    ]
+  }
+}

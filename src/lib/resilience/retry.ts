@@ -9,7 +9,6 @@ export async function fetchConReintentos(url: string, opciones: RequestInit, max
       // Para errores 404, podríamos reintentar ya que Spotify tiene problemas intermitentes
       if (response.status === 404) {
         if (reintentos < maxReintentos) {
-          console.log(`API: Error 404 en ${url}, reintento ${reintentos + 1} de ${maxReintentos}`);
           reintentos++;
           
           // Esperar con backoff exponencial: 1s, 2s, 4s...

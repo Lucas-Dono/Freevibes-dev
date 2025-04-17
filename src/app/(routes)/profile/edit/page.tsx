@@ -42,7 +42,7 @@ const popularGenres = [
 export default function EditProfilePage() {
   const router = useRouter();
   const { profile, loading, error, updateProfile } = useProfile();
-  const { profileNotifications } = useCustomNotifications();
+  const { showNotification, addSystemNotification } = useCustomNotifications();
   
   // Estados para el formulario
   const [formData, setFormData] = useState({
@@ -167,7 +167,7 @@ export default function EditProfilePage() {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors as any);
-      profileNotifications.onFormErrors();
+      showNotification('Por favor corrige los errores en el formulario', 'error');
       return;
     }
     
@@ -180,7 +180,7 @@ export default function EditProfilePage() {
       
       if (updatedProfile) {
         setShowSuccess(true);
-        profileNotifications.onProfileUpdated();
+        showNotification('Perfil actualizado con éxito', 'success');
         
         // Redireccionar después de un breve periodo (para que el usuario vea el mensaje de éxito)
         setTimeout(() => {
@@ -189,7 +189,7 @@ export default function EditProfilePage() {
       }
     } catch (error) {
       setSubmitError('Error al actualizar el perfil. Por favor, intenta de nuevo más tarde.');
-      profileNotifications.onProfileUpdateError();
+      showNotification('Error al actualizar el perfil', 'error');
       console.error('Error actualizando perfil:', error);
     } finally {
       setIsSubmitting(false);

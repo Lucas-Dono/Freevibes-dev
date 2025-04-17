@@ -11,6 +11,14 @@
     {
       "source": "/external-api/:path*",
       "destination": "https://musicverse-node-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/hybrid",
+      "destination": "/hybrid-adapter"
     }
-  ]
+  ],
+   "buildOptions": {
+     "ignorePreviewMode": true,
+     "ignoreDevCommand": true
+   }
 } 

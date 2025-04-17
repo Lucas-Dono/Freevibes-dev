@@ -12,9 +12,7 @@ export class CircuitBreaker {
     if (this.estado === 'ABIERTO') {
       if (Date.now() - this.ultimoFallo > this.tiempoReinicio) {
         this.estado = 'SEMI_ABIERTO';
-        console.log('CircuitBreaker: circuito en modo semi-abierto, probando operación');
       } else {
-        console.log('CircuitBreaker: circuito abierto, usando respuesta alternativa');
         return fallbackFn ? fallbackFn() : Promise.reject(new Error('Circuito abierto y no hay fallback'));
       }
     }
@@ -42,7 +40,6 @@ export class CircuitBreaker {
   
   private exito(): void {
     if (this.estado === 'SEMI_ABIERTO') {
-      console.log('CircuitBreaker: operación exitosa en modo semi-abierto, cerrando circuito');
     }
     
     this.fallos = 0;
@@ -54,7 +51,6 @@ export class CircuitBreaker {
     this.ultimoFallo = Date.now();
     
     if (this.fallos >= this.umbralFallos || this.estado === 'SEMI_ABIERTO') {
-      console.log(`CircuitBreaker: umbral de fallos alcanzado (${this.fallos}/${this.umbralFallos}), abriendo circuito`);
       this.estado = 'ABIERTO';
     }
   }

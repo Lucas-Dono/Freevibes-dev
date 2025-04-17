@@ -66,7 +66,6 @@ class IsomorphicCache {
           if (memoryItem.expires < now && allowExpired) {
             // Log solo si usamos un valor expirado
             if (ENABLE_CACHE_DEBUG) {
-              console.log(`[IsomorphicCache] Usando valor expirado para: ${key}`);
             }
           }
           return memoryItem.value;
@@ -147,7 +146,6 @@ class IsomorphicCache {
     }
     
     if (expiredCount > 0 && ENABLE_CACHE_DEBUG) {
-      console.log(`[IsomorphicCache] Se eliminaron ${expiredCount} entradas expiradas`);
     }
     
     // Si hay demasiadas entradas, eliminar las más antiguas
@@ -166,7 +164,6 @@ class IsomorphicCache {
       }
       
       if (ENABLE_CACHE_DEBUG) {
-        console.log(`[IsomorphicCache] Se eliminaron ${entriesToRemove} entradas antiguas`);
       }
     }
   }

@@ -1,6 +1,6 @@
-# MusicVerse Python API para YouTube Music
+# freevibes Python API para FreeVibes
 
-Esta API proporciona acceso a funcionalidades de YouTube Music, permitiendo buscar canciones, obtener recomendaciones y más.
+Esta API proporciona acceso a funcionalidades de FreeVibes, permitiendo buscar canciones, obtener recomendaciones y más.
 
 ## Despliegue en Render
 
@@ -11,7 +11,7 @@ Esta API proporciona acceso a funcionalidades de YouTube Music, permitiendo busc
    - Conecta tu repositorio de GitHub/GitLab/Bitbucket
 
 2. **Configuración del servicio**:
-   - **Nombre**: `musicverse-python-api` (o el que prefieras)
+   - **Nombre**: `freevibes-python-api` (o el que prefieras)
    - **Ambiente**: `Python`
    - **Región**: Selecciona la más cercana a tus usuarios
    - **Rama**: `main` (o la que uses)
@@ -24,7 +24,7 @@ Esta API proporciona acceso a funcionalidades de YouTube Music, permitiendo busc
    Configura las siguientes variables en la sección "Environment":
    - `PORT`: 10000 (Render asigna este puerto automáticamente)
    - `FLASK_ENV`: production
-   - `CORS_ORIGIN`: URLs separadas por comas (ej: https://musicverse.vercel.app,https://musicverse-node-api.onrender.com)
+   - `CORS_ORIGIN`: URLs separadas por comas (ej: https://freevibes.vercel.app,https://freevibes-node-api.onrender.com)
    - `YOUTUBE_API_KEY`: Tu clave de API de YouTube Data v3
 
 4. **Crear servicio**:
@@ -57,7 +57,7 @@ Asegúrate de tener un archivo `.env` con las variables necesarias para desarrol
 
 - `/` - Verificación de salud
 - `/api` - Información de la API
-- `/search` - Buscar en YouTube Music
+- `/search` - Buscar en FreeVibes
 - `/find-track` - Encontrar una pista específica
 - `/spotify-to-youtube` - Convertir ID de Spotify a YouTube
 - `/recommendations` - Obtener recomendaciones

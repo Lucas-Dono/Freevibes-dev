@@ -3,12 +3,48 @@
  */
 
 /**
- * Obtiene la URL base de las APIs
- * @returns URL base configurada o la URL por defecto
+ * Utilidad para obtener la configuración de las APIs y servicios externos
+ */
+
+interface APIConfig {
+  nodeServerUrl: string;
+  pythonApiUrl: string;
+  demoMode: boolean;
+}
+
+/**
+ * Obtiene la configuración actual de la API basada en variables de entorno
+ * @returns Objeto con la configuración de la API
+ */
+export function getAPIConfig(): APIConfig {
+  // URL del servidor Node.js
+  const nodeServerUrl = process.env.NODE_API_URL || 'http://localhost:3101';
+  
+  // URL de la API Python
+  const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5100';
+  
+  // Determinar si estamos en modo demo
+  const demoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+  
+  return {
+    nodeServerUrl,
+    pythonApiUrl,
+    demoMode
+  };
+}
+
+/**
+ * Obtiene la URL base de la API
+ * @returns URL base para las llamadas a la API
  */
 export function getApiBaseUrl(): string {
-  // Usar la variable de entorno si está definida, o la URL local por defecto
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+  // Si estamos en el navegador, usar la URL actual
+  if (typeof window !== 'undefined' && window.location) {
+    return window.location.origin;
+  }
+  
+  // Si estamos en el servidor, usar la variable de entorno o localhost
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 }
 
 /**

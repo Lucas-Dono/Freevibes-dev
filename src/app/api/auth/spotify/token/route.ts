@@ -1,68 +1,50 @@
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
-/**
- * Obtiene un token de cliente para Spotify mediante Client Credentials Flow
- * Este endpoint es utilizado por el componente GenreSelector para obtener
- * un token que permite acceder a recursos públicos de Spotify sin necesidad
- * de autenticación de usuario.
- */
+// Marcar esta ruta como dinámica
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
-    // Obtener credenciales de Spotify de las variables de entorno
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+    // Verificar si estamos en modo demo desde las cookies o los headers
+    const demoModeCookie = request.cookies.get('demo-mode')?.value === 'true' || request.cookies.get('demoMode')?.value === 'true';
+    const demoModeHeader = request.headers.get('x-demo-mode') === 'true';
+    const isDemoMode = demoModeCookie || demoModeHeader;
     
-    // Verificar que tenemos las credenciales necesarias
-    if (!clientId || !clientSecret) {
-      console.error('[Spotify Token] Credenciales de Spotify no configuradas');
-      return NextResponse.json(
-        { error: 'Configuración de servidor incompleta' },
-        { status: 500 }
-      );
+    // Si estamos en modo demo, devolver un token ficticio
+    if (isDemoMode) {
+      console.log('[API AUTH] Solicitud de token en modo demo, devolviendo token ficticio');
+      return Response.json({
+        access_token: 'demo-mode-token-xxxxxx',
+        token_type: 'Bearer',
+        expires_in: 3600,
+        demo_mode: true
+      });
     }
-    
-    // Solicitar token mediante Client Credentials Flow
-    console.log('[Spotify Token] Solicitando token de cliente');
-    
-    // Crear el cuerpo de la petición
-    const params = new URLSearchParams();
-    params.append('grant_type', 'client_credentials');
-    
-    // Realizar solicitud a la API de Spotify
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`
-      },
-      body: params
-    });
-    
-    // Verificar respuesta
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error(`[Spotify Token] Error al obtener token: ${response.status}`, errorData);
-      return NextResponse.json(
-        { error: 'Error al obtener token de Spotify' },
-        { status: response.status }
-      );
+
+    // Obtener sesión del usuario
+    const session = await getServerSession(authOptions);
+
+    // Verificar si hay sesión y token de acceso
+    if (!session || !session.accessToken) {
+      console.error('[API] Token no disponible, usuario no autenticado');
+      return Response.json({ 
+        error: 'No autenticado', 
+        message: 'Se requiere autenticación con Spotify' 
+      }, { status: 401 });
     }
-    
-    // Procesar y devolver el token
-    const tokenData = await response.json();
-    console.log('[Spotify Token] Token obtenido correctamente');
-    
-    return NextResponse.json({
-      access_token: tokenData.access_token,
-      expires_in: tokenData.expires_in,
-      token_type: tokenData.token_type
+
+    // Devolver el token de acceso
+    return Response.json({ 
+      access_token: session.accessToken,
+      token_type: 'Bearer'
     });
-    
   } catch (error) {
-    console.error('[Spotify Token] Error inesperado:', error);
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    );
+    console.error('[API] Error al obtener token de Spotify:', error);
+    return Response.json({ 
+      error: 'Error en la API',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    }, { status: 500 });
   }
 } 

@@ -5,9 +5,10 @@
  * la API no oficial de YouTube Music.
  */
 import { NextRequest, NextResponse } from 'next/server';
+import { API_CONFIG } from '@/config/api-config';
 
 // URL del servidor Python de YouTube Music
-const YTMUSIC_SERVICE_URL = 'http://localhost:5000/api';
+const YTMUSIC_SERVICE_URL = API_CONFIG.getPythonApiUrl();
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,7 +24,6 @@ export async function GET(request: NextRequest) {
       targetUrl.searchParams.append(key, value);
     });
     
-    console.log(`[YouTube Music Proxy] Redirigiendo a: ${targetUrl.toString()}`);
     
     // Realizar la solicitud al servicio Python
     const response = await fetch(targetUrl.toString(), {
@@ -77,7 +77,6 @@ export async function POST(request: NextRequest) {
     // Obtener el cuerpo de la solicitud
     const body = await request.json();
     
-    console.log(`[YouTube Music Proxy] Redirigiendo POST a: ${targetUrl.toString()}`);
     
     // Realizar la solicitud al servicio Python
     const response = await fetch(targetUrl.toString(), {

@@ -1,0 +1,35 @@
+{
+  "external_urls": {
+    "spotify": "https://open.spotify.com/artist/61J0BktHv7PuP3tjTPYXSX"
+  },
+  "followers": {
+    "href": null,
+    "total": 2395006
+  },
+  "genres": [
+    "italo dance"
+  ],
+  "href": "https://api.spotify.com/v1/artists/61J0BktHv7PuP3tjTPYXSX",
+  "id": "61J0BktHv7PuP3tjTPYXSX",
+  "images": [
+    {
+      "url": "https://i.scdn.co/image/ab6761610000e5eb314f9d52a5a1389b93669b9b",
+      "height": 640,
+      "width": 640
+    },
+    {
+      "url": "https://i.scdn.co/image/ab67616100005174314f9d52a5a1389b93669b9b",
+      "height": 320,
+      "width": 320
+    },
+    {
+      "url": "https://i.scdn.co/image/ab6761610000f178314f9d52a5a1389b93669b9b",
+      "height": 160,
+      "width": 160
+    }
+  ],
+  "name": "Eros Ramazzotti",
+  "popularity": 71,
+  "type": "artist",
+  "uri": "spotify:artist:61J0BktHv7PuP3tjTPYXSX"
+}

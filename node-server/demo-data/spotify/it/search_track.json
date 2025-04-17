@@ -1,0 +1,1649 @@
+{
+  "tracks": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=musica%20italiana&type=track&market=IT&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=musica%20italiana&type=track&market=IT&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 21,
+    "items": [
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5BwOOeKayeMZXa5SSaiRxv"
+              },
+              "href": "https://api.spotify.com/v1/artists/5BwOOeKayeMZXa5SSaiRxv",
+              "id": "5BwOOeKayeMZXa5SSaiRxv",
+              "name": "Ricchi E Poveri",
+              "type": "artist",
+              "uri": "spotify:artist:5BwOOeKayeMZXa5SSaiRxv"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/0WdZQGmbPI3U7eDF5jACGi"
+          },
+          "href": "https://api.spotify.com/v1/albums/0WdZQGmbPI3U7eDF5jACGi",
+          "id": "0WdZQGmbPI3U7eDF5jACGi",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273e46c669e434e80209396680b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02e46c669e434e80209396680b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851e46c669e434e80209396680b"
+            }
+          ],
+          "is_playable": true,
+          "name": "The Collection",
+          "release_date": "1998",
+          "release_date_precision": "year",
+          "total_tracks": 18,
+          "type": "album",
+          "uri": "spotify:album:0WdZQGmbPI3U7eDF5jACGi"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5BwOOeKayeMZXa5SSaiRxv"
+            },
+            "href": "https://api.spotify.com/v1/artists/5BwOOeKayeMZXa5SSaiRxv",
+            "id": "5BwOOeKayeMZXa5SSaiRxv",
+            "name": "Ricchi E Poveri",
+            "type": "artist",
+            "uri": "spotify:artist:5BwOOeKayeMZXa5SSaiRxv"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 190693,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USBI10000112"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7037bX3jdaUWUAXL12CHGy"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7037bX3jdaUWUAXL12CHGy",
+        "id": "7037bX3jdaUWUAXL12CHGy",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Sarà perché ti amo",
+        "popularity": 72,
+        "preview_url": null,
+        "track_number": 7,
+        "type": "track",
+        "uri": "spotify:track:7037bX3jdaUWUAXL12CHGy"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2TJHmhbmT7L3gw2NKyDTHh"
+              },
+              "href": "https://api.spotify.com/v1/artists/2TJHmhbmT7L3gw2NKyDTHh",
+              "id": "2TJHmhbmT7L3gw2NKyDTHh",
+              "name": "Manu Pilas",
+              "type": "artist",
+              "uri": "spotify:artist:2TJHmhbmT7L3gw2NKyDTHh"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/05Ng00IfiS6xeyQX8WtjHU"
+          },
+          "href": "https://api.spotify.com/v1/albums/05Ng00IfiS6xeyQX8WtjHU",
+          "id": "05Ng00IfiS6xeyQX8WtjHU",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f3c7e4934b8dd9eedf69e6e5"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f3c7e4934b8dd9eedf69e6e5"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f3c7e4934b8dd9eedf69e6e5"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bella Ciao (Música Original de la Serie la Casa de Papel/ Money Heist)",
+          "release_date": "2018-04-20",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:05Ng00IfiS6xeyQX8WtjHU"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2TJHmhbmT7L3gw2NKyDTHh"
+            },
+            "href": "https://api.spotify.com/v1/artists/2TJHmhbmT7L3gw2NKyDTHh",
+            "id": "2TJHmhbmT7L3gw2NKyDTHh",
+            "name": "Manu Pilas",
+            "type": "artist",
+            "uri": "spotify:artist:2TJHmhbmT7L3gw2NKyDTHh"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 139844,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ES84S1800619"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3lWzVNe1yFZlkeBBzUuZYu"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3lWzVNe1yFZlkeBBzUuZYu",
+        "id": "3lWzVNe1yFZlkeBBzUuZYu",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Bella Ciao - Música Original de la Serie la Casa de Papel/ Money Heist",
+        "popularity": 71,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3lWzVNe1yFZlkeBBzUuZYu"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6elIiwc8OyeqKxXe2rmPXZ"
+              },
+              "href": "https://api.spotify.com/v1/artists/6elIiwc8OyeqKxXe2rmPXZ",
+              "id": "6elIiwc8OyeqKxXe2rmPXZ",
+              "name": "Toto Cutugno",
+              "type": "artist",
+              "uri": "spotify:artist:6elIiwc8OyeqKxXe2rmPXZ"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/5LkInsAkNvLWqwJwcyrJ8y"
+          },
+          "href": "https://api.spotify.com/v1/albums/5LkInsAkNvLWqwJwcyrJ8y",
+          "id": "5LkInsAkNvLWqwJwcyrJ8y",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273d919d138f6e83aba728bd697"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02d919d138f6e83aba728bd697"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851d919d138f6e83aba728bd697"
+            }
+          ],
+          "is_playable": true,
+          "name": "L'Italiano",
+          "release_date": "1983-02-01",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:5LkInsAkNvLWqwJwcyrJ8y"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6elIiwc8OyeqKxXe2rmPXZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/6elIiwc8OyeqKxXe2rmPXZ",
+            "id": "6elIiwc8OyeqKxXe2rmPXZ",
+            "name": "Toto Cutugno",
+            "type": "artist",
+            "uri": "spotify:artist:6elIiwc8OyeqKxXe2rmPXZ"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 236546,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITB268300025"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2S7RApTsKT0CtYojYq2cKz"
+        },
+        "href": "https://api.spotify.com/v1/tracks/2S7RApTsKT0CtYojYq2cKz",
+        "id": "2S7RApTsKT0CtYojYq2cKz",
+        "is_local": false,
+        "is_playable": true,
+        "name": "L'italiano",
+        "popularity": 71,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:2S7RApTsKT0CtYojYq2cKz"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3jc496ljiyrS3ECrD7QiqL"
+              },
+              "href": "https://api.spotify.com/v1/artists/3jc496ljiyrS3ECrD7QiqL",
+              "id": "3jc496ljiyrS3ECrD7QiqL",
+              "name": "Gipsy Kings",
+              "type": "artist",
+              "uri": "spotify:artist:3jc496ljiyrS3ECrD7QiqL"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4bnWDBDMEsDvwObwZnMngr"
+          },
+          "href": "https://api.spotify.com/v1/albums/4bnWDBDMEsDvwObwZnMngr",
+          "id": "4bnWDBDMEsDvwObwZnMngr",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2739c90ed4b52bdb183c60669ad"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e029c90ed4b52bdb183c60669ad"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048519c90ed4b52bdb183c60669ad"
+            }
+          ],
+          "is_playable": true,
+          "name": "Mosaïque",
+          "release_date": "1989-05-01",
+          "release_date_precision": "day",
+          "total_tracks": 12,
+          "type": "album",
+          "uri": "spotify:album:4bnWDBDMEsDvwObwZnMngr"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3jc496ljiyrS3ECrD7QiqL"
+            },
+            "href": "https://api.spotify.com/v1/artists/3jc496ljiyrS3ECrD7QiqL",
+            "id": "3jc496ljiyrS3ECrD7QiqL",
+            "name": "Gipsy Kings",
+            "type": "artist",
+            "uri": "spotify:artist:3jc496ljiyrS3ECrD7QiqL"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 218520,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "GBAAW0202208"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/4OjJAGDDZTLlTNeOMBl7UM"
+        },
+        "href": "https://api.spotify.com/v1/tracks/4OjJAGDDZTLlTNeOMBl7UM",
+        "id": "4OjJAGDDZTLlTNeOMBl7UM",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Volare (Nel Blu di Pinto di Blu)",
+        "popularity": 71,
+        "preview_url": null,
+        "track_number": 7,
+        "type": "track",
+        "uri": "spotify:track:4OjJAGDDZTLlTNeOMBl7UM"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1c0wBsDBu0NqpvxBqjYjZS"
+              },
+              "href": "https://api.spotify.com/v1/artists/1c0wBsDBu0NqpvxBqjYjZS",
+              "id": "1c0wBsDBu0NqpvxBqjYjZS",
+              "name": "Al Bano And Romina Power",
+              "type": "artist",
+              "uri": "spotify:artist:1c0wBsDBu0NqpvxBqjYjZS"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/6rYKh2EVXdWs5Pe8MugvSM"
+          },
+          "href": "https://api.spotify.com/v1/albums/6rYKh2EVXdWs5Pe8MugvSM",
+          "id": "6rYKh2EVXdWs5Pe8MugvSM",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273228264ef165a3de1041d0c22"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02228264ef165a3de1041d0c22"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851228264ef165a3de1041d0c22"
+            }
+          ],
+          "is_playable": true,
+          "name": "Felicità (Ariola Express Gold-Serie)",
+          "release_date": "1982",
+          "release_date_precision": "year",
+          "total_tracks": 16,
+          "type": "album",
+          "uri": "spotify:album:6rYKh2EVXdWs5Pe8MugvSM"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1c0wBsDBu0NqpvxBqjYjZS"
+            },
+            "href": "https://api.spotify.com/v1/artists/1c0wBsDBu0NqpvxBqjYjZS",
+            "id": "1c0wBsDBu0NqpvxBqjYjZS",
+            "name": "Al Bano And Romina Power",
+            "type": "artist",
+            "uri": "spotify:artist:1c0wBsDBu0NqpvxBqjYjZS"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 193160,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USBI10000114"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7sXTcibuNYugjjYNfgf2kY"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7sXTcibuNYugjjYNfgf2kY",
+        "id": "7sXTcibuNYugjjYNfgf2kY",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Felicità",
+        "popularity": 70,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:7sXTcibuNYugjjYNfgf2kY"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3EA9hVIzKfFiQI0Kikz2wo"
+              },
+              "href": "https://api.spotify.com/v1/artists/3EA9hVIzKfFiQI0Kikz2wo",
+              "id": "3EA9hVIzKfFiQI0Kikz2wo",
+              "name": "Andrea Bocelli",
+              "type": "artist",
+              "uri": "spotify:artist:3EA9hVIzKfFiQI0Kikz2wo"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3uARqNN4bYqts3Ltg5Jku3"
+          },
+          "href": "https://api.spotify.com/v1/albums/3uARqNN4bYqts3Ltg5Jku3",
+          "id": "3uARqNN4bYqts3Ltg5Jku3",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2737e69f0cf9685328522e66e14"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e027e69f0cf9685328522e66e14"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048517e69f0cf9685328522e66e14"
+            }
+          ],
+          "is_playable": true,
+          "name": "Bocelli (Remastered)",
+          "release_date": "1995-01-01",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:3uARqNN4bYqts3Ltg5Jku3"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3EA9hVIzKfFiQI0Kikz2wo"
+            },
+            "href": "https://api.spotify.com/v1/artists/3EA9hVIzKfFiQI0Kikz2wo",
+            "id": "3EA9hVIzKfFiQI0Kikz2wo",
+            "name": "Andrea Bocelli",
+            "type": "artist",
+            "uri": "spotify:artist:3EA9hVIzKfFiQI0Kikz2wo"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0gm1lHoOXAdy5OB4AwFYRr"
+            },
+            "href": "https://api.spotify.com/v1/artists/0gm1lHoOXAdy5OB4AwFYRr",
+            "id": "0gm1lHoOXAdy5OB4AwFYRr",
+            "name": "Giorgia",
+            "type": "artist",
+            "uri": "spotify:artist:0gm1lHoOXAdy5OB4AwFYRr"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 265584,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITZ049700083"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6cPLCU7hKjgjvLWzCevl7R"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6cPLCU7hKjgjvLWzCevl7R",
+        "id": "6cPLCU7hKjgjvLWzCevl7R",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Vivo per lei",
+        "popularity": 70,
+        "preview_url": null,
+        "track_number": 7,
+        "type": "track",
+        "uri": "spotify:track:6cPLCU7hKjgjvLWzCevl7R"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/00w9sdZ78mWArooTmiSTld"
+              },
+              "href": "https://api.spotify.com/v1/artists/00w9sdZ78mWArooTmiSTld",
+              "id": "00w9sdZ78mWArooTmiSTld",
+              "name": "Umberto Tozzi",
+              "type": "artist",
+              "uri": "spotify:artist:00w9sdZ78mWArooTmiSTld"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4mtA5ClPItnUF8yfg5uygI"
+          },
+          "href": "https://api.spotify.com/v1/albums/4mtA5ClPItnUF8yfg5uygI",
+          "id": "4mtA5ClPItnUF8yfg5uygI",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2731001d7559f5fb1b98db8ce4f"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e021001d7559f5fb1b98db8ce4f"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048511001d7559f5fb1b98db8ce4f"
+            }
+          ],
+          "is_playable": true,
+          "name": "E' nell' aria…ti amo",
+          "release_date": "1977-01-01",
+          "release_date_precision": "day",
+          "total_tracks": 10,
+          "type": "album",
+          "uri": "spotify:album:4mtA5ClPItnUF8yfg5uygI"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/00w9sdZ78mWArooTmiSTld"
+            },
+            "href": "https://api.spotify.com/v1/artists/00w9sdZ78mWArooTmiSTld",
+            "id": "00w9sdZ78mWArooTmiSTld",
+            "name": "Umberto Tozzi",
+            "type": "artist",
+            "uri": "spotify:artist:00w9sdZ78mWArooTmiSTld"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 245693,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITR007700021"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0gAbf0NL9no1Urk1Wj8Uui"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0gAbf0NL9no1Urk1Wj8Uui",
+        "id": "0gAbf0NL9no1Urk1Wj8Uui",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Ti Amo",
+        "popularity": 69,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:0gAbf0NL9no1Urk1Wj8Uui"
+      },
+      {
+        "album": {
+          "album_type": "single",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0L1f9i3L3fkMNENljDOsjG"
+              },
+              "href": "https://api.spotify.com/v1/artists/0L1f9i3L3fkMNENljDOsjG",
+              "id": "0L1f9i3L3fkMNENljDOsjG",
+              "name": "Rocco Hunt",
+              "type": "artist",
+              "uri": "spotify:artist:0L1f9i3L3fkMNENljDOsjG"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/753BrMSZZPDcA4Ue5MdF6u"
+          },
+          "href": "https://api.spotify.com/v1/albums/753BrMSZZPDcA4Ue5MdF6u",
+          "id": "753BrMSZZPDcA4Ue5MdF6u",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273462c35e7b658b0f2092c7b8c"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02462c35e7b658b0f2092c7b8c"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851462c35e7b658b0f2092c7b8c"
+            }
+          ],
+          "is_playable": true,
+          "name": "Musica Italiana",
+          "release_date": "2024-04-05",
+          "release_date_precision": "day",
+          "total_tracks": 1,
+          "type": "album",
+          "uri": "spotify:album:753BrMSZZPDcA4Ue5MdF6u"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0L1f9i3L3fkMNENljDOsjG"
+            },
+            "href": "https://api.spotify.com/v1/artists/0L1f9i3L3fkMNENljDOsjG",
+            "id": "0L1f9i3L3fkMNENljDOsjG",
+            "name": "Rocco Hunt",
+            "type": "artist",
+            "uri": "spotify:artist:0L1f9i3L3fkMNENljDOsjG"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 183461,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITB002400294"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3m2loz99NJ3z8UYEFcFdmS"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3m2loz99NJ3z8UYEFcFdmS",
+        "id": "3m2loz99NJ3z8UYEFcFdmS",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Musica Italiana",
+        "popularity": 54,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:3m2loz99NJ3z8UYEFcFdmS"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4llklDtTTyMYMY2LfFOkTI"
+              },
+              "href": "https://api.spotify.com/v1/artists/4llklDtTTyMYMY2LfFOkTI",
+              "id": "4llklDtTTyMYMY2LfFOkTI",
+              "name": "Domenico Modugno",
+              "type": "artist",
+              "uri": "spotify:artist:4llklDtTTyMYMY2LfFOkTI"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4WscwOrzbo3JOJW5fSfb2R"
+          },
+          "href": "https://api.spotify.com/v1/albums/4WscwOrzbo3JOJW5fSfb2R",
+          "id": "4WscwOrzbo3JOJW5fSfb2R",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2730df0595d6dd4479aa7040ae6"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e020df0595d6dd4479aa7040ae6"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048510df0595d6dd4479aa7040ae6"
+            }
+          ],
+          "is_playable": true,
+          "name": "Volare",
+          "release_date": "2020-07-18",
+          "release_date_precision": "day",
+          "total_tracks": 29,
+          "type": "album",
+          "uri": "spotify:album:4WscwOrzbo3JOJW5fSfb2R"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4llklDtTTyMYMY2LfFOkTI"
+            },
+            "href": "https://api.spotify.com/v1/artists/4llklDtTTyMYMY2LfFOkTI",
+            "id": "4llklDtTTyMYMY2LfFOkTI",
+            "name": "Domenico Modugno",
+            "type": "artist",
+            "uri": "spotify:artist:4llklDtTTyMYMY2LfFOkTI"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 214853,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "DETL61621179"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/71hIekopkrYCGgggsBOpVG"
+        },
+        "href": "https://api.spotify.com/v1/tracks/71hIekopkrYCGgggsBOpVG",
+        "id": "71hIekopkrYCGgggsBOpVG",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Volare",
+        "popularity": 51,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:71hIekopkrYCGgggsBOpVG"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4llklDtTTyMYMY2LfFOkTI"
+              },
+              "href": "https://api.spotify.com/v1/artists/4llklDtTTyMYMY2LfFOkTI",
+              "id": "4llklDtTTyMYMY2LfFOkTI",
+              "name": "Domenico Modugno",
+              "type": "artist",
+              "uri": "spotify:artist:4llklDtTTyMYMY2LfFOkTI"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/490sLjsTmSo7MnA8noKMOH"
+          },
+          "href": "https://api.spotify.com/v1/albums/490sLjsTmSo7MnA8noKMOH",
+          "id": "490sLjsTmSo7MnA8noKMOH",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273837bb9f622e659dba1545c47"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02837bb9f622e659dba1545c47"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851837bb9f622e659dba1545c47"
+            }
+          ],
+          "is_playable": true,
+          "name": "Nel Blu Dipinto Di Blu",
+          "release_date": "2008-04-28",
+          "release_date_precision": "day",
+          "total_tracks": 14,
+          "type": "album",
+          "uri": "spotify:album:490sLjsTmSo7MnA8noKMOH"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4llklDtTTyMYMY2LfFOkTI"
+            },
+            "href": "https://api.spotify.com/v1/artists/4llklDtTTyMYMY2LfFOkTI",
+            "id": "4llklDtTTyMYMY2LfFOkTI",
+            "name": "Domenico Modugno",
+            "type": "artist",
+            "uri": "spotify:artist:4llklDtTTyMYMY2LfFOkTI"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 219120,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USA560766736"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5zyrEv4F3FaLECI8TOKpFM"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5zyrEv4F3FaLECI8TOKpFM",
+        "id": "5zyrEv4F3FaLECI8TOKpFM",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Nel Blu Dipinto Di Blu",
+        "popularity": 51,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:5zyrEv4F3FaLECI8TOKpFM"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/31Pfw9p5mZPeKqZSaiXzqk"
+              },
+              "href": "https://api.spotify.com/v1/artists/31Pfw9p5mZPeKqZSaiXzqk",
+              "id": "31Pfw9p5mZPeKqZSaiXzqk",
+              "name": "Nicola Di Bari",
+              "type": "artist",
+              "uri": "spotify:artist:31Pfw9p5mZPeKqZSaiXzqk"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/2M4lcTFQ4RL1OImMKMhMAW"
+          },
+          "href": "https://api.spotify.com/v1/albums/2M4lcTFQ4RL1OImMKMhMAW",
+          "id": "2M4lcTFQ4RL1OImMKMhMAW",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2735128c3465802d998fe82c0a2"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e025128c3465802d998fe82c0a2"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048515128c3465802d998fe82c0a2"
+            }
+          ],
+          "is_playable": true,
+          "name": "Serie Platino",
+          "release_date": "1995-12-06",
+          "release_date_precision": "day",
+          "total_tracks": 20,
+          "type": "album",
+          "uri": "spotify:album:2M4lcTFQ4RL1OImMKMhMAW"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/31Pfw9p5mZPeKqZSaiXzqk"
+            },
+            "href": "https://api.spotify.com/v1/artists/31Pfw9p5mZPeKqZSaiXzqk",
+            "id": "31Pfw9p5mZPeKqZSaiXzqk",
+            "name": "Nicola Di Bari",
+            "type": "artist",
+            "uri": "spotify:artist:31Pfw9p5mZPeKqZSaiXzqk"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 192533,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITB007100024"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5DRD6ORAoilGd5bTuzOG8D"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5DRD6ORAoilGd5bTuzOG8D",
+        "id": "5DRD6ORAoilGd5bTuzOG8D",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Il Cuore E' Uno Zingaro (El Corazon Es Un Gitano)",
+        "popularity": 47,
+        "preview_url": null,
+        "track_number": 17,
+        "type": "track",
+        "uri": "spotify:track:5DRD6ORAoilGd5bTuzOG8D"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/422Vo1v0NaW7ZVU8EwvhKW"
+              },
+              "href": "https://api.spotify.com/v1/artists/422Vo1v0NaW7ZVU8EwvhKW",
+              "id": "422Vo1v0NaW7ZVU8EwvhKW",
+              "name": "Giorgio Poi",
+              "type": "artist",
+              "uri": "spotify:artist:422Vo1v0NaW7ZVU8EwvhKW"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3Tba6GMxsEye0PGDz1u2WB"
+          },
+          "href": "https://api.spotify.com/v1/albums/3Tba6GMxsEye0PGDz1u2WB",
+          "id": "3Tba6GMxsEye0PGDz1u2WB",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2732113f6ff5dd03d68e1bfa9b6"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e022113f6ff5dd03d68e1bfa9b6"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048512113f6ff5dd03d68e1bfa9b6"
+            }
+          ],
+          "is_playable": true,
+          "name": "Smog",
+          "release_date": "2019-03-08",
+          "release_date_precision": "day",
+          "total_tracks": 9,
+          "type": "album",
+          "uri": "spotify:album:3Tba6GMxsEye0PGDz1u2WB"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/422Vo1v0NaW7ZVU8EwvhKW"
+            },
+            "href": "https://api.spotify.com/v1/artists/422Vo1v0NaW7ZVU8EwvhKW",
+            "id": "422Vo1v0NaW7ZVU8EwvhKW",
+            "name": "Giorgio Poi",
+            "type": "artist",
+            "uri": "spotify:artist:422Vo1v0NaW7ZVU8EwvhKW"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/582KhTHEVOONNQLmQ5612r"
+            },
+            "href": "https://api.spotify.com/v1/artists/582KhTHEVOONNQLmQ5612r",
+            "id": "582KhTHEVOONNQLmQ5612r",
+            "name": "Calcutta ",
+            "type": "artist",
+            "uri": "spotify:artist:582KhTHEVOONNQLmQ5612r"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 161706,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITLGE1900011"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/6YK59OPowCZwuL4lJ9QyUx"
+        },
+        "href": "https://api.spotify.com/v1/tracks/6YK59OPowCZwuL4lJ9QyUx",
+        "id": "6YK59OPowCZwuL4lJ9QyUx",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La Musica Italiana",
+        "popularity": 45,
+        "preview_url": null,
+        "track_number": 9,
+        "type": "track",
+        "uri": "spotify:track:6YK59OPowCZwuL4lJ9QyUx"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1omXEEZyvv5R4u32iTydFP"
+          },
+          "href": "https://api.spotify.com/v1/albums/1omXEEZyvv5R4u32iTydFP",
+          "id": "1omXEEZyvv5R4u32iTydFP",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27388216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0288216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485188216c7a5ac5da5199b3cb2b"
+            }
+          ],
+          "is_playable": true,
+          "name": "50 Mejores Canciones Italianas",
+          "release_date": "2012-03-14",
+          "release_date_precision": "day",
+          "total_tracks": 50,
+          "type": "album",
+          "uri": "spotify:album:1omXEEZyvv5R4u32iTydFP"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3j6BKDjFfl67JiB3gUIWW6"
+            },
+            "href": "https://api.spotify.com/v1/artists/3j6BKDjFfl67JiB3gUIWW6",
+            "id": "3j6BKDjFfl67JiB3gUIWW6",
+            "name": "Milano",
+            "type": "artist",
+            "uri": "spotify:artist:3j6BKDjFfl67JiB3gUIWW6"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 250723,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USA371688902"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7MeJw7MqM1MSAs8dBwent5"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7MeJw7MqM1MSAs8dBwent5",
+        "id": "7MeJw7MqM1MSAs8dBwent5",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Ti amo",
+        "popularity": 25,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:7MeJw7MqM1MSAs8dBwent5"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1omXEEZyvv5R4u32iTydFP"
+          },
+          "href": "https://api.spotify.com/v1/albums/1omXEEZyvv5R4u32iTydFP",
+          "id": "1omXEEZyvv5R4u32iTydFP",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27388216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0288216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485188216c7a5ac5da5199b3cb2b"
+            }
+          ],
+          "is_playable": true,
+          "name": "50 Mejores Canciones Italianas",
+          "release_date": "2012-03-14",
+          "release_date_precision": "day",
+          "total_tracks": 50,
+          "type": "album",
+          "uri": "spotify:album:1omXEEZyvv5R4u32iTydFP"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0P59Ic0pwN3KaBTpoBZhrB"
+            },
+            "href": "https://api.spotify.com/v1/artists/0P59Ic0pwN3KaBTpoBZhrB",
+            "id": "0P59Ic0pwN3KaBTpoBZhrB",
+            "name": "Los De La Decada",
+            "type": "artist",
+            "uri": "spotify:artist:0P59Ic0pwN3KaBTpoBZhrB"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 200546,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USA371688904"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/5OeXsbz1zTTrJRQe71bkTq"
+        },
+        "href": "https://api.spotify.com/v1/tracks/5OeXsbz1zTTrJRQe71bkTq",
+        "id": "5OeXsbz1zTTrJRQe71bkTq",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Felicità",
+        "popularity": 24,
+        "preview_url": null,
+        "track_number": 3,
+        "type": "track",
+        "uri": "spotify:track:5OeXsbz1zTTrJRQe71bkTq"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1XviEvQtSnTPeUc7z8XblO"
+              },
+              "href": "https://api.spotify.com/v1/artists/1XviEvQtSnTPeUc7z8XblO",
+              "id": "1XviEvQtSnTPeUc7z8XblO",
+              "name": "Bruno Ferrara",
+              "type": "artist",
+              "uri": "spotify:artist:1XviEvQtSnTPeUc7z8XblO"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1W77Mu7xV1mTyVOiD1DVjX"
+          },
+          "href": "https://api.spotify.com/v1/albums/1W77Mu7xV1mTyVOiD1DVjX",
+          "id": "1W77Mu7xV1mTyVOiD1DVjX",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f77cb7c4b20db732f5c5d700"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f77cb7c4b20db732f5c5d700"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f77cb7c4b20db732f5c5d700"
+            }
+          ],
+          "is_playable": true,
+          "name": "TEMPO D'AMORE",
+          "release_date": "2011-07-29",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:1W77Mu7xV1mTyVOiD1DVjX"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1XviEvQtSnTPeUc7z8XblO"
+            },
+            "href": "https://api.spotify.com/v1/artists/1XviEvQtSnTPeUc7z8XblO",
+            "id": "1XviEvQtSnTPeUc7z8XblO",
+            "name": "Bruno Ferrara",
+            "type": "artist",
+            "uri": "spotify:artist:1XviEvQtSnTPeUc7z8XblO"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 185626,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "DEQ121113051"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/2yiN6nDxVUuSQz2QSA0bjV"
+        },
+        "href": "https://api.spotify.com/v1/tracks/2yiN6nDxVUuSQz2QSA0bjV",
+        "id": "2yiN6nDxVUuSQz2QSA0bjV",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Musica Italiana - Italienische version",
+        "popularity": 24,
+        "preview_url": null,
+        "track_number": 1,
+        "type": "track",
+        "uri": "spotify:track:2yiN6nDxVUuSQz2QSA0bjV"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1omXEEZyvv5R4u32iTydFP"
+          },
+          "href": "https://api.spotify.com/v1/albums/1omXEEZyvv5R4u32iTydFP",
+          "id": "1omXEEZyvv5R4u32iTydFP",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27388216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0288216c7a5ac5da5199b3cb2b"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485188216c7a5ac5da5199b3cb2b"
+            }
+          ],
+          "is_playable": true,
+          "name": "50 Mejores Canciones Italianas",
+          "release_date": "2012-03-14",
+          "release_date_precision": "day",
+          "total_tracks": 50,
+          "type": "album",
+          "uri": "spotify:album:1omXEEZyvv5R4u32iTydFP"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7Dasxr6NQ6uRSEFYFjNdzn"
+            },
+            "href": "https://api.spotify.com/v1/artists/7Dasxr6NQ6uRSEFYFjNdzn",
+            "id": "7Dasxr6NQ6uRSEFYFjNdzn",
+            "name": "Marco Polo",
+            "type": "artist",
+            "uri": "spotify:artist:7Dasxr6NQ6uRSEFYFjNdzn"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 217080,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USA371688907"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7cCTmJUgZos1EAc1h79JmQ"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7cCTmJUgZos1EAc1h79JmQ",
+        "id": "7cCTmJUgZos1EAc1h79JmQ",
+        "is_local": false,
+        "is_playable": true,
+        "name": "L'italiano",
+        "popularity": 24,
+        "preview_url": null,
+        "track_number": 6,
+        "type": "track",
+        "uri": "spotify:track:7cCTmJUgZos1EAc1h79JmQ"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3ZdUdqrBgAe1ZQDgjME1fO"
+          },
+          "href": "https://api.spotify.com/v1/albums/3ZdUdqrBgAe1ZQDgjME1fO",
+          "id": "3ZdUdqrBgAe1ZQDgjME1fO",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273421eed153963ecd1d3a0e3b8"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02421eed153963ecd1d3a0e3b8"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851421eed153963ecd1d3a0e3b8"
+            }
+          ],
+          "is_playable": true,
+          "name": "Musica Italiana Vol 10",
+          "release_date": "2006-01-24",
+          "release_date_precision": "day",
+          "total_tracks": 18,
+          "type": "album",
+          "uri": "spotify:album:3ZdUdqrBgAe1ZQDgjME1fO"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/37r3ZUhErh0QPJENMsAPBG"
+            },
+            "href": "https://api.spotify.com/v1/artists/37r3ZUhErh0QPJENMsAPBG",
+            "id": "37r3ZUhErh0QPJENMsAPBG",
+            "name": "Salvatore Adamo",
+            "type": "artist",
+            "uri": "spotify:artist:37r3ZUhErh0QPJENMsAPBG"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 189358,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "USA370545965"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0gAKvCFVQDez7ABmM4ZaBQ"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0gAKvCFVQDez7ABmM4ZaBQ",
+        "id": "0gAKvCFVQDez7ABmM4ZaBQ",
+        "is_local": false,
+        "is_playable": true,
+        "name": "La notte",
+        "popularity": 23,
+        "preview_url": null,
+        "track_number": 11,
+        "type": "track",
+        "uri": "spotify:track:0gAKvCFVQDez7ABmM4ZaBQ"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/3RhgRrK9gcQECPrCTsEdQl"
+          },
+          "href": "https://api.spotify.com/v1/albums/3RhgRrK9gcQECPrCTsEdQl",
+          "id": "3RhgRrK9gcQECPrCTsEdQl",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27361a21ccaa195cabf74cef7cc"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0261a21ccaa195cabf74cef7cc"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485161a21ccaa195cabf74cef7cc"
+            }
+          ],
+          "is_playable": true,
+          "name": "Musica italiana per l'estate",
+          "release_date": "2023-06-30",
+          "release_date_precision": "day",
+          "total_tracks": 22,
+          "type": "album",
+          "uri": "spotify:album:3RhgRrK9gcQECPrCTsEdQl"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/72A0Z8q8NiochyK9gUHpCR"
+            },
+            "href": "https://api.spotify.com/v1/artists/72A0Z8q8NiochyK9gUHpCR",
+            "id": "72A0Z8q8NiochyK9gUHpCR",
+            "name": "The Kolors",
+            "type": "artist",
+            "uri": "spotify:artist:72A0Z8q8NiochyK9gUHpCR"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 199512,
+        "explicit": true,
+        "external_ids": {
+          "isrc": "ITQ002300342"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/0Iq9EZTl7TMjcIIC29Nfko"
+        },
+        "href": "https://api.spotify.com/v1/tracks/0Iq9EZTl7TMjcIIC29Nfko",
+        "id": "0Iq9EZTl7TMjcIIC29Nfko",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Italodisco",
+        "popularity": 22,
+        "preview_url": null,
+        "track_number": 4,
+        "type": "track",
+        "uri": "spotify:track:0Iq9EZTl7TMjcIIC29Nfko"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/4UvgFRfpxDJLmwO57wEPPz"
+          },
+          "href": "https://api.spotify.com/v1/albums/4UvgFRfpxDJLmwO57wEPPz",
+          "id": "4UvgFRfpxDJLmwO57wEPPz",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b2739754806f0ce9d1ef33dd1a13"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e029754806f0ce9d1ef33dd1a13"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d000048519754806f0ce9d1ef33dd1a13"
+            }
+          ],
+          "is_playable": true,
+          "name": "Musica Italiana",
+          "release_date": "2013-03-22",
+          "release_date_precision": "day",
+          "total_tracks": 16,
+          "type": "album",
+          "uri": "spotify:album:4UvgFRfpxDJLmwO57wEPPz"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0F67dTtrz3yA4UxAsLy0S8"
+            },
+            "href": "https://api.spotify.com/v1/artists/0F67dTtrz3yA4UxAsLy0S8",
+            "id": "0F67dTtrz3yA4UxAsLy0S8",
+            "name": "Rico Grandi",
+            "type": "artist",
+            "uri": "spotify:artist:0F67dTtrz3yA4UxAsLy0S8"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 190959,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "DEP060300006"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/7rwHd19LkVO65ku8iv9a7g"
+        },
+        "href": "https://api.spotify.com/v1/tracks/7rwHd19LkVO65ku8iv9a7g",
+        "id": "7rwHd19LkVO65ku8iv9a7g",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Marina",
+        "popularity": 8,
+        "preview_url": null,
+        "track_number": 10,
+        "type": "track",
+        "uri": "spotify:track:7rwHd19LkVO65ku8iv9a7g"
+      },
+      {
+        "album": {
+          "album_type": "album",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1XviEvQtSnTPeUc7z8XblO"
+              },
+              "href": "https://api.spotify.com/v1/artists/1XviEvQtSnTPeUc7z8XblO",
+              "id": "1XviEvQtSnTPeUc7z8XblO",
+              "name": "Bruno Ferrara",
+              "type": "artist",
+              "uri": "spotify:artist:1XviEvQtSnTPeUc7z8XblO"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1W77Mu7xV1mTyVOiD1DVjX"
+          },
+          "href": "https://api.spotify.com/v1/albums/1W77Mu7xV1mTyVOiD1DVjX",
+          "id": "1W77Mu7xV1mTyVOiD1DVjX",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f77cb7c4b20db732f5c5d700"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f77cb7c4b20db732f5c5d700"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f77cb7c4b20db732f5c5d700"
+            }
+          ],
+          "is_playable": true,
+          "name": "TEMPO D'AMORE",
+          "release_date": "2011-07-29",
+          "release_date_precision": "day",
+          "total_tracks": 13,
+          "type": "album",
+          "uri": "spotify:album:1W77Mu7xV1mTyVOiD1DVjX"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1XviEvQtSnTPeUc7z8XblO"
+            },
+            "href": "https://api.spotify.com/v1/artists/1XviEvQtSnTPeUc7z8XblO",
+            "id": "1XviEvQtSnTPeUc7z8XblO",
+            "name": "Bruno Ferrara",
+            "type": "artist",
+            "uri": "spotify:artist:1XviEvQtSnTPeUc7z8XblO"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 182533,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "DEQ121113052"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/3Yg0ZrysOCBRMe3WTuxnr7"
+        },
+        "href": "https://api.spotify.com/v1/tracks/3Yg0ZrysOCBRMe3WTuxnr7",
+        "id": "3Yg0ZrysOCBRMe3WTuxnr7",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Musica Italiana - Deutsch-italienische version",
+        "popularity": 5,
+        "preview_url": null,
+        "track_number": 13,
+        "type": "track",
+        "uri": "spotify:track:3Yg0ZrysOCBRMe3WTuxnr7"
+      },
+      {
+        "album": {
+          "album_type": "compilation",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+              },
+              "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+              "id": "0LyfQWJT6nXafLPZqxe9Of",
+              "name": "Various Artists",
+              "type": "artist",
+              "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+            }
+          ],
+          "external_urls": {
+            "spotify": "https://open.spotify.com/album/1xnLEEXVqDIdcErH761vAF"
+          },
+          "href": "https://api.spotify.com/v1/albums/1xnLEEXVqDIdcErH761vAF",
+          "id": "1xnLEEXVqDIdcErH761vAF",
+          "images": [
+            {
+              "height": 640,
+              "width": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273524603963ee35d5a052298b5"
+            },
+            {
+              "height": 300,
+              "width": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02524603963ee35d5a052298b5"
+            },
+            {
+              "height": 64,
+              "width": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851524603963ee35d5a052298b5"
+            }
+          ],
+          "is_playable": true,
+          "name": "Musica italiana estiva",
+          "release_date": "2024-06-07",
+          "release_date_precision": "day",
+          "total_tracks": 32,
+          "type": "album",
+          "uri": "spotify:album:1xnLEEXVqDIdcErH761vAF"
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/725KKhVCSCQbYkZBptBTfg"
+            },
+            "href": "https://api.spotify.com/v1/artists/725KKhVCSCQbYkZBptBTfg",
+            "id": "725KKhVCSCQbYkZBptBTfg",
+            "name": "Baby K",
+            "type": "artist",
+            "uri": "spotify:artist:725KKhVCSCQbYkZBptBTfg"
+          }
+        ],
+        "disc_number": 1,
+        "duration_ms": 206333,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "ITB001800326"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/track/23jlNUcZklF6SQ8k61pvJn"
+        },
+        "href": "https://api.spotify.com/v1/tracks/23jlNUcZklF6SQ8k61pvJn",
+        "id": "23jlNUcZklF6SQ8k61pvJn",
+        "is_local": false,
+        "is_playable": true,
+        "name": "Da zero a cento",
+        "popularity": 4,
+        "preview_url": null,
+        "track_number": 27,
+        "type": "track",
+        "uri": "spotify:track:23jlNUcZklF6SQ8k61pvJn"
+      }
+    ]
+  }
+}

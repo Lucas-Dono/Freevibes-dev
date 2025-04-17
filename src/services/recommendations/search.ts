@@ -54,7 +54,6 @@ export async function searchMultiSource(
       // Intentar obtener de caché primero
       const cachedData = await recommendationsCache.get(cacheKey);
       if (cachedData) {
-        console.log(`[Search] Cache hit para: "${query}"`);
         const tracks = JSON.parse(cachedData);
         
         // Ordenar por completitud si estamos usando el orquestador
@@ -85,7 +84,6 @@ export async function searchMultiSource(
     // Si tenemos información de sección, usar la distribución optimizada
     if (options.section) {
       apiDistribution = loadOrchestrator.getApiDistribution(asSectionType(options.section));
-      console.log(`[Search] Usando distribución optimizada para sección ${options.section}:`, apiDistribution);
     }
     
     // Determinar fuentes a utilizar basado en la disponibilidad y distribución
@@ -106,7 +104,6 @@ export async function searchMultiSource(
       if (tracks.length > 0) {
         results = tracks;
         sourcesUsed[preferredSource as keyof typeof sourcesUsed] = true;
-        console.log(`[Search] Encontrados ${tracks.length} resultados en ${preferredSource}`);
       }
     }
 
@@ -134,7 +131,6 @@ export async function searchMultiSource(
               }),
             new Promise<{ source: string; tracks: Track[] }>(resolve => 
               setTimeout(() => {
-                console.log(`[Search] Timeout para ${source}`);
                 resolve({ source, tracks: [] });
               }, timeouts[source as keyof typeof timeouts])
             )
@@ -148,7 +144,6 @@ export async function searchMultiSource(
         for (const { source, tracks } of sourceResults) {
           if (tracks.length > 0) {
             sourcesUsed[source as keyof typeof sourcesUsed] = true;
-            console.log(`[Search] Encontrados ${tracks.length} resultados en ${source}`);
             
             if (options.combineResults) {
               // Añadir a los resultados existentes
@@ -248,7 +243,6 @@ export async function searchMultiSource(
     
     // Si quedan muy pocos resultados después del filtrado, buscar en Spotify como fallback
     if (results.length < Math.min(5, limit) && !query.includes('spotify:')) {
-      console.log(`[Search] Resultados insuficientes (${results.length}) después del filtrado. Buscando en Spotify como fallback.`);
       
       try {
         // Intentar una búsqueda directa en Spotify
@@ -312,7 +306,6 @@ export async function searchMultiSource(
     if (!useCache) {
       const cachedData = await recommendationsCache.get(cacheKey);
       if (cachedData) {
-        console.log(`[Search] Usando caché como fallback para: "${query}"`);
         return JSON.parse(cachedData);
       }
     }
@@ -337,7 +330,6 @@ async function searchBySource(
   options: SearchOptions
 ): Promise<Track[]> {
   try {
-    console.log(`[Search] Buscando en ${source}: "${query}"`);
     
     switch (source.toLowerCase()) {
       case 'spotify': {
@@ -531,7 +523,6 @@ async function cacheTracks(query: string, tracks: Track[], options: SearchOption
  * @returns Lista de canciones simuladas
  */
 function generateMockSearchResults(query: string, limit: number, options: SearchOptions): Track[] {
-  console.log(`[Search] Generando resultados simulados para: ${query}`);
   
   const mockTracks: Track[] = [];
   const count = Math.min(limit, 25); // Aumentamos el límite para mayor variedad
@@ -677,4 +668,4 @@ function generateMockSearchResults(query: string, limit: number, options: Search
   }
   
   return mockTracks;
-} 
+}

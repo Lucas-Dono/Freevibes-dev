@@ -114,7 +114,6 @@ export async function getRecommendationsByGenre(
               ? track.image[2]['#text']
               : selectGenreImage(normalizedGenre),
           duration: 210000, // Last.fm no proporciona duración, aproximamos 3:30
-          source: 'lastfm',
           sourceUrl: track.url,
           spotifyId: undefined,
           youtubeId: undefined
@@ -484,7 +483,6 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       albumCover: coverImage,
       cover: coverImage,
       duration: 180000 + (i * 15000), // Entre 3 y 5 minutos
-      source: 'lastfm',
       sourceUrl: 'https://www.last.fm',
       spotifyId: undefined,
       youtubeId: undefined

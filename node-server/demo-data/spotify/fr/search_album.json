@@ -1,0 +1,1046 @@
+{
+  "albums": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=chanson%20fran%C3%A7aise&type=album&market=FR&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=chanson%20fran%C3%A7aise&type=album&market=FR&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 21,
+    "items": [
+      {
+        "album_type": "compilation",
+        "total_tracks": 51,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2VgxRUxFu728zUn5EwOvfq"
+        },
+        "href": "https://api.spotify.com/v1/albums/2VgxRUxFu728zUn5EwOvfq",
+        "id": "2VgxRUxFu728zUn5EwOvfq",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2734029fce03d0de82173225642",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e024029fce03d0de82173225642",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048514029fce03d0de82173225642",
+            "width": 64
+          }
+        ],
+        "name": "Chanson française pour Noël",
+        "release_date": "2024-11-15",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2VgxRUxFu728zUn5EwOvfq",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "single",
+        "total_tracks": 1,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5w4k9Vz93h1ZJKRdp2zFn6"
+        },
+        "href": "https://api.spotify.com/v1/albums/5w4k9Vz93h1ZJKRdp2zFn6",
+        "id": "5w4k9Vz93h1ZJKRdp2zFn6",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27336703fefa1e2c2e529fef75c",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0236703fefa1e2c2e529fef75c",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485136703fefa1e2c2e529fef75c",
+            "width": 64
+          }
+        ],
+        "name": "Nuits Françaises",
+        "release_date": "2023-10-13",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5w4k9Vz93h1ZJKRdp2zFn6",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7yyIR9coVU196KLJT9Mj6T"
+            },
+            "href": "https://api.spotify.com/v1/artists/7yyIR9coVU196KLJT9Mj6T",
+            "id": "7yyIR9coVU196KLJT9Mj6T",
+            "name": "Chansons d´Accordeon",
+            "type": "artist",
+            "uri": "spotify:artist:7yyIR9coVU196KLJT9Mj6T"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1uV6kr7RrDmiffQoxLOg8s"
+        },
+        "href": "https://api.spotify.com/v1/albums/1uV6kr7RrDmiffQoxLOg8s",
+        "id": "1uV6kr7RrDmiffQoxLOg8s",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d9c128ff1209802afde47fd6",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d9c128ff1209802afde47fd6",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d9c128ff1209802afde47fd6",
+            "width": 64
+          }
+        ],
+        "name": "Isa",
+        "release_date": "2021-10-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1uV6kr7RrDmiffQoxLOg8s",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 41,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/05YgluUGnovqiIPC7zOnpG"
+        },
+        "href": "https://api.spotify.com/v1/albums/05YgluUGnovqiIPC7zOnpG",
+        "id": "05YgluUGnovqiIPC7zOnpG",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273992e35a05db27b71a1bf947d",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02992e35a05db27b71a1bf947d",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851992e35a05db27b71a1bf947d",
+            "width": 64
+          }
+        ],
+        "name": "Tubes chansons française",
+        "release_date": "2020-05-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:05YgluUGnovqiIPC7zOnpG",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 39,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3skN1JzAWSzzeeXe6Kxvna"
+        },
+        "href": "https://api.spotify.com/v1/albums/3skN1JzAWSzzeeXe6Kxvna",
+        "id": "3skN1JzAWSzzeeXe6Kxvna",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737fe0b9c3098a70df0b8fc5a5",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e027fe0b9c3098a70df0b8fc5a5",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048517fe0b9c3098a70df0b8fc5a5",
+            "width": 64
+          }
+        ],
+        "name": "Hits chanson française",
+        "release_date": "2020-05-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3skN1JzAWSzzeeXe6Kxvna",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 22,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6wligYG6Z0IbV1vMlvGQcU"
+        },
+        "href": "https://api.spotify.com/v1/albums/6wligYG6Z0IbV1vMlvGQcU",
+        "id": "6wligYG6Z0IbV1vMlvGQcU",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2731563071054d202423b9b24a3",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e021563071054d202423b9b24a3",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048511563071054d202423b9b24a3",
+            "width": 64
+          }
+        ],
+        "name": "Chanson française 90",
+        "release_date": "2018-07-20",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6wligYG6Z0IbV1vMlvGQcU",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4wXhQ2XK2QDb2KS1SkBmnm"
+            },
+            "href": "https://api.spotify.com/v1/artists/4wXhQ2XK2QDb2KS1SkBmnm",
+            "id": "4wXhQ2XK2QDb2KS1SkBmnm",
+            "name": "Tubes variété française",
+            "type": "artist",
+            "uri": "spotify:artist:4wXhQ2XK2QDb2KS1SkBmnm"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+            },
+            "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+            "id": "35nUzvEFgf2TzqnRdIMYjg",
+            "name": "Variété Française",
+            "type": "artist",
+            "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 20,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5JICpzmzPXxmervdTPFaQL"
+        },
+        "href": "https://api.spotify.com/v1/albums/5JICpzmzPXxmervdTPFaQL",
+        "id": "5JICpzmzPXxmervdTPFaQL",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2738b21dafb16ef74b2b2661487",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e028b21dafb16ef74b2b2661487",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048518b21dafb16ef74b2b2661487",
+            "width": 64
+          }
+        ],
+        "name": "On aime la variété française",
+        "release_date": "2018-04-14",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5JICpzmzPXxmervdTPFaQL",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+            },
+            "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+            "id": "35nUzvEFgf2TzqnRdIMYjg",
+            "name": "Variété Française",
+            "type": "artist",
+            "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/00Kwx4BvhjavOQeeG9gZjw"
+            },
+            "href": "https://api.spotify.com/v1/artists/00Kwx4BvhjavOQeeG9gZjw",
+            "id": "00Kwx4BvhjavOQeeG9gZjw",
+            "name": "Chansons Françaises",
+            "type": "artist",
+            "uri": "spotify:artist:00Kwx4BvhjavOQeeG9gZjw"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0zWK4H1DjIUL0WXrRZuj52"
+            },
+            "href": "https://api.spotify.com/v1/artists/0zWK4H1DjIUL0WXrRZuj52",
+            "id": "0zWK4H1DjIUL0WXrRZuj52",
+            "name": "French Café Ensemble",
+            "type": "artist",
+            "uri": "spotify:artist:0zWK4H1DjIUL0WXrRZuj52"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 16,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2CASpqSuaXRLhLOQQNFYgC"
+        },
+        "href": "https://api.spotify.com/v1/albums/2CASpqSuaXRLhLOQQNFYgC",
+        "id": "2CASpqSuaXRLhLOQQNFYgC",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e6544d36376031b71cd604bb",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e6544d36376031b71cd604bb",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e6544d36376031b71cd604bb",
+            "width": 64
+          }
+        ],
+        "name": "Chansons françaises classiques et populaires",
+        "release_date": "2018-03-26",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2CASpqSuaXRLhLOQQNFYgC",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+            },
+            "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+            "id": "35nUzvEFgf2TzqnRdIMYjg",
+            "name": "Variété Française",
+            "type": "artist",
+            "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/00Kwx4BvhjavOQeeG9gZjw"
+            },
+            "href": "https://api.spotify.com/v1/artists/00Kwx4BvhjavOQeeG9gZjw",
+            "id": "00Kwx4BvhjavOQeeG9gZjw",
+            "name": "Chansons Françaises",
+            "type": "artist",
+            "uri": "spotify:artist:00Kwx4BvhjavOQeeG9gZjw"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/12yskxAZUBU9h3OhHp2lu9"
+            },
+            "href": "https://api.spotify.com/v1/artists/12yskxAZUBU9h3OhHp2lu9",
+            "id": "12yskxAZUBU9h3OhHp2lu9",
+            "name": "Compilation Titres cultes de la Chanson Française",
+            "type": "artist",
+            "uri": "spotify:artist:12yskxAZUBU9h3OhHp2lu9"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 20,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2D2YcLslG12mbwUxagG4jC"
+        },
+        "href": "https://api.spotify.com/v1/albums/2D2YcLslG12mbwUxagG4jC",
+        "id": "2D2YcLslG12mbwUxagG4jC",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e1106f4035a8cc008a525174",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e1106f4035a8cc008a525174",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e1106f4035a8cc008a525174",
+            "width": 64
+          }
+        ],
+        "name": "Chansons françaises pour faire la fête",
+        "release_date": "2017-06-23",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2D2YcLslG12mbwUxagG4jC",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/35nUzvEFgf2TzqnRdIMYjg"
+            },
+            "href": "https://api.spotify.com/v1/artists/35nUzvEFgf2TzqnRdIMYjg",
+            "id": "35nUzvEFgf2TzqnRdIMYjg",
+            "name": "Variété Française",
+            "type": "artist",
+            "uri": "spotify:artist:35nUzvEFgf2TzqnRdIMYjg"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/00Kwx4BvhjavOQeeG9gZjw"
+            },
+            "href": "https://api.spotify.com/v1/artists/00Kwx4BvhjavOQeeG9gZjw",
+            "id": "00Kwx4BvhjavOQeeG9gZjw",
+            "name": "Chansons Françaises",
+            "type": "artist",
+            "uri": "spotify:artist:00Kwx4BvhjavOQeeG9gZjw"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0zWK4H1DjIUL0WXrRZuj52"
+            },
+            "href": "https://api.spotify.com/v1/artists/0zWK4H1DjIUL0WXrRZuj52",
+            "id": "0zWK4H1DjIUL0WXrRZuj52",
+            "name": "French Café Ensemble",
+            "type": "artist",
+            "uri": "spotify:artist:0zWK4H1DjIUL0WXrRZuj52"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 29,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5kKp0z0LOyeaj04lqlrm9n"
+        },
+        "href": "https://api.spotify.com/v1/albums/5kKp0z0LOyeaj04lqlrm9n",
+        "id": "5kKp0z0LOyeaj04lqlrm9n",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737f4c637869f34801f8d59d57",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e027f4c637869f34801f8d59d57",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048517f4c637869f34801f8d59d57",
+            "width": 64
+          }
+        ],
+        "name": "Chanson française",
+        "release_date": "2015-06-15",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5kKp0z0LOyeaj04lqlrm9n",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7jD2kuFguuwFISy4F5KfGX"
+            },
+            "href": "https://api.spotify.com/v1/artists/7jD2kuFguuwFISy4F5KfGX",
+            "id": "7jD2kuFguuwFISy4F5KfGX",
+            "name": "Jacqueline François",
+            "type": "artist",
+            "uri": "spotify:artist:7jD2kuFguuwFISy4F5KfGX"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7iXV74Ij5lEvt6Msi4e12z"
+        },
+        "href": "https://api.spotify.com/v1/albums/7iXV74Ij5lEvt6Msi4e12z",
+        "id": "7iXV74Ij5lEvt6Msi4e12z",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27343ddfb314d892a8f3864a57f",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0243ddfb314d892a8f3864a57f",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485143ddfb314d892a8f3864a57f",
+            "width": 64
+          }
+        ],
+        "name": "Paris",
+        "release_date": "2014-11-07",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7iXV74Ij5lEvt6Msi4e12z",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6qYw0ETyjvdY8neuXBIdwO"
+        },
+        "href": "https://api.spotify.com/v1/albums/6qYw0ETyjvdY8neuXBIdwO",
+        "id": "6qYw0ETyjvdY8neuXBIdwO",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2734c79363a6810ba2cf1414b26",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e024c79363a6810ba2cf1414b26",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048514c79363a6810ba2cf1414b26",
+            "width": 64
+          }
+        ],
+        "name": "Paris",
+        "release_date": "2014-11-07",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6qYw0ETyjvdY8neuXBIdwO",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 15,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1qyUp2URn7JuLKCfWlZ958"
+        },
+        "href": "https://api.spotify.com/v1/albums/1qyUp2URn7JuLKCfWlZ958",
+        "id": "1qyUp2URn7JuLKCfWlZ958",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273fd35fd2e9019d03dd80ae360",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02fd35fd2e9019d03dd80ae360",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851fd35fd2e9019d03dd80ae360",
+            "width": 64
+          }
+        ],
+        "name": "Chanson Française Vol. 1",
+        "release_date": "2014-04-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1qyUp2URn7JuLKCfWlZ958",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5rTZdkPXMfrsJU8h46tkiV"
+            },
+            "href": "https://api.spotify.com/v1/artists/5rTZdkPXMfrsJU8h46tkiV",
+            "id": "5rTZdkPXMfrsJU8h46tkiV",
+            "name": "Jean-Pierre Haeck",
+            "type": "artist",
+            "uri": "spotify:artist:5rTZdkPXMfrsJU8h46tkiV"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/70KEZdpLENuFDPYMlDoaub"
+            },
+            "href": "https://api.spotify.com/v1/artists/70KEZdpLENuFDPYMlDoaub",
+            "id": "70KEZdpLENuFDPYMlDoaub",
+            "name": "Toni Scholl",
+            "type": "artist",
+            "uri": "spotify:artist:70KEZdpLENuFDPYMlDoaub"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0YtDGMrCT5SCShRF2xyPxp"
+            },
+            "href": "https://api.spotify.com/v1/artists/0YtDGMrCT5SCShRF2xyPxp",
+            "id": "0YtDGMrCT5SCShRF2xyPxp",
+            "name": "Alain Crepin",
+            "type": "artist",
+            "uri": "spotify:artist:0YtDGMrCT5SCShRF2xyPxp"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/654Os8oOtCNlMHvh7lZXKy"
+            },
+            "href": "https://api.spotify.com/v1/artists/654Os8oOtCNlMHvh7lZXKy",
+            "id": "654Os8oOtCNlMHvh7lZXKy",
+            "name": "Christian Lombardi",
+            "type": "artist",
+            "uri": "spotify:artist:654Os8oOtCNlMHvh7lZXKy"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 23,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1ncUGcxDLDqiRAZYCKwXlM"
+        },
+        "href": "https://api.spotify.com/v1/albums/1ncUGcxDLDqiRAZYCKwXlM",
+        "id": "1ncUGcxDLDqiRAZYCKwXlM",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e835830e6607f9e807c5ef43",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e835830e6607f9e807c5ef43",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e835830e6607f9e807c5ef43",
+            "width": 64
+          }
+        ],
+        "name": "Recto verso (Edition Collector)",
+        "release_date": "2013-05-10",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1ncUGcxDLDqiRAZYCKwXlM",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 17,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0rFKJTkteZamC0YcH3ZWf4"
+        },
+        "href": "https://api.spotify.com/v1/albums/0rFKJTkteZamC0YcH3ZWf4",
+        "id": "0rFKJTkteZamC0YcH3ZWf4",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273a26dc692f35673eb199c446f",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02a26dc692f35673eb199c446f",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851a26dc692f35673eb199c446f",
+            "width": 64
+          }
+        ],
+        "name": "Recto verso (Deluxe)",
+        "release_date": "2013-05-10",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0rFKJTkteZamC0YcH3ZWf4",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0VeKwTXHqVb5fHj2SaNXwx"
+        },
+        "href": "https://api.spotify.com/v1/albums/0VeKwTXHqVb5fHj2SaNXwx",
+        "id": "0VeKwTXHqVb5fHj2SaNXwx",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27340e73ae768ae32db1c605783",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0240e73ae768ae32db1c605783",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485140e73ae768ae32db1c605783",
+            "width": 64
+          }
+        ],
+        "name": "Little French Songs (Deluxe Version Without Videos)",
+        "release_date": "2013-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0VeKwTXHqVb5fHj2SaNXwx",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1HVwzNriKEjaeE06okqSpx"
+            },
+            "href": "https://api.spotify.com/v1/artists/1HVwzNriKEjaeE06okqSpx",
+            "id": "1HVwzNriKEjaeE06okqSpx",
+            "name": "Carla Bruni",
+            "type": "artist",
+            "uri": "spotify:artist:1HVwzNriKEjaeE06okqSpx"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6MuoqipFgorIZEYwGWEFAU"
+        },
+        "href": "https://api.spotify.com/v1/albums/6MuoqipFgorIZEYwGWEFAU",
+        "id": "6MuoqipFgorIZEYwGWEFAU",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2733b5969aba116e8248a3e6369",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e023b5969aba116e8248a3e6369",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048513b5969aba116e8248a3e6369",
+            "width": 64
+          }
+        ],
+        "name": "Zaz",
+        "release_date": "2010-05-10",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6MuoqipFgorIZEYwGWEFAU",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mbgj8ERPs8lWi7t5cYrdy"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mbgj8ERPs8lWi7t5cYrdy",
+            "id": "1mbgj8ERPs8lWi7t5cYrdy",
+            "name": "Zaz",
+            "type": "artist",
+            "uri": "spotify:artist:1mbgj8ERPs8lWi7t5cYrdy"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 23,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3NV5eSC7lHEqYcbpfwBwhe"
+        },
+        "href": "https://api.spotify.com/v1/albums/3NV5eSC7lHEqYcbpfwBwhe",
+        "id": "3NV5eSC7lHEqYcbpfwBwhe",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d2165bc9dfecf9099dca7f65",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d2165bc9dfecf9099dca7f65",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d2165bc9dfecf9099dca7f65",
+            "width": 64
+          }
+        ],
+        "name": "Chanson Française",
+        "release_date": "2010-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3NV5eSC7lHEqYcbpfwBwhe",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5W2azFmEww74Bkmp2QUMMu"
+            },
+            "href": "https://api.spotify.com/v1/artists/5W2azFmEww74Bkmp2QUMMu",
+            "id": "5W2azFmEww74Bkmp2QUMMu",
+            "name": "Boris Vian",
+            "type": "artist",
+            "uri": "spotify:artist:5W2azFmEww74Bkmp2QUMMu"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/60l5j3bSkMidOUgiX8m5sD"
+        },
+        "href": "https://api.spotify.com/v1/albums/60l5j3bSkMidOUgiX8m5sD",
+        "id": "60l5j3bSkMidOUgiX8m5sD",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d2ad600632db1bf5947cd890",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d2ad600632db1bf5947cd890",
+            "width": 64
+          }
+        ],
+        "name": "La bohème",
+        "release_date": "1966-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:60l5j3bSkMidOUgiX8m5sD",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2JHdzrhao8eRwM49mX63Vt"
+        },
+        "href": "https://api.spotify.com/v1/albums/2JHdzrhao8eRwM49mX63Vt",
+        "id": "2JHdzrhao8eRwM49mX63Vt",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2732ea00f484786bc1829265088",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e022ea00f484786bc1829265088",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048512ea00f484786bc1829265088",
+            "width": 64
+          }
+        ],
+        "name": "Canta En Español",
+        "release_date": "1965-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2JHdzrhao8eRwM49mX63Vt",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2hgP9Ap2tc10R5jrQaEpMT"
+            },
+            "href": "https://api.spotify.com/v1/artists/2hgP9Ap2tc10R5jrQaEpMT",
+            "id": "2hgP9Ap2tc10R5jrQaEpMT",
+            "name": "Charles Aznavour",
+            "type": "artist",
+            "uri": "spotify:artist:2hgP9Ap2tc10R5jrQaEpMT"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 18,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7L0nSUsf4eVG6HDpbN4Ye4"
+        },
+        "href": "https://api.spotify.com/v1/albums/7L0nSUsf4eVG6HDpbN4Ye4",
+        "id": "7L0nSUsf4eVG6HDpbN4Ye4",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27339828f776112cb1da8028537",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0239828f776112cb1da8028537",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485139828f776112cb1da8028537",
+            "width": 64
+          }
+        ],
+        "name": "Oh quelle nuit + 17 succès de Sacha Distel (Chanson française)",
+        "release_date": "1959",
+        "release_date_precision": "year",
+        "type": "album",
+        "uri": "spotify:album:7L0nSUsf4eVG6HDpbN4Ye4",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1si0MhutSLRlQbxiBV08tz"
+            },
+            "href": "https://api.spotify.com/v1/artists/1si0MhutSLRlQbxiBV08tz",
+            "id": "1si0MhutSLRlQbxiBV08tz",
+            "name": "Sacha Distel",
+            "type": "artist",
+            "uri": "spotify:artist:1si0MhutSLRlQbxiBV08tz"
+          }
+        ]
+      }
+    ]
+  }
+}

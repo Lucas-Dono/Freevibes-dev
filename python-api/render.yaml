@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: musicverse-python-api
+    name: freevibes-python-api
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app

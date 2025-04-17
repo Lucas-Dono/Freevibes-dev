@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSpotify } from '@/lib/spotify';
 import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 // Marcar esta ruta como dinámica para evitar errores de compilación estática
 export const dynamic = 'force-dynamic';
@@ -8,7 +10,95 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     console.log("API: Iniciando solicitud para obtener géneros del usuario");
-    const sp = await getSpotify();
+    
+    // Verificar si estamos en modo demo desde cookies o headers
+    const cookieStore = cookies();
+    const isDemoModeCookie = cookieStore.get('demo-mode')?.value === 'true' || 
+                            cookieStore.get('demoMode')?.value === 'true';
+    const isDemoModeHeader = request.headers.get('x-demo-mode') === 'true';
+    const isDemoMode = isDemoModeCookie || isDemoModeHeader;
+    
+    if (isDemoMode) {
+      console.log("API: Solicitud en modo demo, devolviendo géneros predefinidos");
+      
+      // Crear un conjunto de géneros predefinidos para el modo demo
+      const demoGenres = {
+        "pop": 15,
+        "latin pop": 12,
+        "dance pop": 10,
+        "urban contemporary": 9,
+        "reggaeton": 8,
+        "latin urban": 7,
+        "trap latino": 6,
+        "tropical house": 5,
+        "edm": 5,
+        "r&b": 4,
+        "hip hop": 4,
+        "indie pop": 3,
+        "rock": 3,
+        "alternative rock": 2,
+        "electronic": 2
+      };
+      
+      // Crear top géneros en formato ordenado
+      const topGenres = Object.entries(demoGenres)
+        .map(([name, count]) => ({
+          name,
+          count,
+          percentage: Math.round((count / 20) * 100)
+        }))
+        .sort((a, b) => b.count - a.count);
+      
+      // Devolver resultado estructurado para modo demo
+      return NextResponse.json({
+        success: true,
+        message: "Géneros obtenidos correctamente en modo demo",
+        topGenres: topGenres,
+        allGenres: demoGenres,
+        topArtists: [
+          {
+            id: "demo_artist_1",
+            name: "Bad Bunny",
+            genres: ["latin trap", "reggaeton", "trap latino"],
+            images: [{ url: "https://i.scdn.co/image/ab6761610000e5eb3bcf152e4f2387414ef5248d" }],
+            popularity: 98
+          },
+          {
+            id: "demo_artist_2",
+            name: "Dua Lipa",
+            genres: ["dance pop", "pop", "uk pop"],
+            images: [{ url: "https://i.scdn.co/image/ab6761610000e5eb54f401f09aeefe19d318a8b4" }],
+            popularity: 95
+          },
+          {
+            id: "demo_artist_3",
+            name: "Taylor Swift",
+            genres: ["pop", "dance pop"],
+            images: [{ url: "https://i.scdn.co/image/ab6761610000e5eb5a00969a4698c3bc19d84156" }],
+            popularity: 99
+          }
+        ],
+        source: "modo demo",
+        hasUserInput: false
+      });
+    }
+    
+    // Obtener la sesión del servidor para acceso al token (solo si no estamos en modo demo)
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.accessToken) {
+      console.error("API: No hay sesión de usuario o token de acceso");
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Usuario no autenticado',
+          hasUserInput: true
+        }, 
+        { status: 401 }
+      );
+    }
+    
+    const sp = await getSpotify(session.accessToken);
     const { searchParams } = new URL(request.url);
 
     // Parámetros

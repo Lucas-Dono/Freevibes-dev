@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/app/context/AuthContext';
+import { useSession } from 'next-auth/react';
 
 export interface Playlist {
   id: string;
@@ -59,7 +59,8 @@ interface UseProfileReturn {
 }
 
 export default function useProfile(): UseProfileReturn {
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

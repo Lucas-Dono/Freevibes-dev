@@ -1,0 +1,707 @@
+{
+  "playlists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=chanson%20fran%C3%A7aise&type=playlist&market=FR&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=chanson%20fran%C3%A7aise&type=playlist&market=FR&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 902,
+    "items": [
+      {
+        "collaborative": false,
+        "description": "Florilège Tricolore",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/71ozDqi1J7xzNqgC1QvpRi"
+        },
+        "href": "https://api.spotify.com/v1/playlists/71ozDqi1J7xzNqgC1QvpRi",
+        "id": "71ozDqi1J7xzNqgC1QvpRi",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da846871f0dadbf370b4c2ce2631",
+            "width": null
+          }
+        ],
+        "name": "TOP 100 Chansons Françaises 🇫🇷",
+        "owner": {
+          "display_name": "Alexandre M",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/amrotte932"
+          },
+          "href": "https://api.spotify.com/v1/users/amrotte932",
+          "id": "amrotte932",
+          "type": "user",
+          "uri": "spotify:user:amrotte932"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAEhym473WUbr0WCdU4ndiQ2pFHXrBN",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/71ozDqi1J7xzNqgC1QvpRi/tracks",
+          "total": 367
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:71ozDqi1J7xzNqgC1QvpRi"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0Gxir6hi6MrXcmOlSe1Crt"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0Gxir6hi6MrXcmOlSe1Crt",
+        "id": "0Gxir6hi6MrXcmOlSe1Crt",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da848fe159200a88fd54fd1f7a17",
+            "width": null
+          }
+        ],
+        "name": "Les 50 plus belles chansons Françaises",
+        "owner": {
+          "display_name": "Clément",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/11125780322"
+          },
+          "href": "https://api.spotify.com/v1/users/11125780322",
+          "id": "11125780322",
+          "type": "user",
+          "uri": "spotify:user:11125780322"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAbDVYBPVVR3M7sTz2ApKN/oGXWNht",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0Gxir6hi6MrXcmOlSe1Crt/tracks",
+          "total": 50
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0Gxir6hi6MrXcmOlSe1Crt"
+      },
+      null,
+      {
+        "collaborative": false,
+        "description": "Jacques Brel  -  Jean Ferrat  -   Georges Brassens  -Gilbert Bécaud  -  Georges Moustaki  -  Barbara  -  Serge Lama  -  Michel Sardou  -  Serge Réggiani  -  Charles Aznavour  - Claude Nougaro  - Jonnhy Hallyday ... ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/5COR8XymT384L8NMmqTvLf"
+        },
+        "href": "https://api.spotify.com/v1/playlists/5COR8XymT384L8NMmqTvLf",
+        "id": "5COR8XymT384L8NMmqTvLf",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e020a188c7abf4c383ceebc0862ab67616d00001e024528fa6df7a7ddf8dcd6b5d3ab67616d00001e0253ceb28b22edf58556dcc295ab67616d00001e02d7f83c0d85b59ac2e3ad722c",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e020a188c7abf4c383ceebc0862ab67616d00001e024528fa6df7a7ddf8dcd6b5d3ab67616d00001e0253ceb28b22edf58556dcc295ab67616d00001e02d7f83c0d85b59ac2e3ad722c",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e020a188c7abf4c383ceebc0862ab67616d00001e024528fa6df7a7ddf8dcd6b5d3ab67616d00001e0253ceb28b22edf58556dcc295ab67616d00001e02d7f83c0d85b59ac2e3ad722c",
+            "width": 60
+          }
+        ],
+        "name": "LES GRANDS CLASSIQUES DE LA CHANSON FRANCAISE",
+        "owner": {
+          "display_name": "tara65300",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/jrynglzozqb16de5nz8hkmysx"
+          },
+          "href": "https://api.spotify.com/v1/users/jrynglzozqb16de5nz8hkmysx",
+          "id": "jrynglzozqb16de5nz8hkmysx",
+          "type": "user",
+          "uri": "spotify:user:jrynglzozqb16de5nz8hkmysx"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAABhr12RSYpVfI/jK3AZYataDOQOVls",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/5COR8XymT384L8NMmqTvLf/tracks",
+          "total": 149
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:5COR8XymT384L8NMmqTvLf"
+      },
+      {
+        "collaborative": false,
+        "description": "Les standards &amp; les classiques de la chanson française. Hits &amp; tubes français. Chanteuses et chanteurs. Variété française, VF. Années 60. Années 70. Années 80. Années 90. Années 2000.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/7aUI6OUkeXotPRLPvN9IV6"
+        },
+        "href": "https://api.spotify.com/v1/playlists/7aUI6OUkeXotPRLPvN9IV6",
+        "id": "7aUI6OUkeXotPRLPvN9IV6",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8463954d8691440b525b3fb7af",
+            "width": null
+          }
+        ],
+        "name": "Chansons Françaises de Légende",
+        "owner": {
+          "display_name": "Topsify France",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/warnerfrspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/warnerfrspotify",
+          "id": "warnerfrspotify",
+          "type": "user",
+          "uri": "spotify:user:warnerfrspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAALekY39GweGmB6mywmHDv0tZrtocPt",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/7aUI6OUkeXotPRLPvN9IV6/tracks",
+          "total": 123
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:7aUI6OUkeXotPRLPvN9IV6"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0vLco226KKL73lU2tAP6sQ"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0vLco226KKL73lU2tAP6sQ",
+        "id": "0vLco226KKL73lU2tAP6sQ",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0211d79597d84e5bc40571a044ab67616d00001e024fbcdf2343a4b6a43754ad38ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02bb2ac59f3a2433c327477802",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0211d79597d84e5bc40571a044ab67616d00001e024fbcdf2343a4b6a43754ad38ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02bb2ac59f3a2433c327477802",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0211d79597d84e5bc40571a044ab67616d00001e024fbcdf2343a4b6a43754ad38ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02bb2ac59f3a2433c327477802",
+            "width": 60
+          }
+        ],
+        "name": "Las 30 Mejores canciones francesas",
+        "owner": {
+          "display_name": "fernando",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/j9t1vc3hax1rponcf7crihzo4"
+          },
+          "href": "https://api.spotify.com/v1/users/j9t1vc3hax1rponcf7crihzo4",
+          "id": "j9t1vc3hax1rponcf7crihzo4",
+          "type": "user",
+          "uri": "spotify:user:j9t1vc3hax1rponcf7crihzo4"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAJ7qdT56fYuR8q5ahpprXG5eeCeht",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0vLco226KKL73lU2tAP6sQ/tracks",
+          "total": 30
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0vLco226KKL73lU2tAP6sQ"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6CmPOD9fWycN7rnyuOHmej"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6CmPOD9fWycN7rnyuOHmej",
+        "id": "6CmPOD9fWycN7rnyuOHmej",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72cabb13e216bcf69317ba29fe9",
+            "width": null
+          }
+        ],
+        "name": "Canciones francesas 🇫🇷🔥",
+        "owner": {
+          "display_name": "lilbae",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/liloux92340"
+          },
+          "href": "https://api.spotify.com/v1/users/liloux92340",
+          "id": "liloux92340",
+          "type": "user",
+          "uri": "spotify:user:liloux92340"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAACNj1Aqh/lKgk4fm9Ba0U0k1o+4shC",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6CmPOD9fWycN7rnyuOHmej/tracks",
+          "total": 109
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6CmPOD9fWycN7rnyuOHmej"
+      },
+      {
+        "collaborative": false,
+        "description": "Chansons francaises toutes générations &#x2F;  blind test &#x2F; french classics songs &#x2F; old french songs &#x2F; classiques &#x2F; france hits &#x2F; hits années 60 à 2024 &#x2F; playlist toutes générations &#x2F; mix années &#x2F; musiques francaise &#x2F; soirée dansante &#x2F; vieilles musiques",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/7fMBx2JsFhflTakI8MzWnW"
+        },
+        "href": "https://api.spotify.com/v1/playlists/7fMBx2JsFhflTakI8MzWnW",
+        "id": "7fMBx2JsFhflTakI8MzWnW",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84820a2c75735b0d50146b9e53",
+            "width": null
+          }
+        ],
+        "name": "Chansons françaises 60-70-80-90-00-10-20",
+        "owner": {
+          "display_name": "xx",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/11155016204"
+          },
+          "href": "https://api.spotify.com/v1/users/11155016204",
+          "id": "11155016204",
+          "type": "user",
+          "uri": "spotify:user:11155016204"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAGp77rLYNxzHeRx7tcfea+fN2z456a",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/7fMBx2JsFhflTakI8MzWnW/tracks",
+          "total": 214
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:7fMBx2JsFhflTakI8MzWnW"
+      },
+      {
+        "collaborative": false,
+        "description": "EXITOS DE LA MUSICA DE FRANCIA",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6F162arbpo5MXFSDDJ9zHl"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6F162arbpo5MXFSDDJ9zHl",
+        "id": "6F162arbpo5MXFSDDJ9zHl",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e02159a5ce13b0c1657c87b96bcab67616d00001e0215bd78a4dee4aa5f6463dca2ab67616d00001e023d69a1082b9d676263912178ab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e02159a5ce13b0c1657c87b96bcab67616d00001e0215bd78a4dee4aa5f6463dca2ab67616d00001e023d69a1082b9d676263912178ab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e02159a5ce13b0c1657c87b96bcab67616d00001e0215bd78a4dee4aa5f6463dca2ab67616d00001e023d69a1082b9d676263912178ab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 60
+          }
+        ],
+        "name": "CANCIONES FRANCESAS FAMOSAS",
+        "owner": {
+          "display_name": "Franco Marinelli",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/fpm1954"
+          },
+          "href": "https://api.spotify.com/v1/users/fpm1954",
+          "id": "fpm1954",
+          "type": "user",
+          "uri": "spotify:user:fpm1954"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAiddbaVP35bHC+TfmaD87kS0AgJHX",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6F162arbpo5MXFSDDJ9zHl/tracks",
+          "total": 57
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6F162arbpo5MXFSDDJ9zHl"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/4c34N5YuijHiLF8b20ZhkP"
+        },
+        "href": "https://api.spotify.com/v1/playlists/4c34N5YuijHiLF8b20ZhkP",
+        "id": "4c34N5YuijHiLF8b20ZhkP",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0231d6b27ffaa0b2f89234698aab67616d00001e02341380395b40c880249f1b86ab67616d00001e0263423dab00ac6763899a9876ab67616d00001e026626c7b801202b95e1d83c8f",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0231d6b27ffaa0b2f89234698aab67616d00001e02341380395b40c880249f1b86ab67616d00001e0263423dab00ac6763899a9876ab67616d00001e026626c7b801202b95e1d83c8f",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0231d6b27ffaa0b2f89234698aab67616d00001e02341380395b40c880249f1b86ab67616d00001e0263423dab00ac6763899a9876ab67616d00001e026626c7b801202b95e1d83c8f",
+            "width": 60
+          }
+        ],
+        "name": "Chanson Française",
+        "owner": {
+          "display_name": "Josi Páez",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/21v2mhoh6vigvnh5eb4cijymq"
+          },
+          "href": "https://api.spotify.com/v1/users/21v2mhoh6vigvnh5eb4cijymq",
+          "id": "21v2mhoh6vigvnh5eb4cijymq",
+          "type": "user",
+          "uri": "spotify:user:21v2mhoh6vigvnh5eb4cijymq"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAJgyn8O6ePnmqP55MPO5f4CF/K3uq",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/4c34N5YuijHiLF8b20ZhkP/tracks",
+          "total": 37
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:4c34N5YuijHiLF8b20ZhkP"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/7BxUgB596KMnzXCHlD5YsD"
+        },
+        "href": "https://api.spotify.com/v1/playlists/7BxUgB596KMnzXCHlD5YsD",
+        "id": "7BxUgB596KMnzXCHlD5YsD",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84190ef5522c672fd107ec7057",
+            "width": null
+          }
+        ],
+        "name": "Classiques de la chanson française ",
+        "owner": {
+          "display_name": "NARCISSE",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/benjitki"
+          },
+          "href": "https://api.spotify.com/v1/users/benjitki",
+          "id": "benjitki",
+          "type": "user",
+          "uri": "spotify:user:benjitki"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAB6VhVCc4Ij7ESrHuWPUuo2qGFsfwS",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/7BxUgB596KMnzXCHlD5YsD/tracks",
+          "total": 101
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:7BxUgB596KMnzXCHlD5YsD"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/4MRDN0a7ghqucURg2kiFle"
+        },
+        "href": "https://api.spotify.com/v1/playlists/4MRDN0a7ghqucURg2kiFle",
+        "id": "4MRDN0a7ghqucURg2kiFle",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e027dfb43229cf6a424ee8daa84ab67616d00001e0298be7dbe7527754efdcd7ad7ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e027dfb43229cf6a424ee8daa84ab67616d00001e0298be7dbe7527754efdcd7ad7ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e027dfb43229cf6a424ee8daa84ab67616d00001e0298be7dbe7527754efdcd7ad7ab67616d00001e02a99d795a3d462079ef3efe0aab67616d00001e02d2ad600632db1bf5947cd890",
+            "width": 60
+          }
+        ],
+        "name": "Chanson française - best of",
+        "owner": {
+          "display_name": "Pierre-Alexandre De Cartier d'Yves",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/1118553781"
+          },
+          "href": "https://api.spotify.com/v1/users/1118553781",
+          "id": "1118553781",
+          "type": "user",
+          "uri": "spotify:user:1118553781"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAACMzWQG2Pfe3+gBFCpd60Q/MBprgj2",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/4MRDN0a7ghqucURg2kiFle/tracks",
+          "total": 451
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:4MRDN0a7ghqucURg2kiFle"
+      },
+      {
+        "collaborative": false,
+        "description": " Chanson Française 2025 - Top 100 Musique du Moment 2025 (Meilleurs Tubes Français 2025)",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/4yPUaVLWHACFNb4QqgUN58"
+        },
+        "href": "https://api.spotify.com/v1/playlists/4yPUaVLWHACFNb4QqgUN58",
+        "id": "4yPUaVLWHACFNb4QqgUN58",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8466eb56999232970e355dc6eb",
+            "width": null
+          }
+        ],
+        "name": "Chanson Française 2025 - Top 100 Musique du Moment 2025 (Meilleurs Tubes Français 2025)",
+        "owner": {
+          "display_name": "Redlist Playlists",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/7bntwjdswpqhrnqr0gssydbd0"
+          },
+          "href": "https://api.spotify.com/v1/users/7bntwjdswpqhrnqr0gssydbd0",
+          "id": "7bntwjdswpqhrnqr0gssydbd0",
+          "type": "user",
+          "uri": "spotify:user:7bntwjdswpqhrnqr0gssydbd0"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAdL5ty7i1MBRRY/NPSYp+/4k6QtgAJ",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/4yPUaVLWHACFNb4QqgUN58/tracks",
+          "total": 100
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:4yPUaVLWHACFNb4QqgUN58"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/47CSuNu5DTHXXHndIEbFdS"
+        },
+        "href": "https://api.spotify.com/v1/playlists/47CSuNu5DTHXXHndIEbFdS",
+        "id": "47CSuNu5DTHXXHndIEbFdS",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84553456fdb2636888be4180f5",
+            "width": null
+          }
+        ],
+        "name": "Chansons calmes françaises  ",
+        "owner": {
+          "display_name": "noasoussan",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/noasoussan"
+          },
+          "href": "https://api.spotify.com/v1/users/noasoussan",
+          "id": "noasoussan",
+          "type": "user",
+          "uri": "spotify:user:noasoussan"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAzfOyzQ/ffkqlvUbJR/51pjGJeVyG",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/47CSuNu5DTHXXHndIEbFdS/tracks",
+          "total": 107
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:47CSuNu5DTHXXHndIEbFdS"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6kNPE9X6C3sjIOloHpLfZx"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6kNPE9X6C3sjIOloHpLfZx",
+        "id": "6kNPE9X6C3sjIOloHpLfZx",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02e38a50a2a2b7b55533a8b58aab67616d00001e02f36d0f53e2ce7485e17a57beab67616d00001e02fe22c015a3def7f3cf3411fc",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02e38a50a2a2b7b55533a8b58aab67616d00001e02f36d0f53e2ce7485e17a57beab67616d00001e02fe22c015a3def7f3cf3411fc",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02e38a50a2a2b7b55533a8b58aab67616d00001e02f36d0f53e2ce7485e17a57beab67616d00001e02fe22c015a3def7f3cf3411fc",
+            "width": 60
+          }
+        ],
+        "name": "Chansons françaises",
+        "owner": {
+          "display_name": "Maripau",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/n1kjrp3npkpysg1y7qh6wpiky"
+          },
+          "href": "https://api.spotify.com/v1/users/n1kjrp3npkpysg1y7qh6wpiky",
+          "id": "n1kjrp3npkpysg1y7qh6wpiky",
+          "type": "user",
+          "uri": "spotify:user:n1kjrp3npkpysg1y7qh6wpiky"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAognKaT5sdvf15iVnSa8FS3bLvdY8",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6kNPE9X6C3sjIOloHpLfZx/tracks",
+          "total": 92
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6kNPE9X6C3sjIOloHpLfZx"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/2nSxqKyTpLWDyMOPIzKOMD"
+        },
+        "href": "https://api.spotify.com/v1/playlists/2nSxqKyTpLWDyMOPIzKOMD",
+        "id": "2nSxqKyTpLWDyMOPIzKOMD",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0200c0bba714d6c46e47ab1d07ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02546a87c8bba9d409808fede9ab67616d00001e029922157daa474131bb3a0fbc",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0200c0bba714d6c46e47ab1d07ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02546a87c8bba9d409808fede9ab67616d00001e029922157daa474131bb3a0fbc",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0200c0bba714d6c46e47ab1d07ab67616d00001e022433cb43f0f2f0f23b7c8b82ab67616d00001e02546a87c8bba9d409808fede9ab67616d00001e029922157daa474131bb3a0fbc",
+            "width": 60
+          }
+        ],
+        "name": "Française chansons ",
+        "owner": {
+          "display_name": "Daiana Posada",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/21zvunpeqelulpyfphowz3xia"
+          },
+          "href": "https://api.spotify.com/v1/users/21zvunpeqelulpyfphowz3xia",
+          "id": "21zvunpeqelulpyfphowz3xia",
+          "type": "user",
+          "uri": "spotify:user:21zvunpeqelulpyfphowz3xia"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAL90FMpFFbq3K6rycPV8R9ZUub4M6",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/2nSxqKyTpLWDyMOPIzKOMD/tracks",
+          "total": 46
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:2nSxqKyTpLWDyMOPIzKOMD"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6lBRg4ggdwucTXfs09LeGY"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6lBRg4ggdwucTXfs09LeGY",
+        "id": "6lBRg4ggdwucTXfs09LeGY",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e026d15e49468078d069e8e9693ab67616d00001e02750217eaced1026c5a6e8c1eab67616d00001e02a710e49cc4affe5b6cca3189ab67616d00001e02b4930c0c18e453f60eb330d9",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e026d15e49468078d069e8e9693ab67616d00001e02750217eaced1026c5a6e8c1eab67616d00001e02a710e49cc4affe5b6cca3189ab67616d00001e02b4930c0c18e453f60eb330d9",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e026d15e49468078d069e8e9693ab67616d00001e02750217eaced1026c5a6e8c1eab67616d00001e02a710e49cc4affe5b6cca3189ab67616d00001e02b4930c0c18e453f60eb330d9",
+            "width": 60
+          }
+        ],
+        "name": "Chanson française ringarde",
+        "owner": {
+          "display_name": "Hélo Lanfranco",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/68g48ih02bthjiolao5yc1mgr"
+          },
+          "href": "https://api.spotify.com/v1/users/68g48ih02bthjiolao5yc1mgr",
+          "id": "68g48ih02bthjiolao5yc1mgr",
+          "type": "user",
+          "uri": "spotify:user:68g48ih02bthjiolao5yc1mgr"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAgcGie+KvcEW8BfWbZdnpW+BSTW2K",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6lBRg4ggdwucTXfs09LeGY/tracks",
+          "total": 124
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6lBRg4ggdwucTXfs09LeGY"
+      },
+      {
+        "collaborative": false,
+        "description": "musique actuelle 2025 - musica recente 2025 - musique recente francaise 2025 - chanson du moment 2025 - chanson francaise du moment 2025 - musique populaire 2025 - musique du moment 2025 - tubes du moment 2025 - derniers tubes du moment 2025 - hit du moment 2025 - meilleure musique 2025 - meilleure chanson 2025",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1eJoMGxKOrNqXr5uYegONN"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1eJoMGxKOrNqXr5uYegONN",
+        "id": "1eJoMGxKOrNqXr5uYegONN",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84781171d16430539a7a314c3f",
+            "width": null
+          }
+        ],
+        "name": "Musique Actuelle 2025 - Chanson du Moment 2025  (Musique Populaire 2025 Mix)",
+        "owner": {
+          "display_name": "Redlist - Favorite Songs",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/1napb5rojlrqtimlnzpnbmrc4"
+          },
+          "href": "https://api.spotify.com/v1/users/1napb5rojlrqtimlnzpnbmrc4",
+          "id": "1napb5rojlrqtimlnzpnbmrc4",
+          "type": "user",
+          "uri": "spotify:user:1napb5rojlrqtimlnzpnbmrc4"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAFTRvEdD04o52TujIPxdTxPXgV1mda",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1eJoMGxKOrNqXr5uYegONN/tracks",
+          "total": 100
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1eJoMGxKOrNqXr5uYegONN"
+      },
+      null,
+      null
+    ]
+  }
+}

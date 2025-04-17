@@ -21,26 +21,37 @@ import { recommendationsCache, DEFAULT_CACHE_TTL } from '@/lib/cache';
 export async function getSimilarTracks(track: Track, limit: number = 20): Promise<Track[]> {
   try {
     if (!track) {
+      console.error('[Track] Error: Se intentó obtener tracks similares sin proporcionar una pista');
       throw new Error('Pista no proporcionada');
     }
     
     const { title, artist, spotifyId } = track;
-    console.log(`[Track] Obteniendo tracks similares a: ${title} - ${artist}`);
     
     // Crear una clave de caché basada en la información disponible
     const baseKey = spotifyId || `${title}_${artist}`.toLowerCase().replace(/\s+/g, '_');
     const cacheKey = `similar_track:${baseKey}:${limit}`;
     
     // Intentar obtener de caché primero
-    const cachedData = await recommendationsCache.get(cacheKey);
+    let cachedData;
+    try {
+      cachedData = await recommendationsCache.get(cacheKey);
+    } catch (cacheError) {
+      console.warn(`[Track] Error accediendo a caché:`, cacheError);
+      // Continuamos sin datos de caché
+    }
     
     if (cachedData) {
-      console.log(`[Track] Cache hit para tracks similares a ${title}`);
-      return JSON.parse(cachedData);
+      try {
+        return JSON.parse(cachedData);
+      } catch (parseError) {
+        console.warn(`[Track] Error analizando datos de caché:`, parseError);
+        // Continuamos con la obtención de datos frescos
+      }
     }
     
     // Crear una estrategia en cascada para obtener recomendaciones
     let similarTracks: Track[] = [];
+    let errors: Error[] = [];
     
     // Estrategia 1: Buscar por ID de Spotify si está disponible
     if (spotifyId) {
@@ -53,10 +64,11 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         
         if (spotifyResults.length >= Math.min(5, limit)) {
           similarTracks = spotifyResults;
-          console.log(`[Track] Encontradas ${similarTracks.length} canciones por ID de Spotify`);
         }
       } catch (error) {
-        console.error(`[Track] Error buscando por spotifyId:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`[Track] Error buscando por spotifyId:`, errorMessage);
+        errors.push(new Error(`Spotify ID search: ${errorMessage}`));
       }
     }
     
@@ -73,10 +85,11 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
           const allTracks = [...similarTracks, ...searchResults];
           // Deduplicar por ID
           similarTracks = Array.from(new Map(allTracks.map(t => [t.id, t])).values());
-          console.log(`[Track] Añadidas ${searchResults.length} canciones por título/artista`);
         }
       } catch (error) {
-        console.error(`[Track] Error buscando por título/artista:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`[Track] Error buscando por título/artista:`, errorMessage);
+        errors.push(new Error(`Title/artist search: ${errorMessage}`));
       }
     }
     
@@ -96,10 +109,39 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
           const allTracks = [...similarTracks, ...filteredTracks];
           // Deduplicar por ID
           similarTracks = Array.from(new Map(allTracks.map(t => [t.id, t])).values());
-          console.log(`[Track] Añadidas ${filteredTracks.length} canciones de artistas similares`);
         }
       } catch (error) {
-        console.error(`[Track] Error obteniendo tracks del artista:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`[Track] Error obteniendo tracks del artista:`, errorMessage);
+        errors.push(new Error(`Artist tracks: ${errorMessage}`));
+      }
+    }
+    
+    // Si ninguna estrategia funcionó y tenemos errores, intentar una última alternativa
+    if (similarTracks.length === 0 && errors.length > 0) {
+      console.warn(`[Track] Todas las estrategias fallaron con ${errors.length} errores. Intentando método alternativo.`);
+      
+      // Detectar posible género basado en el nombre del artista o el título
+      try {
+        const searchText = `${title} ${artist}`;
+        const genres = ['rock', 'pop', 'rap', 'hiphop', 'electronic', 'dance', 'indie', 'alternative', 'latin'];
+        
+        // Intentar identificar un género en el texto
+        let detectedGenre = 'pop'; // Default
+        for (const genre of genres) {
+          if (searchText.toLowerCase().includes(genre)) {
+            detectedGenre = genre;
+            break;
+          }
+        }
+        
+        const genreTracks = await getRecommendationsByGenre(detectedGenre, limit);
+        if (genreTracks.length > 0) {
+          similarTracks = genreTracks;
+        }
+      } catch (genreError) {
+        console.error(`[Track] Error en método alternativo por género:`, genreError);
+        // Si este último intento falla, continuamos con los resultados que tengamos
       }
     }
     
@@ -108,19 +150,30 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
     
     // Guardar en caché para futuras solicitudes
     if (finalTracks.length > 0) {
-      await recommendationsCache.set(
-        cacheKey,
-        JSON.stringify(finalTracks),
-        DEFAULT_CACHE_TTL
-      );
+      try {
+        await recommendationsCache.set(
+          cacheKey,
+          JSON.stringify(finalTracks),
+          DEFAULT_CACHE_TTL
+        );
+      } catch (cacheError) {
+        console.warn(`[Track] Error guardando en caché:`, cacheError);
+        // Continuamos sin afectar al usuario
+      }
     }
     
-    console.log(`[Track] Recomendaciones finales para ${title}: ${finalTracks.length} tracks`);
+    
+    // Si después de todos los intentos no hay resultados, usar fallback
+    if (finalTracks.length === 0) {
+      console.warn(`[Track] No se pudieron obtener recomendaciones. Generando fallback.`);
+      return getTrackFallbackTracks(track, limit);
+    }
+    
     return finalTracks;
   } catch (error) {
-    console.error(`[Track] Error obteniendo tracks similares:`, error);
+    console.error(`[Track] Error crítico obteniendo tracks similares:`, error);
     
-    // En caso de error, intentar recuperar datos de caché
+    // En caso de error crítico, intentar recuperar datos de caché
     try {
       const { title, artist, spotifyId } = track;
       const baseKey = spotifyId || `${title}_${artist}`.toLowerCase().replace(/\s+/g, '_');
@@ -128,40 +181,14 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
       const cachedData = await recommendationsCache.get(cacheKey);
       
       if (cachedData) {
-        console.log(`[Track] Usando caché para recuperar después de error`);
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
-      console.error(`[Track] Error accediendo a caché:`, cacheError);
+      console.error(`[Track] Error accediendo a caché en recuperación:`, cacheError);
     }
     
-    // Si todo falla, intentar obtener recomendaciones basadas en el género de la pista
-    try {
-      // Detectar posible género basado en el nombre del artista o el título
-      const title = track.title || '';
-      const artist = track.artist || '';
-      const searchText = `${title} ${artist}`;
-      
-      // Lista de géneros populares para detectar
-      const genres = ['rock', 'pop', 'rap', 'hiphop', 'electronic', 'dance', 'indie', 'alternative', 'latin'];
-      
-      // Intentar identificar un género en el texto
-      let detectedGenre = 'pop'; // Default
-      for (const genre of genres) {
-        if (searchText.toLowerCase().includes(genre)) {
-          detectedGenre = genre;
-          break;
-        }
-      }
-      
-      console.log(`[Track] Intentando obtener recomendaciones por género: ${detectedGenre}`);
-      return await getRecommendationsByGenre(detectedGenre, limit);
-    } catch (genreError) {
-      console.error(`[Track] Error en fallback por género:`, genreError);
-      
-      // Último recurso: devolver datos fallback
-      return getTrackFallbackTracks(track, limit);
-    }
+    // Si todo falla, devolver datos fallback
+    return getTrackFallbackTracks(track, limit);
   }
 }
 
@@ -172,7 +199,6 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
  * @returns Lista de tracks fallback
  */
 function getTrackFallbackTracks(track: Track, limit: number): Track[] {
-  console.log(`[Track] Generando tracks fallback similares a: ${track.title}`);
   
   const { title, artist } = track;
   const fallbackTracks: Track[] = [];

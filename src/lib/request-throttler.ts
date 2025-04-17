@@ -166,11 +166,13 @@ export function releaseRequest(api: string = 'default', requestId: string): void
  * Envuelve una función para aplicar throttling
  * @param fn Función a envolver
  * @param api Nombre de la API
+ * @param options Opciones adicionales de throttling (opcional)
  * @returns Función con throttling aplicado
  */
 export function withThrottle<T extends (...args: any[]) => Promise<any>>(
   fn: T,
-  api: string = 'default'
+  api: string = 'default',
+  options?: any
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
     const requestId = `req_${Date.now()}_${Math.random()}`;

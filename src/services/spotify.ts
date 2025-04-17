@@ -2,6 +2,37 @@
 import { withThrottle } from '@/lib/request-throttler';
 import { throttleApiCalls, ThrottleOptions } from '@/lib/api-throttle';
 
+// Variable global para controlar el modo demo
+let IS_DEMO_MODE = false;
+let DEMO_LANGUAGE = 'es';
+
+/**
+ * Configura el modo demo para el servicio de Spotify
+ * @param isDemo Si el usuario está en modo demo o no
+ * @param language Idioma para los datos de demo (opcional, por defecto 'es')
+ */
+export function setDemoMode(isDemo: boolean, language: string = 'es'): void {
+  console.log(`[Spotify Service] Configurando modo demo: ${isDemo}${isDemo ? `, idioma: ${language}` : ''}`);
+  IS_DEMO_MODE = isDemo;
+  DEMO_LANGUAGE = language;
+}
+
+/**
+ * Obtiene si el modo demo está activado
+ * @returns true si el modo demo está activado
+ */
+export function isDemoMode(): boolean {
+  return IS_DEMO_MODE;
+}
+
+/**
+ * Obtiene el idioma configurado para el modo demo
+ * @returns Código de idioma (ej: 'es', 'en')
+ */
+export function getDemoLanguage(): string {
+  return DEMO_LANGUAGE;
+}
+
 // Configuración de throttling adaptativo para Spotify API
 const spotifyThrottleOptions: ThrottleOptions = {
   initialDelay: 150, // 150ms entre llamadas por defecto
@@ -85,9 +116,22 @@ async function requestWithToken(endpoint: string): Promise<Response> {
 
 // Función auxiliar para transformar tracks de Spotify al formato de la app
 function transformTrack(spotifyTrack: any): any {
-  const images = spotifyTrack.album?.images || [];
-  const coverUrl = images.length > 0 ? images[0].url : 'https://placehold.co/400x400/2b2b2b/FFFFFF?text=No+Image';
+  // Obtener la URL de la imagen de la portada
+  let coverUrl = 'https://placehold.co/400x400/2b2b2b/FFFFFF?text=No+Image';
   
+  // Intentar obtener la imagen del álbum si existe
+  if (spotifyTrack.album?.images && spotifyTrack.album.images.length > 0) {
+    coverUrl = spotifyTrack.album.images[0].url;
+    // Log para depuración de URLs de imágenes
+    console.log(`[Spotify API] URL de imagen para track ${spotifyTrack.name}: ${coverUrl}`);
+  } 
+  // Si no hay imagen de álbum pero hay imágenes directas, usar la primera
+  else if (spotifyTrack.images && spotifyTrack.images.length > 0) {
+    coverUrl = spotifyTrack.images[0].url;
+    console.log(`[Spotify API] Usando imagen directa para track ${spotifyTrack.name}: ${coverUrl}`);
+  }
+  
+  // Crear el objeto track con toda la información necesaria
   return {
     id: spotifyTrack.id,
     title: spotifyTrack.name,
@@ -95,6 +139,8 @@ function transformTrack(spotifyTrack: any): any {
     album: spotifyTrack.album?.name || 'Álbum desconocido',
     albumId: spotifyTrack.album?.id,
     cover: coverUrl,
+    // Guardar también la URL original de Spotify para ser usada directamente por el componente
+    spotifyCoverUrl: coverUrl,
     duration: spotifyTrack.duration_ms,
     source: 'spotify',
     spotifyId: spotifyTrack.id,
@@ -330,6 +376,30 @@ async function _getSavedTracks(limit: number = 20) {
 // Función interna para obtener las canciones top del usuario (sin throttling)
 async function _getTopTracks(limit: number = 20) {
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo top tracks (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=top-tracks&language=${language}&limit=${limit}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(`[SPOTIFY SERVICE] Error al obtener top tracks en demo:`, errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: ${data.items?.length || 0} top tracks obtenidos`);
+      return data;
+    }
+
+    // Código original
     console.log('Obteniendo canciones top');
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(
@@ -357,30 +427,67 @@ async function _getTopTracks(limit: number = 20) {
       });
     }
     
-    return data.items || [];
+    return data;
   } catch (error) {
     console.error('Error en getTopTracks:', error);
     // Datos mockeados para caso de error
-    return [
-      {
-        id: "fallback_top_1",
-        name: "Tu Top Hit (Fallback)",
-        isTopTrack: true,
-        artists: [{ name: "Artista Popular", id: "popular_1" }],
-        album: {
-          name: "Tus Favoritos",
-          id: "fav_album_1",
-          images: [{ url: "https://placehold.co/300x300/purple/white?text=Top+Hit", height: 300, width: 300 }]
-        },
-        duration_ms: 210000
-      }
-    ];
+    return {
+      tracks: [
+        {
+          id: "fallback_top_1",
+          name: "Tu Top Hit (Fallback)",
+          isTopTrack: true,
+          artists: [{ name: "Artista Popular", id: "popular_1" }],
+          album: {
+            name: "Tus Favoritos",
+            id: "fav_album_1",
+            images: [{ url: "https://placehold.co/300x300/purple/white?text=Top+Hit", height: 300, width: 300 }]
+          },
+          duration_ms: 210000
+        }
+      ]
+    };
   }
 }
 
 // Función interna para obtener playlists destacadas (sin throttling)
 async function _getFeaturedPlaylists(limit: number = 20, offset: number = 0) {
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log('[SPOTIFY SERVICE] Obteniendo playlists destacadas en MODO DEMO');
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=featured-playlists&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('[SPOTIFY SERVICE] Error al obtener playlists destacadas en demo:', errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: ${data.playlists?.items?.length || 0} playlists destacadas obtenidas`);
+      
+      // Validar estructura de datos
+      if (data.playlists && data.playlists.items && data.playlists.items.length > 0) {
+        const sampleItem = data.playlists.items[0];
+        console.log(`[SPOTIFY SERVICE] Ejemplo primer elemento:`, {
+          id: sampleItem.id,
+          name: sampleItem.name,
+          owner: sampleItem.owner?.display_name || 'No owner'
+        });
+      }
+      
+      return data;
+    }
+
+    // Código original para modo normal
     console.log('[API] Obteniendo playlists destacadas');
     const apiBaseUrl = getApiBaseUrl();
     
@@ -410,7 +517,7 @@ async function _getFeaturedPlaylists(limit: number = 20, offset: number = 0) {
       
       if (response.status === 401 && errorData.redirect) {
         window.location.href = errorData.redirect;
-      return {
+        return {
           message: "Error de autenticación",
           playlists: { items: [] }
         };
@@ -472,20 +579,35 @@ async function _getFeaturedPlaylists(limit: number = 20, offset: number = 0) {
 // Función interna para obtener nuevos lanzamientos (sin throttling)
 async function _getNewReleases(limit: number = 20) {
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log('[API] Obteniendo nuevos lanzamientos (MODO DEMO)');
+      const apiBaseUrl = getApiBaseUrl();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const response = await fetch(
+        `${apiBaseUrl}/demo/data?endpoint=new-releases&language=${getDemoLanguage()}`
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('[API Demo] Error al obtener nuevos lanzamientos:', errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+
+      const data = await response.json();
+      console.log(`[API Demo] ${data.albums?.items?.length || 0} nuevos lanzamientos obtenidos del modo demo`);
+      return data;
+    }
+    
+    // Código original para modo normal
     console.log('[API] Obteniendo nuevos lanzamientos');
     const apiBaseUrl = getApiBaseUrl();
     
-    // Obtener el código de país del navegador para mostrar contenido localizado
-    let userCountry = 'ES'; // país por defecto
-    
+    // Intentar obtener país del usuario
+    let userCountry = 'US';
     try {
-      if (typeof navigator !== 'undefined' && navigator.language) {
-        // Intentar extraer el código de país de la configuración del navegador
-        const languageParts = navigator.language.split('-');
-        if (languageParts.length > 1) {
-          userCountry = languageParts[1].toUpperCase();
-        }
-      }
+      userCountry = await getUserCountry();
     } catch (e) {
       console.error('Error al obtener país del usuario:', e);
     }
@@ -499,8 +621,9 @@ async function _getNewReleases(limit: number = 20) {
       console.error('[API] Error al obtener nuevos lanzamientos:', errorData);
       
       if (response.status === 401 && errorData.redirect) {
-        window.location.href = errorData.redirect;
-        return { albums: { items: [] } };
+        // En lugar de redirigir automáticamente, lanzar un error con información
+        console.warn('[API] Error de autenticación, se requiere iniciar sesión');
+        throw new Error('No autenticado');
       }
       
       // Si hay un error, usar datos mockeados
@@ -548,6 +671,62 @@ async function _getNewReleases(limit: number = 20) {
 // Función interna para obtener recomendaciones del usuario (sin throttling)
 async function _getUserPersonalRotation(limit: number = 10): Promise<any[]> {
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log('[Service] Obteniendo rotación personal del usuario (MODO DEMO)');
+      const apiBaseUrl = getApiBaseUrl();
+      
+      // En modo demo, usaremos una combinación de canciones recientes y tops
+      try {
+        // Obtener historial de reproducción reciente aleatorio
+        const recentlyPlayedResponse = await fetch(
+          `${apiBaseUrl}/demo/data?endpoint=recently-played&language=${getDemoLanguage()}&limit=${limit}`
+        );
+        
+        if (recentlyPlayedResponse.ok) {
+          const recentlyPlayedData = await recentlyPlayedResponse.json();
+          // Las canciones recientes vienen con formato { track: {...}, played_at: ... }
+          const recentTracks = recentlyPlayedData.map((item: any) => {
+            // Añadir marcador de canción reciente
+            const track = item.track;
+            track.isRecentlyPlayed = true;
+            return track;
+          });
+          
+          console.log(`[Service Demo] Obtenidas ${recentTracks.length} canciones del historial simulado`);
+          return recentTracks;
+        }
+      } catch (error) {
+        console.error('[Service Demo] Error al obtener historial simulado:', error);
+      }
+      
+      // Si fallamos con el historial simulado, intentar con top tracks
+      try {
+        const topTracksResponse = await fetch(
+          `${apiBaseUrl}/demo/data?endpoint=top-tracks&language=${getDemoLanguage()}`
+        );
+        
+        if (topTracksResponse.ok) {
+          const topTracksData = await topTracksResponse.json();
+          const topTracks = topTracksData.items || [];
+          
+          // Marcar como top tracks
+          topTracks.forEach((track: any) => {
+            track.isTopTrack = true;
+          });
+          
+          console.log(`[Service Demo] Obtenidos ${topTracks.length} top tracks como fallback`);
+          return topTracks.slice(0, limit);
+        }
+      } catch (error) {
+        console.error('[Service Demo] Error al obtener top tracks como fallback:', error);
+      }
+      
+      // Si todo falla, devolver array vacío
+      return [];
+    }
+    
+    // Código original para el modo normal
     console.log('Obteniendo rotación personal del usuario');
     const apiBaseUrl = getApiBaseUrl();
     
@@ -556,6 +735,20 @@ async function _getUserPersonalRotation(limit: number = 10): Promise<any[]> {
     
     // Definir el tipo explícitamente
     let rotation: any[] = [];
+    
+    // Verificar si tenemos un error de autenticación (401)
+    if (topTracksResponse.status === 401) {
+      const errorData = await topTracksResponse.json();
+      console.warn('Error de autenticación al obtener top tracks:', errorData);
+      
+      // En lugar de redirigir automáticamente al usuario
+      if (errorData.redirect) {
+        console.warn(`Se requiere autenticación para acceder a la API de Spotify`);
+        throw new Error('No autenticado');
+      }
+      
+      throw new Error('No autenticado'); // Para evitar continuar con el flujo
+    }
     
     if (topTracksResponse.ok) {
       const topData = await topTracksResponse.json();
@@ -576,6 +769,18 @@ async function _getUserPersonalRotation(limit: number = 10): Promise<any[]> {
     if (rotation.length < limit) {
       const savedTracksResponse = await fetch(`${apiBaseUrl}/spotify?action=saved-tracks&limit=${limit - rotation.length}`);
       
+      // Verificar si tenemos un error de autenticación (401)
+      if (savedTracksResponse.status === 401) {
+        const errorData = await savedTracksResponse.json();
+        console.warn('Error de autenticación al obtener tracks guardados:', errorData);
+        
+        // En lugar de redirigir automáticamente al usuario
+        if (errorData.redirect) {
+          console.warn(`Se requiere autenticación para acceder a la API de Spotify`);
+          throw new Error('No autenticado');
+        }
+      }
+      
       if (savedTracksResponse.ok) {
         const savedData = await savedTracksResponse.json();
         const savedTracks = savedData.items?.map((item: any) => item.track) || [];
@@ -591,6 +796,18 @@ async function _getUserPersonalRotation(limit: number = 10): Promise<any[]> {
     // Si aún no tenemos suficientes, añadir recomendaciones
     if (rotation.length < limit) {
       const recommendationsResponse = await fetch(`${apiBaseUrl}/spotify?action=recommendations&limit=${limit - rotation.length}`);
+      
+      // Verificar si tenemos un error de autenticación (401)
+      if (recommendationsResponse.status === 401) {
+        const errorData = await recommendationsResponse.json();
+        console.warn('Error de autenticación al obtener recomendaciones:', errorData);
+        
+        // En lugar de redirigir automáticamente al usuario
+        if (errorData.redirect) {
+          console.warn(`Se requiere autenticación para acceder a la API de Spotify`);
+          throw new Error('No autenticado');
+        }
+      }
       
       if (recommendationsResponse.ok) {
         const recommendationsData = await recommendationsResponse.json();
@@ -608,6 +825,12 @@ async function _getUserPersonalRotation(limit: number = 10): Promise<any[]> {
     return rotation.slice(0, limit);
   } catch (error) {
     console.error('Error al obtener rotación personal:', error);
+    
+    // Si es un error de autenticación, solo registrarlo pero no redireccionar
+    if (error instanceof Error && error.message.includes('No autenticado')) {
+      console.warn('No autenticado para obtener rotación personal');
+    }
+    
     return [];
   }
 }
@@ -617,7 +840,7 @@ export const searchTracks = withThrottle(_searchTracks, 'spotify');
 export const getTracksByGenre = withThrottle(_getTracksByGenre, 'spotify');
 export const getAvailableGenres = withThrottle(_getAvailableGenres, 'spotify');
 export const getSavedTracks = withThrottle(_getSavedTracks, 'spotify');
-export const getTopTracks = withThrottle(_getTopTracks, 'spotify');
+export const getTopTracks = withThrottle(_getTopTracks, 'getTopTracks', spotifyThrottleOptions);
 export const getFeaturedPlaylists = withThrottle(_getFeaturedPlaylists, 'spotify');
 export const getNewReleases = withThrottle(_getNewReleases, 'spotify');
 export const getUserPersonalRotation = withThrottle(_getUserPersonalRotation, 'spotify');
@@ -776,7 +999,34 @@ export async function getPlaylistDetail(playlistId: string) {
 
 // Función para obtener información de un artista
 export async function getArtist(artistId: string) {
+  // Proceder con la llamada normal...
+  console.log(`[Spotify API] Obteniendo artista: ${artistId}`);
+  
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo información del artista: ${artistId} (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=artist&artistId=${artistId}&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(`[SPOTIFY SERVICE] Error al obtener información del artista ${artistId} en demo:`, errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: Información del artista ${artistId} obtenida correctamente`);
+      return data;
+    }
+
+    // Código original para modo normal
     console.log(`Obteniendo información del artista: ${artistId}`);
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(
@@ -805,7 +1055,33 @@ export async function getArtist(artistId: string) {
 
 // Función para obtener las canciones más populares de un artista
 export async function getArtistTopTracks(artistId: string) {
+  console.log(`[Spotify API] Obteniendo top tracks para artista: ${artistId}`);
+  
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo top tracks del artista: ${artistId} (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=artist-top-tracks&artistId=${artistId}&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(`[SPOTIFY SERVICE] Error al obtener top tracks del artista ${artistId} en demo:`, errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: ${data.tracks?.length || 0} top tracks del artista ${artistId} obtenidos`);
+      return data.tracks || [];
+    }
+
+    // Código original para modo normal
     console.log(`Obteniendo top tracks del artista: ${artistId}`);
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(
@@ -834,7 +1110,33 @@ export async function getArtistTopTracks(artistId: string) {
 
 // Función para obtener los álbumes de un artista
 export async function getArtistAlbums(artistId: string, limit: number = 20) {
+  console.log(`[Spotify API] Obteniendo álbumes para artista: ${artistId} (limit: ${limit})`);
+  
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo álbumes del artista: ${artistId} (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=artist-albums&artistId=${artistId}&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(`[SPOTIFY SERVICE] Error al obtener álbumes del artista ${artistId} en demo:`, errorData);
+        throw new Error(errorData.error || 'Error al obtener datos de demo');
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: ${data.items?.length || 0} álbumes del artista ${artistId} obtenidos`);
+      return data.items || [];
+    }
+
+    // Código original para modo normal
     console.log(`Obteniendo álbumes del artista: ${artistId}`);
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(
@@ -863,6 +1165,8 @@ export async function getArtistAlbums(artistId: string, limit: number = 20) {
 
 // Función para obtener artistas relacionados
 export async function getRelatedArtists(artistId: string) {
+  console.log(`[Spotify API] Obteniendo artistas relacionados para: ${artistId}`);
+  
   try {
     console.log(`Obteniendo artistas relacionados con: ${artistId}`);
     const apiBaseUrl = getApiBaseUrl();
@@ -904,18 +1208,72 @@ export async function searchArtists(query: string, limit: number = 20) {
       console.error('Error en searchArtists:', errorData);
       
       if (response.status === 401 && errorData.redirect) {
-        window.location.href = errorData.redirect;
-        return;
+        // Verificar si el usuario está en modo demo
+        const isDemo = localStorage.getItem('demo_mode') === 'true';
+        if (!isDemo) {
+          console.log('[searchArtists] Redirigiendo al login debido a error 401 (no en modo demo)');
+          window.location.href = errorData.redirect;
+          return;
+        } else {
+          console.log('[searchArtists] Error 401 ignorado en modo demo. Retornando datos de fallback.');
+          // Retornar datos de fallback para el modo demo
+          return [{
+            id: "fallback-artist-1",
+            name: `Artista para "${query}" (Fallback)`,
+            images: [{ url: "https://placehold.co/300x300/purple/white?text=Artist", height: 300, width: 300 }],
+            popularity: 60,
+            isFallback: true
+          }];
+        }
       }
       
       throw new Error(errorData.error || 'Error al buscar artistas');
     }
 
     const data = await response.json();
-    return data.artists.items;
+    
+    // Verificar si la estructura de datos es la esperada
+    if (!data || !data.artists) {
+      console.warn(`[searchArtists] Estructura de datos inesperada para búsqueda "${query}":`, data);
+      return []; // Devolver array vacío si data.artists no existe
+    }
+    
+    // Verificar si tiene la propiedad items
+    if (!data.artists.items) {
+      console.warn(`[searchArtists] No se encontraron items en la respuesta para "${query}":`, data.artists);
+      
+      // Si data.artists es un array en sí mismo, filtrar para garantizar estructura correcta
+      if (Array.isArray(data.artists)) {
+        // Filtrar artistas sin imágenes y asegurarse de tener estructura correcta
+        const validArtists = data.artists
+          .filter((artist: any) => artist && typeof artist === 'object')
+          .map((artist: any) => ({
+            ...artist,
+            // Asegurar que siempre tenga un array de imágenes, aunque esté vacío
+            images: Array.isArray(artist.images) ? artist.images : []
+          }));
+        return validArtists;
+      }
+      
+      // Si no, devolver array vacío
+      return [];
+    }
+    
+    // Filtrar artistas sin imágenes y asegurarse de tener estructura correcta
+    const validArtists = data.artists.items
+      .filter((artist: any) => artist && typeof artist === 'object')
+      .map((artist: any) => ({
+        ...artist,
+        // Asegurar que siempre tenga un array de imágenes, aunque esté vacío
+        images: Array.isArray(artist.images) ? artist.images : []
+      }));
+      
+    console.log(`[searchArtists] Búsqueda "${query}" retornó ${validArtists.length} artistas válidos`);
+    return validArtists;
   } catch (error) {
     console.error(`Error en searchArtists para ${query}:`, error);
-    throw error;
+    // Devolver array vacío en lugar de lanzar el error para evitar que la aplicación se rompa
+    return [];
   }
 }
 
@@ -1211,7 +1569,100 @@ const searchPlaylistsByTerm = async (term: string, limit = 10): Promise<Playlist
 // Función para obtener artistas más escuchados
 export async function getTopArtists(limit: number = 10, timeRange: string = 'medium_term') {
   console.log(`[Service] Obteniendo artistas top (limit: ${limit}, timeRange: ${timeRange})`);
+  
   try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log('[Service] Obteniendo artistas top (MODO DEMO)');
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      try {
+        // En modo demo, usaremos el archivo search_artist.json que contiene artistas reales
+        const requestUrl = `${apiBaseUrl}/demo/data?endpoint=search&type=artist&language=${language}`;
+        console.log(`[Service DEMO] Solicitando URL para artistas: ${requestUrl}`);
+        
+        const response = await fetch(requestUrl);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error(`[Service DEMO] Error al obtener artistas: ${response.status}`, errorData);
+          throw new Error(`Error al obtener artistas: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Validar la estructura de los datos
+        if (!data.artists || !data.artists.items || !Array.isArray(data.artists.items)) {
+          console.error('[Service DEMO] Formato incorrecto de datos para artistas:', data);
+          throw new Error('Formato incorrecto de datos para artistas');
+        }
+        
+        console.log(`[Service DEMO] Artistas obtenidos: ${data.artists.items.length}`);
+        
+        // Filtrar artistas por popularidad y asegurarse de que tengan imagen
+        const validatedArtists = data.artists.items
+          .filter((artist: any) => artist.popularity > 60) // Solo artistas populares
+          .slice(0, limit) // Limitar al número solicitado
+          .map((artist: any) => {
+            // Verificar si el artista tiene imágenes
+            if (!artist.images || !artist.images.length || !artist.images[0].url) {
+              console.warn(`[Service DEMO] Artista sin imágenes: ${artist.name}, añadiendo placeholder`);
+              artist.images = [{ 
+                url: "https://placehold.co/300x300/purple/white?text=Artist", 
+                height: 300, 
+                width: 300 
+              }];
+            }
+            return artist;
+          });
+        
+        return { items: validatedArtists };
+      } catch (error) {
+        console.error('[Service DEMO] Error al obtener artistas destacados:', error);
+        
+        // Generar artistas demo con datos realistas
+        return {
+          items: [
+            {
+              id: "7ltDVBr6mKbRvohxheJ9h1",
+              name: "ROSALÍA",
+              genres: ["latin", "pop", "flamenco"],
+              images: [{ 
+                url: "https://i.scdn.co/image/ab6761610000e5ebd7bb678bef6d2f26110cae49", 
+                height: 640, 
+                width: 640 
+              }],
+              popularity: 82
+            },
+            {
+              id: "1Xyo4u8uXC1ZmMpatF05PJ",
+              name: "The Weeknd",
+              genres: ["pop", "r&b", "canadian"],
+              images: [{ 
+                url: "https://i.scdn.co/image/ab6761610000e5eb2f71b65ef483ed75a8b40437", 
+                height: 640, 
+                width: 640 
+              }],
+              popularity: 94
+            },
+            {
+              id: "4q3ewBCX7sLwd24euuV69X",
+              name: "Bad Bunny",
+              genres: ["latin", "reggaeton", "trap latino"],
+              images: [{ 
+                url: "https://i.scdn.co/image/ab6761610000e5eb9ad50e478a469448c6f369df", 
+                height: 640, 
+                width: 640 
+              }],
+              popularity: 89
+            }
+          ].slice(0, limit)
+        };
+      }
+    }
+    
+    // Código original para modo normal
     const apiBaseUrl = getApiBaseUrl();
     const response = await fetch(
       `${apiBaseUrl}/spotify?action=top-artists&limit=${limit}&timeRange=${timeRange}`
@@ -1237,7 +1688,7 @@ export async function getTopArtists(limit: number = 10, timeRange: string = 'med
       
       // Devolver datos mockeados para artistas populares
       console.log('[Service] Devolviendo datos mockeados para artistas top');
-      return { 
+      return {
         items: [
           {
             id: "fallback_artist_1",
@@ -1252,22 +1703,8 @@ export async function getTopArtists(limit: number = 10, timeRange: string = 'med
             genres: ["rock", "alternative rock"],
             images: [{ url: "https://placehold.co/300x300/black/white?text=Rock+Star", height: 300, width: 300 }],
             popularity: 85
-          },
-          {
-            id: "fallback_artist_3",
-            name: "Artista Indie (Fallback)",
-            genres: ["indie", "indie pop"],
-            images: [{ url: "https://placehold.co/300x300/teal/white?text=Indie+Artist", height: 300, width: 300 }],
-            popularity: 78
-          },
-          {
-            id: "fallback_artist_4",
-            name: "Rapero Famoso (Fallback)",
-            genres: ["hip hop", "rap"],
-            images: [{ url: "https://placehold.co/300x300/gold/black?text=Famous+Rapper", height: 300, width: 300 }],
-            popularity: 88
           }
-        ] 
+        ].slice(0, limit)
       };
     }
 
@@ -1278,23 +1715,16 @@ export async function getTopArtists(limit: number = 10, timeRange: string = 'med
     console.error(`[Service] Error en getTopArtists:`, error);
     
     // Devolver datos mockeados si hay error
-    return { 
+    return {
       items: [
         {
-          id: "fallback_artist_1",
-          name: "Artista Pop (Fallback)",
-          genres: ["pop", "dance pop"],
-          images: [{ url: "https://placehold.co/300x300/pink/black?text=Pop+Artist", height: 300, width: 300 }],
-          popularity: 90
-        },
-        {
-          id: "fallback_artist_2",
-          name: "Rockstar (Fallback)",
-          genres: ["rock", "alternative rock"],
-          images: [{ url: "https://placehold.co/300x300/black/white?text=Rock+Star", height: 300, width: 300 }],
-          popularity: 85
+          id: "error_artist_1",
+          name: "Artista Error (Fallback)",
+          genres: ["pop"],
+          images: [{ url: "https://placehold.co/300x300/red/white?text=Error", height: 300, width: 300 }],
+          popularity: 75
         }
-      ] 
+      ].slice(0, limit)
     };
   }
 }
@@ -1560,3 +1990,165 @@ async function _searchMultiType(query: string, limit: number = 1): Promise<any> 
 
 // Exportar con throttling
 export const searchMultiType = withThrottle(_searchMultiType, 'spotify'); 
+
+// Función para obtener detalles de un álbum específico
+export async function getAlbum(albumId: string) {
+  try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo detalles del álbum: ${albumId} (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=album&albumId=${albumId}&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        // Si no hay datos específicos para este álbum, intentar usar un álbum predeterminado
+        console.log(`[SPOTIFY SERVICE] No se encontró álbum demo específico, usando álbum predeterminado`);
+        
+        // Usar un álbum predeterminado (After Hours de The Weeknd)
+        return {
+          id: albumId,
+          name: "After Hours",
+          artists: [{ id: "1", name: "The Weeknd" }],
+          images: [{ url: "/placeholder-album.jpg" }],
+          release_date: "2020-03-20",
+          total_tracks: 14,
+          popularity: 92,
+          genres: ["R&B", "Pop"],
+          label: "XO / Republic Records"
+        };
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: Álbum con ID ${albumId} obtenido`);
+      return data;
+    }
+
+    // Código para modo normal
+    console.log(`Obteniendo detalles del álbum: ${albumId}`);
+    const apiBaseUrl = getApiBaseUrl();
+    const response = await fetch(
+      `${apiBaseUrl}/spotify?action=album&albumId=${albumId}`
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error en getAlbum:', errorData);
+      
+      if (response.status === 401 && errorData.redirect) {
+        window.location.href = errorData.redirect;
+        return null;
+      }
+      
+      throw new Error(errorData.error || 'Error al obtener detalles del álbum');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error en getAlbum para ${albumId}:`, error);
+    // Devolver álbum predeterminado en caso de error
+    return {
+      id: albumId,
+      name: "After Hours",
+      artists: [{ id: "1", name: "The Weeknd" }],
+      images: [{ url: "/placeholder-album.jpg" }],
+      release_date: "2020-03-20",
+      total_tracks: 14,
+      popularity: 92,
+      genres: ["R&B", "Pop"],
+      label: "XO / Republic Records"
+    };
+  }
+}
+
+// Función para obtener las canciones de un álbum
+export async function getAlbumTracks(albumId: string, limit: number = 50) {
+  try {
+    // Si el usuario está en modo demo, usar datos de demo
+    if (isDemoMode()) {
+      console.log(`[SPOTIFY SERVICE] Obteniendo canciones del álbum: ${albumId} (MODO DEMO)`);
+      const apiBaseUrl = getApiBaseUrl();
+      const language = getDemoLanguage();
+      
+      // Obtener los datos de demo desde el endpoint correspondiente
+      const requestUrl = `${apiBaseUrl}/demo/data?endpoint=album-tracks&albumId=${albumId}&language=${language}`;
+      console.log(`[SPOTIFY SERVICE] Solicitando URL: ${requestUrl}`);
+      
+      const response = await fetch(requestUrl);
+      
+      if (!response.ok) {
+        // Si no hay datos específicos, proporcionar datos genéricos para After Hours
+        console.log(`[SPOTIFY SERVICE] No se encontraron canciones demo específicas, usando canciones predeterminadas`);
+        
+        // Canciones predeterminadas del álbum After Hours
+        return [
+          { id: "1", name: "Alone Again", duration_ms: 240000, track_number: 1, explicit: false },
+          { id: "2", name: "Too Late", duration_ms: 234000, track_number: 2, explicit: false },
+          { id: "3", name: "Hardest To Love", duration_ms: 193000, track_number: 3, explicit: false },
+          { id: "4", name: "Scared To Live", duration_ms: 226000, track_number: 4, explicit: false },
+          { id: "5", name: "Snowchild", duration_ms: 242000, track_number: 5, explicit: false },
+          { id: "6", name: "Escape From LA", duration_ms: 352000, track_number: 6, explicit: false },
+          { id: "7", name: "Heartless", duration_ms: 206000, track_number: 7, explicit: true },
+          { id: "8", name: "Faith", duration_ms: 282000, track_number: 8, explicit: false },
+          { id: "9", name: "Blinding Lights", duration_ms: 200000, track_number: 9, explicit: false },
+          { id: "10", name: "In Your Eyes", duration_ms: 237000, track_number: 10, explicit: false },
+          { id: "11", name: "Save Your Tears", duration_ms: 216000, track_number: 11, explicit: false },
+          { id: "12", name: "Repeat After Me (Interlude)", duration_ms: 183000, track_number: 12, explicit: false },
+          { id: "13", name: "After Hours", duration_ms: 360000, track_number: 13, explicit: false },
+          { id: "14", name: "Until I Bleed Out", duration_ms: 201000, track_number: 14, explicit: false }
+        ];
+      }
+      
+      const data = await response.json();
+      console.log(`[SPOTIFY SERVICE] DEMO: ${data.items?.length || 0} canciones del álbum ${albumId} obtenidas`);
+      return data.items || [];
+    }
+
+    // Código para modo normal
+    console.log(`Obteniendo canciones del álbum: ${albumId}`);
+    const apiBaseUrl = getApiBaseUrl();
+    const response = await fetch(
+      `${apiBaseUrl}/spotify?action=album-tracks&albumId=${albumId}&limit=${limit}`
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error en getAlbumTracks:', errorData);
+      
+      if (response.status === 401 && errorData.redirect) {
+        window.location.href = errorData.redirect;
+        return [];
+      }
+      
+      throw new Error(errorData.error || 'Error al obtener canciones del álbum');
+    }
+
+    const data = await response.json();
+    return data.items || [];
+  } catch (error) {
+    console.error(`Error en getAlbumTracks para ${albumId}:`, error);
+    // Devolver canciones predeterminadas en caso de error
+    return [
+      { id: "1", name: "Alone Again", duration_ms: 240000, track_number: 1, explicit: false },
+      { id: "2", name: "Too Late", duration_ms: 234000, track_number: 2, explicit: false },
+      { id: "3", name: "Hardest To Love", duration_ms: 193000, track_number: 3, explicit: false },
+      { id: "4", name: "Scared To Live", duration_ms: 226000, track_number: 4, explicit: false },
+      { id: "5", name: "Snowchild", duration_ms: 242000, track_number: 5, explicit: false },
+      { id: "6", name: "Escape From LA", duration_ms: 352000, track_number: 6, explicit: false },
+      { id: "7", name: "Heartless", duration_ms: 206000, track_number: 7, explicit: true },
+      { id: "8", name: "Faith", duration_ms: 282000, track_number: 8, explicit: false },
+      { id: "9", name: "Blinding Lights", duration_ms: 200000, track_number: 9, explicit: false },
+      { id: "10", name: "In Your Eyes", duration_ms: 237000, track_number: 10, explicit: false },
+      { id: "11", name: "Save Your Tears", duration_ms: 216000, track_number: 11, explicit: false },
+      { id: "12", name: "Repeat After Me (Interlude)", duration_ms: 183000, track_number: 12, explicit: false },
+      { id: "13", name: "After Hours", duration_ms: 360000, track_number: 13, explicit: false },
+      { id: "14", name: "Until I Bleed Out", duration_ms: 201000, track_number: 14, explicit: false }
+    ];
+  }
+}

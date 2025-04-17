@@ -1,0 +1,186 @@
+{
+  "items": [
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/4q3ewBCX7sLwd24euuV69X"
+      },
+      "followers": {
+        "href": null,
+        "total": 93613466
+      },
+      "genres": [
+        "reggaeton",
+        "trap latino",
+        "latin",
+        "urbano latino"
+      ],
+      "href": "https://api.spotify.com/v1/artists/4q3ewBCX7sLwd24euuV69X",
+      "id": "4q3ewBCX7sLwd24euuV69X",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb81f47f44084e0a09b5f0fa13",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000517481f47f44084e0a09b5f0fa13",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f17881f47f44084e0a09b5f0fa13",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "Bad Bunny",
+      "popularity": 100,
+      "type": "artist",
+      "uri": "spotify:artist:4q3ewBCX7sLwd24euuV69X"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/7ltDVBr6mKbRvohxheJ9h1"
+      },
+      "followers": {
+        "href": null,
+        "total": 8466971
+      },
+      "genres": [
+        "latin"
+      ],
+      "href": "https://api.spotify.com/v1/artists/7ltDVBr6mKbRvohxheJ9h1",
+      "id": "7ltDVBr6mKbRvohxheJ9h1",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5ebd7bb678bef6d2f26110cae49",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab67616100005174d7bb678bef6d2f26110cae49",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f178d7bb678bef6d2f26110cae49",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "ROSALÍA",
+      "popularity": 78,
+      "type": "artist",
+      "uri": "spotify:artist:7ltDVBr6mKbRvohxheJ9h1"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/3H5WUWU5dGYFdJ4A2hWJtV"
+      },
+      "followers": {
+        "href": null,
+        "total": 4891223
+      },
+      "genres": [
+        "flamenco",
+        "spanish pop",
+        "latin"
+      ],
+      "href": "https://api.spotify.com/v1/artists/3H5WUWU5dGYFdJ4A2hWJtV",
+      "id": "3H5WUWU5dGYFdJ4A2hWJtV",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb58d4e2cfe850d3b5d3d9881f",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000517458d4e2cfe850d3b5d3d9881f",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f17858d4e2cfe850d3b5d3d9881f",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "C. Tangana",
+      "popularity": 77,
+      "type": "artist",
+      "uri": "spotify:artist:3H5WUWU5dGYFdJ4A2hWJtV"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/04gDigrS5kc9YWfZHwBETP"
+      },
+      "followers": {
+        "href": null,
+        "total": 21659417
+      },
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "href": "https://api.spotify.com/v1/artists/04gDigrS5kc9YWfZHwBETP",
+      "id": "04gDigrS5kc9YWfZHwBETP",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb2fda3dfc5a6fbf8c8b9118f7",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab676161000051742fda3dfc5a6fbf8c8b9118f7",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f1782fda3dfc5a6fbf8c8b9118f7",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "Mariah Carey",
+      "popularity": 85,
+      "type": "artist",
+      "uri": "spotify:artist:04gDigrS5kc9YWfZHwBETP"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+      },
+      "followers": {
+        "href": null,
+        "total": 60489562
+      },
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+      "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb2f71b65ef483ed75a8b40437",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab676161000051742f71b65ef483ed75a8b40437",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f1782f71b65ef483ed75a8b40437",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "The Weeknd",
+      "popularity": 96,
+      "type": "artist",
+      "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+    }
+  ]
+} 

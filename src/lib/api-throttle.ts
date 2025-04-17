@@ -88,7 +88,6 @@ export function throttleApiCalls<T extends (...args: any[]) => Promise<any>>(
       try {
         // Si no es el primer intento, esperar antes de reintentar
         if (attempt > 0) {
-          console.log(`[ThrottleAPI:${apiName}] Reintentando (${attempt}/${maxRetries})...`);
           await sleep(retryDelay * attempt); // Aumentar el tiempo entre reintentos
         }
         

@@ -25,11 +25,10 @@ export default function UserProfilePage(): JSX.Element {
   const [mounted, setMounted] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  const { userNotifications } = useCustomNotifications();
+  const { showNotification, addSystemNotification } = useCustomNotifications();
   const { profile, loading, error } = useProfile();
   
   // En una aplicación real, usaríamos el ID para obtener los datos del usuario
-  console.log(`Mostrando el perfil de usuario con ID: ${userId}`);
   
   useEffect(() => {
     setMounted(true);
@@ -40,10 +39,10 @@ export default function UserProfilePage(): JSX.Element {
     
     if (!isFollowing) {
       // Si vamos a seguir al usuario
-      userNotifications.onUserFollowed(profile?.name || 'Usuario');
+      showNotification(`Ahora sigues a ${profile?.name || 'Usuario'}`, 'success');
     } else {
       // Si dejamos de seguir al usuario
-      userNotifications.onUserUnfollowed(profile?.name || 'Usuario');
+      showNotification(`Has dejado de seguir a ${profile?.name || 'Usuario'}`, 'info');
     }
     
     // Aquí iría la llamada a la API para seguir/dejar de seguir al usuario

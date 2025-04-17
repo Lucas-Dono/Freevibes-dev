@@ -57,7 +57,6 @@ export async function cacheTrackImage(
       ttl
     );
     
-    console.log(`[ImageCache] Almacenada información para "${trackKey}"`);
   } catch (error) {
     console.error(`[ImageCache] Error al almacenar información para "${trackKey}":`, error);
   }
@@ -80,7 +79,6 @@ export async function getTrackImageFromCache(
     if (!cachedData) return null;
     
     const trackDetails = JSON.parse(cachedData) as CachedTrackDetails;
-    console.log(`[ImageCache] Recuperada información para "${trackKey}" (edad: ${formatAge(Date.now() - trackDetails.timestamp)})`);
     
     return trackDetails;
   } catch (error) {
@@ -107,7 +105,6 @@ export async function findTrackDetails(
     const cachedDetails = await getTrackImageFromCache(trackKey);
     if (cachedDetails) return cachedDetails;
     
-    console.log(`[ImageCache] Buscando información para "${trackKey}" en APIs externas`);
     
     // Si no está en caché, buscar en las APIs externas
     // Esta función se implementará en un servicio separado

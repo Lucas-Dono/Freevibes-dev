@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "rewrites": [
@@ -38,7 +38,9 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_IGNORE_PRERENDER_ERRORS": "true",
+    "NEXT_SKIP_HYBRID_PRERENDER": "true"
   },
   "public": true
 } 

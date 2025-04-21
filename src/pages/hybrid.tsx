@@ -8,11 +8,38 @@ import { getHybridRecommendations, VALID_GENRES } from '@/services/recommendatio
 import { usePlayer } from '@/contexts/PlayerContext';
 import { SessionProvider } from 'next-auth/react';
 import { PlayerProvider } from '@/contexts/PlayerContext';
-import NextDynamic from 'next/dynamic';
 
 // Configuración explícita para forzar renderizado en el servidor
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 export const revalidate = 0;
+
+// Esta configuración le indica a Next.js que esta página debe ser renderizada en servidor
+// y nunca intentar pre-renderizarla estáticamente durante el build
+export const config = {
+  unstable_runtimeJS: true,
+  runtime: 'nodejs',
+};
+
+// Este archivo será renderizado en el lado del cliente
+// Esto evita problemas de pre-renderizado estático
+const ClientHybrid = () => {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+  
+  return <HybridPageWithProviders />;
+};
 
 // Componente de la página Hybrid que muestra recomendaciones híbridas
 const HybridPage: NextPage = () => {
@@ -149,16 +176,4 @@ const HybridPageWithProviders = () => (
   </SessionProvider>
 );
 
-// Usando dynamic para evitar renderizado estático
-const DynamicHybridPage = NextDynamic(() => Promise.resolve(HybridPageWithProviders), {
-  ssr: true,
-});
-
-export default DynamicHybridPage;
-
-// Esta configuración le indica a Next.js que esta página debe ser renderizada en servidor
-// y nunca intentar pre-renderizarla estáticamente durante el build
-export const config = {
-  unstable_runtimeJS: true,
-  runtime: 'nodejs',
-}; 
+export default ClientHybrid; 

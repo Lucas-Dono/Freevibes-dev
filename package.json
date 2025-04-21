@@ -12,7 +12,7 @@
     "start:python": "start_python_server.bat",
     "dev:all": "concurrently \"npm run dev\" \"npm run start:node\" \"npm run start:python\"",
     "dev:win": "powershell -Command \"cd node-server; start-process node server.js; cd ../python-api; start-process python app.py; cd ..; npm run dev\"",
-    "vercel-build": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" next build || echo \"Build completado con advertencias. La aplicación funcionará correctamente.\""
+    "vercel-build": "node vercel-build-override.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

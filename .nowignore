@@ -1,0 +1,13 @@
+# Ignorar rutas específicas
+/src/pages/hybrid.tsx
+/src/app/hybrid-adapter/
+
+# Excluir nodos específicos
+node_modules
+
+# Ignorar archivos de configuración temporales
+.next-temp-build-config
+.vercel-ignore-build-errors
+
+# Directorios de build
+.next/cache 

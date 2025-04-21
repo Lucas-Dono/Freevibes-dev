@@ -40,6 +40,5 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "public": true,
-  "generateStaticParams": false
+  "public": true
 } 

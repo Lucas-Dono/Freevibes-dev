@@ -13,7 +13,7 @@ const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler
 
 const app = express();
 const PORT = process.env.SERVER_PORT || '3001'; // Asegurar string
-const PYTHON_API_BASE_URL = process.env.PYTHON_API_BASE_URL || 'http://localhost:5000'; // Nueva variable base
+const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5000'; // Nueva variable base
 // URL base sin el sufijo /api para las rutas que no lo requieren (si es necesario)
 // const PYTHON_BASE_URL = PYTHON_API_BASE_URL.replace(/\/api$/, ''); // Comentado/Eliminado si no se usa
 

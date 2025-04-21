@@ -1,0 +1,155 @@
+# Propuesta de Diseño para Interfaz Móvil - FreeVibes
+
+## Principios Generales
+
+1.  **Navegación Principal:** Implementar una barra de navegación inferior fija con 4-5 iconos para las secciones clave: Home, Explorar, Buscar, Biblioteca. Similar a los ejemplos 2, 3 y 5.
+2.  **Barra Superior:** Minimalista. Puede contener el logo o título de la sección actual, y botones para acciones secundarias como Notificaciones, Perfil o Configuración (ejemplo 2 o 5).
+3.  **Mini-Reproductor:** Un reproductor compacto fijo en la parte inferior, justo encima de la barra de navegación. Mostrará carátula pequeña, título, artista y control de play/pausa. Al tocarlo, se expandirá a pantalla completa (ejemplos 2, 3, 5).
+4.  **Tarjetas (Cards):** Adaptar las tarjetas existentes (`UnifiedMusicCard`, `StyledCard`) para ser más compactas y táctiles. Usar carruseles horizontales deslizables y listas verticales. Asegurar espaciado adecuado.
+5.  **Controles Táctiles:** Aumentar el tamaño de botones, iconos y elementos interactivos para facilitar la interacción en pantallas pequeñas.
+6.  **Diseño Adaptable:** Utilizar Flexbox y Grid para que los layouts se ajusten correctamente a diferentes tamaños de pantalla móvil.
+7.  **Consistencia Visual:** Mantener la paleta de colores y tipografía del diseño de escritorio, pero adaptando los tamaños y espaciados para móvil.
+
+## Diseño por Sección
+
+### Home (`/home`)
+
+*   **Hero/Bienvenida:** Simplificar. Reemplazar la imagen de fondo grande por un banner más pequeño o un saludo directo. La barra de búsqueda puede ir en la barra superior o debajo del saludo.
+*   **Secciones:** Mantener la estructura de carruseles horizontales (ej. "Rotación Personal", "Playlists Destacadas") y listas verticales (ej. "Escuchado Recientemente").
+    *   Los carruseles deben ser deslizables (swipe).
+    *   Las listas verticales son adecuadas para contenido más largo (similar a "Selección rápida" en ejemplo 2).
+    *   Usar encabezados claros para cada sección.
+*   **Filtros/Categorías:** Si se usan botones de categoría (como en ejemplo 2 "Sueño", "Romance"), mostrarlos como "chips" deslizables horizontalmente cerca de la parte superior.
+
+### Explorar (`/explore`)
+
+*   **Filtros/Tabs:** Usar pestañas superiores (como ejemplo 3 "Todas", "Música") o chips deslizables (como ejemplo 2) para filtrar por Géneros, Estados de Ánimo, Novedades, Listas de Éxitos.
+*   **Visualización de Contenido:** Combinar cuadrículas (grids) para categorías generales (ejemplo 3 "Todas") y carruseles horizontales para mostrar playlists o géneros específicos (ejemplo 5 "Géneros"). Las tarjetas de género podrían ser similares a las del ejemplo 5.
+
+### Buscar (`/search`)
+
+*   **Barra de Búsqueda:** Barra de búsqueda prominente en la parte superior (ejemplo 3).
+*   **Vista Inicial:** Mostrar búsquedas recientes y/o categorías/géneros sugeridos (similar a la vista inicial del ejemplo 3).
+*   **Resultados:** Al escribir, mostrar resultados categorizados mediante pestañas (Top, Canciones, Artistas, Álbumes, Playlists) o en una única lista vertical con separadores claros.
+
+### Biblioteca (`/library`)
+
+*   **Filtros/Tabs:** Pestañas superiores para "Playlists", "Artistas", "Álbumes", "Canciones Guardadas" (adaptando la idea de ejemplo 3).
+*   **Visualización de Contenido:** Listas verticales simples para cada categoría. Cada elemento de la lista (nombre de playlist, artista, etc.) debe ser táctil y llevar a la página de detalle correspondiente. Incluir opciones de filtrado o clasificación si es relevante. Considerar opción de vista de cuadrícula vs. lista.
+
+### Páginas de Detalle (Artista `/artist/[id]`, Álbum `/album/[id]`, Playlist `/playlist/[id]`)
+
+*   **Encabezado:** Imagen grande de portada/artista en la parte superior, seguida del nombre, artista/creador, y botones de acción principales (Reproducir, Aleatorio, Me Gusta/Seguir, Opciones...).
+*   **Listado de Canciones:** Lista vertical de canciones. Cada fila debe ser táctil, mostrar información esencial (número/índice, título, duración, menú de opciones) y permitir la reproducción individual.
+*   **Artista Específico:** Podría incluir secciones adicionales como "Top Canciones", "Álbumes", "Sencillos" usando pestañas o secciones colapsables.
+
+### Reproductor a Pantalla Completa
+
+*   **Diseño Principal (Vista Central):**
+    *   Carátula del álbum grande, **circular** (estilo vinilo), centrada. Puede incluir animación sutil de rotación o indicador de progreso en el borde.
+    *   Debajo de la carátula: Título de la canción y nombre del artista.
+    *   Debajo del texto: Barra de progreso interactiva.
+    *   Controles principales grandes y claros en la parte inferior: Anterior, Play/Pausa, Siguiente. Botones secundarios opcionales para Aleatorio y Repetir.
+    *   Iconos para acciones comunes: Me Gusta/Guardar y Más Opciones (...).
+*   **Vistas Adicionales (Navegación por Swipe Horizontal):** Implementar un sistema de páginas deslizables horizontalmente (izquierda/derecha) para acceder a contenido adicional, manteniendo la vista principal limpia. Un indicador visual (ej. puntos) mostrará la página actual.
+    *   **Página 1 (Central):** La vista principal con la carátula tipo vinilo y controles.
+    *   **Página 2 (Swipe): Letra.** Vista optimizada para mostrar la letra sincronizada a pantalla completa.
+    *   **Página 3 (Swipe): Cola de reproducción.** Lista vertical de las próximas canciones, con posibilidad de interacción (ver, reorganizar, eliminar).
+    *   **Página 4 (Swipe): Información.** Detalles adicionales de la canción (álbum, ID, duración), enlaces a artista/álbum y acciones contextuales.
+*   **Gestos:**
+    *   Deslizar horizontalmente para cambiar entre las vistas (Vinilo/Principal, Letra, Cola, Info).
+    *   Deslizar verticalmente hacia abajo para minimizar el reproductor y volver al mini-reproductor.
+
+## Consideraciones Adicionales
+
+*   **Rendimiento:** Optimizar imágenes y carga de datos para conexiones móviles.
+*   **Feedback Táctil:** Proveer feedback visual (ej. efecto ripple) al tocar elementos interactivos.
+*   **Modo Offline:** Considerar funcionalidades para reproducción offline si aplica.
+*   **Accesibilidad:** Asegurar buen contraste de colores, tamaño de fuente legible y compatibilidad con lectores de pantalla.
+
+## Plan de Implementación Detallado
+
+Este plan describe los pasos recomendados para adaptar la UI existente a una experiencia móvil optimizada, basándose en las ideas anteriores.
+
+**Fase 1: Configuración y Globales**
+
+1.  **Branch Git:** Crear una nueva rama dedicada para el desarrollo de la UI móvil (ej. `feat/mobile-ui`).
+2.  **Theme Móvil:** Ajustar el tema de Material UI (`src/theme`) para dispositivos móviles:
+    *   Reducir tamaños de fuente base.
+    *   Ajustar espaciados y paddings predeterminados para ser más compactos.
+    *   Utilizar breakpoints de Material UI para definir estilos específicos por tamaño de pantalla.
+3.  **Barra de Navegación Inferior:**
+    *   Implementar un componente `BottomNavigation` (MUI) fijo en la parte inferior.
+    *   Añadir iconos (Home, Explorar, Buscar, Biblioteca) usando `BottomNavigationAction`.
+    *   Asegurar que esté visible solo en pantallas móviles (usar `useMediaQuery` o CSS media queries).
+    *   Vincular cada acción a la ruta correspondiente.
+4.  **Barra Superior (AppBar):**
+    *   Adaptar el `AppBar` existente.
+    *   En móvil: Mostrar título de la sección actual o logo compacto. Ocultar la barra de búsqueda principal (se manejará en la sección Buscar o dentro de Home).
+    *   Añadir un botón de menú (opcional) o iconos directos para acciones secundarias (Perfil, Notificaciones, Configuración) si son necesarias en móvil.
+5.  **Mini-Reproductor Fijo:**
+    *   Crear un componente `MiniPlayer` que se posicione fijo encima de la `BottomNavigation`.
+    *   Mostrar carátula pequeña, título/artista (truncado si es largo) y botón Play/Pausa.
+    *   Obtener estado del `PlayerContext`.
+    *   Al hacer tap, debe activar la vista del Reproductor a Pantalla Completa.
+    *   Visible solo en móvil cuando haya una canción activa.
+
+**Fase 2: Adaptación de Páginas Principales**
+
+*(Iterar por cada página: Home, Explore, Search, Library)*
+
+6.  **Layout Responsivo:** Revisar el layout principal de cada página (`page.tsx`). Usar `Grid` y `Box` de MUI con props responsivas (`sx` prop) o CSS Flexbox/Grid para adaptar la estructura a pantallas verticales y estrechas.
+7.  **Componentes de Contenido:**
+    *   **Carruseles:** Configurar `react-slick` (o similar) para que sea deslizable (swipe) en móvil. Ajustar el número de slides visibles (`slidesToShow`). Asegurar que las flechas (si se mantienen) sean táctiles o reemplazarlas por indicadores de puntos.
+    *   **Tarjetas (`UnifiedMusicCard`, `StyledCard`, etc.):** Crear estilos específicos para móvil: reducir tamaño de imagen, ajustar tamaño de fuente y padding. Asegurar que sean fácilmente clickeables/táctiles.
+    *   **Listas Verticales:** Asegurar que los `ListItem` tengan suficiente padding y altura para ser táctiles. Truncar texto largo si es necesario.
+    *   **Tabs/Chips:** Si se usan `Tabs` o `Chip` (MUI) para filtros, asegurarse de que sean scrollables horizontalmente si no caben en la pantalla.
+8.  **Contenido Específico por Página:**
+    *   **Home:** Simplificar el Hero. Posicionar la búsqueda de forma accesible (AppBar o bajo el saludo).
+    *   **Explore:** Adaptar grids y carruseles. Asegurar legibilidad de tarjetas de género/categoría.
+    *   **Search:** Hacer la barra de búsqueda prominente. Adaptar la vista de resultados (Tabs o lista única) para móvil.
+    *   **Library:** Optimizar las listas verticales. Considerar añadir iconos para diferenciar tipos de contenido (Playlist, Álbum, Artista).
+
+**Fase 3: Adaptación de Páginas de Detalle**
+
+*(Iterar por cada página: Artist, Album, Playlist)*
+
+9.  **Encabezado:** Implementar un layout flexible para la imagen de cabecera, título y botones de acción. La imagen debe escalar correctamente. Los botones deben ser grandes y fáciles de tocar.
+10. **Lista de Canciones:** Adaptar la tabla o lista. Asegurar que cada fila sea táctil y muestre la información esencial de forma clara. El menú de opciones (...) por canción debe ser accesible.
+
+**Fase 4: Implementación del Reproductor a Pantalla Completa**
+
+11. **Componente Contenedor:** Crear un componente (ej. `FullScreenPlayer`) que se muestre modalmente o cubra toda la pantalla cuando esté activo (controlado por estado, quizás en `PlayerContext`).
+12. **Vista Principal (Vinilo):**
+    *   Estilar la imagen de carátula con `border-radius: 50%`.
+    *   Aplicar animación CSS (`@keyframes spin`) a la carátula, controlada por el estado de reproducción (play/pause).
+    ```css
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .vinyl-spinning {
+      animation: spin 20s linear infinite; /* Ajustar duración para velocidad deseada */
+    }
+    .vinyl-paused {
+      animation-play-state: paused;
+    }
+    ```
+    *   Posicionar controles (Play/Pausa, Prev, Next, Like, Options) de forma ergonómica y con buen tamaño táctil.
+13. **Navegación por Swipe:**
+    *   Integrar una librería como `Swiper.js` o `react-swipeable-views`.
+    *   Crear componentes separados para cada "slide" (Letra, Cola, Información).
+    *   Añadir indicadores de página (puntos).
+14. **Vistas Adicionales (Slides):**
+    *   **Letra:** Componente que muestre texto formateado. Integrar lógica de sincronización si existe.
+    *   **Cola:** Lista scrollable de canciones. Usar `react-window` o `react-virtualized` si la cola puede ser muy larga. Añadir opción de reordenar (drag-and-drop) si se desea.
+    *   **Información:** Mostrar metadatos relevantes.
+15. **Gesto de Minimizar:** Implementar detección de swipe hacia abajo (ej. `react-use-gesture`) en el contenedor principal para ocultar el `FullScreenPlayer` y mostrar el `MiniPlayer`.
+
+**Fase 5: Pruebas y Refinamiento**
+
+16. **Pruebas Multi-dispositivo:** Probar exhaustivamente en diferentes tamaños de pantalla móvil (usando DevTools y dispositivos reales).
+17. **Pruebas de Interacción:** Verificar que todos los elementos táctiles respondan correctamente (botones, swipes, scroll).
+18. **Rendimiento:** Analizar tiempos de carga y respuesta en móvil. Optimizar imágenes y llamadas a API si es necesario.
+19. **Accesibilidad:** Realizar pruebas básicas de accesibilidad (contraste, navegación por teclado si aplica, lectores de pantalla).
+20. **Iteración:** Recoger feedback y refinar la UI según sea necesario.

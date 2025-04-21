@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "rewrites": [
@@ -17,8 +17,8 @@
       "destination": "/hybrid-adapter"
     }
   ],
-   "buildOptions": {
-     "ignorePreviewMode": true,
-     "ignoreDevCommand": true
-   }
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "public": true
 } 

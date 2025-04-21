@@ -3,6 +3,11 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Configuración de dinámica para evitar prerender estático
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export const revalidate = 0;
+
 export default function HybridAdapter() {
   const router = useRouter();
 

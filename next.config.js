@@ -10,6 +10,15 @@ const nextConfig = {
   // Configurar para desarrollo y producción
   output: 'standalone',
   
+  // Configuración para evitar pre-renderizado estático de páginas específicas
+  experimental: {
+    serverComponentsExternalPackages: ['next-auth'],
+    // Permitir pre-generación parcial
+    isrMemoryCacheSize: 0, // Deshabilitar ISR cache para forzar renderizado dinámico
+    // Especificar rutas dinámicas para el App Router
+    instrumentationHook: true,
+  },
+  
   images: {
     remotePatterns: [
       // Last.fm
@@ -128,11 +137,6 @@ const nextConfig = {
         hostname: 'via.placeholder.com',
       },
     ],
-  },
-  
-  // Asegurar que las páginas con APIs dinámicas no sean exportadas estáticamente
-  experimental: {
-    serverComponentsExternalPackages: ['next-auth'],
   },
   
   excludeDefaultMomentLocales: true,

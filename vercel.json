@@ -17,8 +17,29 @@
       "destination": "/hybrid-adapter"
     }
   ],
+  "headers": [
+    {
+      "source": "/hybrid",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/hybrid-adapter",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   },
-  "public": true
+  "public": true,
+  "generateStaticParams": false
 } 

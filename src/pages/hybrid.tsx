@@ -8,10 +8,11 @@ import { getHybridRecommendations, VALID_GENRES } from '@/services/recommendatio
 import { usePlayer } from '@/contexts/PlayerContext';
 import { SessionProvider } from 'next-auth/react';
 import { PlayerProvider } from '@/contexts/PlayerContext';
+import NextDynamic from 'next/dynamic';
 
-// Agregar esta configuración para excluir la página de la generación estática
-export const dynamic = 'force-dynamic';
+// Configuración explícita para forzar renderizado en el servidor
 export const dynamicParams = true;
+export const revalidate = 0;
 
 // Componente de la página Hybrid que muestra recomendaciones híbridas
 const HybridPage: NextPage = () => {
@@ -148,7 +149,12 @@ const HybridPageWithProviders = () => (
   </SessionProvider>
 );
 
-export default HybridPageWithProviders;
+// Usando dynamic para evitar renderizado estático
+const DynamicHybridPage = NextDynamic(() => Promise.resolve(HybridPageWithProviders), {
+  ssr: true,
+});
+
+export default DynamicHybridPage;
 
 // Esta configuración le indica a Next.js que esta página debe ser renderizada en servidor
 // y nunca intentar pre-renderizarla estáticamente durante el build

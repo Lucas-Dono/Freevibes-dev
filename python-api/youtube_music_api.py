@@ -95,8 +95,7 @@ def cached(cache_file):
                     # Verificar si el caché está vigente
                     if time.time() - cached_data.get('timestamp', 0) < CACHE_DURATION:
                         logger.info(
-                            f"Usando caché para {
-                                func.__name__} con región {region}")
+                            f"Usando caché para {func.__name__} con región {region}")
                         # Importante: devolver como jsonify para que sea una
                         # respuesta válida
                         return jsonify(cached_data.get('data'))

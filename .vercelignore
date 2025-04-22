@@ -1,11 +1,7 @@
 # Ignorar errores en estas rutas
-/src/pages/hybrid.tsx
-/src/app/hybrid-adapter/
 
 # Ignorar archivos de configuración temporales
 .next-temp-build-config
 .vercel-ignore-build-errors
 
-# Ignorar errores de renderizado estático
-**/hybrid
-**/hybrid-adapter 
+# Ignorar errores de renderizado estático 

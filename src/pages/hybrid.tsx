@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { NextPage } from 'next';
+import { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { Track } from '@/types/types';
 import { Navbar } from '@/components/Navbar';
@@ -8,18 +8,6 @@ import { getHybridRecommendations, VALID_GENRES } from '@/services/recommendatio
 import { usePlayer } from '@/contexts/PlayerContext';
 import { SessionProvider } from 'next-auth/react';
 import { PlayerProvider } from '@/contexts/PlayerContext';
-
-// Configuración explícita para forzar renderizado en el servidor
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-export const revalidate = 0;
-
-// Esta configuración le indica a Next.js que esta página debe ser renderizada en servidor
-// y nunca intentar pre-renderizarla estáticamente durante el build
-export const config = {
-  unstable_runtimeJS: true,
-  runtime: 'nodejs',
-};
 
 // Este archivo será renderizado en el lado del cliente
 // Esto evita problemas de pre-renderizado estático
@@ -175,5 +163,13 @@ const HybridPageWithProviders = () => (
     </PlayerProvider>
   </SessionProvider>
 );
+
+// Add empty getServerSideProps to force dynamic rendering
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // No data fetching needed here, just forcing SSR
+  return {
+    props: {},
+  };
+};
 
 export default ClientHybrid; 

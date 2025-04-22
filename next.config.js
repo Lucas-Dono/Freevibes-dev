@@ -153,17 +153,6 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Configurar reescrituras para las rutas
-  async rewrites() {
-    return [
-      // Redirigir a nuestro adaptador para mantener compatibilidad
-      {
-        source: '/hybrid',
-        destination: '/hybrid-adapter',
-      },
-    ];
-  },
-  
   // Configuración específica para el directorio pages
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   
@@ -177,9 +166,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  // Usar la configuración de hybrid-config
-  ...hybridConfig.nextConfig,
 };
 
 module.exports = nextConfig; 

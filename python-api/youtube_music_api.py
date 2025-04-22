@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin # Importar cross_origin
 import os
 import json
 from datetime import datetime, timedelta
@@ -24,21 +24,26 @@ logger = logging.getLogger('youtube-music-api')
 
 app = Flask(__name__)
 
-# Configuración CORS más específica
-cors_origin_string = os.environ.get('CORS_ORIGIN', '*') # Renombrar variable
+# Configuración CORS principal (restrictiva)
+cors_origin_string = os.environ.get('CORS_ORIGIN', '') # Leer variable, default a string vacío
 allowed_origins = [] # Lista para guardar orígenes
 if cors_origin_string == '*':
-    allowed_origins = "*" # Permitir todo si es '*'
+    allowed_origins = "*" # Permitir todo si es '*' explícito
 elif cors_origin_string:
-    # Dividir la cadena en una lista de orígenes
-    allowed_origins = [origin.strip() for origin in cors_origin_string.split(',')]
+    # Dividir la cadena en una lista de orígenes permitidos
+    allowed_origins = [origin.strip() for origin in cors_origin_string.split(',') if origin.strip()]
+    # Añadir localhost para desarrollo si no se especifica '*' ni localhost
+    if '*' not in allowed_origins and 'http://localhost:3000' not in allowed_origins:
+        allowed_origins.append('http://localhost:3000')
+        allowed_origins.append('http://localhost:3100') # Añadir también el puerto del servidor Node local
+elif not allowed_origins:
+    # Si CORS_ORIGIN está vacío o no se define, permitir solo localhost por defecto
+    allowed_origins = ['http://localhost:3000', 'http://localhost:3100']
 
-# Asegurarse de que allowed_origins no esté vacía si no es '*'
-if not allowed_origins and allowed_origins != "*":
-     allowed_origins = [] # O un origen por defecto seguro si prefieres
-
-CORS(app, resources={r"/*": {"origins": allowed_origins}}) # Pasar la lista
-logger.info(f"CORS configurado con orígenes: {allowed_origins}")
+# Aplicar CORS restrictivo globalmente
+# Nota: No usamos resources= aquí para poder usar el decorador @cross_origin más fácil
+CORS(app, origins=allowed_origins, supports_credentials=True)
+logger.info(f"CORS principal configurado con orígenes: {allowed_origins}")
 
 # Configuración y autenticación
 AUTH_FILE = "browser.json"
@@ -2390,6 +2395,7 @@ def get_predefined_artists_by_genre(genre, count, region='US'):
 
 
 @app.route('/status')
+@cross_origin(origins='*') # Aplicar CORS abierto solo a esta ruta
 def health_check():
     """Endpoint para verificar la salud del servicio"""
     try:

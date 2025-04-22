@@ -28,9 +28,10 @@ const corsOptions = {
     
     // En modo desarrollo, aceptamos peticiones sin origen (ej. Postman, curl)
     if (!origin) {
-      callback(null, true); // Permitir solicitudes sin origen
-    } else if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, origin); // Devolver solo el origen específico de la solicitud
+      callback(null, true);
+    } else if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+      // Permitir si el origen está en la lista O si la lista contiene '*' (comodín)
+      callback(null, true); 
     } else {
       console.warn(`Origen bloqueado por CORS: ${origin}`);
       callback(new Error('No permitido por CORS'), false);
@@ -41,24 +42,20 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// Aplicar CORS a toda la aplicación
+// Aplicar CORS restrictivo a toda la aplicación
 app.use(cors(corsOptions));
 
-// Para endpoints específicos que necesitan CORS abierto
+// Para el endpoint de status específico que necesita CORS abierto
 const openCorsOptions = {
-  origin: '*',
-  methods: ['GET', 'OPTIONS'],
-  optionsSuccessStatus: 204
+  origin: '*', // Permitir cualquier origen para status
+  methods: ['GET', 'OPTIONS'], // Solo métodos necesarios para status
+  credentials: false // No necesario para status
 };
 
-// Aplicar CORS abierto a rutas específicas
-// app.use('/status', cors(openCorsOptions));
-// app.use('/api/youtube/status', cors(openCorsOptions));
-
 // Log de la configuración CORS al inicio
-console.log('Configuración CORS:', {
+console.log('Configuración CORS principal:', {
   origin: typeof corsOptions.origin === 'function' 
-    ? 'Función dinámica' 
+    ? `Función dinámica basada en CORS_ORIGIN=${process.env.CORS_ORIGIN || 'default (localhost)'}` 
     : corsOptions.origin,
   env: process.env.NODE_ENV || 'development'
 });
@@ -78,7 +75,7 @@ app.use((req, res, next) => {
 // Crear caché para resultados de Spotify con tiempo de expiración de 24 horas
 const spotifyCache = new NodeCache({ stdTTL: 86400, checkperiod: 120 });
 
-// Endpoint raíz para verificación de salud
+// Endpoint raíz para verificación de salud (usa CORS principal)
 app.get('/', (req, res) => {
   res.json({
     status: 'OK',
@@ -89,10 +86,10 @@ app.get('/', (req, res) => {
   });
 });
 
-// Status endpoint con respuesta rápida - lo hacemos así para permitir el CORS
+// Status endpoint con CORS abierto específico
 app.get('/status', cors(openCorsOptions), (req, res) => {
   // Responder inmediatamente con un status 200 y datos mínimos
-  console.log('[Status] Solicitud de verificación recibida');
+  console.log('[Status] Solicitud de verificación recibida (CORS abierto)');
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),

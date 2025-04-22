@@ -25,12 +25,20 @@ logger = logging.getLogger('youtube-music-api')
 app = Flask(__name__)
 
 # Configuración CORS más específica
-cors_origin = os.environ.get('CORS_ORIGIN', '*')
-if cors_origin and ',' in cors_origin:
-    # Si hay múltiples orígenes, usar el primero
-    cors_origin = cors_origin.split(',')[0].strip()
-CORS(app, resources={r"/*": {"origins": cors_origin}})
-logger.info(f"CORS configurado con origen: {cors_origin}")
+cors_origin_string = os.environ.get('CORS_ORIGIN', '*') # Renombrar variable
+allowed_origins = [] # Lista para guardar orígenes
+if cors_origin_string == '*':
+    allowed_origins = "*" # Permitir todo si es '*'
+elif cors_origin_string:
+    # Dividir la cadena en una lista de orígenes
+    allowed_origins = [origin.strip() for origin in cors_origin_string.split(',')]
+
+# Asegurarse de que allowed_origins no esté vacía si no es '*'
+if not allowed_origins and allowed_origins != "*":
+     allowed_origins = [] # O un origen por defecto seguro si prefieres
+
+CORS(app, resources={r"/*": {"origins": allowed_origins}}) # Pasar la lista
+logger.info(f"CORS configurado con orígenes: {allowed_origins}")
 
 # Configuración y autenticación
 AUTH_FILE = "browser.json"

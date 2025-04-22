@@ -12,7 +12,7 @@ const { handleDemoRequest, isDemoMode } = require('./demo-data/demo-handler');
 const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler');
 
 const app = express();
-const PORT = process.env.SERVER_PORT || '3001'; // Asegurar string
+const PORT = process.env.PORT || '3001'; // Asegurar string
 const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5000'; // Nueva variable base
 // URL base sin el sufijo /api para las rutas que no lo requieren (si es necesario)
 // const PYTHON_BASE_URL = PYTHON_API_BASE_URL.replace(/\/api$/, ''); // Comentado/Eliminado si no se usa
@@ -21,19 +21,31 @@ const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:500
 const corsOptions = {
   // Función que determina dinámicamente qué origen permitir
   origin: function(origin, callback) {
-    // Obtener los orígenes permitidos
-    const allowedOrigins = process.env.CORS_ORIGIN ? 
-      process.env.CORS_ORIGIN.split(',') : 
-      ['http://localhost:3100', 'http://localhost:3000'];
+    const allowedOriginsEnv = process.env.CORS_ORIGIN;
+    const defaultOrigins = ['http://localhost:3100', 'http://localhost:3000'];
     
-    // En modo desarrollo, aceptamos peticiones sin origen (ej. Postman, curl)
-    if (!origin) {
-      callback(null, true);
-    } else if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
-      // Permitir si el origen está en la lista O si la lista contiene '*' (comodín)
+    // Usar orígenes de env si existen, si no, los por defecto
+    const allowedOrigins = allowedOriginsEnv ? allowedOriginsEnv.split(',') : defaultOrigins;
+    
+    // En modo desarrollo, o si no hay origen (Postman, curl), permitir
+    if (!origin || process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // Normalizar el origen recibido (quitar posible / al final)
+    const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+    
+    // Verificar si el origen normalizado O el origen sin esquema está en la lista permitida
+    const isAllowed = allowedOrigins.some(allowed => 
+        allowed === normalizedOrigin || // Coincidencia exacta (ej. https://dominio.com)
+        allowed === normalizedOrigin.replace(/^https?:\/\//, '') || // Coincidencia sin esquema (ej. dominio.com)
+        allowed === '*' // Comodín
+    );
+    
+    if (isAllowed) {
       callback(null, true); 
     } else {
-      console.warn(`Origen bloqueado por CORS: ${origin}`);
+      console.warn(`Origen bloqueado por CORS: ${origin}. Orígenes permitidos: ${allowedOrigins.join(', ')}`);
       callback(new Error('No permitido por CORS'), false);
     }
   },

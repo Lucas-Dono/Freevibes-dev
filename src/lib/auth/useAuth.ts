@@ -20,16 +20,16 @@ interface CommonAuthProps {
 export function useAuth(): CommonAuthProps {
   // Intentar usar el AuthContext más reciente (el de components)
   const componentAuth = useContext(ComponentAuthContext);
-  
+
   // Si existe, devolverlo
   if (componentAuth !== componentDefaultAuth) {
     return componentAuth;
   }
-  
+
   // En caso contrario, intentar usar el AuthContext legacy
   try {
     const libAuth = useContext(LibAuthContext);
-    
+
     if (libAuth) {
       // Mapear las propiedades del contexto legacy a las propiedades comunes
       return {
@@ -42,7 +42,7 @@ export function useAuth(): CommonAuthProps {
   } catch (error) {
     // Si hay error, simplemente ignorarlo
   }
-  
+
   // Devolver un objeto con valores por defecto
   return {
     isAuthenticated: false,
@@ -50,4 +50,4 @@ export function useAuth(): CommonAuthProps {
     loading: true,
     isDemo: false
   };
-} 
+}

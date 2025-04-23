@@ -4,7 +4,7 @@ import { API_CONFIG } from '@/config/api-config';
 export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json();
-    
+
     // Validar que se proporcionen todos los campos requeridos
     if (!username || !email || !password) {
       return NextResponse.json(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // Devolver la respuesta exitosa
     return NextResponse.json(data, { status: 201 });
-    
+
   } catch (error) {
     console.error('Error en registro:', error);
     return NextResponse.json(
@@ -42,4 +42,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

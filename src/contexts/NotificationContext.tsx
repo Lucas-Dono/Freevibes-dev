@@ -42,7 +42,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
   // Ya no necesitamos limpiar toasts porque no los usaremos
-  
+
   // Esta función quedará como no-op (sin operación) para mantener compatibilidad
   // con el código existente, pero no mostrará toasts
   const showNotification = (message: string, type: NotificationType, options?: ToastOptions) => {
@@ -59,18 +59,18 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   // Sistema de notificaciones persistentes - ahora es el único que usamos
   const addSystemNotification = (message: string, type: NotificationType) => {
     // Verificar si ya existe una notificación con el mismo mensaje para evitar duplicados
-    const isDuplicate = notifications.some(existingNotification => 
+    const isDuplicate = notifications.some(existingNotification =>
       existingNotification.message === message &&
       // Opcional: también verificar que no sea muy antigua (menos de 5 minutos)
       (new Date().getTime() - existingNotification.timestamp.getTime() < 5 * 60 * 1000)
     );
-    
+
     // Si es un duplicado, no agregar
     if (isDuplicate) {
       console.log(`Notificación duplicada evitada: ${message}`);
       return;
     }
-    
+
     const newNotification: SystemNotification = {
       id: Date.now().toString(),
       message,
@@ -84,13 +84,13 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => ({ ...n, read: true }))
     );
   };
@@ -105,10 +105,10 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <NotificationContext.Provider value={{ 
-      showNotification, 
-      notifications, 
-      unreadCount, 
+    <NotificationContext.Provider value={{
+      showNotification,
+      notifications,
+      unreadCount,
       addSystemNotification,
       markAsRead,
       markAllAsRead,
@@ -119,4 +119,4 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       {/* Eliminamos el ToastContainer completamente */}
     </NotificationContext.Provider>
   );
-}; 
+};

@@ -24,7 +24,7 @@ export async function GET(
         { status: 404 }
       );
     }
-    
+
     const responseData = {
       details: albumDetails,
       tracks: albumTracks
@@ -40,4 +40,4 @@ export async function GET(
       { status: 500 }
     );
   }
-} 
+}

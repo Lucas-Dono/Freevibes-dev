@@ -13,7 +13,7 @@ module.exports = {
         primary: {
           DEFAULT: "var(--primary)",
           light: "var(--primary-light)",
-          lighter: "var(--primary-lighter)", 
+          lighter: "var(--primary-lighter)",
           dark: "var(--primary-dark)",
           darker: "var(--primary-darker)",
         },
@@ -148,4 +148,4 @@ module.exports = {
       variants: ['hover', 'focus', 'active'],
     },
   ],
-}; 
+};

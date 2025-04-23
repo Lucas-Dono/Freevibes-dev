@@ -54,15 +54,15 @@ function mapRequestToFile(action, params, lang) {
   switch (action) {
     case 'featured':
       return `${lang}/featured_playlists.json`;
-    
+
     case 'new-releases':
       return `${lang}/new_releases.json`;
-    
+
     case 'search':
       // Si la búsqueda incluye un artista conocido, usar datos específicos
       const query = params.q || params.query || '';
       const searchType = params.type || 'track';
-      
+
       if (query.toLowerCase().includes('rosalía') && lang === 'es') {
         return `es/search_rosalía_${searchType}.json`;
       } else if (query.toLowerCase().includes('taylor swift') && lang === 'en') {
@@ -72,28 +72,28 @@ function mapRequestToFile(action, params, lang) {
       } else if (query.toLowerCase().includes('maneskin') && lang === 'it') {
         return `it/search_maneskin_${searchType}.json`;
       }
-      
+
       // Búsqueda genérica según el idioma
       return `${lang}/search_${searchType}.json`;
-    
+
     case 'recommendations':
       return 'recommendations_general.json';
-    
+
     case 'top':
       return `${lang}/top_tracks.json`;
-    
+
     case 'saved-tracks':
       // Para proteger privacidad, usar top_tracks en lugar de saved_tracks
       return `${lang}/top_tracks.json`;
-    
+
     case 'genre-recommendations':
       const genre = params.genre || 'pop';
       return `${lang}/genre_${genre.toLowerCase()}.json`;
-    
+
     case 'direct':
       // Intentar mapear endpoints directos de Spotify a archivos locales
       const endpoint = params.endpoint || '';
-      
+
       if (endpoint.includes('/browse/featured-playlists')) {
         return `${lang}/featured_playlists.json`;
       } else if (endpoint.includes('/browse/new-releases')) {
@@ -108,10 +108,10 @@ function mapRequestToFile(action, params, lang) {
         // Para proteger privacidad, usar top_tracks en lugar de saved_tracks
         return `${lang}/top_tracks.json`;
       }
-      
+
       // Si no hay un mapeo específico, usar perfil de usuario
       return 'user_profile.json';
-    
+
     default:
       // Para cualquier acción no reconocida, usar perfil de usuario
       return 'user_profile.json';
@@ -128,27 +128,27 @@ async function handleDemoRequest(req, res) {
   if (!isDemoMode(req)) {
     return false;
   }
-  
+
   try {
     const lang = getDemoLanguage(req);
     const action = req.query.action || '';
     const params = req.query;
-    
+
     console.log(`[DEMO MODE] Procesando solicitud: ${action} (idioma: ${lang})`);
-    
+
     // Mapear la solicitud a un archivo de datos
     const filePath = mapRequestToFile(action, params, lang);
     console.log(`[DEMO MODE] Usando archivo: ${filePath}`);
-    
+
     // Cargar datos demo
     const demoData = await loadDemoData(filePath);
-    
+
     // Devolver respuesta
     res.json(demoData);
     return true;
   } catch (error) {
     console.error('[DEMO MODE] Error:', error);
-    
+
     // Incluso en caso de error, indicamos que la solicitud fue manejada
     // para evitar que continúe el flujo normal
     res.status(500).json({
@@ -162,4 +162,4 @@ async function handleDemoRequest(req, res) {
 module.exports = {
   handleDemoRequest,
   isDemoMode
-}; 
+};

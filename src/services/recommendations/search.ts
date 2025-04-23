@@ -1,6 +1,6 @@
 /**
  * Servicio de búsqueda musical multi-fuente
- * 
+ *
  * Este módulo proporciona funciones para realizar búsquedas de música en múltiples fuentes.
  */
 
@@ -41,21 +41,21 @@ export interface SearchOptions {
  * @returns Lista de tracks encontrados
  */
 export async function searchMultiSource(
-  query: string, 
-  limit: number = 20, 
+  query: string,
+  limit: number = 20,
   options: SearchOptions = {}
 ): Promise<Track[]> {
   const cacheKey = `search:${query}:${limit}:${JSON.stringify(options)}`;
   const useCache = !options.forceFresh;
   let startTime: number;
-  
+
   try {
     if (useCache) {
       // Intentar obtener de caché primero
       const cachedData = await recommendationsCache.get(cacheKey);
       if (cachedData) {
         const tracks = JSON.parse(cachedData);
-        
+
         // Ordenar por completitud si estamos usando el orquestador
         if (options.section) {
           return loadOrchestrator.sortTracksByCompleteness(tracks);
@@ -63,44 +63,44 @@ export async function searchMultiSource(
         return tracks;
       }
     }
-    
+
     startTime = Date.now();
-    
+
     // Optimización: convertir búsquedas de género a formato específico
     const isGenreSearch = query.toLowerCase().startsWith('genre:');
-    
+
     let results: Track[] = [];
     let sourcesUsed = {
       spotify: false,
       youtube: false
     };
-    
+
     // Determinar la distribución de APIs según la sección
     let apiDistribution = {
       spotify: 40,
       youtube: 60
     };
-    
+
     // Si tenemos información de sección, usar la distribución optimizada
     if (options.section) {
       apiDistribution = loadOrchestrator.getApiDistribution(asSectionType(options.section));
     }
-    
+
     // Determinar fuentes a utilizar basado en la disponibilidad y distribución
     // Solo permitimos spotify y youtube como fuentes
-    const availableSources = options.availableSources || 
+    const availableSources = options.availableSources ||
       ['spotify', 'youtube'].filter(source => {
         // Determinar si usaremos esta fuente basado en su porcentaje en la distribución
         const randomValue = Math.random() * 100;
         return randomValue <= apiDistribution[source as keyof typeof apiDistribution];
       });
-    
+
     // Si se especifica una fuente preferida y está disponible, usarla primero
     const preferredSource = options.preferredSource;
-    
+
     if (preferredSource && (preferredSource === 'spotify' || preferredSource === 'youtube') && availableSources.includes(preferredSource)) {
       const tracks = await searchBySource(preferredSource, query, limit, options);
-      
+
       if (tracks.length > 0) {
         results = tracks;
         sourcesUsed[preferredSource as keyof typeof sourcesUsed] = true;
@@ -113,14 +113,14 @@ export async function searchMultiSource(
       const remainingSources = availableSources.filter(
         source => source !== preferredSource || !sourcesUsed[source as keyof typeof sourcesUsed]
       );
-      
+
       if (remainingSources.length > 0) {
         // Definir tiempos de espera diferentes para cada fuente
         const timeouts = {
           spotify: 8000,  // 8 segundos para Spotify
           youtube: 10000  // 10 segundos para YouTube (cuota limitada)
         };
-        
+
         const sourcePromises = remainingSources.map(source => {
           return Promise.race([
             searchBySource(source, query, limit, options)
@@ -129,22 +129,22 @@ export async function searchMultiSource(
                 console.error(`[Search] Error en ${source}:`, error);
                 return { source, tracks: [] };
               }),
-            new Promise<{ source: string; tracks: Track[] }>(resolve => 
+            new Promise<{ source: string; tracks: Track[] }>(resolve =>
               setTimeout(() => {
                 resolve({ source, tracks: [] });
               }, timeouts[source as keyof typeof timeouts])
             )
           ]);
         });
-        
+
         // Esperar a que todas las promesas se resuelvan
         const sourceResults = await Promise.all(sourcePromises);
-        
+
         // Procesar los resultados de cada fuente
         for (const { source, tracks } of sourceResults) {
           if (tracks.length > 0) {
             sourcesUsed[source as keyof typeof sourcesUsed] = true;
-            
+
             if (options.combineResults) {
               // Añadir a los resultados existentes
               results = [...results, ...tracks];
@@ -157,14 +157,14 @@ export async function searchMultiSource(
         }
       }
     }
-    
+
     // Eliminar duplicados basados en ID o combinación de título y artista
     const uniqueTracks: Record<string, Track> = {};
-    
+
     results.forEach(track => {
       // Crear clave única basada en ID o título+artista
       const key = track.id || `${track.title}:${track.artist}`.toLowerCase();
-      
+
       // Filtrar canciones con títulos inválidos como "canción no encontrada numero 1"
       const invalidPatterns = [
         'no encontrada',
@@ -177,8 +177,8 @@ export async function searchMultiSource(
         'no disponible'
       ];
 
-      const isInvalidTitle = invalidPatterns.some(pattern => 
-        track.title?.toLowerCase().includes(pattern) || 
+      const isInvalidTitle = invalidPatterns.some(pattern =>
+        track.title?.toLowerCase().includes(pattern) ||
         track.artist?.toLowerCase().includes(pattern)
       );
 
@@ -186,11 +186,11 @@ export async function searchMultiSource(
       if (isInvalidTitle) {
         return;
       }
-      
+
       // Si este track ya existe, mantener la versión con más datos
       if (uniqueTracks[key]) {
         const existing = uniqueTracks[key];
-        
+
         // Determinar cuál tiene más datos (preferir el que tiene ID de Spotify)
         if (
           (track.spotifyId && !existing.spotifyId) ||
@@ -211,15 +211,15 @@ export async function searchMultiSource(
         uniqueTracks[key] = track;
       }
     });
-    
+
     // Convertir de vuelta a array y limitar resultados
     results = Object.values(uniqueTracks);
-    
+
     // SOLUCIÓN RADICAL: Eliminar TODOS los tracks sin imágenes o con imágenes de LastFM
     results = results.filter(track => {
       // Si no tiene imagen, eliminar
       if (!track.cover) return false;
-      
+
       // Detectar URLs de Last.fm o genéricas
       const badImagePatterns = [
         'lastfm',
@@ -234,29 +234,29 @@ export async function searchMultiSource(
         '/i/u/',
         '/ar0/'
       ];
-      
+
       // Si contiene alguno de los patrones, eliminar
-      return !badImagePatterns.some(pattern => 
+      return !badImagePatterns.some(pattern =>
         track.cover?.toLowerCase().includes(pattern)
       );
     });
-    
+
     // Si quedan muy pocos resultados después del filtrado, buscar en Spotify como fallback
     if (results.length < Math.min(5, limit) && !query.includes('spotify:')) {
-      
+
       try {
         // Intentar una búsqueda directa en Spotify
         const spotifyApi = await import('@/services/spotify');
         const spotifyResults = await spotifyApi.searchTracks(query, limit * 2);
-        
+
         // Filtrar también estos resultados para garantizar imágenes válidas
-        const filteredSpotifyResults = spotifyResults.filter((track: Track) => 
+        const filteredSpotifyResults = spotifyResults.filter((track: Track) =>
           track.cover && !track.cover.includes('lastfm')
         );
-        
+
         // Combinar los resultados originales con los nuevos de Spotify
         const combinedResults = [...results];
-        
+
         // Añadir sólo tracks de Spotify que no estén ya en los resultados (por título+artista)
         for (const spotifyTrack of filteredSpotifyResults) {
           const key = `${spotifyTrack.title}:${spotifyTrack.artist}`.toLowerCase();
@@ -264,44 +264,44 @@ export async function searchMultiSource(
             combinedResults.push(spotifyTrack);
           }
         }
-        
+
         results = combinedResults;
       } catch (error) {
         console.error('[Search] Error en fallback de Spotify:', error);
       }
     }
-    
+
     // Aleatorizar el orden de los resultados para mayor variedad
     // (excepto en búsquedas específicas donde el orden puede ser importante)
     if (!options.preserveOrder && !query.includes(':') && results.length > 5) {
       results = shuffleArray(results);
     }
-    
+
     // Limitar al número solicitado
     results = results.slice(0, limit);
-    
+
     // Si estamos usando el orquestador, ordenar por completitud
     if (options.section) {
       results = loadOrchestrator.sortTracksByCompleteness(results);
     }
-    
+
     // Guardar en caché para futuras búsquedas si tenemos resultados
     if (results.length > 0 && useCache) {
       await recommendationsCache.set(cacheKey, JSON.stringify(results), DEFAULT_CACHE_TTL);
     }
-    
+
     const endTime = Date.now();
-    console.log(`[Search] Búsqueda "${query}" completada en ${endTime - startTime}ms. Fuentes usadas:`, 
+    console.log(`[Search] Búsqueda "${query}" completada en ${endTime - startTime}ms. Fuentes usadas:`,
       Object.entries(sourcesUsed)
         .filter(([_, used]) => used)
         .map(([source]) => source)
         .join(', ')
     );
-    
+
     return results;
   } catch (error) {
     console.error(`[Search] Error buscando "${query}":`, error);
-    
+
     // Intentar recuperar de caché incluso si es una búsqueda forzada
     if (!useCache) {
       const cachedData = await recommendationsCache.get(cacheKey);
@@ -309,7 +309,7 @@ export async function searchMultiSource(
         return JSON.parse(cachedData);
       }
     }
-    
+
     // Si todo falla, devolver array vacío
     return [];
   }
@@ -324,13 +324,13 @@ export async function searchMultiSource(
  * @returns Lista de tracks encontrados
  */
 async function searchBySource(
-  source: string, 
-  query: string, 
-  limit: number, 
+  source: string,
+  query: string,
+  limit: number,
   options: SearchOptions
 ): Promise<Track[]> {
   try {
-    
+
     switch (source.toLowerCase()) {
       case 'spotify': {
         // Ajustar consulta para Spotify si se especifica un artista preferido
@@ -338,55 +338,55 @@ async function searchBySource(
         if (options.preferArtist && !query.toLowerCase().includes(options.preferArtist.toLowerCase())) {
           spotifyQuery = `${query} ${options.preferArtist}`;
         }
-        
+
         // Buscar en Spotify
         const spotifyTracks = await spotifySource.searchTracks(spotifyQuery, limit);
         return spotifyTracks;
       }
-      
+
       case 'youtube': {
         // Siempre usar YouTube Music para búsquedas
         const ytMusicResults = await youtubeMusic.searchSongs(query, limit);
         if (ytMusicResults.length > 0) {
           return youtubeMusic.toTracks(ytMusicResults);
         }
-        
+
         // Si no hay resultados con YouTube Music, intentar con YouTube normal
-        const musicQuery = query.includes('music') || query.includes('música') || query.includes('canción') 
-          ? query 
+        const musicQuery = query.includes('music') || query.includes('música') || query.includes('canción')
+          ? query
           : `${query} music`;
-        
+
         // Buscar videos
         const videos = await youtube.searchVideos(musicQuery, limit);
-        
+
         if (!videos || !videos.items || videos.items.length === 0) {
           return [];
         }
-        
+
         // Filtrar contenido no musical basado en el título
         const musicItems = videos.items.filter(item => {
           const title = item.snippet.title.toLowerCase();
           const nonMusicTerms = [
-            'gameplay', 'tutorial', 'how to', 'walkthrough', 'review', 
+            'gameplay', 'tutorial', 'how to', 'walkthrough', 'review',
             'unboxing', 'trailer', 'explicación', 'explicacion'
           ];
           return !nonMusicTerms.some(term => title.includes(term));
         });
-        
+
         // Extraer título y artista de los videos
         return musicItems.map(item => {
           // Intentar extraer artista y título del formato común "Artista - Título"
           const { title, artist } = extractArtistAndTitle(item.snippet.title);
-          
+
           // Determinar la mejor imagen disponible
           const thumbnails = item.snippet.thumbnails;
-          const bestThumbnail = 
-            thumbnails.maxres?.url || 
-            thumbnails.standard?.url || 
-            thumbnails.high?.url || 
-            thumbnails.medium?.url || 
+          const bestThumbnail =
+            thumbnails.maxres?.url ||
+            thumbnails.standard?.url ||
+            thumbnails.high?.url ||
+            thumbnails.medium?.url ||
             thumbnails.default.url;
-          
+
           return {
             id: item.id.videoId,
             title,
@@ -399,7 +399,7 @@ async function searchBySource(
           };
         });
       }
-          
+
       default:
         console.warn(`[Search] Fuente no soportada: ${source}`);
         return [];
@@ -416,16 +416,16 @@ async function searchBySource(
 function extractArtistAndTitle(videoTitle: string): { title: string; artist: string } {
   // Patrón común: "Artista - Título (Opcional)"
   const dashSeparatorMatch = videoTitle.match(/^(.*?)\s*-\s*(.*?)(\(.*?\))?$/);
-  
+
   if (dashSeparatorMatch) {
     let [, artist, title] = dashSeparatorMatch;
-    
+
     // Limpiar el título
     title = cleanMusicTitle(title);
-    
+
     return { title, artist: artist.trim() };
   }
-  
+
   // Sin separador claro, asumir que todo es el título y derivar artista del canal
   return {
     title: cleanMusicTitle(videoTitle),
@@ -438,7 +438,7 @@ function extractArtistAndTitle(videoTitle: string): { title: string; artist: str
  */
 function cleanMusicTitle(title: string): string {
   let cleanTitle = title.trim();
-  
+
   // Términos comunes a eliminar
   const termsToRemove = [
     /\(Official\s*Video\)/gi,
@@ -475,15 +475,15 @@ function cleanMusicTitle(title: string): string {
     /Lyric\s*Video/gi,
     /Video\s*Lyric/gi
   ];
-  
+
   // Aplicar cada patrón
   for (const pattern of termsToRemove) {
     cleanTitle = cleanTitle.replace(pattern, '');
   }
-  
+
   // Eliminar múltiples espacios
   cleanTitle = cleanTitle.replace(/\s+/g, ' ').trim();
-  
+
   return cleanTitle;
 }
 
@@ -516,27 +516,27 @@ async function cacheTracks(query: string, tracks: Track[], options: SearchOption
 /**
  * Genera resultados de búsqueda simulados para desarrollo
  * NOTA: Función temporal para desarrollo, será reemplazada por búsquedas reales en APIs
- * 
+ *
  * @param query Término de búsqueda
  * @param limit Número máximo de resultados
  * @param options Opciones de búsqueda
  * @returns Lista de canciones simuladas
  */
 function generateMockSearchResults(query: string, limit: number, options: SearchOptions): Track[] {
-  
+
   const mockTracks: Track[] = [];
   const count = Math.min(limit, 25); // Aumentamos el límite para mayor variedad
   const words = query.split(' ');
-  
+
   // Extraer posible género si la búsqueda es de formato genre:xxx
   let genre = '';
   let isGenreSearch = false;
-  
+
   if (query.toLowerCase().startsWith('genre:')) {
     isGenreSearch = true;
     genre = query.substring('genre:'.length).toLowerCase();
   }
-  
+
   // Imágenes por géneros para búsquedas de género
   const genreImages: Record<string, string> = {
     'pop': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819',
@@ -552,7 +552,7 @@ function generateMockSearchResults(query: string, limit: number, options: Search
     'metal': 'https://images.unsplash.com/photo-1629276301820-0f3eedc29fd0',
     'default': 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
   };
-  
+
   // Artistas ficticios por género con nombres mejorados
   const genreArtists: Record<string, string[]> = {
     'pop': ['Taylor Wonder', 'The Weekdays', 'Ariadna Grande', 'Justin Lake', 'Katy Perry', 'Ed Williams', 'Dua Nova'],
@@ -568,7 +568,7 @@ function generateMockSearchResults(query: string, limit: number, options: Search
     'metal': ['Metallica', 'Iron Boy', 'Black Monday', 'Slayer', 'Megadeth', 'System Of A Rise', 'Rammstein'],
     'default': ['The Universal Artist', 'Music Masters', 'Sound Collective', 'Audio Wizards', 'Harmony Crew']
   };
-  
+
   // Títulos de canciones por género mejorados
   const genreSongTitles: Record<string, string[]> = {
     'pop': ['Dancing With Myself', 'Love Story', 'Night Changes', 'Watermelon Sugar', 'Blinding Lights', 'Bad Habits', 'Levitating'],
@@ -584,7 +584,7 @@ function generateMockSearchResults(query: string, limit: number, options: Search
     'metal': ['Master of Reality', 'The Trooper', 'Holy Wars', 'Walk This Path', 'Paranoid Android', 'Enter Sandman', 'Crazy Train'],
     'default': ['The Journey Begins', 'First Impression', 'New Horizons', 'Sunset Boulevard', 'Midnight Memories', 'Summer Breeze']
   };
-  
+
   // Nombres de álbumes por género mejorados
   const genreAlbums: Record<string, string[]> = {
     'pop': ['Teenage Dream', 'Sweetener', 'Future Nostalgia', '1989', 'After Hours', 'Divide', 'Confessions'],
@@ -600,16 +600,16 @@ function generateMockSearchResults(query: string, limit: number, options: Search
     'metal': ['Master of Puppets', 'Rust in Peace', 'The Number of the Beast', 'Paranoid', 'Reign in Blood', 'Cowboys from Hell'],
     'default': ['Magnum Opus', 'The Collection', 'Studio Sessions', 'Greatest Hits', 'New Beginnings', 'The Journey']
   };
-  
+
   // Extraer posible nombre de artista
   const artistName = options.preferArtist || (words.length > 1 && !isGenreSearch ? words[0] : undefined);
-  
+
   // Seleccionar imagen de género si es búsqueda por género
   let coverImage;
   let artistsList;
   let songTitlesList;
   let albumsList;
-  
+
   if (isGenreSearch) {
     coverImage = genreImages[genre] || genreImages['default'];
     artistsList = genreArtists[genre] || genreArtists['default'];
@@ -629,31 +629,31 @@ function generateMockSearchResults(query: string, limit: number, options: Search
     albumsList = genreAlbums['default'];
     coverImage = searchImages[Math.floor(Math.random() * searchImages.length)];
   }
-  
+
   // Crear tracks simulados relacionados con la búsqueda
   for (let i = 0; i < count; i++) {
     // Obtener un artista aleatorio o usar el proporcionado
     const randomArtist = artistsList[Math.floor(Math.random() * artistsList.length)];
     const artist = options.preferArtist || randomArtist;
-    
+
     // Obtener un título aleatorio de canción
     const randomIndex = Math.floor(Math.random() * songTitlesList.length);
     const songBase = songTitlesList[randomIndex];
-    
+
     // Generar título relevante a la búsqueda pero sin prefijos de género
     let title = songBase;
-    
+
     // Para evitar repeticiones si hay más canciones que títulos en nuestra lista
     if (i >= songTitlesList.length) {
       // Añadir un sufijo numérico discreto
       const suffix = Math.floor(Math.random() * 3) + 1;
       title = `${songBase} ${suffix === 1 ? '' : suffix}`.trim();
     }
-    
+
     // Seleccionar un álbum aleatorio
     const albumIndex = Math.floor(Math.random() * albumsList.length);
     const album = albumsList[albumIndex];
-    
+
     mockTracks.push({
       id: `search_${query.replace(/\s+/g, '_').replace(/[^\w-]/g, '')}_${i}`,
       title,
@@ -666,6 +666,6 @@ function generateMockSearchResults(query: string, limit: number, options: Search
       youtubeId: undefined
     });
   }
-  
+
   return mockTracks;
 }

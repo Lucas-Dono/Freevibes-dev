@@ -15,9 +15,9 @@ export async function GET(request: NextRequest) {
     // Obtener la URL del servidor Node desde la configuración central
     // Esto asegura que siempre usemos la URL correcta independientemente del modo
     const nodeServerUrl = API_CONFIG.getNodeApiUrl();
-    
+
     console.log(`[API Playlists] Usando servidor Node: ${nodeServerUrl}`);
-    
+
     // Llamamos al servidor Node.js para obtener las playlists
     const response = await axios.get(`${nodeServerUrl}/api/demo/playlists`, {
       params: { limit, language },
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response.data);
   } catch (error: any) {
     console.error('[Playlists API] Error:', error.message);
-    
+
     // Si el error tiene una respuesta, extraer detalles adicionales
     if (error.response) {
       console.error('[Playlists API] Detalles del error:', {
@@ -35,10 +35,10 @@ export async function GET(request: NextRequest) {
         data: error.response.data
       });
     }
-    
+
     return NextResponse.json(
       { error: 'Error al obtener playlists', details: error.message },
       { status: 500 }
     );
   }
-} 
+}

@@ -1,6 +1,6 @@
 /**
  * Sistema de recomendaciones musicales multi-fuente
- * 
+ *
  * Este módulo implementa un sistema de recomendaciones musicales que combina
  * resultados de múltiples fuentes para proporcionar recomendaciones robustas,
  * incluso cuando algunas fuentes fallan.
@@ -24,9 +24,9 @@ let youTubeMusicAvailabilityChecked = false;
 // Verificar si YouTube Music está disponible (se ejecuta una sola vez)
 async function checkYouTubeMusicAvailability() {
   if (youTubeMusicAvailabilityChecked) return isYouTubeMusicAvailable;
-  
+
   try {
-    // Comprobar si el objeto existe 
+    // Comprobar si el objeto existe
     if (!youtubeMusic) {
       isYouTubeMusicAvailable = false;
       return false;
@@ -43,7 +43,7 @@ async function checkYouTubeMusicAvailability() {
       const availableMethods = Object.keys(youtubeMusic).filter(key => {
         return typeof (youtubeMusic as any)[key] === 'function';
       });
-      
+
       if (availableMethods.length > 0) {
         isYouTubeMusicAvailable = true;
       } else {
@@ -53,7 +53,7 @@ async function checkYouTubeMusicAvailability() {
   } catch (error) {
     isYouTubeMusicAvailable = false;
   }
-  
+
   youTubeMusicAvailabilityChecked = true;
   return isYouTubeMusicAvailable;
 }
@@ -150,13 +150,13 @@ function checkApiUsage(source: SourceType): boolean {
   const now = Date.now();
   const usage = apiUsage[source];
   const resetPeriod = resetPeriods[source];
-  
+
   // Resetear contador si ha pasado el período
   if (now - usage.lastReset > resetPeriod) {
     usage.count = 0;
     usage.lastReset = now;
   }
-  
+
   // Verificar si se ha alcanzado el límite
   const limit = API_LIMITS[source];
   if (usage.count >= limit) {
@@ -166,7 +166,7 @@ function checkApiUsage(source: SourceType): boolean {
     }
     return false;
   }
-  
+
   // Incrementar contador
   usage.count++;
   return true;
@@ -225,7 +225,7 @@ const youtubeMusicAPI = new YouTubeMusicAPI();
 
 /**
  * Obtiene recomendaciones basadas en género utilizando múltiples fuentes
- * 
+ *
  * @param genre Género musical para buscar
  * @param limit Número máximo de resultados
  * @param options Opciones adicionales para la búsqueda
@@ -240,11 +240,11 @@ export async function getRecommendationsByGenre(
     if (!genre) {
       throw new Error('Género no proporcionado');
     }
-    
-    
+
+
     // Limpiar y normalizar el género
     const normalizedGenre = normalizeGenre(genre);
-    
+
     // Definir el orden de fuentes según configuración
     // y controlar los límites de API de cada una
     const sourcePriority = [
@@ -253,19 +253,19 @@ export async function getRecommendationsByGenre(
       SOURCES_CONFIG.third,
       'youtube'  // YouTube como última opción
     ].filter(Boolean) as SourceType[];
-    
+
     // Filtrar fuentes que han alcanzado sus límites
     const availableSources = sourcePriority.filter(source => {
       // Verificar si la fuente está habilitada
-      const isEnabled = source === 'spotify' ? SOURCES_CONFIG.spotify : 
+      const isEnabled = source === 'spotify' ? SOURCES_CONFIG.spotify :
                        source === 'lastfm' ? SOURCES_CONFIG.lastfm :
                        source === 'deezer' ? SOURCES_CONFIG.deezer :
                        source === 'youtube' ? SOURCES_CONFIG.youtube : false;
-                       
+
       // Verificar si la fuente tiene disponibilidad de API
       return isEnabled && checkApiUsage(source);
     });
-    
+
     // Si no hay fuentes disponibles, usar caché o fallback
     if (availableSources.length === 0) {
       console.warn(`[Multi] Todas las fuentes han alcanzado sus límites de API, usando caché o fallback`);
@@ -273,30 +273,30 @@ export async function getRecommendationsByGenre(
     } else {
       options.preferredSource = availableSources[0];
     }
-    
+
     // Intentar obtener de caché primero (a menos que se fuerce una búsqueda fresca)
     if (!options.forceFresh) {
       const cacheKey = `genre:${normalizedGenre}:${limit}:${JSON.stringify(options)}`;
       const cachedData = await recommendationsCache.get(cacheKey);
-      
+
       if (cachedData) {
         return JSON.parse(cachedData);
       }
     }
-    
+
     // Construir query para buscar por género
     // Validar el género para evitar buscar canciones con "genre:canción completa"
     // Un género normalmente no contiene espacios ni caracteres especiales
     const isValidGenre = /^[a-zA-Z0-9-&]+$/.test(normalizedGenre.trim());
     const searchQuery = isValidGenre ? `genre:${normalizedGenre}` : normalizedGenre;
-    
+
     // Realizar búsqueda multi-fuente
     let tracks = await searchMultiSource(searchQuery, limit, {
       ...options,
       combineResults: true,
       availableSources // Pasar las fuentes disponibles como strings
     });
-    
+
     // Si no hay resultados suficientes, probar otra búsqueda diferente
     if (tracks.length < Math.min(limit, 10)) {
       const alternateQuery = `${normalizedGenre} music`;
@@ -306,33 +306,33 @@ export async function getRecommendationsByGenre(
         forceFresh: true,
         availableSources // Mantener las mismas fuentes disponibles
       });
-      
+
       // Combinar y deduplicar resultados
       const allTracks = [...tracks, ...moreTracks];
       tracks = Array.from(new Map(allTracks.map(track => [track.id, track])).values());
     }
-    
+
     // Filtrar artistas excluidos si se especifica
     if (options.excludeArtist && tracks.length > 0) {
       const excludeArtist = options.excludeArtist.toLowerCase();
-      tracks = tracks.filter(track => 
+      tracks = tracks.filter(track =>
         !track.artist || !track.artist.toLowerCase().includes(excludeArtist)
       );
     }
-    
+
     // Limitar al número solicitado
     let finalTracks = tracks.slice(0, limit);
-    
+
     // Procesar los tracks para asegurar que tengan títulos y artistas correctos
     finalTracks = finalTracks.map(track => {
       // Limpiar prefijos de género en títulos
       let cleanedTitle = track.title;
-      
+
       // Eliminar prefijos de género específicos
       if (cleanedTitle.toLowerCase().startsWith('genre:')) {
         cleanedTitle = cleanedTitle.substring(cleanedTitle.indexOf(':') + 1).trim();
       }
-      
+
       // Si el título contiene el género y algún separador, limpiarlo
       if (normalizedGenre && cleanedTitle.toLowerCase().includes(normalizedGenre.toLowerCase())) {
         const genreName = normalizedGenre.charAt(0).toUpperCase() + normalizedGenre.slice(1);
@@ -342,28 +342,28 @@ export async function getRecommendationsByGenre(
           .replace(new RegExp(`genre:${normalizedGenre}`, 'i'), '')
           .trim();
       }
-      
+
       // Eliminar palabras genéricas como "Result", "Mix", "Track" seguidas de números
       cleanedTitle = cleanedTitle
         .replace(/\b(Result|Mix|Track)\s*\d*\b/gi, '')
         .replace(/\s+\d+$/, '')  // Eliminar números al final
         .trim();
-        
+
       // Si después de limpiar está vacío, usar un título genérico basado en el género
       if (!cleanedTitle || cleanedTitle === '-') {
         const genreCapitalized = normalizedGenre.charAt(0).toUpperCase() + normalizedGenre.slice(1);
         cleanedTitle = `${genreCapitalized} Song`;
       }
-      
+
       // Limpiar prefijos en artistas
       let cleanedArtist = track.artist;
-      
+
       // Eliminar "Artista para" y otras frases genéricas
-      if (cleanedArtist.toLowerCase().includes('artista para') || 
+      if (cleanedArtist.toLowerCase().includes('artista para') ||
           cleanedArtist.toLowerCase().includes('artist for')) {
         // Generar un nombre de artista más natural basado en el género
         const genreCapitalized = normalizedGenre.charAt(0).toUpperCase() + normalizedGenre.slice(1);
-        
+
         // Nombres de artistas por género
         const artistsByGenre: Record<string, string[]> = {
           'pop': ['Pop Sensation', 'Melody Makers', 'Chart Toppers', 'The Harmony'],
@@ -377,23 +377,23 @@ export async function getRecommendationsByGenre(
           'indie': ['The Independents', 'Garage Sound', 'Alternative Vibes', 'The Underground'],
           'default': ['The Artists', 'Sound Collective', 'Music Makers', 'Studio Session']
         };
-        
+
         // Seleccionar un nombre basado en el género o usar uno por defecto
         const genreArtists = artistsByGenre[normalizedGenre] || artistsByGenre['default'];
         cleanedArtist = genreArtists[Math.floor(Math.random() * genreArtists.length)];
       }
-      
+
       // Eliminar menciones del género en el nombre del artista
       if (cleanedArtist.toLowerCase().includes('genre:')) {
         cleanedArtist = cleanedArtist.replace(/genre:[a-z-]+/gi, '').trim();
       }
-      
+
       // Si después de limpiar está vacío, usar un nombre genérico
       if (!cleanedArtist || cleanedArtist === '-') {
         const genreCapitalized = normalizedGenre.charAt(0).toUpperCase() + normalizedGenre.slice(1);
         cleanedArtist = `${genreCapitalized} Artist`;
       }
-      
+
       return {
         ...track,
         title: cleanedTitle,
@@ -401,7 +401,7 @@ export async function getRecommendationsByGenre(
         album: track.album || normalizedGenre
       };
     });
-    
+
     // Guardar en caché para futuras solicitudes
     if (finalTracks.length > 0 && !options.forceFresh) {
       const cacheKey = `genre:${normalizedGenre}:${limit}:${JSON.stringify(options)}`;
@@ -410,28 +410,28 @@ export async function getRecommendationsByGenre(
         JSON.stringify(finalTracks),
         DEFAULT_CACHE_TTL
       );
-      
+
       // También almacenar este género en la lista de géneros disponibles
       await cacheAvailableGenre(normalizedGenre);
     }
-    
+
     return finalTracks;
   } catch (error) {
     console.error(`[Multi] Error obteniendo recomendaciones para género ${genre}:`, error);
-    
+
     // En caso de error, intentar recuperar datos de caché aunque estén expirados
     try {
       const normalizedGenre = normalizeGenre(genre);
       const cacheKey = `genre:${normalizedGenre}:${limit}:${JSON.stringify(options)}`;
       const cachedData = await recommendationsCache.get(cacheKey);
-      
+
       if (cachedData) {
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
       console.error(`[Multi] Error accediendo a caché:`, cacheError);
     }
-    
+
     // Si todo falla, devolver datos fallback
     return getGenreFallbackTracks(genre, limit);
   }
@@ -446,7 +446,7 @@ async function cacheAvailableGenre(genre: string): Promise<void> {
     // Verificar si el género ya está en la lista
     if (!availableGenres.includes(genre)) {
       availableGenres.push(genre);
-      
+
       // Guardar en caché local solo para esta sesión
       const cacheKey = `available_genres`;
       await recommendationsCache.set(
@@ -470,16 +470,16 @@ export async function getAvailableGenres(): Promise<string[]> {
     if (availableGenres.length > 0) {
       return availableGenres;
     }
-    
+
     // Intentar recuperar de caché
     const cacheKey = `available_genres`;
     const cachedData = await recommendationsCache.get(cacheKey);
-    
+
     if (cachedData) {
       availableGenres = JSON.parse(cachedData);
       return availableGenres;
     }
-    
+
     // Si no hay datos en caché, devolver los géneros válidos predeterminados
     availableGenres = VALID_GENRES.slice(0, 15); // Primeros 15 géneros
     return availableGenres;
@@ -496,13 +496,13 @@ export async function getAvailableGenres(): Promise<string[]> {
  */
 function normalizeGenre(genre: string): string {
   if (!genre) return 'pop';
-  
+
   // Convertir a minúsculas y eliminar caracteres especiales
   let normalized = genre.toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-');
-  
+
   // Verificar si el género normalizado está en la lista de géneros válidos
   // Si no, intentar encontrar una coincidencia parcial
   if (!VALID_GENRES.includes(normalized)) {
@@ -513,12 +513,12 @@ function normalizeGenre(genre: string): string {
       }
     }
   }
-  
+
   // Si aún no hay coincidencia, default a 'pop'
   if (!VALID_GENRES.includes(normalized)) {
     normalized = 'pop';
   }
-  
+
   return normalized;
 }
 
@@ -529,10 +529,10 @@ function normalizeGenre(genre: string): string {
  * @returns Lista de tracks fallback
  */
 function getGenreFallbackTracks(genre: string, limit: number): Track[] {
-  
+
   const normalizedGenre = normalizeGenre(genre);
   const fallbackTracks: Track[] = [];
-  
+
   // Imágenes por géneros (usando Unsplash para mejor calidad)
   const genreImages: Record<string, string> = {
     'pop': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819',
@@ -554,7 +554,7 @@ function getGenreFallbackTracks(genre: string, limit: number): Track[] {
     'folk': 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34',
     'default': 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
   };
-  
+
   // Generar nombres de artistas por género
   const artistsByGenre: Record<string, string[]> = {
     'pop': ['Pop Star', 'Melody Maker', 'Chart Topper', 'The Hitmaker'],
@@ -570,20 +570,20 @@ function getGenreFallbackTracks(genre: string, limit: number): Track[] {
     'alternative': ['Alt Nation', 'Different Path', 'The Outsiders', 'New Wave'],
     'default': ['The Musicians', 'Sound Creators', 'Audio Artists', 'Music Makers'],
   };
-  
+
   // Seleccionar la imagen adecuada para el género
   const coverImage = genreImages[normalizedGenre] || genreImages['default'];
   const artistList = artistsByGenre[normalizedGenre] || artistsByGenre['default'];
-  
+
   // Crear tracks fallback con mejor presentación
   for (let i = 0; i < Math.min(limit, 10); i++) {
     // Obtener un artista aleatorio de la lista para este género
     const randomArtist = artistList[Math.floor(Math.random() * artistList.length)];
-    
+
     // Generar un nombre de canción contextual al género
     const songNumber = i + 1;
     const genreName = normalizedGenre.charAt(0).toUpperCase() + normalizedGenre.slice(1);
-    
+
     // Variedad de títulos basados en el género y número
     let songTitle;
     if (i % 3 === 0) {
@@ -593,7 +593,7 @@ function getGenreFallbackTracks(genre: string, limit: number): Track[] {
     } else {
       songTitle = `${genreName} Experience ${songNumber}`;
     }
-    
+
     fallbackTracks.push({
       id: `genre_fallback_${normalizedGenre}_${i}`,
       title: songTitle,
@@ -606,7 +606,7 @@ function getGenreFallbackTracks(genre: string, limit: number): Track[] {
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
 }
 
@@ -623,7 +623,7 @@ interface TrackDetailsCache {
 // Caché global para detalles de pistas - reduce las búsquedas repetidas
 const trackDetailsCache: TrackDetailsCache = {};
 // TTL de caché: 30 minutos
-const TRACK_DETAILS_CACHE_TTL = 30 * 60 * 1000; 
+const TRACK_DETAILS_CACHE_TTL = 30 * 60 * 1000;
 // Tamaño máximo de caché
 const MAX_CACHE_SIZE = 200;
 
@@ -643,7 +643,7 @@ export async function getMultiSourceTrackDetails(
   if (!options.forceFresh) {
     const cacheKey = `search:${query}:${limit}`;
     const cachedData = await recommendationsCache.get(cacheKey);
-    
+
     if (cachedData) {
       try {
         const tracks = JSON.parse(cachedData);
@@ -653,19 +653,19 @@ export async function getMultiSourceTrackDetails(
       }
     }
   }
-  
+
   // Verificar si los servicios requeridos están disponibles
   const isYouTubeMusicAvailable = youtubeMusic.isAvailable && youtubeMusic.isAvailable();
-  
+
   // Track counter para evitar procesamiento excesivo
   const processedTracks = new Map<string, Track>();
   const trackIdSignatures = new Set<string>();
-  
+
   // Obtener tracks de Spotify
   let spotifyResults: Track[] = [];
   try {
     spotifyResults = await spotifyService.searchTracks(query, Math.min(limit * 2, 10));
-    
+
     // Registrar tracks de Spotify usando un identificador único
     spotifyResults.forEach(track => {
       // Crear una firma para identificar tracks similares
@@ -678,7 +678,7 @@ export async function getMultiSourceTrackDetails(
   } catch (error) {
     console.error(`[Multi-Source] Error buscando en Spotify: "${query}"`, error);
   }
-  
+
   // Obtener resultados de YouTube Music si está disponible
   let youtubeResults: Track[] = [];
   if (isYouTubeMusicAvailable) {
@@ -687,7 +687,7 @@ export async function getMultiSourceTrackDetails(
       if (processedTracks.size < limit) {
         const ytMusicRawResults = await youtubeMusic.searchSongs(query, Math.min(limit * 1.5, 8));
         youtubeResults = youtubeMusic.toTracks(ytMusicRawResults);
-        
+
         // Añadir solo tracks que no sean similares a los ya procesados
         youtubeResults.forEach(track => {
           const signature = `${track.title.toLowerCase()}:${track.artist.toLowerCase()}`;
@@ -701,10 +701,10 @@ export async function getMultiSourceTrackDetails(
       console.error(`[Multi-Source] Error buscando en YouTube Music: "${query}"`, error);
     }
   }
-  
+
   // Combinar resultados
   let combinedResults: Track[] = Array.from(processedTracks.values());
-  
+
   // Ordenar por relevancia (prioridad a Spotify que suele tener mejores metadatos)
   combinedResults.sort((a, b) => {
     // Priorizar resultados de Spotify
@@ -712,14 +712,14 @@ export async function getMultiSourceTrackDetails(
     if (a.source !== 'spotify' && b.source === 'spotify') return 1;
     return 0;
   });
-  
+
   // Limitar al número solicitado
   combinedResults = combinedResults.slice(0, limit);
-  
+
   // Guardar en caché
   const cacheKey = `search:${query}:${limit}`;
   await recommendationsCache.set(cacheKey, JSON.stringify(combinedResults));
-  
+
   return combinedResults;
 }
 
@@ -745,49 +745,49 @@ export async function getSimilarTracks(track: Track, options: GetRecommendations
 async function enhanceTrackImages(tracks: Track[]): Promise<Track[]> {
   try {
     if (tracks.length === 0) return tracks;
-    
+
     // Primero intentemos buscar mejores imágenes para tracks sin portada
     const tracksNeedingImages = tracks.filter(track => !track.cover || track.cover.includes('default-cover') || track.cover.includes('placeholder'));
-    
+
     if (tracksNeedingImages.length === 0) {
       return tracks;
     }
-    
-    
+
+
     // Usar YouTube como fuente alternativa de imágenes
     const quotaStatus = youtube.getQuotaStatus();
-    
+
     if (SOURCES_CONFIG.youtube && quotaStatus.hasQuota && tracksNeedingImages.length <= 10) {
       try {
         // Buscar imágenes en YouTube
         for (const track of tracksNeedingImages) {
           const query = `${track.title} ${track.artist} official`;
           const searchResult = await youtube.searchVideos(query, 1);
-          
+
           if (searchResult.items && searchResult.items.length > 0) {
-            const thumbnailUrl = searchResult.items[0].snippet.thumbnails.high?.url || 
+            const thumbnailUrl = searchResult.items[0].snippet.thumbnails.high?.url ||
                                searchResult.items[0].snippet.thumbnails.medium?.url;
-            
+
             if (thumbnailUrl) {
               track.cover = thumbnailUrl;
-              
+
               // También guardar el ID de YouTube si no lo tiene
               if (!track.youtubeId) {
                 track.youtubeId = searchResult.items[0].id.videoId;
               }
             }
           }
-          
+
           // Pequeña pausa para no sobrecargar YouTube
           await new Promise(resolve => setTimeout(resolve, 200));
         }
-        
+
       } catch (error) {
         console.error('[Multi] Error buscando imágenes en YouTube:', error);
       }
     } else {
     }
-    
+
     return tracks;
   } catch (error) {
     console.error('[Multi] Error en enhanceTrackImages:', error);
@@ -797,7 +797,7 @@ async function enhanceTrackImages(tracks: Track[]): Promise<Track[]> {
 
 /**
  * Mejora las pistas con IDs de YouTube y portadas si es necesario
- * 
+ *
  * @param tracks Lista de pistas a mejorar
  * @param options Opciones de mejora
  * @returns Pistas mejoradas
@@ -810,64 +810,64 @@ export async function enhanceTracksWithYouTubeIds(
     if (!SOURCES_CONFIG.youtube) {
       return tracks;
     }
-    
+
     // Verificar el estado de la cuota
     const quotaStatus = youtube.getQuotaStatus();
     if (!quotaStatus.canEnrichTracks) {
       console.warn('[Multi] Cuota de YouTube insuficiente para enriquecer tracks');
       return tracks;
     }
-    
+
     // Filtrar tracks que ya tienen ID de YouTube o que tienen la misma combinación de artista+título
     const uniqueTracks: Track[] = [];
     const processedKeys = new Set<string>();
-    
+
     tracks.forEach(track => {
       // Si ya tiene ID de YouTube o estamos omitiendo verificaciones de duplicados, incluirlo directamente
       if (track.youtubeId || options.skipDuplicateChecks) {
         uniqueTracks.push(track);
         return;
       }
-      
+
       // Crear clave única para detectar duplicados
       const key = `${track.artist}:${track.title}`.toLowerCase();
-      
+
       // Si no está duplicado, añadirlo a la lista de tracks únicos
       if (!processedKeys.has(key)) {
         processedKeys.add(key);
         uniqueTracks.push(track);
       }
     });
-    
-    
+
+
     // Enriquecer tracks en batch
     const enrichedTracks = await youtube.enrichTracksWithYouTubeIds(uniqueTracks);
-    
+
     // Si estamos procesando todos los tracks, devolver el resultado directamente
     if (options.skipDuplicateChecks) {
       return enrichedTracks;
     }
-    
+
     // Si solo procesamos tracks únicos, necesitamos aplicar los IDs a los tracks originales
     // Creamos un mapa de artista+título -> youtubeId
     const youtubeIdMap = new Map<string, string>();
-    
+
     enrichedTracks.forEach(track => {
       if (track.youtubeId) {
         const key = `${track.artist}:${track.title}`.toLowerCase();
         youtubeIdMap.set(key, track.youtubeId);
       }
     });
-    
+
     // Aplicar los IDs a todos los tracks originales
     return tracks.map(track => {
       const key = `${track.artist}:${track.title}`.toLowerCase();
       const youtubeId = youtubeIdMap.get(key);
-      
+
       if (youtubeId && !track.youtubeId) {
         return { ...track, youtubeId };
       }
-      
+
       return track;
     });
   } catch (error) {
@@ -892,23 +892,23 @@ export async function batchProcessQueries(
   } = {}
 ): Promise<Record<string, Track[]>> {
   try {
-    const { 
-      limit = 1, 
-      cacheOnly = false, 
+    const {
+      limit = 1,
+      cacheOnly = false,
       timeout = 10000,
-      preferredSource 
+      preferredSource
     } = options;
-    
-    
+
+
     // Resultado final: clave = consulta, valor = tracks
     const results: Record<string, Track[]> = {};
-    
+
     // Comprobar caché primero para todas las consultas
     const cachePromises = queries.map(async query => {
       const cacheKey = `track:${query}:${limit}`;
       const cached = trackDetailsCache[cacheKey];
       const now = Date.now();
-      
+
       if (cached && now - cached.timestamp < TRACK_DETAILS_CACHE_TTL) {
         if (ENABLE_CACHE_DEBUG) {
         }
@@ -917,23 +917,23 @@ export async function batchProcessQueries(
       }
       return false; // No encontrado en caché
     });
-    
+
     // Esperar a que se completen todas las comprobaciones de caché
     const cacheResults = await Promise.all(cachePromises);
-    
+
     // Filtrar consultas que no están en caché
     const pendingQueries = queries.filter((_, index) => !cacheResults[index]);
-    
+
     // Si todas las consultas están en caché o solo queremos resultados en caché, terminar
     if (pendingQueries.length === 0 || cacheOnly) {
       return results;
     }
-    
-    
+
+
     // Procesar consultas pendientes en paralelo, pero con límite de concurrencia
     const maxConcurrent = 2; // Máximo 2 solicitudes concurrentes para evitar sobrecarga
     const batchSize = Math.min(maxConcurrent, pendingQueries.length);
-    
+
     // Función auxiliar para procesar un lote
     const processBatch = async (batch: string[]) => {
       const promises = batch.map(async query => {
@@ -943,17 +943,17 @@ export async function batchProcessQueries(
             timeout,
             forceFresh: true
           });
-          
+
           // Guardar en resultados
           results[query] = tracks;
-          
+
           // Actualizar caché explícitamente
           const cacheKey = `track:${query}:${limit}`;
           trackDetailsCache[cacheKey] = {
             timestamp: Date.now(),
             data: tracks
           };
-          
+
           return { query, success: true };
         } catch (error) {
           console.error(`[BatchProcessor] Error procesando "${query}":`, error);
@@ -961,32 +961,32 @@ export async function batchProcessQueries(
           return { query, success: false };
         }
       });
-      
+
       return Promise.all(promises);
     };
-    
+
     // Procesar en lotes secuenciales para mantener el rate limiting
     for (let i = 0; i < pendingQueries.length; i += batchSize) {
       const currentBatch = pendingQueries.slice(i, i + batchSize);
       await processBatch(currentBatch);
-      
+
       // Si quedan más lotes, esperar un poco entre ellos
       if (i + batchSize < pendingQueries.length) {
         await new Promise(resolve => setTimeout(resolve, 300));
       }
     }
-    
+
     // Agregar consultas que no pudieron procesarse con arrays vacíos
     queries.forEach(query => {
       if (!results[query]) {
         results[query] = [];
       }
     });
-    
+
     return results;
   } catch (error) {
     console.error(`[BatchProcessor] Error en procesamiento por lotes:`, error);
-    
+
     // Devolver objeto con arrays vacíos para todas las consultas
     return queries.reduce((acc, query) => {
       acc[query] = [];
@@ -1022,13 +1022,13 @@ async function searchYouTubeTracks(query: string, limit: number): Promise<Track[
       }
       return [];
     }
-    
+
     // Determinar qué método usar para buscar canciones
     let searchMethod: Function | null = null;
-    
+
     // Tratamos youtubeMusic como 'any' para acceder a métodos que podrían no estar en la interfaz
     const ytMusic = youtubeMusic as any;
-    
+
     // Intentar encontrar un método de búsqueda apropiado
     if (typeof ytMusic.searchSongs === 'function') {
       searchMethod = ytMusic.searchSongs.bind(ytMusic);
@@ -1037,16 +1037,16 @@ async function searchYouTubeTracks(query: string, limit: number): Promise<Track[
     } else if (typeof ytMusic.searchTracks === 'function') {
       searchMethod = ytMusic.searchTracks.bind(ytMusic);
     }
-    
+
     if (!searchMethod) {
       console.warn('[YouTube] No se encontró método de búsqueda en YouTube Music');
       return [];
     }
-    
+
     try {
       // Usar el método encontrado
       const youtubeResults = await searchMethod(query, limit);
-      
+
       // Determinar cómo convertir resultados a formato Track
       if (typeof ytMusic.toTracks === 'function') {
         return ytMusic.toTracks(youtubeResults) || [];
@@ -1083,18 +1083,18 @@ function combineResults(spotifyTracks: Track[], youtubeTracks: Track[], limit: n
       ...spotifyTracks.map(track => ({ ...track, weight: track.weight || 0.8 })),
       ...youtubeTracks.map(track => ({ ...track, weight: track.weight || 0.6 }))
     ];
-    
+
     // Eliminar duplicados basados en título y artista
     const uniqueMap = new Map<string, Track>();
-    
+
     for (const track of weightedTracks) {
       // Normalizar título y artista para comparación
       const title = (track.title || '').toLowerCase().trim();
       const artist = (track.artist || '').toLowerCase().trim();
       const key = `${title}|${artist}`;
-      
+
       const existingTrack = uniqueMap.get(key);
-      
+
       if (!existingTrack) {
         uniqueMap.set(key, track);
       } else if ((track.weight || 0) > (existingTrack.weight || 0)) {
@@ -1102,7 +1102,7 @@ function combineResults(spotifyTracks: Track[], youtubeTracks: Track[], limit: n
         uniqueMap.set(key, track);
       }
     }
-    
+
     // Convertir a array y limitar según el parámetro
     const results = Array.from(uniqueMap.values()).slice(0, limit);
     return results;
@@ -1111,4 +1111,4 @@ function combineResults(spotifyTracks: Track[], youtubeTracks: Track[], limit: n
     // En caso de error, devolver simplemente los primeros N resultados de ambas fuentes
     return [...spotifyTracks, ...youtubeTracks].slice(0, limit);
   }
-} 
+}

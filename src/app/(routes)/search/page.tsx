@@ -52,7 +52,7 @@ export default function SearchPage() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const suggestionContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // Para evitar peticiones repetidas
   const lastQueryRef = useRef<string>('');
   const suggestionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -75,22 +75,22 @@ export default function SearchPage() {
 
     try {
       console.log('Buscando en YouTube:', searchQuery);
-      
+
       // Acceder directamente al endpoint de búsqueda del servidor Node
       const apiUrl = `/api/youtube/search?query=${encodeURIComponent(searchQuery)}&filter=songs&limit=6`;
       console.log('Llamando a API:', apiUrl);
-      
+
       const response = await fetch(apiUrl);
-      
+
       console.log('Respuesta recibida. Status:', response.status);
-      
+
       if (!response.ok) {
         throw new Error(`Error en la API: ${response.status}`);
       }
-      
+
       const responseText = await response.text();
       console.log('Respuesta como texto:', responseText.substring(0, 100) + '...');
-      
+
       // Intentar parsear la respuesta como JSON
       let data;
       try {
@@ -99,13 +99,13 @@ export default function SearchPage() {
         console.error('Error al parsear JSON:', parseError);
         throw new Error('La respuesta de la API no es un JSON válido');
       }
-      
+
       console.log('Datos parseados:', data);
-      
+
       // Verificar si hay resultados
       if (data && Array.isArray(data) && data.length > 0) {
         console.log(`Encontrados ${data.length} resultados de YouTube`);
-        
+
         // Transformar los resultados al formato esperado por el componente
         const formattedTracks = data.map((track: any) => {
           console.log('Procesando track:', track);
@@ -120,7 +120,7 @@ export default function SearchPage() {
             source: 'youtube'
           };
         });
-        
+
         console.log('Tracks formateados:', formattedTracks);
         setTracks(formattedTracks);
       } else {
@@ -137,7 +137,7 @@ export default function SearchPage() {
       setIsLoading(false);
       // Mantener el estado de búsqueda pero forzar que se cierren las sugerencias
       setShowSuggestions(false);
-      
+
       // Programar el restablecimiento del estado de búsqueda después de un tiempo
       // para permitir interacciones futuras
       setTimeout(() => {
@@ -153,7 +153,7 @@ export default function SearchPage() {
   // Actualizar la URL con el parámetro de búsqueda
   const updateSearchParam = useCallback((value: string) => {
     if (!searchParams) return;
-    
+
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
       params.set('q', value);
@@ -173,33 +173,33 @@ export default function SearchPage() {
       setShowSuggestions(false);
       return;
     }
-    
+
     // Evitar búsquedas repetidas de la misma consulta
     if (searchQuery.toLowerCase() === lastQueryRef.current.toLowerCase()) {
       setShowSuggestions(suggestions.length > 0);
       return;
     }
-    
+
     // Actualizar la referencia de la última consulta
     lastQueryRef.current = searchQuery;
-    
+
     // Cancelar cualquier timeout anterior
     if (suggestionTimeoutRef.current) {
       clearTimeout(suggestionTimeoutRef.current);
     }
-    
+
     setIsLoadingSuggestions(true);
-    
+
     try {
       // Usar el endpoint combinado
       const response = await fetch(`/api/combined/suggest?query=${encodeURIComponent(searchQuery)}&limit=6`);
-      
+
       if (!response.ok) {
         throw new Error(`Error en la API de sugerencias: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       // Solo actualizar si esta sigue siendo la última consulta
       // (para evitar resultados fuera de orden)
       if (searchQuery.toLowerCase() === lastQueryRef.current.toLowerCase()) {
@@ -208,10 +208,10 @@ export default function SearchPage() {
       }
     } catch (err) {
       console.error('Error al obtener sugerencias:', err);
-      
+
       // FALLBACK: Generar sugerencias locales si el servidor no responde
       const queryLower = searchQuery.toLowerCase();
-      
+
       // Lista de artistas y canciones populares para el fallback
       const fallbackItems: Suggestion[] = [
         { id: 'local-artist-bad-bunny', text: 'Bad Bunny', type: 'artist', source: 'local' },
@@ -223,12 +223,12 @@ export default function SearchPage() {
         { id: 'local-album-un-verano-sin-ti', text: 'Un Verano Sin Ti - Bad Bunny', type: 'album', artist: 'Bad Bunny', albumName: 'Un Verano Sin Ti', source: 'local' },
         { id: 'local-album-midnights', text: 'Midnights - Taylor Swift', type: 'album', artist: 'Taylor Swift', albumName: 'Midnights', source: 'local' }
       ];
-      
+
       // Filtrar por la consulta
-      const matchedItems = fallbackItems.filter(item => 
+      const matchedItems = fallbackItems.filter(item =>
         item.text.toLowerCase().includes(queryLower)
       );
-      
+
       // Usar sugerencias locales como fallback
       if (matchedItems.length > 0) {
         setSuggestions(matchedItems);
@@ -255,8 +255,8 @@ export default function SearchPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
-    
-    // Si estamos buscando desde una sugerencia recién seleccionada o ya hemos buscado, 
+
+    // Si estamos buscando desde una sugerencia recién seleccionada o ya hemos buscado,
     // no mostrar el panel a menos que el texto cambie
     if (isSearchingFromSuggestion || hasSearched) {
       // Solo permitir nuevas sugerencias si el usuario edita el texto
@@ -264,7 +264,7 @@ export default function SearchPage() {
         // El usuario está cambiando el texto, así que podemos mostrar sugerencias
         // para la nueva consulta
         setIsSearchingFromSuggestion(false);
-        
+
         // Si estamos modificando una búsqueda previa, mantener el estado
         // de búsqueda pero permitir nuevas sugerencias
         if (hasSearched && value.trim()) {
@@ -277,7 +277,7 @@ export default function SearchPage() {
         return; // No mostrar sugerencias si el texto no ha cambiado
       }
     }
-    
+
     // Si no hay texto, ocultar sugerencias inmediatamente
     if (!value.trim()) {
       setShowSuggestions(false);
@@ -285,13 +285,13 @@ export default function SearchPage() {
       setHasSearched(false);
       return;
     }
-    
+
     // Si el texto es muy corto, no mostrar sugerencias
     if (value.length < 2) {
       setShowSuggestions(false);
       return;
     }
-    
+
     // Usar debounce para las sugerencias para reducir llamadas al servidor
     debouncedSuggestions(value);
   };
@@ -300,13 +300,13 @@ export default function SearchPage() {
   const handleSuggestionClick = (suggestion: Suggestion) => {
     // Cerrar el panel de sugerencias inmediatamente
     setShowSuggestions(false);
-    
+
     // Indicar que estamos realizando una búsqueda desde sugerencia
     setIsSearchingFromSuggestion(true);
-    
+
     // Construir el texto de búsqueda según el tipo de sugerencia
     let searchText = suggestion.text;
-    
+
     // Para búsquedas más precisas según el tipo
     if (suggestion.type === 'artist' && suggestion.text) {
       searchText = suggestion.text; // Buscar solo por nombre de artista
@@ -315,30 +315,30 @@ export default function SearchPage() {
     } else if (suggestion.type === 'album' && suggestion.artist && suggestion.albumName) {
       searchText = `${suggestion.albumName} ${suggestion.artist}`; // Buscar álbum + artista
     }
-    
+
     // Evitar búsquedas repetidas
     if (searchText === query) {
       return;
     }
-    
+
     setQuery(searchText);
-    
+
     // Actualizar la referencia de la última consulta para evitar peticiones adicionales
     lastQueryRef.current = searchText;
-    
+
     // Bloquear la reapertura del panel de sugerencias durante la búsqueda
     const blockSuggestions = () => {
       // Cancelar cualquier debounce pendiente para evitar que se muestren sugerencias
       debouncedSuggestions.cancel();
     };
-    
+
     blockSuggestions();
-    
+
     // MODIFICACIÓN: Al hacer clic en una sugerencia, ahora ejecutamos la búsqueda inmediatamente
     // ya que es una acción explícita del usuario
     performSearch(searchText);
     updateSearchParam(searchText);
-    
+
     // Añadir la búsqueda al historial (enviando al backend)
     try {
       fetch('/api/search/history', {
@@ -349,7 +349,7 @@ export default function SearchPage() {
     } catch (err) {
       // Silenciar errores del historial para no interrumpir el flujo
     }
-    
+
     // Enfocar el campo de búsqueda
     if (searchInputRef.current) {
       searchInputRef.current.focus();
@@ -359,18 +359,18 @@ export default function SearchPage() {
   // MODIFICACIÓN: Manejar envío del formulario para ejecutar la búsqueda
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Cerrar panel de sugerencias inmediatamente
     setShowSuggestions(false);
-    
+
     // Cancelar cualquier debounce pendiente
     debouncedSuggestions.cancel();
-    
+
     // Solo ejecutar búsqueda si hay texto
     if (query.trim()) {
       // Establecer modo de búsqueda para evitar que se muestren sugerencias
       setIsSearchingFromSuggestion(true);
-      
+
       performSearch(query);
       updateSearchParam(query);
     }
@@ -380,7 +380,7 @@ export default function SearchPage() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        suggestionContainerRef.current && 
+        suggestionContainerRef.current &&
         !suggestionContainerRef.current.contains(event.target as Node) &&
         searchInputRef.current &&
         !searchInputRef.current.contains(event.target as Node)
@@ -407,10 +407,10 @@ export default function SearchPage() {
     if (initialQuery) {
       // Asegurarse de que también se actualizan las sugerencias
       lastQueryRef.current = initialQuery;
-      
+
       // Realizar búsqueda inicial con el query de la URL
       performSearch(initialQuery);
-      
+
       // También buscar sugerencias si corresponde
       if (initialQuery.length >= 2) {
         fetchSuggestions(initialQuery);
@@ -442,7 +442,7 @@ export default function SearchPage() {
       <h1 className="text-3xl font-bold mb-6 text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         {t('search.searchMusic')}
       </h1>
-      
+
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -494,10 +494,10 @@ export default function SearchPage() {
               </svg>
             )}
           </button>
-          
+
           {/* Lista de sugerencias */}
           {showSuggestions && suggestions.length > 0 && (
-            <div 
+            <div
               ref={suggestionContainerRef}
               className="absolute z-10 left-0 right-0 mt-2 py-2 bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
             >
@@ -508,7 +508,7 @@ export default function SearchPage() {
               ) : (
                 <ul>
                   {suggestions.map((suggestion) => (
-                    <li 
+                    <li
                       key={suggestion.id}
                       className="px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors text-white flex items-center"
                       onClick={() => handleSuggestionClick(suggestion)}
@@ -543,7 +543,7 @@ export default function SearchPage() {
                         </svg>
                       )}
                       <span className="flex-grow">{suggestion.text}</span>
-                      
+
                       {/* Etiquetas según la fuente y tipo */}
                       <div className="flex flex-shrink-0 ml-2 space-x-1">
                         {suggestion.source === 'lastfm' && (
@@ -641,4 +641,4 @@ export default function SearchPage() {
       )}
     </div>
   );
-} 
+}

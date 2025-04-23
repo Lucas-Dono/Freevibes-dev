@@ -32,4 +32,4 @@ export async function GET(
     console.error(`[API Artist Details] Error interno al obtener detalles para ${artistId}:`, error);
     return NextResponse.json({ error: 'Internal server error fetching artist details' }, { status: 500 });
   }
-} 
+}

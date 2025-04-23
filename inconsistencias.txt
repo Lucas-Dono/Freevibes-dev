@@ -40,7 +40,7 @@
 
 1. **Múltiples implementaciones de `getApiBaseUrl()`**:
    - En `src/services/utils/api-config.ts`: Implementación centralizada que devuelve `/api`
-   - En `src/services/spotify.ts`: Implementación duplicada similar 
+   - En `src/services/spotify.ts`: Implementación duplicada similar
    - En `src/config/api-config.ts`: Otra implementación que devuelve `${window.location.origin}/api`
    - En `src/lib/api-config.ts`: Implementación que devuelve `window.location.origin` (sin `/api`)
    - En `src/services/recommendations/sources/spotify.ts`: Implementación duplicada
@@ -180,7 +180,7 @@
    - `python-api` tiene copias de seguridad y archivos duplicados: `youtube_music_api.py.backup`, `youtube_music_api_fixed.py`, etc.
 
 2. **Mezcla de paradigmas de autenticación**:
-   - Se usa NextAuth en `src/lib/auth.ts` 
+   - Se usa NextAuth en `src/lib/auth.ts`
    - Se implementa autenticación manual en `src/app/api/auth/login/route.ts`
 
 3. **Diferentes enfoques de logging**:
@@ -216,7 +216,7 @@
 
 4. **Múltiples implementaciones de cacheo para YouTube**:
    - En Python: Sistema de cacheo basado en archivos con duración de 1 hora
-   - En Node: Una implementación con `NodeCache` con TTL configurable 
+   - En Node: Una implementación con `NodeCache` con TTL configurable
    - En frontend: Caché en memoria + localStorage con duración no especificada claramente
 
 5. **Inconsistencias en tipos de datos YouTube**:
@@ -537,7 +537,7 @@
 - ✅ `python-api/youtube_music_api.py` (parcial)
 - ✅ `.env`
 - ✅ `.env.example`
-- ✅ `vercel.json` 
+- ✅ `vercel.json`
 - ✅ `next.config.js`
 - ✅ `docs/es/TECHNICAL.md` (parcial)
 - ✅ `docs/en/TECHNICAL.md` (parcial)

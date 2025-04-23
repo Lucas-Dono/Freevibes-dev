@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [🏠 Home](../../README.md) | [📚 Technical Documentation](TECHNICAL.md) | [📝 Changelog](CHANGELOG.md)
-  
+
 </div>
 
 ---
@@ -200,4 +200,4 @@ Configure each service separately according to the [Technical Documentation](TEC
 
 <div align="center">
   <p>© 2025 FreeVibes Web</p>
-</div> 
+</div>

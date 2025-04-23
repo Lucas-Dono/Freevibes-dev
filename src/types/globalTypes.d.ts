@@ -5,4 +5,4 @@ interface Window {
   __FORCE_DISABLE_DEMO__?: boolean;
 }
 
-// Otras declaraciones globales pueden agregarse aquí según sea necesario 
+// Otras declaraciones globales pueden agregarse aquí según sea necesario

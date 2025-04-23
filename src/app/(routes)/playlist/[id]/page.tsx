@@ -46,30 +46,30 @@ interface Track {
 export default function PlaylistPage() {
   const params = useParams();
   const playlistId = params ? (params.id as string) : '';
-  
+
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { playTrack: _playTrackFromContext_ } = usePlayer();
-  
+
   useEffect(() => {
     const fetchPlaylistData = async () => {
       if (!playlistId) return;
-      
+
       try {
         setLoading(true);
-        
+
         // Obtener la URL base de la API
         const apiBaseUrl = getApiBaseUrl();
-        
+
         // Obtener detalles de la playlist usando nuestra nueva API
         const response = await axios.get(`${apiBaseUrl}/api/playlist/${playlistId}`, {
           params: {
             language: 'es' // Fallback a español si no hay idioma preferido
           }
         });
-        
+
         if (response.data) {
           setPlaylist(response.data);
           setError(null);
@@ -78,10 +78,10 @@ export default function PlaylistPage() {
         }
       } catch (err: any) {
         console.error('Error al cargar datos de la playlist:', err);
-        
+
         // Extraer mensaje de error
         let errorMessage = 'Error al cargar información de la playlist. Por favor, intenta de nuevo más tarde.';
-        
+
         if (err.response) {
           if (err.response.status === 404) {
             errorMessage = 'No se encontró la playlist solicitada.';
@@ -91,32 +91,32 @@ export default function PlaylistPage() {
         } else if (err.message) {
           errorMessage = err.message;
         }
-        
+
         setError(errorMessage);
         setPlaylist(null);
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchPlaylistData();
   }, [playlistId]);
-  
+
   const formatDuration = (ms: number): string => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
-  
+
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
-  
+
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
@@ -138,7 +138,7 @@ export default function PlaylistPage() {
         cover: apiTrack.album.images[0]?.url || '/img/default-track.jpg',
         duration: apiTrack.duration_ms / 1000,
         uri: `spotify:track:${apiTrack.id}`, // Incluir URI por si el servicio lo necesita
-        source: 'spotify' 
+        source: 'spotify'
         // El servicio se encargará de buscar youtubeId
     };
 
@@ -166,17 +166,17 @@ export default function PlaylistPage() {
           </div>
           <p className="mt-2">{error || 'No se encontró información de la playlist.'}</p>
         </div>
-        
+
         <div className="mt-8 p-6 bg-gray-800 rounded-lg">
           <h3 className="text-xl font-bold mb-4">Modo Demo</h3>
           <p className="mb-2">En el modo demo, puedes explorar playlists de diversos artistas.</p>
           <p className="mb-4">Prueba volver a la página principal para encontrar playlists disponibles.</p>
-          
+
           <div className="flex flex-wrap gap-4">
             <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
               Ir a Inicio
             </Link>
-            <button 
+            <button
               onClick={() => window.history.back()}
               className="px-4 py-2 border border-gray-600 rounded hover:bg-gray-700"
             >
@@ -187,7 +187,7 @@ export default function PlaylistPage() {
       </div>
     );
   }
-  
+
   return (
     <div>
       {/* Cabecera de la playlist */}
@@ -206,7 +206,7 @@ export default function PlaylistPage() {
           </div>
           )}
         </div>
-        
+
         {/* Información de la playlist */}
         <div className="container mx-auto px-4 py-12 relative z-10">
           <div className="flex flex-col md:flex-row items-center md:items-end gap-8">
@@ -239,7 +239,7 @@ export default function PlaylistPage() {
           </div>
         </div>
       </div>
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* Lista de canciones */}
         <div className="mb-12">
@@ -261,7 +261,7 @@ export default function PlaylistPage() {
                   </svg>
                 </div>
               </div>
-              
+
               {/* Lista de canciones */}
               <div className="mt-2">
                 {playlist.tracks.items.map((item, index) => (
@@ -276,8 +276,8 @@ export default function PlaylistPage() {
                     >
                       <div className="flex items-center justify-center text-gray-400">
                         {hoveredIndex === index ? (
-                          <IconButton 
-                            size="small" 
+                          <IconButton
+                            size="small"
                             onClick={() => handlePlay(item.track)}
                             className="text-white"
                           >
@@ -287,7 +287,7 @@ export default function PlaylistPage() {
                           <span>{index + 1}</span>
                         )}
                       </div>
-                    
+
                     <div className="flex items-center min-w-0">
                       <div className="relative w-10 h-10 mr-3 flex-shrink-0">
                         <Image
@@ -311,7 +311,7 @@ export default function PlaylistPage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="hidden md:flex items-center min-w-0">
                       <Link href={`/album/${item.track.album.id}`} className="text-gray-300 hover:underline truncate">
                         {item.track.album.name}
@@ -334,4 +334,4 @@ export default function PlaylistPage() {
       </div>
     </div>
   );
-} 
+}

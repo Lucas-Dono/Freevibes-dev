@@ -16,26 +16,26 @@ export default function AdminPage() {
   const [languages, setLanguages] = useState<string[]>(['es', 'en', 'fr', 'it']);
   const [showTips, setShowTips] = useState(false);
   const router = useRouter();
-  
+
   // Verificar autenticación
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
     }
   }, [status, router]);
-  
+
   const handleInitializeDemo = async () => {
     if (!session?.accessToken) {
-      setResult({ 
-        success: false, 
-        error: 'No hay sesión activa de Spotify. Por favor, inicia sesión primero.' 
+      setResult({
+        success: false,
+        error: 'No hay sesión activa de Spotify. Por favor, inicia sesión primero.'
       });
       return;
     }
-    
+
     setIsInitializing(true);
     setResult(null);
-    
+
     try {
       const response = await fetch('/api/admin/initialize-demo', {
         method: 'POST',
@@ -46,13 +46,13 @@ export default function AdminPage() {
           languages
         })
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Error al inicializar el modo demo');
       }
-      
+
       setResult({
         success: true,
         message: data.message || 'Modo demo inicializado correctamente'
@@ -68,7 +68,7 @@ export default function AdminPage() {
       setIsInitializing(false);
     }
   };
-  
+
   if (status === 'loading') {
     return (
       <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
@@ -79,20 +79,20 @@ export default function AdminPage() {
       </Container>
     );
   }
-  
+
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Administración del Modo Demo
         </Typography>
-        
+
         <Typography variant="body1" paragraph>
-          Desde aquí puedes inicializar o actualizar los datos utilizados en el modo demo. 
+          Desde aquí puedes inicializar o actualizar los datos utilizados en el modo demo.
           Este proceso recopilará automáticamente datos desde Spotify utilizando tu cuenta
           y los acumulará con los datos existentes, enriqueciendo la base de datos demo.
         </Typography>
-        
+
         <Alert severity="info" sx={{ my: 2 }}>
           <AlertTitle>Acumulación de datos</AlertTitle>
           <Typography variant="body2">
@@ -100,14 +100,14 @@ export default function AdminPage() {
             tendrás más artistas, canciones y álbumes disponibles en el modo demo.
           </Typography>
         </Alert>
-        
+
         {!session?.accessToken ? (
           <Box sx={{ my: 4, textAlign: 'center' }}>
             <Typography variant="body1" gutterBottom>
               Necesitas iniciar sesión con Spotify para continuar.
             </Typography>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               startIcon={<SpotifyIcon />}
               onClick={() => signIn('spotify')}
               sx={{ bgcolor: '#1DB954', '&:hover': { bgcolor: '#1aa34a' }, mt: 2 }}
@@ -120,15 +120,15 @@ export default function AdminPage() {
             <Alert severity="info" sx={{ my: 3 }}>
               <AlertTitle>Información importante</AlertTitle>
               <Typography variant="body2">
-                Algunos datos podrían no estar disponibles debido a limitaciones de la API de Spotify. 
+                Algunos datos podrían no estar disponibles debido a limitaciones de la API de Spotify.
                 En esos casos, se generarán datos de demostración automáticamente.
               </Typography>
             </Alert>
-            
+
             <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
               Idiomas a incluir
             </Typography>
-            
+
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4 }}>
               {[
                 { code: 'es', name: 'Español' },
@@ -153,7 +153,7 @@ export default function AdminPage() {
                 </Button>
               ))}
             </Box>
-            
+
             <Button
               variant="contained"
               color="primary"
@@ -165,9 +165,9 @@ export default function AdminPage() {
             >
               {isInitializing ? 'Inicializando...' : 'Acumular Datos Demo'}
             </Button>
-            
+
             {result && (
-              <Alert 
+              <Alert
                 severity={result.success ? 'success' : 'error'}
                 sx={{ mt: 3 }}
               >
@@ -175,7 +175,7 @@ export default function AdminPage() {
                 {result.message || result.error}
               </Alert>
             )}
-            
+
             {showTips && (
               <Box sx={{ mt: 3, bgcolor: 'background.paper', p: 2, borderRadius: 1 }}>
                 <Typography variant="subtitle1" gutterBottom>
@@ -186,33 +186,33 @@ export default function AdminPage() {
                     <ListItemIcon>
                       <InfoIcon color="info" />
                     </ListItemIcon>
-                    <ListItemText 
-                      primary="Error 404 (Not Found)" 
-                      secondary="Se generarán datos mock automáticamente para endpoints no disponibles" 
+                    <ListItemText
+                      primary="Error 404 (Not Found)"
+                      secondary="Se generarán datos mock automáticamente para endpoints no disponibles"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <WarningIcon color="warning" />
                     </ListItemIcon>
-                    <ListItemText 
-                      primary="Error 401 (Unauthorized)" 
-                      secondary="Inicia sesión nuevamente con tu cuenta de Spotify" 
+                    <ListItemText
+                      primary="Error 401 (Unauthorized)"
+                      secondary="Inicia sesión nuevamente con tu cuenta de Spotify"
                     />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <WarningIcon color="warning" />
                     </ListItemIcon>
-                    <ListItemText 
-                      primary="Error 403 (Forbidden)" 
-                      secondary="Tu cuenta puede no tener los permisos necesarios" 
+                    <ListItemText
+                      primary="Error 403 (Forbidden)"
+                      secondary="Tu cuenta puede no tener los permisos necesarios"
                     />
                   </ListItem>
                 </List>
               </Box>
             )}
-            
+
             <Typography variant="body2" sx={{ mt: 4, color: 'text.secondary' }}>
               Este proceso puede tomar varios minutos dependiendo de la cantidad de datos a recopilar.
               Los datos recopilados se guardarán en el servidor y estarán disponibles para el modo demo.
@@ -222,4 +222,4 @@ export default function AdminPage() {
       </Paper>
     </Container>
   );
-} 
+}

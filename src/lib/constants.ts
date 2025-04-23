@@ -8,4 +8,4 @@ export const API_TIMEOUTS = {
   SEARCH: 20000,         // Búsquedas (20 segundos)
   RECOMMENDATIONS: 25000, // Recomendaciones (25 segundos)
   DETAILS: 10000         // Detalles de un elemento específico (10 segundos)
-}; 
+};

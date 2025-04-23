@@ -70,19 +70,19 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 export default function SettingsPage() {
   // Estado para las pestañas
   const [tabValue, setTabValue] = useState(0);
-  
+
   // Obtener estado de autenticación y preferencias
   const { isAuthenticated, isDemo } = useAuth();
-  
+
   // Obtener traducciones e idioma actual
   const { t } = useTranslation();
   const { language } = useLanguage();
-  
+
   // Estados para las configuraciones
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isHighQuality, setIsHighQuality] = useState(false);
   const [notifications, setNotifications] = useState(true);
-  
+
   // Manejo de cambio de pestaña
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -93,7 +93,7 @@ export default function SettingsPage() {
       <Typography variant="h4" gutterBottom fontWeight="bold" sx={{ mb: 4 }}>
         {t('settings.title')}
       </Typography>
-      
+
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={tabValue}
@@ -108,7 +108,7 @@ export default function SettingsPage() {
           <Tab label={t('settings.aboutUs')} {...a11yProps(3)} />
         </Tabs>
       </Box>
-      
+
       {/* Pestaña General */}
       <TabPanel value={tabValue} index={0}>
         {/* Sección de Idioma */}
@@ -117,16 +117,16 @@ export default function SettingsPage() {
             {t('settings.language')}
           </SectionTitle>
           <Typography variant="body2" color="text.secondary" paragraph>
-            {language === 'es' 
-              ? 'Selecciona el idioma en el que quieres ver el contenido de la aplicación.' 
+            {language === 'es'
+              ? 'Selecciona el idioma en el que quieres ver el contenido de la aplicación.'
               : 'Select the language in which you want to see the application content.'}
           </Typography>
-          
+
           <Box sx={{ mt: 3 }}>
             <LanguageSwitcher variant="full" />
           </Box>
         </SettingsSection>
-        
+
         {/* Sección de Tema */}
         <SettingsSection>
           <SectionTitle variant="h6">
@@ -143,7 +143,7 @@ export default function SettingsPage() {
             label={isDarkMode ? t('settings.dark') : t('settings.light')}
           />
         </SettingsSection>
-        
+
         {/* Sección de Calidad de Audio */}
         <SettingsSection>
           <SectionTitle variant="h6">
@@ -160,13 +160,13 @@ export default function SettingsPage() {
             label={isHighQuality ? "Alta calidad" : "Calidad normal"}
           />
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {isHighQuality 
+            {isHighQuality
               ? "La reproducción en alta calidad consume más datos."
               : "La calidad normal es adecuada para la mayoría de las conexiones."}
           </Typography>
         </SettingsSection>
       </TabPanel>
-      
+
       {/* Pestaña de Cuenta */}
       <TabPanel value={tabValue} index={1}>
         <SettingsSection>
@@ -188,7 +188,7 @@ export default function SettingsPage() {
           )}
         </SettingsSection>
       </TabPanel>
-      
+
       {/* Pestaña de Notificaciones */}
       <TabPanel value={tabValue} index={2}>
         <SettingsSection>
@@ -207,7 +207,7 @@ export default function SettingsPage() {
           />
         </SettingsSection>
       </TabPanel>
-      
+
       {/* Pestaña de Acerca de */}
       <TabPanel value={tabValue} index={3}>
         <SettingsSection>
@@ -222,9 +222,9 @@ export default function SettingsPage() {
               ? 'Una aplicación para descubrir y disfrutar música a través de múltiples plataformas.'
               : 'An application to discover and enjoy music across multiple platforms.'}
           </Typography>
-          
+
           <Divider sx={{ my: 2 }} />
-          
+
           <Typography variant="body2" paragraph>
             © 2024 freevibes. {language === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
           </Typography>
@@ -232,4 +232,4 @@ export default function SettingsPage() {
       </TabPanel>
     </SettingsContainer>
   );
-} 
+}

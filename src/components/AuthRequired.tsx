@@ -20,24 +20,24 @@ export default function AuthRequired({ children }: AuthRequiredProps) {
       setIsChecking(false);
       return;
     }
-    
+
     // Para evitar verificaciones repetidas y bucles
     const lastChecked = sessionStorage.getItem('lastAuthCheck');
     const now = Date.now();
-    
+
     if (lastChecked && now - parseInt(lastChecked) < 2000) {
       console.log('[AuthRequired] Verificación reciente, omitiendo');
       setIsChecking(false);
       return;
     }
-    
+
     // Registrar esta verificación
     sessionStorage.setItem('lastAuthCheck', now.toString());
-    
+
     // Solo verificar cuando el estado de autenticación ya no está cargando
     if (!isLoading) {
       console.log('[AuthRequired] Estado de autenticación:', isAuthenticated ? 'autenticado' : 'no autenticado');
-      
+
       if (!isAuthenticated && !isDemo) {
         console.log('[AuthRequired] No hay autenticación, redirigiendo a login');
         // Solo redirigir si no estamos ya en login para evitar bucles
@@ -47,7 +47,7 @@ export default function AuthRequired({ children }: AuthRequiredProps) {
       } else {
         console.log('[AuthRequired] Autenticación válida, permitiendo acceso');
       }
-      
+
       setIsChecking(false);
     }
   }, [isAuthenticated, isLoading, isDemo, router]);
@@ -73,4 +73,4 @@ export default function AuthRequired({ children }: AuthRequiredProps) {
 
   // Si hay autenticación, renderizar los hijos
   return <>{children}</>;
-} 
+}

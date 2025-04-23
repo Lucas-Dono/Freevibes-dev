@@ -38,7 +38,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const detectedLanguage = getUserLanguage();
       setLanguageState(detectedLanguage);
       setIsLoading(false);
-      
+
     }
   }, []);
 
@@ -53,7 +53,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     // Añadir listener para eventos de cambio en cookies
     window.addEventListener('storage', handleStorageChange);
-    
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
@@ -66,4 +66,4 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default LanguageProvider; 
+export default LanguageProvider;

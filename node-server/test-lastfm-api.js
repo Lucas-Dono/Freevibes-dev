@@ -1,6 +1,6 @@
 /**
  * Script de prueba para la API de Last.fm
- * 
+ *
  * Este script realiza pruebas simples a la API de Last.fm para verificar
  * si el problema de error 403 es con la clave API, con la implementación,
  * o con alguna limitación de la API.
@@ -16,7 +16,7 @@ const LASTFM_API_URL = 'https://ws.audioscrobbler.com/2.0/';
 // Función para probar la búsqueda de artistas
 async function testArtistSearch(query = 'karol') {
   console.log(`\n[TEST] Buscando artista "${query}"`);
-  
+
   try {
     const response = await axios.get(LASTFM_API_URL, {
       params: {
@@ -28,15 +28,15 @@ async function testArtistSearch(query = 'karol') {
       },
       timeout: 5000
     });
-    
+
     if (response.status === 200) {
       console.log('[✓] La API respondió correctamente (200 OK)');
-      
-      if (response.data && 
-          response.data.results && 
-          response.data.results.artistmatches && 
+
+      if (response.data &&
+          response.data.results &&
+          response.data.results.artistmatches &&
           response.data.results.artistmatches.artist) {
-        
+
         const artists = response.data.results.artistmatches.artist;
         console.log(`[✓] Se encontraron ${artists.length} artistas`);
         artists.forEach((artist, index) => {
@@ -49,16 +49,16 @@ async function testArtistSearch(query = 'karol') {
     } else {
       console.log(`[✗] La API respondió con código de error: ${response.status}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(`[✗] Error al buscar artistas: ${error.message}`);
-    
+
     if (error.response) {
       console.log(`   Código de respuesta: ${error.response.status}`);
       console.log(`   Mensaje de error: ${JSON.stringify(error.response.data)}`);
     }
-    
+
     return false;
   }
 }
@@ -66,7 +66,7 @@ async function testArtistSearch(query = 'karol') {
 // Función para probar la búsqueda de canciones
 async function testTrackSearch(query = 'karol') {
   console.log(`\n[TEST] Buscando canción "${query}"`);
-  
+
   try {
     const response = await axios.get(LASTFM_API_URL, {
       params: {
@@ -78,15 +78,15 @@ async function testTrackSearch(query = 'karol') {
       },
       timeout: 5000
     });
-    
+
     if (response.status === 200) {
       console.log('[✓] La API respondió correctamente (200 OK)');
-      
-      if (response.data && 
-          response.data.results && 
-          response.data.results.trackmatches && 
+
+      if (response.data &&
+          response.data.results &&
+          response.data.results.trackmatches &&
           response.data.results.trackmatches.track) {
-        
+
         const tracks = response.data.results.trackmatches.track;
         console.log(`[✓] Se encontraron ${tracks.length} canciones`);
         tracks.forEach((track, index) => {
@@ -99,16 +99,16 @@ async function testTrackSearch(query = 'karol') {
     } else {
       console.log(`[✗] La API respondió con código de error: ${response.status}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(`[✗] Error al buscar canciones: ${error.message}`);
-    
+
     if (error.response) {
       console.log(`   Código de respuesta: ${error.response.status}`);
       console.log(`   Mensaje de error: ${JSON.stringify(error.response.data)}`);
     }
-    
+
     return false;
   }
 }
@@ -116,7 +116,7 @@ async function testTrackSearch(query = 'karol') {
 // Función para probar la búsqueda de álbumes
 async function testAlbumSearch(query = 'karol') {
   console.log(`\n[TEST] Buscando álbum "${query}"`);
-  
+
   try {
     const response = await axios.get(LASTFM_API_URL, {
       params: {
@@ -128,15 +128,15 @@ async function testAlbumSearch(query = 'karol') {
       },
       timeout: 5000
     });
-    
+
     if (response.status === 200) {
       console.log('[✓] La API respondió correctamente (200 OK)');
-      
-      if (response.data && 
-          response.data.results && 
-          response.data.results.albummatches && 
+
+      if (response.data &&
+          response.data.results &&
+          response.data.results.albummatches &&
           response.data.results.albummatches.album) {
-        
+
         const albums = response.data.results.albummatches.album;
         console.log(`[✓] Se encontraron ${albums.length} álbumes`);
         albums.forEach((album, index) => {
@@ -149,16 +149,16 @@ async function testAlbumSearch(query = 'karol') {
     } else {
       console.log(`[✗] La API respondió con código de error: ${response.status}`);
     }
-    
+
     return true;
   } catch (error) {
     console.log(`[✗] Error al buscar álbumes: ${error.message}`);
-    
+
     if (error.response) {
       console.log(`   Código de respuesta: ${error.response.status}`);
       console.log(`   Mensaje de error: ${JSON.stringify(error.response.data)}`);
     }
-    
+
     return false;
   }
 }
@@ -168,16 +168,16 @@ async function runTests() {
   console.log('='.repeat(50));
   console.log('PRUEBA DE API DE LAST.FM');
   console.log('='.repeat(50));
-  
+
   // Probar búsqueda de artistas
   await testArtistSearch();
-  
+
   // Probar búsqueda de canciones
   await testTrackSearch();
-  
+
   // Probar búsqueda de álbumes
   await testAlbumSearch();
-  
+
   console.log('\n' + '='.repeat(50));
   console.log('FIN DE PRUEBAS');
   console.log('='.repeat(50));
@@ -186,4 +186,4 @@ async function runTests() {
 // Ejecutar todas las pruebas
 runTests().catch(error => {
   console.error('Error durante la ejecución de las pruebas:', error);
-}); 
+});

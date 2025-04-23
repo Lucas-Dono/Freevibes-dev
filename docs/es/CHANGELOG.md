@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [🏠 Inicio](../../README.md) | [📘 Guía de Inicio](README.md) | [📚 Documentación Técnica](TECHNICAL.md)
-  
+
 </div>
 
 ---
@@ -51,4 +51,4 @@ Este documento mantiene un registro detallado de todos los cambios significativo
 
 <div align="center">
   <p>© 2025 FreeVibes Web</p>
-</div> 
+</div>

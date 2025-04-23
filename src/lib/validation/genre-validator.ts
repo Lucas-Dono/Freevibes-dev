@@ -14,37 +14,37 @@ interface ValidationResult {
 }
 
 export async function validarGenero(
-  genre: string, 
-  token: string, 
+  genre: string,
+  token: string,
   source: SourceType = 'spotify'
 ): Promise<boolean> {
   // Verificar caché primero
   const cachedResultsStr = await genreCache.get(CACHE_KEY_VALID_GENRES);
   const cachedResults: Record<string, ValidationResult> = cachedResultsStr ? JSON.parse(cachedResultsStr) : {};
-  
+
   // Si tenemos un resultado reciente (menos de 24 horas), usarlo
   const cacheKey = `${source}:${genre}`;
   if (cachedResults[cacheKey] && (Date.now() - cachedResults[cacheKey].timestamp) < 24 * 60 * 60 * 1000) {
     return cachedResults[cacheKey].valid;
   }
-  
+
   // Si no hay caché o es antiguo, validar el género
   let isValid = false;
-  
+
   try {
     if (source === 'spotify') {
       // Para Spotify, intenta obtener tracks para este género
       const response = await fetchConReintentos(
         `https://api.spotify.com/v1/search?q=genre%3A${encodeURIComponent(genre)}&type=track&limit=1`,
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
-          } 
+          }
         },
         2 // Máximo 2 reintentos para no saturar
       );
-      
+
       // Si la respuesta es exitosa y contiene al menos un track, el género es válido
       if (response.ok) {
         const data = await response.json();
@@ -67,41 +67,41 @@ export async function validarGenero(
     console.error(`Error al validar género ${genre} (${source}):`, error);
     isValid = false;
   }
-  
+
   // Guardar resultado en caché
   cachedResults[cacheKey] = {
     valid: isValid,
     source,
     timestamp: Date.now()
   };
-  
+
   await genreCache.set(CACHE_KEY_VALID_GENRES, JSON.stringify(cachedResults), CACHE_TTL_HOURS);
-  
+
   return isValid;
 }
 
 export async function obtenerGenerosValidados(
-  generos: string[], 
-  token: string, 
+  generos: string[],
+  token: string,
   source: SourceType = 'spotify'
 ): Promise<string[]> {
   // Si no hay géneros para validar, devolver array vacío
   if (!generos.length) return [];
-  
+
   const generosValidos: string[] = [];
-  
+
   // Intentar validar un género aleatorio primero como "prueba canario"
   const generoCanario = generos[Math.floor(Math.random() * generos.length)];
   const canarioValido = await validarGenero(generoCanario, token, source);
-  
+
   // Si el género canario es válido, podemos asumir que todos son válidos
   // y evitar sobrecargar la API con múltiples peticiones
   if (canarioValido) {
     return generos;
   }
-  
+
   // Si el canario falla, validar cada género individualmente
-  
+
   // Validar géneros en paralelo con límite para no sobrecargar
   const resultados = await Promise.all(
     generos.map(async (genre) => ({
@@ -109,9 +109,9 @@ export async function obtenerGenerosValidados(
       valid: await validarGenero(genre, token, source)
     }))
   );
-  
+
   // Filtrar solo los géneros válidos
   return resultados
     .filter(result => result.valid)
     .map(result => result.genre);
-} 
+}

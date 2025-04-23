@@ -58,11 +58,11 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
   // Estado para el modo demo
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [demoLang, setDemoLang] = useState<string>('es');
-  
+
   // Rutas públicas que no requieren autenticación
   const publicRoutes = ['/login', '/register', '/reset-password'];
   const isPublicRoute = pathname ? publicRoutes.includes(pathname) : false;
@@ -70,21 +70,21 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   // Efecto para capturar el token de refresh desde la URL
   useEffect(() => {
     console.log('ClientLayout: Verificando parámetros de URL para token de refresco...');
-    
+
     // Verificar si hay un token en la URL
     const rtData = searchParams?.get('rt_data');
-    
+
     if (rtData) {
       console.log('ClientLayout: Token encontrado en URL, procesando...');
       try {
         // Decodificar el token desde base64
         const refreshToken = atob(rtData);
         console.log('ClientLayout: Token de refresh capturado desde URL (length):', refreshToken.length);
-        
+
         // Guardar en localStorage
         localStorage.setItem('spotify_refresh_token', refreshToken);
         console.log('ClientLayout: Token guardado en localStorage correctamente');
-        
+
         // Verificar que realmente se guardó
         const savedToken = localStorage.getItem('spotify_refresh_token');
         if (savedToken) {
@@ -92,14 +92,14 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
         } else {
           console.error('ClientLayout: Error - El token no se guardó correctamente en localStorage');
         }
-        
+
         // Limpiar la URL para no exponer el token
         console.log('ClientLayout: Limpiando URL...');
         const newUrl = window.location.pathname;
         router.replace(newUrl);
       } catch (error) {
         console.error('ClientLayout: Error al procesar token desde URL:', error);
-        
+
         // Intentar limpiar la URL de todos modos
         try {
           router.replace(window.location.pathname);
@@ -109,7 +109,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       }
     } else {
       console.log('ClientLayout: No se encontró token en la URL');
-      
+
       // Verificar si ya tenemos un token en localStorage
       const existingToken = localStorage.getItem('spotify_refresh_token');
       if (existingToken) {
@@ -119,16 +119,16 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [searchParams, router]);
-  
+
   // Efecto para verificar si el modo demo está activo
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const demoMode = sessionStorage.getItem('demoMode') === 'true';
       const lang = sessionStorage.getItem('demoLang') || 'es';
-      
+
       setIsDemoMode(demoMode);
       setDemoLang(lang);
-      
+
       if (demoMode) {
         console.log(`[DEMO] Modo demo activo con idioma: ${lang}`);
       }
@@ -153,8 +153,8 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
               }}
             >
               {isDemoMode && !isPublicRoute && (
-                <Box 
-                  sx={{ 
+                <Box
+                  sx={{
                     position: 'fixed',
                     top: 0,
                     left: 0,
@@ -176,7 +176,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                           Modo Demo ({demoLang === 'es' ? 'Español' : demoLang === 'en' ? 'English' : demoLang === 'fr' ? 'Français' : 'Italiano'})
                         </span>
                       </Box>
-                      <button 
+                      <button
                         onClick={() => {
                           sessionStorage.removeItem('demoMode');
                           sessionStorage.removeItem('demoLang');
@@ -192,9 +192,9 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                 </Box>
               )}
               {!isPublicRoute && <Navbar />}
-              <Box 
-                component="main" 
-                sx={{ 
+              <Box
+                component="main"
+                sx={{
                   flexGrow: 1,
                   mt: isPublicRoute ? 0 : (isDemoMode ? '100px' : '64px'), // Sin margen en rutas públicas
                   pt: isPublicRoute ? 0 : 2,
@@ -215,4 +215,4 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ClientLayout; 
+export default ClientLayout;

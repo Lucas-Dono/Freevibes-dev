@@ -5,4 +5,4 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0; // No guardar en caché
 export const fetchCache = 'force-no-store';
 
-export const runtime = 'nodejs'; // Usar Node.js runtime 
+export const runtime = 'nodejs'; // Usar Node.js runtime

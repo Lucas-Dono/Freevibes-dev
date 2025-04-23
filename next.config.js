@@ -8,10 +8,10 @@ const hybridConfig = require('./src/hybrid-config');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
+
   // Configurar para desarrollo y producción
   output: 'standalone',
-  
+
   // Configuración para evitar pre-renderizado estático de páginas específicas
   experimental: {
     serverComponentsExternalPackages: ['next-auth'],
@@ -20,7 +20,7 @@ const nextConfig = {
     // Especificar rutas dinámicas para el App Router
     instrumentationHook: true,
   },
-  
+
   images: {
     remotePatterns: [
       // Last.fm
@@ -69,7 +69,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'seeded-session-images.scdn.co',
       },
-      
+
       // Deezer
       {
         protocol: 'https',
@@ -83,7 +83,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.deezer.com',
       },
-      
+
       // YouTube - Ampliado con más dominios y subdominios
       {
         protocol: 'https',
@@ -122,13 +122,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
-      
+
       // Discord (imágenes para desarrollo)
       {
         protocol: 'https',
         hostname: 'cdn.discordapp.com',
       },
-      
+
       // Placeholders
       {
         protocol: 'https',
@@ -140,22 +140,22 @@ const nextConfig = {
       },
     ],
   },
-  
+
   excludeDefaultMomentLocales: true,
-  
+
   typescript: {
     ignoreBuildErrors: true,
   },
-  
+
   swcMinify: true,
-  
+
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  
+
   // Configuración específica para el directorio pages
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  
+
   // Configuración para mejorar el rendimiento durante el desarrollo
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
@@ -168,4 +168,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

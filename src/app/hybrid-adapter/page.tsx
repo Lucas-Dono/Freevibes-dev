@@ -22,4 +22,4 @@ export default function HybridAdapter() {
       <h1 className="text-xl">Cargando el reproductor híbrido...</h1>
     </div>
   );
-} 
+}

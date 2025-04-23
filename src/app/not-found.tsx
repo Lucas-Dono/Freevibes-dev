@@ -13,8 +13,8 @@ export default function NotFound() {
   }, []);
 
   return (
-    <Container 
-      maxWidth="md" 
+    <Container
+      maxWidth="md"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -35,15 +35,15 @@ export default function NotFound() {
         La página que estás buscando no existe o ha sido movida.
       </Typography>
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() => router.push('/')}
         >
           Volver al inicio
         </Button>
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => router.back()}
         >
           Volver atrás
@@ -51,4 +51,4 @@ export default function NotFound() {
       </Box>
     </Container>
   );
-} 
+}

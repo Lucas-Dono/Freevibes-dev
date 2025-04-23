@@ -107,37 +107,37 @@ export default function AlbumPage() {
   const [error, setError] = useState<string | null>(null);
   // Estado para seguir qué canción está sonando
   const [currentTrackId, setCurrentTrackId] = useState<string | number | null>(null);
-  
+
   // Estado para almacenar los datos del álbum
   const [albumData, setAlbumData] = useState<AlbumDataType>(fallbackAlbumData);
-  
+
   // Obtener datos del álbum cuando cambia el ID
   useEffect(() => {
     const fetchAlbumData = async () => {
       if (!albumId) return;
-      
+
       try {
         setLoading(true);
         setError(null);
-        
+
         // Obtener la URL base de la API
         const apiBaseUrl = getApiBaseUrl();
-        
+
         // Obtener detalles del álbum usando nuestra API
         const response = await axios.get(`${apiBaseUrl}/api/album/${albumId}`, {
           params: {
             language: 'es' // Fallback a español si no hay idioma preferido
           }
         });
-        
+
         if (!response.data || !response.data.details) {
           throw new Error('No se obtuvo información detallada del álbum');
         }
-        
+
         const apiResponse = response.data;
         const albumDetails = apiResponse.details;
         const albumTracks = apiResponse.tracks;
-        
+
         // Transformar los datos al formato esperado por la UI
         const formattedAlbum: AlbumDataType = {
           id: albumDetails.id,
@@ -166,14 +166,14 @@ export default function AlbumPage() {
           }),
           relatedAlbums: []
         };
-        
+
         setAlbumData(formattedAlbum);
       } catch (err: any) {
         console.error('Error al cargar datos del álbum:', err);
-        
+
         // Extraer mensaje de error
         let errorMessage = 'Error al cargar información del álbum. Por favor, intenta de nuevo más tarde.';
-        
+
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 404) {
             errorMessage = 'No se encontró el álbum solicitado.';
@@ -183,7 +183,7 @@ export default function AlbumPage() {
         } else if (err.message) {
           errorMessage = err.message;
         }
-        
+
         setError(errorMessage);
         // Mantener los datos de fallback en caso de error
         setAlbumData(fallbackAlbumData);
@@ -191,12 +191,12 @@ export default function AlbumPage() {
         setLoading(false);
       }
     };
-    
+
     if (mounted) {
       fetchAlbumData();
     }
   }, [albumId, mounted]);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -228,17 +228,17 @@ export default function AlbumPage() {
           </div>
           <p className="mt-2">{error}</p>
         </div>
-        
+
         <div className="mt-8 p-6 bg-gray-800 rounded-lg">
           <h3 className="text-xl font-bold mb-4">Modo Demo</h3>
           <p className="mb-2">En el modo demo, puedes explorar álbumes de diversos artistas.</p>
           <p className="mb-4">Prueba volver a la página principal para encontrar álbumes disponibles.</p>
-          
+
           <div className="flex flex-wrap gap-4">
             <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
               Ir a Inicio
             </Link>
-            <button 
+            <button
               onClick={() => window.history.back()}
               className="px-4 py-2 border border-gray-600 rounded hover:bg-gray-700"
             >
@@ -254,7 +254,7 @@ export default function AlbumPage() {
   const totalTracks = albumData.tracks.length;
   const totalDuration = albumData.tracks.reduce((acc, track) => acc + track.duration, 0);
   const totalMinutes = Math.floor(totalDuration / 60);
-  
+
   // Función para reproducir una canción del álbum
   const handlePlayTrack = async (track: TrackType) => {
     try {
@@ -264,15 +264,15 @@ export default function AlbumPage() {
         setPlaying(false);
         return;
       }
-      
+
       setPlaying(true);
-      
+
       // ---> Log para depuración
       console.log('[AlbumPage] Llamando a playTrack con:', JSON.stringify(track, null, 2));
-      
+
       // Llamar al servicio de reproducción
       await playTrack(track);
-      
+
       // Actualizar el ID de la canción actual
       setCurrentTrackId(track.id);
     } catch (error) {
@@ -284,14 +284,14 @@ export default function AlbumPage() {
   // Función para reproducir todo el álbum
   const handlePlayAlbum = () => {
     if (albumData.tracks.length === 0) return;
-    
+
     // Si ya está reproduciendo, pausar
     if (playing) {
       setPlaying(false);
       // Aquí se podría implementar la pausa mediante un servicio de reproducción
       return;
     }
-    
+
     // Reproducir la primera canción del álbum
     handlePlayTrack(albumData.tracks[0]);
   };
@@ -302,31 +302,31 @@ export default function AlbumPage() {
       <section className="relative">
         <div className="h-64 md:h-80 lg:h-96 w-full relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
-          <div 
-            className="absolute inset-0 bg-center bg-cover" 
-            style={{ 
+          <div
+            className="absolute inset-0 bg-center bg-cover"
+            style={{
               backgroundImage: `url(${albumData.coverUrl})`,
               filter: 'blur(40px)',
               opacity: 0.4
             }}>
           </div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative -mt-32 md:-mt-48 lg:-mt-56 flex flex-col md:flex-row items-end md:items-center gap-6 md:gap-10">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               className="w-48 h-48 md:w-64 md:h-64 shadow-2xl rounded-lg overflow-hidden"
             >
-              <img 
-                src={albumData.coverUrl} 
+              <img
+                src={albumData.coverUrl}
                 alt={albumData.title}
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -335,9 +335,9 @@ export default function AlbumPage() {
             >
               <div className="text-sm font-medium uppercase tracking-wide">Álbum</div>
               <h1 className="text-3xl md:text-5xl font-bold mt-1">{albumData.title}</h1>
-              
+
               <div className="flex items-center mt-3 space-x-2">
-                <img 
+                <img
                   src={albumData.coverUrl} // En un caso real, usaríamos la imagen del artista
                   alt={albumData.artist.name}
                   className="w-6 h-6 rounded-full object-cover"
@@ -354,7 +354,7 @@ export default function AlbumPage() {
           </div>
         </div>
       </section>
-      
+
       {/* Sección principal del álbum */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -362,7 +362,7 @@ export default function AlbumPage() {
             <div className="lg:col-span-2">
               {/* Acciones del álbum */}
               <div className="flex items-center space-x-4 mb-6">
-                <button 
+                <button
                   className="bg-primary hover:bg-primary-dark text-white py-2 px-6 rounded-full font-medium transition-colors focus:outline-none flex items-center"
                   onClick={handlePlayAlbum}
                 >
@@ -382,8 +382,8 @@ export default function AlbumPage() {
                     </>
                   )}
                 </button>
-                
-                <button 
+
+                <button
                   className="text-white/80 hover:text-white p-2 focus:outline-none"
                   onClick={() => setIsLiked(!isLiked)}
                 >
@@ -391,14 +391,14 @@ export default function AlbumPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                   </svg>
                 </button>
-                
+
                 <button className="text-white/80 hover:text-white p-2 focus:outline-none">
                   <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
                   </svg>
                 </button>
               </div>
-              
+
               {/* Lista de canciones */}
               <div className="mt-6">
                 <div className="border-b border-gray-800 pb-2 mb-2">
@@ -409,7 +409,7 @@ export default function AlbumPage() {
                     <div className="col-span-2 text-right">Duración</div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-1">
                   {albumData.tracks.map((track, index) => (
                     <motion.div
@@ -421,7 +421,7 @@ export default function AlbumPage() {
                     >
                       <div className="col-span-1 flex items-center">
                         <span className="text-gray-400 group-hover:hidden">{track.number}</span>
-                        <button 
+                        <button
                           className="text-white hidden group-hover:block"
                           onClick={() => handlePlayTrack(track)}
                         >
@@ -446,15 +446,15 @@ export default function AlbumPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Información complementaria y álbumes relacionados */}
             <div>
               {/* Datos del álbum */}
               <div className="bg-card-bg rounded-xl p-6 mb-8">
                 <h3 className="text-lg font-semibold mb-4">Acerca de</h3>
-                
+
                 <p className="text-gray-300 mb-6">{albumData.description}</p>
-                
+
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Lanzamiento:</span>
@@ -465,21 +465,21 @@ export default function AlbumPage() {
                     <span>{albumData.label}</span>
                   </div>
                 </div>
-                
+
                 <div className="mt-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-400 text-sm">Popularidad:</span>
                     <span className="text-sm font-medium">{albumData.popularity}%</span>
                   </div>
                   <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full bg-gradient-to-r ${getPopularityGradient(albumData.popularity)}`}
                       style={{ width: `${albumData.popularity}%` }}
                     ></div>
                   </div>
                 </div>
               </div>
-              
+
               {/* Álbumes relacionados */}
               {albumData.relatedAlbums.length > 0 && (
                 <div>
@@ -495,8 +495,8 @@ export default function AlbumPage() {
                         <Link href={`/album/${album.id}`}>
                           <div className="bg-card-bg rounded-lg p-3 hover:bg-card-bg/80 transition-colors group">
                             <div className="relative aspect-square rounded-md overflow-hidden mb-2">
-                              <img 
-                                src={album.coverUrl} 
+                              <img
+                                src={album.coverUrl}
                                 alt={album.title}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               />
@@ -516,4 +516,4 @@ export default function AlbumPage() {
       </section>
     </div>
   );
-} 
+}

@@ -30,7 +30,7 @@ export interface UnifiedMusicCardProps {
   title: string;
   subtitle?: string; // Artista, propietario, etc.
   coverUrl: string;
-  
+
   // Metadatos opcionales
   badge?: {
     text: string;
@@ -38,14 +38,14 @@ export interface UnifiedMusicCardProps {
   };
   duration?: number;
   secondaryInfo?: string; // Información adicional como vistas, reproducciones, etc.
-  
+
   // Opciones de comportamiento
   isPlayable?: boolean;
   linkTo?: string;
-  
+
   // Indicador de tipo (para mostrar un badge adecuado si no se proporciona uno)
   itemType?: 'track' | 'album' | 'artist' | 'playlist' | 'video';
-  
+
   // Callbacks - usando tipos más genéricos para aceptar MouseEvent de cualquier elemento
   onPlay?: (e: React.MouseEvent<any>) => void;
   onClick?: (e: React.MouseEvent<any>) => void;
@@ -55,7 +55,7 @@ export interface UnifiedMusicCardProps {
  * Componente de tarjeta unificado para mostrar música, playlists, álbumes,
  * artistas y otros elementos con un estilo consistente en toda la aplicación.
  */
-const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({ 
+const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
   id,
   title,
   subtitle,
@@ -73,21 +73,21 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
   // Usar el contexto del reproductor
   const { addToQueue, playTrack, createAutoPlaylist } = usePlayer();
   const { musicNotifications } = useCustomNotifications();
-  
+
   // Estados para el menú contextual
   const [contextMenuVisible, setContextMenuVisible] = useState<boolean>(false);
   const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   // Estado para controlar la carga de la imagen
   const [imgSrc, setImgSrc] = useState<string>(
     // Si la URL ya falló antes o es inválida, usar directamente el placeholder
-    !coverUrl || coverUrl === '' || failedImageCache.has(coverUrl) 
-      ? placeholderDataUrl 
+    !coverUrl || coverUrl === '' || failedImageCache.has(coverUrl)
+      ? placeholderDataUrl
       : coverUrl
   );
   const [imgError, setImgError] = useState<boolean>(false);
-  
+
   // Efecto para manejar cambios en coverUrl
   useEffect(() => {
     if (coverUrl && coverUrl !== '' && !failedImageCache.has(coverUrl)) {
@@ -97,7 +97,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       setImgSrc(placeholderDataUrl);
     }
   }, [coverUrl]);
-  
+
   // Función para manejar errores de carga de imagen
   const handleImageError = () => {
     // Agregar a caché de fallos para no reintentar
@@ -110,11 +110,11 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       setImgError(true);
     }
   };
-  
+
   // Generamos un badge automático basado en el tipo si no se proporciona uno
   const determineBadge = () => {
     if (badge) return badge;
-    
+
     if (itemType) {
       switch(itemType) {
         case 'track':
@@ -129,10 +129,10 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
           return { text: 'Video', color: 'bg-red-600' };
       }
     }
-    
+
     return undefined;
   };
-  
+
   const displayBadge = determineBadge();
 
   // Formatear duración de segundos a minutos:segundos
@@ -150,8 +150,8 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       e.preventDefault();
       e.stopPropagation();
       console.log(`[UnifiedMusicCard] Clic en tarjeta de artista: ${title} (${id})`);
-      
-      navigateToArtist(id, title, { 
+
+      navigateToArtist(id, title, {
         redirigirABusqueda: true,
         mostrarDetalles: true,
         usarNavegacionDirecta: true,  // Usar navegación directa para mayor fiabilidad
@@ -168,10 +168,10 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       }).catch(err => {
         console.error(`[UnifiedMusicCard] Error en navegación de artista:`, err);
       });
-      
+
       return;
     }
-    
+
     if (onClick) {
       onClick(e);
     }
@@ -182,7 +182,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     e.stopPropagation();
     e.preventDefault(); // Prevenir navegación si es un enlace
     console.log(`[UnifiedMusicCard] Click en botón reproducir: ${title}`);
-    
+
     // Intentar usar onPlay si existe, de lo contrario usar onClick como fallback
     try {
       if (onPlay) {
@@ -192,7 +192,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
         console.log(`[UnifiedMusicCard] Usando onClick como fallback para reproducción: ${title}`);
         onClick(e);
       }
-      
+
       // Después de un breve retraso, disparar un evento para generar la playlist automáticamente
       setTimeout(() => {
         try {
@@ -204,7 +204,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
             // Si es una canción de YouTube, podemos enviar el ID directamente
             youtubeId: itemType === 'track' && id.length >= 11 && /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : undefined
           };
-          
+
           // Disparar un evento personalizado para solicitar la creación de playlist
           const event = new CustomEvent('createPlaylist', { detail: trackInfo });
           window.dispatchEvent(event);
@@ -220,8 +220,8 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
 
   // Detectar si es una URL de YouTube o una URL de imagen de Google/YouTube
   const isYouTubeUrl = coverUrl && typeof coverUrl === 'string' && (
-    coverUrl.includes('ytimg.com/vi/') || 
-    coverUrl.includes('youtube.com/') || 
+    coverUrl.includes('ytimg.com/vi/') ||
+    coverUrl.includes('youtube.com/') ||
     coverUrl.includes('youtu.be/') ||
     coverUrl.includes('googleusercontent.com') ||
     coverUrl.includes('lh3.googleusercontent.com') ||
@@ -230,7 +230,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
 
   // Detectar si es una URL de Spotify
   const isSpotifyUrl = coverUrl && typeof coverUrl === 'string' && (
-    coverUrl.includes('i.scdn.co/') || 
+    coverUrl.includes('i.scdn.co/') ||
     coverUrl.includes('scdn.co/')
   );
 
@@ -238,35 +238,35 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
   const extractYouTubeId = (url: string): string => {
     // Log para depuración
     console.log(`[UnifiedMusicCard] Procesando URL: ${url}`);
-    
+
     // Casos especiales: URLs de Google
     if (!url || typeof url !== 'string') {
       console.warn('[UnifiedMusicCard] URL inválida:', url);
       return 'default';
     }
-    
+
     // Si es una URL de Google Cloud Storage (para imágenes de YouTube Music)
     if (url.includes('googleusercontent.com') || url.includes('ggpht.com')) {
       console.log('[UnifiedMusicCard] Detectada URL de Google, utilizando como imagen directa');
       return url;
     }
-    
+
     // Si es una URL de Spotify, detectarla explícitamente
     if (url.includes('i.scdn.co/') || url.includes('scdn.co/')) {
       console.log('[UnifiedMusicCard] Detectada URL de Spotify, no se procesará como YouTube:', url);
       return 'spotify_url';
     }
-    
+
     // Si es una URL de imagen directa (jpg, png, etc.), devolverla como está
     if (url.startsWith('http') && (
-        url.includes('.jpg') || 
-        url.includes('.jpeg') || 
-        url.includes('.png') || 
+        url.includes('.jpg') ||
+        url.includes('.jpeg') ||
+        url.includes('.png') ||
         url.includes('.webp'))) {
       console.log('[UnifiedMusicCard] Detectada URL de imagen directa:', url);
       return url;
     }
-    
+
     // Si es una URL de YouTube Image con el ID incluido
     if (url.includes('ytimg.com/vi/')) {
       const match = url.match(/ytimg\.com\/vi\/([^\/\?&"]+)/i);
@@ -275,13 +275,13 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
         return match[1];
       }
     }
-    
+
     // Patrones comunes de URLs de YouTube para extraer el ID
     const patterns = [
       /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i,
       /ytimg\.com\/vi\/([^\/\?&"]+)/i
     ];
-    
+
     // Intentar extraer el ID con los patrones
     for (const pattern of patterns) {
       const match = url.match(pattern);
@@ -290,13 +290,13 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
         return match[1];
       }
     }
-    
+
     // Último recurso: Si parece ser un ID de YouTube directo (11 caracteres, caracteres válidos)
     if (url.length === 11 && /^[a-zA-Z0-9_-]+$/.test(url)) {
       console.log('[UnifiedMusicCard] URL parece ser un ID de YouTube directo:', url);
       return url;
     }
-    
+
     console.warn('[UnifiedMusicCard] No se pudo extraer ID o URL válida:', url);
     return 'default'; // Valor de fallback
   };
@@ -308,12 +308,12 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     setContextMenuPosition({ x: e.clientX, y: e.clientY });
     setContextMenuVisible(true);
   };
-  
+
   // Función para cerrar el menú contextual
   const handleCloseContextMenu = () => {
     setContextMenuVisible(false);
   };
-  
+
   // Efecto para escuchar clics fuera del menú para cerrarlo
   useEffect(() => {
     const handleClickOutside = () => {
@@ -321,23 +321,23 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
         handleCloseContextMenu();
       }
     };
-    
+
     // Manejador para cerrar el menú al hacer scroll
     const handleScroll = () => {
       if (contextMenuVisible) {
         handleCloseContextMenu();
       }
     };
-    
+
     document.addEventListener('click', handleClickOutside);
     document.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
       document.removeEventListener('scroll', handleScroll);
     };
   }, [contextMenuVisible]);
-  
+
   // Convertir la track para usar con las funciones del player
   const getTrackForPlayer = (): Track => {
     return {
@@ -351,7 +351,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       spotifyId: id.length === 22 ? id : undefined
     };
   };
-  
+
   // Manejadores para las acciones del menú contextual
   const handlePlayTrack = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -362,7 +362,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     }
     handleCloseContextMenu();
   };
-  
+
   const handleAddToQueue = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (isPlayable && id) {
@@ -371,7 +371,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     }
     handleCloseContextMenu();
   };
-  
+
   const handleCreateRadio = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (isPlayable && id) {
@@ -384,7 +384,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     }
     handleCloseContextMenu();
   };
-  
+
   const handleGoToArtist = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (subtitle) {
@@ -397,7 +397,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
     }
     handleCloseContextMenu();
   };
-  
+
   const handleOpenInSpotify = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (id.length === 22) {
@@ -408,7 +408,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
 
   // Renderizar el contenido de la tarjeta
   const renderCardContent = () => (
-    <div 
+    <div
       ref={cardRef}
       className={`
         group relative rounded-md overflow-hidden transition-all duration-300 ease-in-out
@@ -423,7 +423,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
         <div className={`relative w-full ${!isYouTubeUrl ? 'pb-[100%]' : itemType === 'video' ? 'pb-[56.25%]' : 'pb-[100%]'} overflow-hidden rounded-md mb-1 bg-gray-200 dark:bg-gray-800`}>
           {/* Cover image or YouTube thumbnail */}
           {isYouTubeUrl && !extractYouTubeId(coverUrl).includes('http') ? (
-            <YouTubeThumbnail 
+            <YouTubeThumbnail
               videoId={extractYouTubeId(coverUrl)}
               alt={title}
               width={500}
@@ -432,7 +432,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
               aspectRatio={itemType === 'video' ? 'video' : 'square'}
             />
           ) : (
-            <Image 
+            <Image
               src={imgSrc}
               alt={title}
               fill
@@ -444,14 +444,14 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
               blurDataURL={placeholderDataUrl}
             />
           )}
-          
+
           {/* Badge de tipo */}
           {displayBadge && (
             <div className={`absolute bottom-1 left-1 px-1.5 py-0.5 text-xs font-medium text-white rounded-full ${displayBadge.color}`}>
               {displayBadge.text}
             </div>
           )}
-          
+
           {/* Botón de reproducción para elementos reproducibles */}
           {isPlayable && (
             <div
@@ -466,19 +466,19 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
             </div>
           )}
         </div>
-        
+
         {/* Título con truncamiento en líneas */}
         <h3 className="text-xs md:text-sm font-medium line-clamp-1 mb-0.5 group-hover:text-primary transition-colors">
           {title}
         </h3>
-        
+
         {/* Subtítulo */}
         {subtitle && (
           <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mb-0.5">
             {subtitle}
           </p>
         )}
-        
+
         {/* Línea de información adicional: Duración o vistas */}
         {(duration || secondaryInfo) && (
           <div className="text-xs text-gray-500 dark:text-gray-500 mt-0.5 flex items-center">
@@ -490,7 +490,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
                 {formatDuration(duration)}
               </span>
             )}
-            
+
             {secondaryInfo && (
               <span className={`${duration ? 'ml-2' : ''} flex items-center`}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -503,14 +503,14 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
           </div>
         )}
       </div>
-      
+
       {/* Menú contextual */}
       <AnimatePresence>
         {contextMenuVisible && (
           <motion.div
             className="fixed z-50 bg-[#0f0f18]/95 backdrop-blur-lg shadow-lg rounded-lg overflow-hidden border border-white/10 w-48 text-white"
-            style={{ 
-              top: contextMenuPosition.y, 
+            style={{
+              top: contextMenuPosition.y,
               left: contextMenuPosition.x,
               position: 'fixed' // Garantizar posición fija independiente del scroll
             }}
@@ -563,7 +563,7 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
       </Link>
     );
   }
-  
+
   // De lo contrario, devolver el contenido directamente
   return renderCardContent();
 };
@@ -574,13 +574,13 @@ const UnifiedMusicCard: React.FC<UnifiedMusicCardProps> = ({
 export const createTrackCard = (track: Track, onPlay?: (track: Track) => void) => {
   // Determinar la URL de la portada adecuada
   let coverToUse = track.cover;
-  
+
   // Si el track tiene una URL específica de Spotify, usarla directamente
   if (track.source === 'spotify' && track.spotifyCoverUrl) {
     coverToUse = track.spotifyCoverUrl;
     console.log(`[UnifiedMusicCard] Usando URL de Spotify para ${track.title}: ${coverToUse}`);
   }
-  
+
   return (
     <UnifiedMusicCard
       id={track.id}

@@ -5,7 +5,7 @@ import { usePlayer, Track } from '@/contexts/PlayerContext';
 
 const PlayerControls: React.FC = () => {
   const { togglePlay, playTrack, isPlaying, currentTrack } = usePlayer();
-  
+
   // Estado para el modo de repetición (se puede implementar luego)
   const [repeatMode, setRepeatMode] = useState<'OFF' | 'ONE' | 'ALL'>('OFF');
 
@@ -36,4 +36,4 @@ const PlayerControls: React.FC = () => {
   );
 };
 
-export default PlayerControls; 
+export default PlayerControls;

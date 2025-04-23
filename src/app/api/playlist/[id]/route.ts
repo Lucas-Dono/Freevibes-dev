@@ -18,7 +18,7 @@ export async function GET(
     const apiConfig = getAPIConfig();
     const nodeServerUrl = apiConfig.nodeServerUrl || 'http://localhost:3001';
 
-    
+
     // Llamamos al servidor Node.js para obtener los detalles de la playlist
     const response = await axios.get(`${nodeServerUrl}/api/demo/playlist/${id}`, {
       params: { language },
@@ -28,7 +28,7 @@ export async function GET(
     return NextResponse.json(response.data);
   } catch (error: any) {
     console.error(`[Playlist API] Error al obtener detalles de playlist ${params.id}:`, error.message);
-    
+
     // Si la respuesta fue 404, devolver error específico
     if (error.response && error.response.status === 404) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function GET(
         { status: 404 }
       );
     }
-    
+
     // Si el error tiene una respuesta, extraer detalles adicionales
     if (error.response) {
       console.error('[Playlist API] Detalles del error:', {
@@ -44,10 +44,10 @@ export async function GET(
         data: error.response.data
       });
     }
-    
+
     return NextResponse.json(
       { error: 'Error al obtener detalles de la playlist', details: error.message },
       { status: 500 }
     );
   }
-} 
+}

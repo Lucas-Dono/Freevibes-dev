@@ -52,4 +52,4 @@ export const MusicNoteIcon = ({ className = 'w-6 h-6' }: { className?: string })
     <circle cx="6" cy="18" r="3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     <circle cx="18" cy="16" r="3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
-); 
+);

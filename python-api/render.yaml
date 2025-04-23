@@ -13,4 +13,4 @@ services:
       - key: CORS_ORIGIN
         value: https://tu-frontend-vercel.vercel.app
       - key: YOUTUBE_API_KEY
-        sync: false # Se configurará manualmente 
+        sync: false # Se configurará manualmente

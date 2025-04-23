@@ -1,13 +1,13 @@
 /**
  * Punto de entrada para los servicios de YouTube
- * 
+ *
  * Este módulo exporta todas las funcionalidades relacionadas con YouTube
  * de forma centralizada.
  */
 
-import { 
-  youtubeService, 
-  YouTubeQuotaManager, 
+import {
+  youtubeService,
+  YouTubeQuotaManager,
   YouTubeService,
   YouTubeSearchResponse,
   YouTubeVideoItem,
@@ -61,14 +61,14 @@ export function mapToYTMusic(videoItem: YouTubeVideoItem): YTMusicResult {
   let videoTitle = videoItem.snippet.title;
   let videoArtist = videoItem.snippet.channelTitle;
   let thumbnails: any[] = [];
-  
+
   // Intentar extraer artista y título si tiene el formato común
   const dashSplit = videoTitle.split(' - ');
   if (dashSplit.length >= 2) {
     videoArtist = dashSplit[0].trim();
     videoTitle = dashSplit.slice(1).join(' - ').trim();
   }
-  
+
   // Limpiar título de términos comunes en videos musicales
   videoTitle = videoTitle
     .replace(/\(Official\s*(Video|Audio|Music Video|Lyric Video|Visualizer)\)/i, '')
@@ -86,7 +86,7 @@ export function mapToYTMusic(videoItem: YouTubeVideoItem): YTMusicResult {
     .replace(/\(\d+\)/i, '')
     .replace(/\[\d+\]/i, '')
     .trim();
-  
+
   // Mapear thumbnails para compatibilidad con YTMusic API
   if (videoItem.snippet.thumbnails) {
     const sizes = ['default', 'medium', 'high', 'standard', 'maxres'] as const;
@@ -95,7 +95,7 @@ export function mapToYTMusic(videoItem: YouTubeVideoItem): YTMusicResult {
       .map(size => {
         const thumb = videoItem.snippet.thumbnails[size];
         if (!thumb) return null;
-        
+
         return {
           url: thumb.url,
           width: thumb.width || 0,
@@ -104,7 +104,7 @@ export function mapToYTMusic(videoItem: YouTubeVideoItem): YTMusicResult {
       })
       .filter(Boolean) as any[];
   }
-  
+
   return {
     videoId: videoItem.id.videoId,
     title: videoTitle,
@@ -112,4 +112,4 @@ export function mapToYTMusic(videoItem: YouTubeVideoItem): YTMusicResult {
     album: 'YouTube Music',
     thumbnails
   };
-} 
+}

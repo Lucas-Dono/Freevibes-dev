@@ -10,15 +10,15 @@ export const API_CONFIG = {
   get FRONTEND_URL() { return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'; },
   get NODE_API_URL() { return process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3001'; },
   get PYTHON_API_URL() { return process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5000'; },
-  
+
   // Getters de compatibilidad para variables deprecadas
   get NEXT_PUBLIC_NODE_API_URL() { return process.env.NEXT_PUBLIC_NODE_API_URL || this.NODE_API_URL; },
-  
+
   // Endpoints específicos
   SPOTIFY_API_BASE: 'https://api.spotify.com/v1',
   DEEZER_API_BASE: 'https://api.deezer.com',
   YOUTUBE_API_BASE: 'https://www.googleapis.com/youtube/v3',
-  
+
   // Timeouts para las APIs (en ms)
   API_TIMEOUTS: {
     SPOTIFY: 15000,
@@ -29,16 +29,16 @@ export const API_CONFIG = {
     RECOMMENDATIONS: 15000,
     DEFAULT: 10000
   },
-  
+
   // Métodos auxiliares para obtener timeouts específicos
   getSearchTimeout: () => {
     return API_CONFIG.API_TIMEOUTS.SEARCH;
   },
-  
+
   getRecommendationsTimeout: () => {
     return API_CONFIG.API_TIMEOUTS.RECOMMENDATIONS;
   },
-  
+
   // Proxies para las APIs externas
   API_PROXIES: {
     LASTFM: '/proxy/lastfm',
@@ -46,12 +46,12 @@ export const API_CONFIG = {
     DEEZER: '/proxy/deezer',
     YOUTUBE: '/proxy/youtube'
   },
-  
+
   // Determinación del modo demo
   isDemoMode: () => {
     return process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
   },
-  
+
   // Función centralizada para obtener la URL base de la API
   getApiBaseUrl: () => {
     // En el navegador
@@ -62,19 +62,19 @@ export const API_CONFIG = {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     return `${appUrl}/api`;
   },
-  
+
   // Función para obtener URL del servidor Node
   getNodeApiUrl: () => {
     // Leer directamente de la variable de entorno (no usar caché)
     return process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3001';
   },
-  
+
   // Función para obtener URL del servidor Python
   getPythonApiUrl: () => {
     // Leer directamente de la variable de entorno (no usar caché)
     return process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5000';
   },
-  
+
   // Configuración para los throttlers de las APIs
   THROTTLE_CONFIG: {
     spotify: {
@@ -93,4 +93,4 @@ export const API_CONFIG = {
       queueTime: 15000     // 15 segundos máximo en cola
     }
   }
-}; 
+};

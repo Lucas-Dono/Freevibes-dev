@@ -3,13 +3,13 @@ export interface UserPreferences {
     audioQuality: 'normal' | 'high' | 'ultra';
     language: string;
   }
-  
+
   export enum Role {
     USER = 'user',
     PREMIUM = 'premium',
     ADMIN = 'admin',
   }
-  
+
   export interface User {
     id: string;
     email: string;
@@ -35,7 +35,7 @@ export interface UserPreferences {
       channelId?: string;
     };
   }
-  
+
   export interface Session {
     id: string;
     userId: string;

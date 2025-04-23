@@ -44,7 +44,7 @@ const PlayerBarContainer = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   position: 'fixed',
   bottom: 0,
-  left: 0, 
+  left: 0,
   right: 0,
   zIndex: 100,
   color: 'white',
@@ -121,7 +121,7 @@ export const MobilePlayerBar: React.FC = () => {
   } = usePlayer();
 
   const theme = useTheme();
-  
+
   // Estados locales
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -131,7 +131,7 @@ export const MobilePlayerBar: React.FC = () => {
 
   // Referencias
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // Calcular progreso actual
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
@@ -143,22 +143,22 @@ export const MobilePlayerBar: React.FC = () => {
   useEffect(() => {
     setLocalVolume(contextVolume * 100);
   }, [contextVolume]);
-  
+
   // Detectar la línea actual basado en el tiempo actual
   useEffect(() => {
     if (!lyrics.synced.length) return;
-    
+
     // Pequeño offset para anticipar ligeramente el cambio de línea
     const offsetTime = currentTime + 0.2; // 200ms de anticipación
-    
+
     // Encontrar la línea actual
     let foundIndex = null;
-    
+
     // Buscar la línea actual
     for (let i = 0; i < lyrics.synced.length; i++) {
       const currentLine = lyrics.synced[i];
       const nextLine = i < lyrics.synced.length - 1 ? lyrics.synced[i + 1] : null;
-      
+
       if (nextLine) {
         // Si estamos entre esta línea y la siguiente
         if (offsetTime >= currentLine.time && offsetTime < nextLine.time) {
@@ -172,15 +172,15 @@ export const MobilePlayerBar: React.FC = () => {
         }
       }
     }
-    
+
     // Si encontramos una línea válida y es diferente a la actual
     if (foundIndex !== null && foundIndex !== currentLineIndex) {
       setCurrentLineIndex(foundIndex);
-      
+
       // Auto-scroll a la línea actual
       if (lyricsContainerRef.current && drawerOpen) {
         const lineElement = document.getElementById(`lyric-line-${foundIndex}`);
-        
+
         if (lineElement) {
           lineElement.scrollIntoView({
             behavior: 'smooth',
@@ -190,41 +190,41 @@ export const MobilePlayerBar: React.FC = () => {
       }
     }
   }, [currentTime, lyrics.synced, currentLineIndex, drawerOpen]);
-  
+
   // Controlar el drawer
   const toggleDrawer = (open: boolean) => {
     setDrawerOpen(open);
   };
-  
+
   // Manejar el cambio de tabs
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
-  
+
   // Manejar cambios en la barra de progreso
   const handleProgressChange = (_: Event, newValue: number | number[]) => {
     const newTime = ((newValue as number) / 100) * duration;
     seekTo(newTime);
   };
-  
+
   // Manejar cambios de volumen
   const handleVolumeChange = (_: Event, newValue: number | number[]) => {
     const newVolume = (newValue as number) / 100;
     setLocalVolume(newValue as number);
     setVolume(newVolume);
   };
-  
+
   // Alternar favorito
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
-  
+
   // Si no hay canción actual, no mostrar nada
   if (!currentTrack) return null;
-  
+
   // URL de la portada por defecto o proporcionada
   const coverUrl = currentTrack.cover || 'https://placehold.co/600x600/1a1a2e/FFFFFF?text=No+Image';
-  
+
   return (
     <>
       {/* Barra de reproductor fija en la parte inferior */}
@@ -240,39 +240,39 @@ export const MobilePlayerBar: React.FC = () => {
             transition={{ duration: 0.1 }}
           />
         </ProgressBar>
-        
-        <motion.div 
+
+        <motion.div
           className="w-full flex items-center"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
           {/* Portada e información de la canción (40%) */}
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              width: '40%', 
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '40%',
               overflow: 'hidden',
               cursor: 'pointer'
             }}
             onClick={() => toggleDrawer(true)}
           >
-            <motion.div 
+            <motion.div
               className="relative w-10 h-10 rounded-md overflow-hidden mr-3 shadow-lg"
               animate={isPlaying ? { rotate: [0, 360] } : { rotate: 0 }}
-              transition={isPlaying ? 
-                { rotate: { repeat: Infinity, duration: 20, ease: "linear" } } : 
+              transition={isPlaying ?
+                { rotate: { repeat: Infinity, duration: 20, ease: "linear" } } :
                 { duration: 0.3 }
               }
             >
-              <img 
-                src={coverUrl} 
-                alt={currentTrack.title} 
-                className="w-full h-full object-cover" 
+              <img
+                src={coverUrl}
+                alt={currentTrack.title}
+                className="w-full h-full object-cover"
               />
             </motion.div>
-            
+
             <Box sx={{ overflow: 'hidden' }}>
               <Typography noWrap variant="body2" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
                 {currentTrack.title}
@@ -282,16 +282,16 @@ export const MobilePlayerBar: React.FC = () => {
               </Typography>
             </Box>
           </Box>
-          
+
           {/* Botón de reproducción central (20%) */}
           <Box sx={{ display: 'flex', justifyContent: 'center', width: '20%' }}>
-            <IconButton 
-              onClick={togglePlay} 
+            <IconButton
+              onClick={togglePlay}
               color="secondary"
-              sx={{ 
-                backgroundColor: 'secondary.main', 
-                color: 'black', 
-                width: 36, 
+              sx={{
+                backgroundColor: 'secondary.main',
+                color: 'black',
+                width: 36,
                 height: 36,
                 boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
                 '&:hover': {
@@ -302,24 +302,24 @@ export const MobilePlayerBar: React.FC = () => {
               {isPlaying ? <Pause /> : <PlayArrow />}
             </IconButton>
           </Box>
-          
+
           {/* Controles adicionales (40%) */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '40%', alignItems: 'center' }}>
             <IconButton onClick={previousTrack} color="inherit" size="small">
               <SkipPrevious />
             </IconButton>
-            
+
             <IconButton onClick={nextTrack} color="inherit" size="small">
               <SkipNext />
             </IconButton>
-            
+
             <IconButton onClick={toggleFavorite} color="inherit" size="small">
               {isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
             </IconButton>
           </Box>
         </motion.div>
       </PlayerBarContainer>
-      
+
       {/* Panel expandido (Drawer) */}
       <SwipeableDrawer
         anchor="bottom"
@@ -339,16 +339,16 @@ export const MobilePlayerBar: React.FC = () => {
         <ExpandedPanel>
           {/* Cabecera con botón de cierre */}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-            <IconButton 
-              edge="end" 
-              color="inherit" 
+            <IconButton
+              edge="end"
+              color="inherit"
               onClick={() => toggleDrawer(false)}
               size="small"
             >
               <Close />
             </IconButton>
           </Box>
-          
+
           {/* Portada grande animada */}
           <motion.div
             className="mx-auto mb-6 relative"
@@ -360,17 +360,17 @@ export const MobilePlayerBar: React.FC = () => {
             <motion.div
               className="w-full h-full rounded-2xl overflow-hidden shadow-2xl"
               animate={isPlaying ? { rotate: 360 } : { rotate: 0 }}
-              transition={isPlaying ? 
-                { rotate: { repeat: Infinity, duration: 20, ease: "linear" } } : 
+              transition={isPlaying ?
+                { rotate: { repeat: Infinity, duration: 20, ease: "linear" } } :
                 { duration: 0.5 }
               }
             >
-              <img 
-                src={coverUrl} 
-                alt={currentTrack.title} 
-                className="w-full h-full object-cover" 
+              <img
+                src={coverUrl}
+                alt={currentTrack.title}
+                className="w-full h-full object-cover"
               />
-              
+
               {/* Efecto de vinilo/disco cuando gira */}
               {isPlaying && (
                 <motion.div
@@ -382,19 +382,19 @@ export const MobilePlayerBar: React.FC = () => {
                 />
               )}
             </motion.div>
-            
+
             {/* Reflejo/sombra decorativa debajo de la portada */}
-            <div 
+            <div
               className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-3/4 h-10 rounded-full opacity-15"
-              style={{ 
+              style={{
                 background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)',
                 filter: 'blur(8px)'
               }}
             />
           </motion.div>
-          
+
           {/* Información de la canción */}
-          <motion.div 
+          <motion.div
             className="text-center mb-6"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -407,9 +407,9 @@ export const MobilePlayerBar: React.FC = () => {
               {currentTrack.artist}
             </Typography>
           </motion.div>
-          
+
           {/* Barra de progreso */}
-          <motion.div 
+          <motion.div
             className="px-4 mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -420,7 +420,7 @@ export const MobilePlayerBar: React.FC = () => {
               onChange={handleProgressChange}
               aria-label="Progress"
             />
-            
+
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
               <Typography variant="caption" color="text.secondary">
                 {currentTimeFormatted}
@@ -430,9 +430,9 @@ export const MobilePlayerBar: React.FC = () => {
               </Typography>
             </Box>
           </motion.div>
-          
+
           {/* Controles principales */}
-          <motion.div 
+          <motion.div
             className="flex justify-center items-center space-x-8 mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -441,43 +441,43 @@ export const MobilePlayerBar: React.FC = () => {
             <IconButton color="inherit">
               <Shuffle />
             </IconButton>
-            
+
             <IconButton onClick={previousTrack} color="inherit">
               <SkipPrevious sx={{ fontSize: 32 }} />
             </IconButton>
-            
-            <IconButton 
-              onClick={togglePlay} 
-              sx={{ 
-                backgroundColor: 'secondary.main', 
+
+            <IconButton
+              onClick={togglePlay}
+              sx={{
+                backgroundColor: 'secondary.main',
                 color: 'black',
                 p: 1.5,
                 boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-                '&:hover': { 
-                  backgroundColor: 'secondary.light' 
+                '&:hover': {
+                  backgroundColor: 'secondary.light'
                 }
               }}
             >
               {isPlaying ? <Pause sx={{ fontSize: 32 }} /> : <PlayArrow sx={{ fontSize: 32 }} />}
             </IconButton>
-            
+
             <IconButton onClick={nextTrack} color="inherit">
               <SkipNext sx={{ fontSize: 32 }} />
             </IconButton>
-            
+
             <IconButton color="inherit">
               <Repeat />
             </IconButton>
           </motion.div>
-          
+
           {/* Pestañas para contenido adicional */}
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs 
-              value={activeTab} 
-              onChange={handleTabChange} 
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
               centered
               variant="fullWidth"
-              sx={{ 
+              sx={{
                 '& .MuiTab-root': { color: 'rgba(255,255,255,0.7)' },
                 '& .Mui-selected': { color: 'white' },
                 '& .MuiTabs-indicator': { backgroundColor: theme.palette.secondary.main }
@@ -488,12 +488,12 @@ export const MobilePlayerBar: React.FC = () => {
               <Tab label="Opciones" />
             </Tabs>
           </Box>
-          
+
           {/* Contenido según la pestaña activa */}
           <Box sx={{ p: 2, flex: 1, overflow: 'auto' }}>
             {/* Pestaña de letras */}
             {activeTab === 0 && (
-              <div 
+              <div
                 className="lyrics-container h-full overflow-y-auto px-2"
                 ref={lyricsContainerRef}
               >
@@ -509,16 +509,16 @@ export const MobilePlayerBar: React.FC = () => {
                       key={`${index}-${line.time}`}
                       id={`lyric-line-${index}`}
                       initial={{ opacity: 0.7 }}
-                      animate={{ 
+                      animate={{
                         opacity: currentLineIndex === index ? 1 : 0.7,
                         scale: currentLineIndex === index ? 1.02 : 1
                       }}
                       transition={{ duration: 0.3 }}
                       className="my-4 text-center"
                     >
-                      <Typography 
-                        variant="body1" 
-                        sx={{ 
+                      <Typography
+                        variant="body1"
+                        sx={{
                           fontWeight: currentLineIndex === index ? 'bold' : 'normal',
                           color: currentLineIndex === index ? 'white' : 'text.secondary'
                         }}
@@ -536,7 +536,7 @@ export const MobilePlayerBar: React.FC = () => {
                 )}
               </div>
             )}
-            
+
             {/* Pestaña de lista de reproducción */}
             {activeTab === 1 && (
               <Box sx={{ height: '100%', overflow: 'auto' }}>
@@ -552,8 +552,8 @@ export const MobilePlayerBar: React.FC = () => {
                     onClick={() => playTrack(track)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <Avatar 
-                      src={track.cover} 
+                    <Avatar
+                      src={track.cover}
                       variant="rounded"
                       sx={{ width: 42, height: 42, mr: 2 }}
                     />
@@ -572,16 +572,16 @@ export const MobilePlayerBar: React.FC = () => {
                 ))}
               </Box>
             )}
-            
+
             {/* Pestaña de opciones */}
             {activeTab === 2 && (
-              <motion.div 
+              <motion.div
                 className="h-full flex flex-col space-y-3 p-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <Box 
+                <Box
                   className="flex items-center justify-between p-3 rounded-lg"
                   sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                 >
@@ -590,8 +590,8 @@ export const MobilePlayerBar: React.FC = () => {
                     {isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
                   </IconButton>
                 </Box>
-                
-                <Box 
+
+                <Box
                   className="flex items-center justify-between p-3 rounded-lg"
                   sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                 >
@@ -600,8 +600,8 @@ export const MobilePlayerBar: React.FC = () => {
                     <Share />
                   </IconButton>
                 </Box>
-                
-                <Box 
+
+                <Box
                   className="flex items-center justify-between p-3 rounded-lg"
                   sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                 >
@@ -610,8 +610,8 @@ export const MobilePlayerBar: React.FC = () => {
                     <Download />
                   </IconButton>
                 </Box>
-                
-                <Box 
+
+                <Box
                   className="flex items-center justify-between p-3 rounded-lg"
                   sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                 >
@@ -629,8 +629,8 @@ export const MobilePlayerBar: React.FC = () => {
                     />
                   </Box>
                 </Box>
-                
-                <Box 
+
+                <Box
                   className="flex items-center justify-between p-3 rounded-lg"
                   sx={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
                 >
@@ -646,4 +646,4 @@ export const MobilePlayerBar: React.FC = () => {
       </SwipeableDrawer>
     </>
   );
-}; 
+};

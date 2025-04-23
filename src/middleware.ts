@@ -63,10 +63,10 @@ function detectLanguage(req: NextRequest): string {
   if (savedLang) {
     return savedLang;
   }
-  
+
   // Obtener el encabezado Accept-Language
   const acceptLanguage = req.headers.get('accept-language') || '';
-  
+
   // Analizar el encabezado para encontrar los idiomas preferidos
   // El formato típico es: 'es-ES,es;q=0.9,en;q=0.8,de;q=0.7'
   const languages = acceptLanguage
@@ -79,7 +79,7 @@ function detectLanguage(req: NextRequest): string {
       return { code: primaryCode, weight: weight ? parseFloat(weight.split('=')[1]) : 1.0 };
     })
     .sort((a, b) => b.weight - a.weight); // Ordenar por peso descendente
-  
+
   // Si hay idiomas detectados, tomar el primero (el de mayor preferencia)
   if (languages.length > 0) {
     const userLang = languages[0].code;
@@ -90,7 +90,7 @@ function detectLanguage(req: NextRequest): string {
     // Para cualquier otro idioma, devolver 'en' (inglés por defecto)
     return 'en';
   }
-  
+
   // Si no se puede determinar, usar 'en' por defecto
   return 'en';
 }
@@ -98,87 +98,87 @@ function detectLanguage(req: NextRequest): string {
 export async function middleware(req: NextRequest) {
   // Obtener la ruta actual
   const { pathname } = req.nextUrl;
-  
+
   // Detectar el idioma preferido del usuario
   const userLanguage = detectLanguage(req);
-  
+
   // Crear una respuesta que podemos modificar
   const response = NextResponse.next();
-  
+
   // Establecer la cookie de idioma si no existe
   if (!req.cookies.has('userLanguage')) {
-    response.cookies.set('userLanguage', userLanguage, { 
+    response.cookies.set('userLanguage', userLanguage, {
       maxAge: 60 * 60 * 24 * 30, // 30 días
       path: '/'
     });
   }
-  
+
   // Depuración detallada
   console.log(`[Middleware] Procesando ruta: ${pathname} (Idioma: ${userLanguage})`);
-  
+
   // Verificar si es una ruta pública o recurso estático
-  if (publicRoutes.some(route => 
-      pathname.startsWith(route) || 
+  if (publicRoutes.some(route =>
+      pathname.startsWith(route) ||
       new RegExp(`^${route}$`).test(pathname) ||
       pathname.includes('.')
   )) {
     console.log(`[Middleware] Ruta pública permitida: ${pathname}`);
     return response;
   }
-  
+
   // Verificar si es ruta de autenticación
-  if (authRoutes.some(route => 
+  if (authRoutes.some(route =>
       new RegExp(`^${route}$`).test(pathname)
   )) {
     console.log(`[Middleware] Ruta de autenticación permitida: ${pathname}`);
     return response;
   }
-  
+
   // Verificar si estamos en modo demo
   const isDemoMode = req.cookies.get('demo-mode')?.value === 'true' || req.cookies.get('demoMode')?.value === 'true';
   console.log(`[Middleware] Estado de modo demo: ${isDemoMode ? 'Activo' : 'Inactivo'}`);
-  
+
   // Agregar el idioma detectado a los headers para que esté disponible en la aplicación
   response.headers.set('x-user-language', userLanguage);
-  
+
   // Si estamos en modo demo y es una ruta permitida, actualizar el idioma si es necesario
   if (isDemoMode) {
-    const isDemoRoute = demoRoutes.some(route => 
-      pathname.startsWith(route) || 
+    const isDemoRoute = demoRoutes.some(route =>
+      pathname.startsWith(route) ||
       new RegExp(`^${route}$`).test(pathname)
     );
-    
+
     if (isDemoRoute) {
       console.log(`[Middleware] Permitiendo acceso a ${pathname} en modo demo (Idioma: ${userLanguage})`);
-      
+
       // Actualizar idioma de demo si es diferente al detectado
       const demoLang = req.cookies.get('demoLanguage')?.value;
       if (demoLang !== userLanguage) {
-        response.cookies.set('demoLanguage', userLanguage, { 
+        response.cookies.set('demoLanguage', userLanguage, {
           maxAge: 60 * 60 * 24 * 7, // 7 días
           path: '/'
         });
       }
-      
+
       return response;
     } else {
       console.log(`[Middleware] BLOQUEANDO acceso en modo demo a ${pathname} - No está en la lista de rutas permitidas`);
     }
   }
-  
+
   // Para rutas protegidas, verificar token de autenticación
   const token = await getToken({ req });
-  
+
   // Si no hay token, redirigir a login
   if (!token) {
     console.log(`[Middleware] Redirigiendo a login desde ${pathname} - No hay token`);
-    
+
     const url = new URL('/login', req.url);
     url.searchParams.set('callbackUrl', pathname);
-    
+
     return NextResponse.redirect(url);
   }
-  
+
   // Si hay token, permitir acceso
   console.log(`[Middleware] Acceso permitido a ${pathname} con token de autenticación (Idioma: ${userLanguage})`);
   return response;
@@ -203,4 +203,4 @@ export const configHybrid = {
     '/hybrid',
     '/hybrid-adapter',
   ],
-}; 
+};

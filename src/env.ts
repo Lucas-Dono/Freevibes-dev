@@ -2,4 +2,4 @@
 // Este archivo simplemente re-exporta desde env.mjs para mantener consistencia
 
 import { env } from './env.mjs';
-export { env }; 
+export { env };

@@ -1,6 +1,6 @@
 /**
  * Servicio de recomendaciones basadas en pistas
- * 
+ *
  * Este módulo proporciona funciones para obtener recomendaciones musicales basadas en pistas específicas,
  * utilizando el sistema multi-fuente.
  */
@@ -13,7 +13,7 @@ import { recommendationsCache, DEFAULT_CACHE_TTL } from '@/lib/cache';
 
 /**
  * Obtiene recomendaciones de canciones similares a una pista específica
- * 
+ *
  * @param track Pista de referencia
  * @param limit Número máximo de resultados
  * @returns Lista de canciones recomendadas
@@ -24,13 +24,13 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
       console.error('[Track] Error: Se intentó obtener tracks similares sin proporcionar una pista');
       throw new Error('Pista no proporcionada');
     }
-    
+
     const { title, artist, spotifyId } = track;
-    
+
     // Crear una clave de caché basada en la información disponible
     const baseKey = spotifyId || `${title}_${artist}`.toLowerCase().replace(/\s+/g, '_');
     const cacheKey = `similar_track:${baseKey}:${limit}`;
-    
+
     // Intentar obtener de caché primero
     let cachedData;
     try {
@@ -39,7 +39,7 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
       console.warn(`[Track] Error accediendo a caché:`, cacheError);
       // Continuamos sin datos de caché
     }
-    
+
     if (cachedData) {
       try {
         return JSON.parse(cachedData);
@@ -48,11 +48,11 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         // Continuamos con la obtención de datos frescos
       }
     }
-    
+
     // Crear una estrategia en cascada para obtener recomendaciones
     let similarTracks: Track[] = [];
     let errors: Error[] = [];
-    
+
     // Estrategia 1: Buscar por ID de Spotify si está disponible
     if (spotifyId) {
       try {
@@ -61,7 +61,7 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
           combineResults: true,
           preferredSource: 'spotify'
         });
-        
+
         if (spotifyResults.length >= Math.min(5, limit)) {
           similarTracks = spotifyResults;
         }
@@ -71,7 +71,7 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         errors.push(new Error(`Spotify ID search: ${errorMessage}`));
       }
     }
-    
+
     // Estrategia 2: Si no hay suficientes resultados, buscar por título y artista
     if (similarTracks.length < Math.min(5, limit) && title && artist) {
       try {
@@ -79,7 +79,7 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         const searchResults = await searchMultiSource(searchQuery, limit, {
           combineResults: true
         });
-        
+
         if (searchResults.length > 0) {
           // Combinar con resultados existentes
           const allTracks = [...similarTracks, ...searchResults];
@@ -92,19 +92,19 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         errors.push(new Error(`Title/artist search: ${errorMessage}`));
       }
     }
-    
+
     // Estrategia 3: Si aún no hay suficientes resultados, obtener tracks del mismo artista
     if (similarTracks.length < Math.min(limit, 10) && artist) {
       try {
         const artistTracks = await getSimilarArtistTracks(artist, limit);
-        
+
         if (artistTracks.length > 0) {
           // Excluir la canción original
-          const filteredTracks = artistTracks.filter(t => 
-            t.id !== track.id && 
+          const filteredTracks = artistTracks.filter(t =>
+            t.id !== track.id &&
             (t.title !== track.title || t.artist !== track.artist)
           );
-          
+
           // Combinar con resultados existentes
           const allTracks = [...similarTracks, ...filteredTracks];
           // Deduplicar por ID
@@ -116,16 +116,16 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         errors.push(new Error(`Artist tracks: ${errorMessage}`));
       }
     }
-    
+
     // Si ninguna estrategia funcionó y tenemos errores, intentar una última alternativa
     if (similarTracks.length === 0 && errors.length > 0) {
       console.warn(`[Track] Todas las estrategias fallaron con ${errors.length} errores. Intentando método alternativo.`);
-      
+
       // Detectar posible género basado en el nombre del artista o el título
       try {
         const searchText = `${title} ${artist}`;
         const genres = ['rock', 'pop', 'rap', 'hiphop', 'electronic', 'dance', 'indie', 'alternative', 'latin'];
-        
+
         // Intentar identificar un género en el texto
         let detectedGenre = 'pop'; // Default
         for (const genre of genres) {
@@ -134,7 +134,7 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
             break;
           }
         }
-        
+
         const genreTracks = await getRecommendationsByGenre(detectedGenre, limit);
         if (genreTracks.length > 0) {
           similarTracks = genreTracks;
@@ -144,10 +144,10 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         // Si este último intento falla, continuamos con los resultados que tengamos
       }
     }
-    
+
     // Limitar al número solicitado
     const finalTracks = similarTracks.slice(0, limit);
-    
+
     // Guardar en caché para futuras solicitudes
     if (finalTracks.length > 0) {
       try {
@@ -161,32 +161,32 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
         // Continuamos sin afectar al usuario
       }
     }
-    
-    
+
+
     // Si después de todos los intentos no hay resultados, usar fallback
     if (finalTracks.length === 0) {
       console.warn(`[Track] No se pudieron obtener recomendaciones. Generando fallback.`);
       return getTrackFallbackTracks(track, limit);
     }
-    
+
     return finalTracks;
   } catch (error) {
     console.error(`[Track] Error crítico obteniendo tracks similares:`, error);
-    
+
     // En caso de error crítico, intentar recuperar datos de caché
     try {
       const { title, artist, spotifyId } = track;
       const baseKey = spotifyId || `${title}_${artist}`.toLowerCase().replace(/\s+/g, '_');
       const cacheKey = `similar_track:${baseKey}:${limit}`;
       const cachedData = await recommendationsCache.get(cacheKey);
-      
+
       if (cachedData) {
         return JSON.parse(cachedData);
       }
     } catch (cacheError) {
       console.error(`[Track] Error accediendo a caché en recuperación:`, cacheError);
     }
-    
+
     // Si todo falla, devolver datos fallback
     return getTrackFallbackTracks(track, limit);
   }
@@ -199,10 +199,10 @@ export async function getSimilarTracks(track: Track, limit: number = 20): Promis
  * @returns Lista de tracks fallback
  */
 function getTrackFallbackTracks(track: Track, limit: number): Track[] {
-  
+
   const { title, artist } = track;
   const fallbackTracks: Track[] = [];
-  
+
   // Crear tracks fallback basados en el track original
   for (let i = 0; i < Math.min(limit, 5); i++) {
     fallbackTracks.push({
@@ -217,6 +217,6 @@ function getTrackFallbackTracks(track: Track, limit: number): Track[] {
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
-} 
+}

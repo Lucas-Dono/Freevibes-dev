@@ -7,7 +7,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     if (typeof window === "undefined") {
       return initialValue;
     }
-    
+
     try {
       // Obtener de localStorage por key
       const item = window.localStorage.getItem(key);
@@ -26,10 +26,10 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       // Permitir que el valor sea una función para seguir el mismo patrón que useState
       const valueToStore =
         value instanceof Function ? value(storedValue) : value;
-      
+
       // Guardar el valor en el estado
       setStoredValue(valueToStore);
-      
+
       // Guardar el valor en localStorage si estamos en el cliente
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
@@ -44,4 +44,4 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 }
 
 // Exportación por defecto
-export default useLocalStorage; 
+export default useLocalStorage;

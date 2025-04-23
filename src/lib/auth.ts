@@ -35,49 +35,49 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, profile }) {
       console.log('[NextAuth] Generando JWT:', { tokenSub: token?.sub });
-      
+
       // Si tenemos información de la cuenta, anexarla al token
       if (account) {
-        console.log('[NextAuth] Datos de cuenta recibidos:', { 
+        console.log('[NextAuth] Datos de cuenta recibidos:', {
           provider: account.provider,
           accessTokenExpiresIn: account.expires_in
         });
-        
+
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
         token.accessTokenExpires = account.expires_at ? account.expires_at * 1000 : 0;
       }
-      
+
       // Verificar si el token ha expirado
       if (token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
         console.log('[NextAuth] Token expirado, intentando refrescar');
         // Lógica para refrescar el token...
       }
-      
+
       return token;
     },
-    
+
     async session({ session, token, user }) {
-      console.log('[NextAuth] Creando sesión:', { 
+      console.log('[NextAuth] Creando sesión:', {
         sessionUser: session?.user?.name,
         tokenSub: token?.sub,
         isDemoMode: isInDemoMode()
       });
-      
+
       // Asegurar que no estamos en modo demo antes de devolver la sesión real
       if (typeof window !== 'undefined' && window.__FORCE_DISABLE_DEMO__) {
         console.log('[NextAuth] Forzando desactivación del modo demo en la sesión');
         // Limpiar cookies de demo
         document.cookie = 'demoMode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
-      
+
       // Agregar el token de acceso a la sesión
       if (token) {
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.error = token.error;
       }
-      
+
       return session;
     }
   },
@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-    signOut: "/login", 
+    signOut: "/login",
     error: "/login",
   },
   cookies: {
@@ -128,11 +128,11 @@ export async function getSession(): Promise<Session | null> {
   try {
     const cookieStore = cookies();
     const sessionCookie = cookieStore.get('next-auth.session-token');
-    
+
     if (!sessionCookie?.value) {
       return null;
     }
-    
+
     // En un entorno real, aquí verificaríamos la validez del token
     // Para este ejemplo, creamos un usuario simulado
     const mockUser: User = {
@@ -141,7 +141,7 @@ export async function getSession(): Promise<Session | null> {
       email: 'usuario@ejemplo.com',
       image: 'https://placehold.co/400x400/blue/white?text=Usuario'
     };
-    
+
     return {
       user: mockUser,
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -160,4 +160,4 @@ export async function getSession(): Promise<Session | null> {
 export async function isAuthenticated(): Promise<boolean> {
   const session = await getSession();
   return session !== null && session.user !== null;
-} 
+}

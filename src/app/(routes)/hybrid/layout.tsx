@@ -11,4 +11,4 @@ export default function HybridLayout({
 }
 
 // Forzar a que esta ruta sea dinámica
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic';

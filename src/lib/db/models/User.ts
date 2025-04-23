@@ -53,67 +53,67 @@ const SpotifyInfoSchema = new Schema<ISpotifyInfo>({
   id: { type: String, required: true },
   email: { type: String },
   display_name: { type: String },
-  images: [{ 
+  images: [{
     url: String,
     height: Number,
     width: Number
   }],
   country: { type: String },
   product: { type: String },
-  followers: { 
-    total: { type: Number, default: 0 } 
+  followers: {
+    total: { type: Number, default: 0 }
   },
   uri: { type: String }
 }, { _id: false });
 
 // Esquema principal de Usuario
 const UserSchema = new Schema<IUser>({
-  spotifyId: { 
-    type: String, 
-    required: true, 
-    unique: true, 
-    index: true 
+  spotifyId: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
   },
-  email: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  email: {
+    type: String,
+    required: true,
+    unique: true
   },
-  name: { 
-    type: String, 
-    required: true 
+  name: {
+    type: String,
+    required: true
   },
-  username: { 
+  username: {
     type: String,
     unique: true,
     sparse: true
   },
-  bio: { 
-    type: String, 
-    default: '' 
+  bio: {
+    type: String,
+    default: ''
   },
-  profileImage: { 
-    type: String, 
-    default: '' 
+  profileImage: {
+    type: String,
+    default: ''
   },
-  coverImage: { 
-    type: String, 
-    default: '' 
+  coverImage: {
+    type: String,
+    default: ''
   },
   favoriteGenres: [GenreSchema],
   spotifyInfo: SpotifyInfoSchema,
-  playlists: [{ 
-    type: String 
+  playlists: [{
+    type: String
   }],
-  followers: { 
-    type: Number, 
-    default: 0 
+  followers: {
+    type: Number,
+    default: 0
   },
-  following: { 
-    type: Number, 
-    default: 0 
+  following: {
+    type: Number,
+    default: 0
   }
 }, { timestamps: true });
 
 // Crear o recuperar el modelo User
-export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema); 
+export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

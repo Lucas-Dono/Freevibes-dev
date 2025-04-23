@@ -9,22 +9,22 @@ interface ServerLoadingModalProps {
   serverType?: 'node' | 'python' | 'both';
 }
 
-const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({ 
-  isOpen, 
+const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
+  isOpen,
   onClose, // Usamos la nueva prop
   initialSeconds = 40,
   serverType = 'both'
 }) => {
   // const { checkServerStatus, setServerLoading, serverStatus, hasBeenActive } = useServerStatus(); // Eliminado
-  
+
   // Estado local para los servidores dentro del modal
   const [localNodeStatus, setLocalNodeStatus] = useState<boolean | null>(null);
   const [localPythonStatus, setLocalPythonStatus] = useState<boolean | null>(null);
-  
+
   const [seconds, setSeconds] = useState(initialSeconds);
   const [showTip, setShowTip] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
-  
+
   // Calcular qué mensaje mostrar sobre servidores basado en estado local
   const nodeActive = localNodeStatus === true;
   const pythonActive = localPythonStatus === true;
@@ -54,24 +54,24 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
       setIsChecking(false);
     }
   };
-  
+
   // Cambiar el consejo mostrado cada 10 segundos
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const tipInterval = setInterval(() => {
       setShowTip(prev => !prev);
     }, 10000);
-    
+
     return () => clearInterval(tipInterval);
   }, [isOpen]);
-  
+
   useEffect(() => {
     if (!isOpen) return;
-    
+
     // Reiniciar contador si se abre de nuevo el modal
     setSeconds(initialSeconds);
-    
+
     // Iniciar temporizador
     const timer = setInterval(() => {
       setSeconds(prev => {
@@ -82,11 +82,11 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
         return prev - 1;
       });
     }, 1000);
-    
+
     // Limpiar temporizador al desmontar
     return () => clearInterval(timer);
   }, [isOpen, initialSeconds]);
-  
+
   // Efecto para cerrar el modal automáticamente cuando ambos servidores están activos
   useEffect(() => {
     if (!isOpen) return;
@@ -96,16 +96,16 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
       onClose(); // Usar prop onClose
     }
   }, [isOpen, localNodeStatus, localPythonStatus, onClose]);
-  
+
   // Verificar periódicamente mientras está abierto
   useEffect(() => {
     if (!isOpen) return;
     // Verificar al abrir y luego cada 5 segundos
-    performServerCheck(); 
+    performServerCheck();
     const intervalId = setInterval(performServerCheck, 5000);
     return () => clearInterval(intervalId);
   }, [isOpen]); // Dependencia solo de isOpen para iniciar/detener intervalo
-  
+
   // Cerrar forzosamente si el tiempo es 0
   useEffect(() => {
     if (seconds === 0 && isOpen) { // Asegurar que esté abierto
@@ -113,11 +113,11 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
       onClose(); // Usar prop onClose
     }
   }, [seconds, isOpen, onClose]);
-  
+
   // Función para verificar manualmente el estado del servidor
   const handleCheckServer = async () => {
     const checkResult = await performServerCheck();
-    
+
     // Asegurar que checkResult no sea undefined si performServerCheck retorna temprano
     const nodeOk = checkResult?.nodeOk ?? false;
     const pythonOk = checkResult?.pythonOk ?? false;
@@ -126,25 +126,25 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
       // Si ambos están activos, cerrar el modal
       console.log('[ServerLoadingModal] Verificación manual: servidores activos');
       onClose();
-    } else if (seconds <= 10) { 
+    } else if (seconds <= 10) {
       // Si el tiempo está por agotarse y aún no están activos, loguear
       console.log('[ServerLoadingModal] Verificación manual: tiempo casi agotado, servidores no listos.');
       // Opcional: alert('Los servidores aún no responden completamente...')
     }
   };
-  
+
   // Función para continuar con funcionalidad limitada (cerrar modal)
   const handleContinueLimited = () => {
     console.log('[ServerLoadingModal] Usuario eligió continuar con funcionalidad limitada.');
     onClose();
   };
-  
+
   // Si no está abierto, no mostrar
   if (!isOpen) return null;
-  
+
   // Calcular el progreso para la barra de progreso (de 0 a 100%)
   const progressPercentage = 100 - Math.floor((seconds / initialSeconds) * 100);
-  
+
   // Consejos que se mostrarán durante la espera
   const tips = [
     "Los servidores gratuitos se apagan automáticamente después de un período de inactividad para ahorrar recursos.",
@@ -153,9 +153,9 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
     "Este tiempo de espera solo ocurre cuando los servidores han estado inactivos por un tiempo.",
     "Una vez que los servidores estén activos, la aplicación funcionará normalmente sin retrasos."
   ];
-  
+
   const currentTip = tips[Math.floor(seconds / 10) % tips.length];
-  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
       <div className="bg-card-bg rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
@@ -168,7 +168,7 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
           </div>
           <h2 className="text-2xl font-bold text-white">Iniciando servidores</h2>
         </div>
-        
+
         <div className="mb-6 text-white/90">
           <p className="mb-4 text-lg">
             Los servidores se están iniciando después de un período de inactividad.
@@ -177,11 +177,11 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
             Este proceso puede tardar hasta <span className="font-semibold">{initialSeconds} segundos</span>. Por favor, espera mientras se activan los servicios.
           </p>
         </div>
-        
+
         {/* Estado de los servidores */}
         <div className="mb-6 bg-gray-900/50 rounded-lg p-4">
           <h3 className="font-medium text-white mb-3">Estado de los servidores:</h3>
-          
+
           <div className="flex items-center justify-between mb-2">
             <span>Servidor Node.js:</span>
             {isChecking && localNodeStatus === null ? (
@@ -196,7 +196,7 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
               </span>
             )}
           </div>
-          
+
           <div className="flex items-center justify-between">
             <span>Servidor Python:</span>
              {isChecking && localPythonStatus === null ? (
@@ -212,21 +212,21 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
             )}
           </div>
         </div>
-        
+
         <div className="mb-4 flex justify-between items-center">
           <span className="text-sm text-primary font-medium">Activando servicios...</span>
           <span className="text-lg font-bold text-white bg-primary/20 px-3 py-1 rounded-md">
             {seconds}s
           </span>
         </div>
-        
+
         <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-6">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-blue-600 to-primary-light transition-all duration-1000 ease-linear"
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
-        
+
         <div className="bg-gray-900/50 rounded-lg p-4 mb-6 min-h-[80px] flex items-center">
           <div className="text-yellow-300 mr-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -235,13 +235,13 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
           </div>
           <p className="text-white/80 text-sm">{currentTip}</p>
         </div>
-        
+
         <div className="flex space-x-3 mb-6">
           {/* Botón para verificar manualmente */}
           <button
             onClick={handleCheckServer}
             disabled={isChecking}
-            className="flex-1 py-3 rounded-lg bg-primary hover:bg-primary-dark transition-colors 
+            className="flex-1 py-3 rounded-lg bg-primary hover:bg-primary-dark transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-white font-medium"
           >
             {isChecking ? (
@@ -258,7 +258,7 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
               <>Verificar ahora</>
             )}
           </button>
-          
+
           {/* Botón para continuar si algún servidor está activo */}
           {anyActive && !allActive && (
             <button
@@ -268,7 +268,7 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
               Continuar con limitaciones
             </button>
           )}
-          
+
           {/* Botón para continuar aunque no haya servidores activos (disponible después de 30 segundos) */}
           {!anyActive && seconds <= 10 && (
             <button
@@ -279,10 +279,10 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
             </button>
           )}
         </div>
-        
+
         <div className="text-xs text-gray-400 border-t border-gray-700 pt-4">
           <p>
-            Este proyecto utiliza servidores gratuitos que se apagan después de un período de inactividad. 
+            Este proyecto utiliza servidores gratuitos que se apagan después de un período de inactividad.
             Una vez iniciados, funcionarán normalmente hasta que vuelvan a quedar inactivos.
           </p>
         </div>
@@ -291,4 +291,4 @@ const ServerLoadingModal: React.FC<ServerLoadingModalProps> = ({
   );
 };
 
-export default ServerLoadingModal; 
+export default ServerLoadingModal;

@@ -38,7 +38,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
   const theme = useTheme();
   const displayTracks = (!tracks || tracks.length === 0) ? exampleTracks : tracks;
   const { playTrack, addToQueue, createAutoPlaylist } = usePlayer();
-  
+
   // Estados para el menú contextual
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
@@ -51,7 +51,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     visible: false,
     trackId: '',
   });
-  
+
   // Función para abrir el menú contextual
   const handleContextMenu = (event: React.MouseEvent, trackId: string) => {
     event.preventDefault();
@@ -63,7 +63,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
       trackId,
     });
   };
-  
+
   // Función para cerrar el menú contextual
   const handleCloseContextMenu = () => {
     setContextMenu({
@@ -71,7 +71,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
       visible: false,
     });
   };
-  
+
   // Escuchar clicks fuera del menú para cerrarlo
   useEffect(() => {
     const handleClickOutside = () => {
@@ -79,14 +79,14 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
         handleCloseContextMenu();
       }
     };
-    
+
     document.addEventListener('click', handleClickOutside);
-    
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [contextMenu.visible]);
-  
+
   // Convertir track a formato compatible con PlayerContext
   const convertToAppTrack = (track: Track): Track => {
     return {
@@ -112,7 +112,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
       color: track.color
     };
   };
-  
+
   // Manejadores de acciones del menú contextual
   const handlePlayNow = (trackId: string) => {
     const track = displayTracks.find(t => t.id === trackId);
@@ -125,7 +125,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     }
     handleCloseContextMenu();
   };
-  
+
   const handleAddToQueue = (trackId: string) => {
     const track = displayTracks.find(t => t.id === trackId);
     if (track) {
@@ -133,7 +133,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     }
     handleCloseContextMenu();
   };
-  
+
   const handleCreateRadio = (trackId: string) => {
     const track = displayTracks.find(t => t.id === trackId);
     if (track) {
@@ -143,7 +143,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     }
     handleCloseContextMenu();
   };
-  
+
   const handleGoToArtist = (trackId: string) => {
     const track = displayTracks.find(t => t.id === trackId);
     if (track) {
@@ -156,7 +156,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     }
     handleCloseContextMenu();
   };
-  
+
   const handleOpenInSpotify = (trackId: string) => {
     if (trackId.length === 22) {
       window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
@@ -190,8 +190,8 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
     <Grid container spacing={2}>
       {displayTracks.map((track) => (
         <Grid item xs={12} key={track.id}>
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               display: 'flex',
               backgroundColor: 'background.paper',
               '&:hover': {
@@ -217,7 +217,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', pr: 2 }}>
-              <IconButton 
+              <IconButton
                 aria-label="play/pause"
                 onClick={() => {
                   if (onPlayTrack) {
@@ -226,16 +226,16 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
                     playTrack(convertToAppTrack(track));
                   }
                 }}
-                sx={{ 
+                sx={{
                   color: theme.palette.primary.main,
                   '&:hover': { color: theme.palette.primary.light }
                 }}
               >
                 <PlayArrow />
               </IconButton>
-              <IconButton 
+              <IconButton
                 aria-label="add to favorites"
-                sx={{ 
+                sx={{
                   color: 'text.secondary',
                   '&:hover': { color: '#e25555' }
                 }}
@@ -249,14 +249,14 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
           </Card>
         </Grid>
       ))}
-      
+
       {/* Menú contextual */}
       <AnimatePresence>
         {contextMenu.visible && (
           <motion.div
             className="fixed z-50 bg-[#0f0f18]/95 backdrop-blur-lg shadow-lg rounded-lg overflow-hidden border border-white/10 w-48 text-white"
-            style={{ 
-              top: contextMenu.mouseY, 
+            style={{
+              top: contextMenu.mouseY,
               left: contextMenu.mouseX
             }}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -266,7 +266,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="py-1">
-              <button 
+              <button
                 className="w-full text-left px-3 py-1.5 text-xs hover:bg-white/10 flex items-center"
                 onClick={() => handlePlayNow(contextMenu.trackId)}
               >
@@ -275,7 +275,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
                 </svg>
                 Reproducir ahora
               </button>
-              <button 
+              <button
                 className="w-full text-left px-3 py-1.5 text-xs hover:bg-white/10 flex items-center"
                 onClick={() => handleAddToQueue(contextMenu.trackId)}
               >
@@ -284,7 +284,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
                 </svg>
                 Reproducir a continuación
               </button>
-              <button 
+              <button
                 className="w-full text-left px-3 py-1.5 text-xs hover:bg-white/10 flex items-center"
                 onClick={() => handleCreateRadio(contextMenu.trackId)}
               >
@@ -293,7 +293,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
                 </svg>
                 Reproducir radio
               </button>
-              <button 
+              <button
                 className="w-full text-left px-3 py-1.5 text-xs hover:bg-white/10 flex items-center"
                 onClick={() => handleGoToArtist(contextMenu.trackId)}
               >
@@ -302,7 +302,7 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
                 </svg>
                 Ir al artista
               </button>
-              <button 
+              <button
                 className="w-full text-left px-3 py-1.5 text-xs hover:bg-white/10 flex items-center"
                 onClick={() => handleOpenInSpotify(contextMenu.trackId)}
               >
@@ -317,4 +317,4 @@ export function TrackList({ tracks, onPlayTrack }: TrackListProps) {
       </AnimatePresence>
     </Grid>
   );
-} 
+}

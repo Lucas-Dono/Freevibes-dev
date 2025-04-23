@@ -13,11 +13,11 @@ import { PlayerProvider } from '@/contexts/PlayerContext';
 // Esto evita problemas de pre-renderizado estático
 const ClientHybrid = () => {
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -25,7 +25,7 @@ const ClientHybrid = () => {
       </div>
     );
   }
-  
+
   return <HybridPageWithProviders />;
 };
 
@@ -35,7 +35,7 @@ const HybridPage: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<string>('pop');
-  
+
   const player = usePlayer();
 
   // Cargar recomendaciones al montar el componente o cuando cambia el género
@@ -63,20 +63,20 @@ const HybridPage: NextPage = () => {
   // Manejador para reproducir una pista
   const handlePlayTrack = useCallback((track: Track) => {
     console.log('Reproduciendo track en HybridPage:', track);
-    
+
     if (player && player.playTrack) {
       // Verificar si la pista tiene la información mínima necesaria
       if (!track.id && track.youtubeId) {
         track.id = track.youtubeId;
       }
-      
+
       // Reproducir la canción
       player.playTrack(track);
-      
+
       // También crear una lista de reproducción basada en las recomendaciones
       // para que se pueda navegar entre canciones
       if (recommendations.length > 0) {
-        player.playPlaylist(recommendations, recommendations.findIndex(t => 
+        player.playPlaylist(recommendations, recommendations.findIndex(t =>
           t.id === track.id || t.youtubeId === track.id || t.youtubeId === track.youtubeId)
         );
       }
@@ -100,10 +100,10 @@ const HybridPage: NextPage = () => {
 
       <main className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
         <Navbar />
-        
+
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold mb-6 text-center">Descubrimiento Híbrido</h1>
-          
+
           <div className="mb-8 flex justify-center">
             <div className="w-full max-w-md">
               <label htmlFor="genre-select" className="block mb-2 text-sm font-medium">
@@ -135,7 +135,7 @@ const HybridPage: NextPage = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
               {recommendations.map((track) => (
-                <HybridMusicCard 
+                <HybridMusicCard
                   key={`${track.id || track.youtubeId || Math.random().toString(36)}-${track.source || 'default'}`}
                   track={track}
                   onPlay={handlePlayTrack}
@@ -172,4 +172,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default ClientHybrid; 
+export default ClientHybrid;

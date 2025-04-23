@@ -15,7 +15,7 @@ export async function connectToDatabase() {
   if (API_CONFIG.isDemoMode()) {
     return null;
   }
-  
+
   if (cached.conn) {
     return cached.conn;
   }
@@ -33,7 +33,7 @@ export async function connectToDatabase() {
       })
       .catch((error) => {
         console.error('[MongoDB] Error al conectar con MongoDB:', error);
-        
+
         // Manejar errores específicamente
         if (error.code === 'ENOTFOUND' || error.message.includes('querySrv ENOTFOUND')) {
           console.error('[MongoDB] Error de resolución DNS. Asegúrate de tener conectividad a internet.');
@@ -42,7 +42,7 @@ export async function connectToDatabase() {
         } else if (error.name === 'MongooseServerSelectionError') {
           console.error('[MongoDB] No se pudo conectar al servidor. Verifica la URL y que el servidor esté en ejecución.');
         }
-        
+
         throw error;
       });
   }
@@ -78,4 +78,4 @@ process.on('SIGINT', async () => {
     console.log('[MongoDB] Conexión cerrada por terminación de aplicación');
   }
   process.exit(0);
-}); 
+});

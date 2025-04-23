@@ -325,7 +325,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       sourceSettings: 'Configuración de fuentes',
       defaultSource: 'Fuente predeterminada',
     },
-    
+
     // Calidad de sonido
     audioQuality: {
       low: 'Baja',
@@ -347,7 +347,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       gaplessPlayback: 'Reproducción sin pausas',
       replayGain: 'Ganancia de reproducción',
     },
-    
+
     // Modos de reproducción
     playbackModes: {
       repeat: 'Repetir',
@@ -384,7 +384,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       enableNotifications: 'Habilitar notificaciones',
       disableNotifications: 'Deshabilitar notificaciones',
     },
-    
+
     // Modo demo
     demo: {
       demoMode: 'Modo demostración',
@@ -401,7 +401,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       loginForFullAccess: 'Inicia sesión para acceso completo',
       demoUser: 'Usuario Demo',
     },
-    
+
     // YouTube específico
     youtube: {
       channelSubscribe: 'Suscribirse al canal',
@@ -423,7 +423,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       quality: 'Calidad',
       resolution: 'Resolución',
     },
-    
+
     // Términos específicos de Spotify
     spotify: {
       spotifyConnect: 'Spotify Connect',
@@ -440,7 +440,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       connectToSpotify: 'Conectar a Spotify',
       disconnectFromSpotify: 'Desconectar de Spotify',
     },
-    
+
     // Géneros musicales
     genres: {
       pop: 'Pop',
@@ -484,7 +484,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       gospel: 'Gospel',
       experimental: 'Experimental',
     },
-    
+
     // Estados de ánimo
     moods: {
       happy: 'Feliz',
@@ -522,7 +522,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       drive: 'Conducir',
       travel: 'Viajar',
     },
-    
+
     // Análisis musical
     musicAnalysis: {
       key: 'Tonalidad',
@@ -549,7 +549,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       musicalProfile: 'Perfil musical',
       soundProfile: 'Perfil de sonido',
     },
-    
+
     // Funciones de descubrimiento
     discovery: {
       trending: 'Tendencias',
@@ -573,7 +573,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       rediscover: 'Redescubre',
       throwbacks: 'Recuerdos',
     },
-    
+
     // Redes sociales y compartir
     social: {
       share: 'Compartir',
@@ -600,7 +600,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       shareArtist: 'Compartir artista',
     },
   },
-  
+
   // Inglés
   en: {
     // Navigation
@@ -913,7 +913,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       sourceSettings: 'Source settings',
       defaultSource: 'Default source',
     },
-    
+
     // Sound quality
     audioQuality: {
       low: 'Low',
@@ -935,7 +935,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       gaplessPlayback: 'Gapless playback',
       replayGain: 'Replay gain',
     },
-    
+
     // Playback modes
     playbackModes: {
       repeat: 'Repeat',
@@ -953,7 +953,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       faster: 'Faster',
       slower: 'Slower',
     },
-    
+
     // Notifications
     notifications: {
       newPlaylist: 'New playlist created',
@@ -972,7 +972,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       enableNotifications: 'Enable notifications',
       disableNotifications: 'Disable notifications',
     },
-    
+
     // Demo mode
     demo: {
       demoMode: 'Demo mode',
@@ -989,7 +989,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       loginForFullAccess: 'Login for full access',
       demoUser: 'Demo User',
     },
-    
+
     // YouTube specific
     youtube: {
       channelSubscribe: 'Subscribe to channel',
@@ -1011,7 +1011,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       quality: 'Quality',
       resolution: 'Resolution',
     },
-    
+
     // Spotify specific terms
     spotify: {
       spotifyConnect: 'Spotify Connect',
@@ -1028,7 +1028,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       connectToSpotify: 'Connect to Spotify',
       disconnectFromSpotify: 'Disconnect from Spotify',
     },
-    
+
     // Music Genres
     genres: {
       pop: 'Pop',
@@ -1072,7 +1072,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       gospel: 'Gospel',
       experimental: 'Experimental',
     },
-    
+
     // Moods
     moods: {
       happy: 'Happy',
@@ -1110,7 +1110,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       drive: 'Drive',
       travel: 'Travel',
     },
-    
+
     // Music Analysis
     musicAnalysis: {
       key: 'Key',
@@ -1137,7 +1137,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       musicalProfile: 'Musical profile',
       soundProfile: 'Sound profile',
     },
-    
+
     // Discovery features
     discovery: {
       trending: 'Trending',
@@ -1161,7 +1161,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       rediscover: 'Rediscover',
       throwbacks: 'Throwbacks',
     },
-    
+
     // Social and sharing
     social: {
       share: 'Share',
@@ -1199,7 +1199,7 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
 export function t(key: string, lang: SupportedLanguage = 'es'): string {
   const keys = key.split('.');
   let result: any = translations[lang] || translations.es; // Fallback a español si el idioma no existe
-  
+
   // Navegar por el árbol de traducciones según las claves
   for (const k of keys) {
     if (result && typeof result === 'object' && k in result) {
@@ -1210,7 +1210,7 @@ export function t(key: string, lang: SupportedLanguage = 'es'): string {
       return key;
     }
   }
-  
+
   return result as string;
 }
 
@@ -1230,12 +1230,12 @@ export function getUserLanguage(): SupportedLanguage {
         return langValue;
       }
     }
-    
+
     // Si no hay cookie, intentar obtener del navegador
     const navLang = navigator.language.split('-')[0];
     return navLang === 'es' ? 'es' : 'en';
   }
-  
+
   // Por defecto en el servidor
   return 'es';
 }
@@ -1248,18 +1248,18 @@ export function setUserLanguage(lang: SupportedLanguage): void {
   if (typeof document !== 'undefined') {
     // Establecer cookie con path y dominio adecuados para asegurar accesibilidad
     document.cookie = `userLanguage=${lang};path=/;max-age=${60 * 60 * 24 * 30}`; // 30 días
-    
+
     // Disparar evento personalizado para notificar el cambio de idioma
     const event = new Event('languageChange');
     window.dispatchEvent(event);
-    
+
     // Emitir evento de almacenamiento para que otros componentes se actualicen
     // Este evento es detectado por el LanguageContext
     window.dispatchEvent(new StorageEvent('storage', {
       key: 'userLanguage',
       newValue: lang
     }));
-    
+
     console.log(`[i18n] Idioma cambiado a: ${lang}`);
   }
-} 
+}

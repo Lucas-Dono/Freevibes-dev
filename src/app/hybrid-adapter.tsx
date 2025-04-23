@@ -9,12 +9,12 @@ import { useRouter } from 'next/navigation';
  */
 export default function HybridAdapter() {
   const router = useRouter();
-  
+
   useEffect(() => {
     // Redirigir a la implementación en App Router
     router.push('/hybrid');
   }, [router]);
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
       <div className="text-center">
@@ -23,4 +23,4 @@ export default function HybridAdapter() {
       </div>
     </div>
   );
-} 
+}

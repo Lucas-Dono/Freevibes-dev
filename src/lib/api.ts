@@ -15,13 +15,13 @@ interface ApiOptions {
 export const getFeaturedPlaylists = async (options: ApiOptions = {}) => {
     try {
         const response = await fetch(`/api/spotify?action=featured&limit=${options.limit || 20}&offset=${options.offset || 0}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error en petición de playlists destacadas:', errorText);
             throw new Error(`Error al obtener playlists destacadas: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -37,13 +37,13 @@ export const getFeaturedPlaylists = async (options: ApiOptions = {}) => {
 export const getNewReleases = async (options: ApiOptions = {}) => {
     try {
         const response = await fetch(`/api/spotify?action=new-releases&limit=${options.limit || 20}&offset=${options.offset || 0}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error en petición de nuevos lanzamientos:', errorText);
             throw new Error(`Error al obtener nuevos lanzamientos: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -60,13 +60,13 @@ export const getNewReleases = async (options: ApiOptions = {}) => {
 export const searchPlaylists = async (query: string, options: ApiOptions = {}) => {
     try {
         const response = await fetch(`/api/spotify?action=search&type=playlist&q=${encodeURIComponent(query)}&limit=${options.limit || 20}&offset=${options.offset || 0}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error en búsqueda de playlists:', errorText);
             throw new Error(`Error al buscar playlists: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -82,13 +82,13 @@ export const searchPlaylists = async (query: string, options: ApiOptions = {}) =
 export const getPlaylistDetails = async (playlistId: string) => {
     try {
         const response = await fetch(`/api/spotify?action=playlist&id=${playlistId}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error al obtener detalles de playlist:', errorText);
             throw new Error(`Error al obtener detalles de playlist: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -105,13 +105,13 @@ export const getPlaylistDetails = async (playlistId: string) => {
 export const getPlaylistTracks = async (playlistId: string, options: ApiOptions = {}) => {
     try {
         const response = await fetch(`/api/spotify?action=playlist-tracks&id=${playlistId}&limit=${options.limit || 100}&offset=${options.offset || 0}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error al obtener pistas de playlist:', errorText);
             throw new Error(`Error al obtener pistas de playlist: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -128,17 +128,17 @@ export const getPlaylistTracks = async (playlistId: string, options: ApiOptions 
 export const searchTracks = async (query: string, options: ApiOptions = {}) => {
     try {
         const response = await fetch(`/api/spotify?action=search&type=track&q=${encodeURIComponent(query)}&limit=${options.limit || 20}&offset=${options.offset || 0}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('[API Cliente] Error en búsqueda de pistas:', errorText);
             throw new Error(`Error al buscar pistas: ${response.status}`);
         }
-        
+
         const data = await response.json();
         return data;
     } catch (error) {
         console.error('[API Cliente] Error en searchTracks:', error);
         throw error;
     }
-}; 
+};

@@ -13,13 +13,13 @@ interface RecommendedTrack extends Track {
 }
 
 const CACHE_DURATION = 1000 * 60 * 60; // 1 hora
-const genreRecommendationsCache: Record<string, { 
-  timestamp: number; 
+const genreRecommendationsCache: Record<string, {
+  timestamp: number;
   data: {
     artists: Artist[];
     playlists: Playlist[];
     tracks: RecommendedTrack[];
-  } 
+  }
 }> = {};
 
 /**
@@ -31,24 +31,24 @@ const genreRecommendationsCache: Record<string, {
 export async function getRecommendationsByGenre(genre: string, limit: number = 20): Promise<Track[]> {
   try {
     console.log(`[YouTube Music] Obteniendo recomendaciones para género: ${genre}`);
-    
+
     // Intentar obtener de caché primero
     const cacheKey = `youtube_music:genre:${genre}:${limit}`;
     const cachedData = await recommendationsCache.get(cacheKey);
-    
+
     if (cachedData) {
       console.log(`[YouTube Music] Cache hit para género: ${genre}`);
       return JSON.parse(cachedData);
     }
-    
+
     // Usar el servicio de YouTube Music para buscar recomendaciones por género
     const tracks = await youtubeMusic.getRecommendationsByGenre(genre, limit);
-    
+
     // Guardar en caché para futuras solicitudes
     if (tracks.length > 0) {
       await recommendationsCache.set(cacheKey, JSON.stringify(tracks), 60 * 60 * 12); // 12 horas
     }
-    
+
     return tracks;
   } catch (error) {
     console.error(`[YouTube Music] Error en getRecommendationsByGenre para ${genre}:`, error);
@@ -65,7 +65,7 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 2
 export async function searchTracks(query: string, limit: number = 20): Promise<Track[]> {
   try {
     console.log(`[YouTube Music] Buscando canciones para: ${query}`);
-    
+
     // Usar el servicio de YouTube Music para buscar canciones
     const ytMusicResults = await youtubeMusic.searchSongs(query, limit);
     return youtubeMusic.toTracks(ytMusicResults);
@@ -85,7 +85,7 @@ export async function searchTracks(query: string, limit: number = 20): Promise<T
 export async function getSimilarTracks(trackName: string, artistName: string, limit: number = 20): Promise<Track[]> {
   try {
     console.log(`[YouTube Music] Buscando canciones similares a: ${trackName} - ${artistName}`);
-    
+
     // Usar el servicio de YouTube Music para buscar canciones similares
     return await youtubeMusic.getSimilarSongs(trackName, artistName, limit);
   } catch (error) {
@@ -102,9 +102,9 @@ export async function getSimilarTracks(trackName: string, artistName: string, li
  */
 function getFallbackTracks(genre: string, limit: number): Track[] {
   console.log(`[YouTube Music] Generando tracks fallback para: ${genre}`);
-  
+
   const fallbackTracks: Track[] = [];
-  
+
   // URLs de carátulas reales categorizadas por género
   const coverUrlsByGenre: {[key: string]: string[]} = {
     'rock': [
@@ -138,7 +138,7 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       'https://i.scdn.co/image/ab67616d0000b273533fd0b248052d04e6b732c0'
     ]
   };
-  
+
   // Nombres de artistas por género
   const artistsByGenre: {[key: string]: string[]} = {
     'rock': ['Rock Legends', 'Guitar Heroes', 'The Amplifiers'],
@@ -148,16 +148,16 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
     'jazz': ['Jazz Ensemble', 'Smooth Quartet', 'Blue Note'],
     'default': ['YouTube Artists', 'Music Channel', 'Sound Collection']
   };
-  
+
   // Elegir artistas y covers para el género actual
   const genreArtists = artistsByGenre[genre.toLowerCase()] || artistsByGenre['default'];
   const genreCovers = coverUrlsByGenre[genre.toLowerCase()] || coverUrlsByGenre['default'];
-  
+
   // Crear tracks fallback
   for (let i = 0; i < Math.min(limit, 10); i++) {
     const artistIndex = i % genreArtists.length;
     const coverIndex = i % genreCovers.length;
-    
+
     fallbackTracks.push({
       id: `youtube_music_fallback_${genre}_${i}`,
       title: `${genre.charAt(0).toUpperCase() + genre.slice(1)} Track ${i + 1}`,
@@ -169,13 +169,13 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
 }
 
 export async function getRecommendationsByUserGenres(
-  genres: string[], 
-  options: { 
+  genres: string[],
+  options: {
     limit?: number;
     artistsPerGenre?: number;
     playlistsPerGenre?: number;
@@ -186,37 +186,37 @@ export async function getRecommendationsByUserGenres(
   playlists: Playlist[];
   tracks: RecommendedTrack[];
 }> {
-  const { 
-    limit = 30, 
+  const {
+    limit = 30,
     artistsPerGenre = 20,
     playlistsPerGenre = 10,
     tracksPerGenre = 30
   } = options;
-  
+
   if (!genres || genres.length === 0) {
     console.warn('No se proporcionaron géneros para obtener recomendaciones');
     return { artists: [], playlists: [], tracks: [] };
   }
-  
+
   // Usar solo los 3 principales géneros
   const topGenres = genres.slice(0, 3);
   const cacheKey = `user_genres_${topGenres.join('_')}_${artistsPerGenre}_${playlistsPerGenre}_${tracksPerGenre}`;
-  
+
   // Verificar caché
   const cached = genreRecommendationsCache[cacheKey];
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
     console.info(`Usando recomendaciones en caché para géneros: ${topGenres.join(', ')}`);
     return cached.data;
   }
-  
+
   try {
     // Llamar a la API de YouTube Music para obtener recomendaciones
     const ytMusicResponse = await youtubeMusicAPI.getRecommendations();
-    
+
     let tracks = [];
     let artists = [];
     let playlists = [];
-    
+
     // Procesar respuesta si contiene datos
     if (ytMusicResponse && Array.isArray(ytMusicResponse)) {
       // Extraer tracks, artists, playlists de la respuesta
@@ -225,7 +225,7 @@ export async function getRecommendationsByUserGenres(
       artists = processedResponse.artists || [];
       playlists = processedResponse.playlists || [];
     }
-    
+
     // Convertir los tracks de YouTube Music a RecommendedTrack
     const recommendedTracks: RecommendedTrack[] = tracks
       .filter((track: YTMusicResult) => track.thumbnails && track.thumbnails.length > 0)
@@ -241,22 +241,22 @@ export async function getRecommendationsByUserGenres(
         weight: 1,
         sourceGenre: (track as any).sourceGenre
       }));
-    
+
     // Limitar el número de tracks si es necesario
     const limitedTracks = recommendedTracks.slice(0, limit);
-    
+
     // Guardar en caché
     const result = {
       artists: artists,
       playlists: playlists,
       tracks: limitedTracks
     };
-    
+
     genreRecommendationsCache[cacheKey] = {
       timestamp: Date.now(),
       data: result
     };
-    
+
     console.info(`Obtenidas ${result.tracks.length} canciones, ${result.artists.length} artistas y ${result.playlists.length} playlists de YouTube Music por géneros`);
     return result;
   } catch (error) {
@@ -270,9 +270,9 @@ function processYouTubeMusicRecommendations(data: any[], genres: string[]) {
   const tracks: any[] = [];
   const artists: any[] = [];
   const playlists: any[] = [];
-  
+
   // Procesamiento personalizado basado en la estructura de respuesta
   // ...
-  
+
   return { tracks, artists, playlists };
-} 
+}

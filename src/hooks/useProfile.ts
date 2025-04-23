@@ -77,12 +77,12 @@ export default function useProfile(): UseProfileReturn {
 
     try {
       const response = await fetch('/api/user/profile');
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Error al obtener el perfil');
       }
-      
+
       const profileData = await response.json();
       setProfile(profileData);
       return profileData;
@@ -153,4 +153,4 @@ export default function useProfile(): UseProfileReturn {
     updateProfile,
     refreshProfile,
   };
-} 
+}

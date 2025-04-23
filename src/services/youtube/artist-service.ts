@@ -80,17 +80,17 @@ export interface YTArtistInfo {
 export async function findYouTubeArtistByName(artistName: string): Promise<string | null> {
   try {
     console.log(`[YouTube Artist Service] Buscando artista por nombre: "${artistName}"`);
-    
+
     // Buscar canales que coincidan con el nombre del artista
     const channels = await searchYouTubeChannels(artistName);
-    
+
     if (channels && channels.length > 0) {
       // Tomamos el primer resultado como el más relevante
       const channelId = channels[0].id.channelId;
       console.log(`[YouTube Artist Service] Artista encontrado con ID: ${channelId}`);
       return channelId;
     }
-    
+
     console.log(`[YouTube Artist Service] No se encontraron canales para: "${artistName}"`);
     return null;
   } catch (error) {
@@ -107,10 +107,10 @@ export async function findYouTubeArtistByName(artistName: string): Promise<strin
 export async function getYouTubeArtistInfo(artistId: string): Promise<YTArtistInfo> {
   try {
     console.log(`[YouTube Artist Service] Obteniendo información del artista: ${artistId}`);
-    
+
     // Obtener idioma del navegador para obtener resultados relevantes
     const language = navigator.language.split('-')[0] || 'es';
-    
+
     // Realizar la petición a la API
     const response = await axios.get('/api/youtube-music/artist/' + artistId, {
       params: {
@@ -118,12 +118,12 @@ export async function getYouTubeArtistInfo(artistId: string): Promise<YTArtistIn
       },
       timeout: API_TIMEOUTS.DETAILS
     });
-    
+
     console.log(`[YouTube Artist Service] Información obtenida para artista: ${artistId}`);
     return response.data;
   } catch (error) {
     console.error(`[YouTube Artist Service] Error al obtener información del artista ${artistId}:`, error);
-    
+
     // Devolver un objeto de error con información básica
     return {
       id: artistId,
@@ -136,4 +136,4 @@ export async function getYouTubeArtistInfo(artistId: string): Promise<YTArtistIn
       error: 'No se pudo obtener información del artista'
     };
   }
-} 
+}

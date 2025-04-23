@@ -8,11 +8,11 @@ import { SystemNotification } from '@/contexts/NotificationContext';
 export default function NotificationsPage() {
   const [mounted, setMounted] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
-  const { 
-    notifications, 
-    markAsRead, 
-    markAllAsRead, 
-    clearNotifications 
+  const {
+    notifications,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications
   } = useCustomNotifications();
 
   useEffect(() => {
@@ -25,21 +25,21 @@ export default function NotificationsPage() {
   const formatNotificationTime = (date: Date): string => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return 'Ahora mismo';
     if (diffInMinutes < 60) return `Hace ${diffInMinutes} minutos`;
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60);
     if (diffInHours < 24) return `Hace ${diffInHours} horas`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays === 1) return 'Ayer';
     if (diffInDays < 7) return `Hace ${diffInDays} días`;
-    
-    return date.toLocaleDateString('es-ES', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -70,7 +70,7 @@ export default function NotificationsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-6">Centro de notificaciones</h1>
-          
+
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div className="flex space-x-2">
               <button
@@ -104,7 +104,7 @@ export default function NotificationsPage() {
                 Leídas
               </button>
             </div>
-            
+
             <div className="flex space-x-2">
               <button
                 onClick={markAllAsRead}
@@ -121,7 +121,7 @@ export default function NotificationsPage() {
             </div>
           </div>
         </div>
-        
+
         {filteredNotifications().length === 0 ? (
           <div className="bg-card-bg rounded-xl p-10 text-center">
             <svg className="w-16 h-16 text-gray-600 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
@@ -129,10 +129,10 @@ export default function NotificationsPage() {
             </svg>
             <h2 className="text-xl font-semibold mb-2">No hay notificaciones</h2>
             <p className="text-gray-400">
-              {filter === 'all' 
-                ? 'No tienes notificaciones en este momento.' 
-                : filter === 'unread' 
-                ? 'No tienes notificaciones sin leer.' 
+              {filter === 'all'
+                ? 'No tienes notificaciones en este momento.'
+                : filter === 'unread'
+                ? 'No tienes notificaciones sin leer.'
                 : 'No tienes notificaciones leídas.'}
             </p>
           </div>
@@ -169,4 +169,4 @@ export default function NotificationsPage() {
       </div>
     </div>
   );
-} 
+}

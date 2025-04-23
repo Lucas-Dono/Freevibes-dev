@@ -10,8 +10,8 @@ import { useCustomNotifications } from '@/hooks/useCustomNotifications';
 import RegionSelector from '@/components/RegionSelector';
 
 const navItems = [
-  { 
-    name: 'Inicio', 
+  {
+    name: 'Inicio',
     href: '/home',
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -19,8 +19,8 @@ const navItems = [
       </svg>
     )
   },
-  { 
-    name: 'Explorar', 
+  {
+    name: 'Explorar',
     href: '/explore',
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -28,8 +28,8 @@ const navItems = [
       </svg>
     )
   },
-  { 
-    name: 'Biblioteca', 
+  {
+    name: 'Biblioteca',
     href: '/library',
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -37,8 +37,8 @@ const navItems = [
       </svg>
     )
   },
-  { 
-    name: 'Búsqueda', 
+  {
+    name: 'Búsqueda',
     href: '/search',
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -57,12 +57,12 @@ export const Navbar: React.FC = () => {
   const user = session?.user;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
-  const { 
-    unreadCount, 
-    notifications, 
-    markAsRead, 
-    markAllAsRead, 
-    clearNotifications 
+  const {
+    unreadCount,
+    notifications,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications
   } = useCustomNotifications();
 
   useEffect(() => {
@@ -103,21 +103,21 @@ export const Navbar: React.FC = () => {
   const formatNotificationTime = (date: Date): string => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return 'Ahora mismo';
     if (diffInMinutes < 60) return `Hace ${diffInMinutes} minutos`;
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60);
     if (diffInHours < 24) return `Hace ${diffInHours} horas`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays === 1) return 'Ayer';
     if (diffInDays < 7) return `Hace ${diffInDays} días`;
-    
-    return date.toLocaleDateString('es-ES', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -127,7 +127,7 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <motion.nav 
+    <motion.nav
       className={`bg-gray-900/70 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50 transition-all duration-300 ${
         scrolled ? 'border-opacity-20 shadow-lg' : 'border-opacity-10'
       }`}
@@ -164,7 +164,7 @@ export const Navbar: React.FC = () => {
                     >
                       <motion.div
                         initial={false}
-                        animate={isActive ? { 
+                        animate={isActive ? {
                           color: '#ffffff',
                           scale: 1.1
                         } : {
@@ -177,7 +177,7 @@ export const Navbar: React.FC = () => {
                         <span className="mr-2">{item.icon}</span>
                         {item.name}
                       </motion.div>
-                      
+
                       {/* Indicador activo */}
                       {isActive && (
                         <motion.div
@@ -188,7 +188,7 @@ export const Navbar: React.FC = () => {
                           transition={{ duration: 0.3 }}
                         />
                       )}
-                      
+
                       {/* Hover indicator */}
                       {!isActive && (
                         <motion.div
@@ -208,7 +208,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center space-x-4">
             {/* Selector de región */}
             <RegionSelector />
-            
+
             {isAuthenticated ? (
               <>
                 {/* Notificación - Solo para usuarios autenticados */}
@@ -223,7 +223,7 @@ export const Navbar: React.FC = () => {
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
                     </svg>
-                    
+
                     {/* Contador de notificaciones no leídas */}
                     {unreadCount > 0 && (
                       <motion.div
@@ -269,7 +269,7 @@ export const Navbar: React.FC = () => {
                             </button>
                           </div>
                         </div>
-                        
+
                         <div className="max-h-[calc(80vh-60px)] overflow-y-auto">
                           {notifications.length === 0 ? (
                             <div className="p-6 text-center text-gray-400">
@@ -285,14 +285,14 @@ export const Navbar: React.FC = () => {
                                   key={notification.id}
                                   initial={{ opacity: 0, x: -20 }}
                                   animate={{ opacity: 1, x: 0 }}
-                                  className={`p-4 border-b border-gray-800 hover:bg-white/5 transition-colors 
+                                  className={`p-4 border-b border-gray-800 hover:bg-white/5 transition-colors
                                     ${!notification.read ? 'bg-white/5' : ''}`}
                                   onClick={() => markAsRead(notification.id)}
                                 >
                                   <div className="flex items-start">
-                                    <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 
-                                      ${notification.type === 'success' ? 'bg-green-500' : 
-                                        notification.type === 'error' ? 'bg-red-500' : 
+                                    <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0
+                                      ${notification.type === 'success' ? 'bg-green-500' :
+                                        notification.type === 'error' ? 'bg-red-500' :
                                         notification.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'}`}
                                     />
                                     <div className="ml-3 flex-grow">
@@ -312,7 +312,7 @@ export const Navbar: React.FC = () => {
                         </div>
                         {notifications.length > 0 && (
                           <div className="p-3 text-center border-t border-gray-800">
-                            <Link 
+                            <Link
                               href="/notifications"
                               className="text-primary hover:text-primary-light text-sm font-medium transition-colors"
                               onClick={() => setIsNotificationMenuOpen(false)}
@@ -339,17 +339,17 @@ export const Navbar: React.FC = () => {
                     <span className="sr-only">Abrir menú de usuario</span>
                     <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#1DB954] to-[#9C27B0] flex items-center justify-center text-white text-xs font-medium overflow-hidden">
                       {user?.name ? (
-                        <img 
-                          src={user.image || "https://i.pravatar.cc/150?img=12"} 
-                          alt={user.name} 
-                          className="h-full w-full object-cover" 
+                        <img
+                          src={user.image || "https://i.pravatar.cc/150?img=12"}
+                          alt={user.name}
+                          className="h-full w-full object-cover"
                         />
                       ) : (
                         <span>{user?.email?.[0]?.toUpperCase() || 'U'}</span>
                       )}
                     </div>
                   </button>
-                  
+
                   {/* Menú desplegable */}
                   <div className="absolute right-0 mt-2 w-48 py-2 bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                     <div className="px-4 py-2 text-sm text-gray-300">
@@ -363,7 +363,7 @@ export const Navbar: React.FC = () => {
                       Configuración
                     </Link>
                     <div className="border-t border-gray-700 my-1"></div>
-                    <button 
+                    <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
@@ -376,7 +376,7 @@ export const Navbar: React.FC = () => {
               <>
                 {/* Botones de autenticación para usuarios no autenticados */}
                 <Link href="/login">
-                  <motion.button 
+                  <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-4 py-2 text-sm bg-[#1DB954] hover:bg-[#1ed760] text-white rounded-md transition-colors"
@@ -441,7 +441,7 @@ export const Navbar: React.FC = () => {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ 
+              transition={{
                 duration: 0.3,
                 opacity: { duration: 0.2 }
               }}
@@ -460,8 +460,8 @@ export const Navbar: React.FC = () => {
                       <Link
                         href={item.href}
                         className={`block px-3 py-2 rounded-md text-base font-medium ${
-                          isActive 
-                            ? 'bg-gray-700 text-white' 
+                          isActive
+                            ? 'bg-gray-700 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                         } flex items-center`}
                       >
@@ -476,7 +476,7 @@ export const Navbar: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: navItems.length * 0.05 }}
                 >
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="block w-full text-left mt-4 px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white flex items-center"
                   >
@@ -493,4 +493,4 @@ export const Navbar: React.FC = () => {
       )}
     </motion.nav>
   );
-}; 
+};

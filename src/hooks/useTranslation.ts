@@ -9,7 +9,7 @@ import { t, SupportedLanguage } from '@/lib/i18n';
  */
 export function useTranslation() {
   const { language } = useLanguage();
-  
+
   /**
    * Traduce una clave al idioma actual
    * @param key Clave de traducción en formato 'categoria.subcategoria.texto'
@@ -18,7 +18,7 @@ export function useTranslation() {
   const translate = (key: string): string => {
     return t(key, language);
   };
-  
+
   /**
    * Traduce texto con variables
    * @param key Clave de traducción
@@ -27,7 +27,7 @@ export function useTranslation() {
    */
   const translateWithVars = (key: string, params: Record<string, string | number>): string => {
     let translatedText = translate(key);
-    
+
     // Reemplazar variables en el formato {{variable}}
     Object.entries(params).forEach(([paramKey, paramValue]) => {
       translatedText = translatedText.replace(
@@ -35,10 +35,10 @@ export function useTranslation() {
         String(paramValue)
       );
     });
-    
+
     return translatedText;
   };
-  
+
   /**
    * Obtiene el código de idioma actual
    * @returns Código de idioma ('es', 'en')
@@ -46,10 +46,10 @@ export function useTranslation() {
   const getCurrentLanguage = (): SupportedLanguage => {
     return language;
   };
-  
+
   return {
     t: translate,
     tVars: translateWithVars,
     language: getCurrentLanguage(),
   };
-} 
+}

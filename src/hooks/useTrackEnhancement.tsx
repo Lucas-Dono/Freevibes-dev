@@ -14,7 +14,7 @@ interface TrackEnhancementOptions {
 
 /**
  * Hook para mejorar tracks con datos completos utilizando el orquestrador de carga
- * 
+ *
  * Este hook facilita la integración del orquestrador de carga en componentes
  * que muestran tracks, automatizando la solicitud de datos completos.
  */
@@ -34,9 +34,9 @@ export function useTrackEnhancement(
   // Función para solicitar mejora de tracks
   const enhanceTracks = useCallback((tracksToEnhance: Track[] = tracks) => {
     if (!tracksToEnhance.length) return;
-    
+
     setIsLoading(true);
-    
+
     loadOrchestrator.enqueueLoad(
       tracksToEnhance,
       {
@@ -50,7 +50,7 @@ export function useTrackEnhancement(
         setTracks(enhancedTracks);
         setIsLoading(false);
         setIsEnhanced(true);
-        
+
         // Llamar al callback de actualización si existe
         if (options.updateCallback) {
           options.updateCallback(enhancedTracks);
@@ -58,7 +58,7 @@ export function useTrackEnhancement(
       }
     );
   }, [pageType, sectionType, options, tracks]);
-  
+
   // Mejorar tracks cuando cambien los tracks iniciales
   useEffect(() => {
     if (initialTracks.length > 0 && JSON.stringify(initialTracks) !== JSON.stringify(tracks)) {
@@ -67,15 +67,15 @@ export function useTrackEnhancement(
       enhanceTracks(initialTracks);
     }
   }, [initialTracks]);
-  
+
   // Función para ordenar los tracks por completitud
   const sortByCompleteness = useCallback(() => {
     if (!tracks.length) return;
-    
+
     const sortedTracks = loadOrchestrator.sortTracksByCompleteness(tracks);
     setTracks(sortedTracks);
   }, [tracks]);
-  
+
   return {
     tracks,
     isLoading,
@@ -83,4 +83,4 @@ export function useTrackEnhancement(
     enhanceTracks,
     sortByCompleteness,
   };
-} 
+}

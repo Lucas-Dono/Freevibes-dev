@@ -103,7 +103,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
       </div>
 
       {/* Control de volumen */}
-      <div 
+      <div
         className="mt-6 flex items-center space-x-2 relative"
         onMouseEnter={() => setIsHoveringVolume(true)}
         onMouseLeave={() => setIsHoveringVolume(false)}
@@ -120,12 +120,12 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
           </svg>
         </motion.button>
 
-        <motion.div 
+        <motion.div
           className="flex items-center"
           initial={{ width: 0, opacity: 0 }}
-          animate={{ 
-            width: isHoveringVolume ? 100 : 0, 
-            opacity: isHoveringVolume ? 1 : 0 
+          animate={{
+            width: isHoveringVolume ? 100 : 0,
+            opacity: isHoveringVolume ? 1 : 0
           }}
           transition={{ duration: 0.2 }}
         >
@@ -143,11 +143,11 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
                   background: `linear-gradient(to right, #7C3AED ${localVolume * 100}%, #374151 ${localVolume * 100}%)`,
                 }}
               />
-              <div 
-                className="absolute top-0 left-0 h-2 bg-gradient-to-r from-primary to-accent rounded-full pointer-events-none" 
+              <div
+                className="absolute top-0 left-0 h-2 bg-gradient-to-r from-primary to-accent rounded-full pointer-events-none"
                 style={{width: `${localVolume * 100}%`}}
               />
-              <div 
+              <div
                 className="absolute top-[-4px] left-0 w-3 h-3 bg-white rounded-full pointer-events-none shadow-md"
                 style={{left: `calc(${localVolume * 100}% - 6px)`}}
               />
@@ -157,4 +157,4 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
       </div>
     </div>
   );
-}; 
+};

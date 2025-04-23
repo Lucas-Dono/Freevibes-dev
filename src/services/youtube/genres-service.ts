@@ -1,6 +1,6 @@
 /**
  * Servicio para gestionar géneros musicales
- * 
+ *
  * Proporciona una lista optimizada de los 10 géneros musicales más populares
  * basados en estadísticas actuales
  */
@@ -51,20 +51,20 @@ export function getAllGenres(): GenreItem[] {
  */
 export function getGenreById(genreId?: string): GenreItem | undefined {
   if (!genreId) return undefined;
-  
+
   // Normalizar el ID del género para la búsqueda
   const normalizedSearchId = genreId.toLowerCase().replace(/[-_\s]/g, '');
-  
+
   // Primero buscar coincidencia exacta
   const exactMatch = ALL_GENRES.find(genre => genre.id === genreId);
   if (exactMatch) return exactMatch;
-  
+
   // Luego buscar coincidencia por ID normalizado
   for (const genre of ALL_GENRES) {
     const normalizedId = genre.id.toLowerCase().replace(/[-_\s]/g, '');
     if (normalizedId === normalizedSearchId) return genre;
   }
-  
+
   // Finalmente buscar por coincidencia parcial
   for (const genre of ALL_GENRES) {
     const normalizedId = genre.id.toLowerCase().replace(/[-_\s]/g, '');
@@ -72,7 +72,7 @@ export function getGenreById(genreId?: string): GenreItem | undefined {
       return genre;
     }
   }
-  
+
   // Si nada coincide, devolver undefined
   return undefined;
 }
@@ -82,9 +82,9 @@ export function getGenreById(genreId?: string): GenreItem | undefined {
  */
 export function isValidGenre(term: string): boolean {
   const normalizedTerm = term.toLowerCase().trim();
-  
+
   // Verificar en la lista de géneros válidos
-  return VALID_GENRES.some(genre => 
+  return VALID_GENRES.some(genre =>
     genre.toLowerCase() === normalizedTerm ||
     normalizedTerm.includes(genre.toLowerCase()) ||
     genre.toLowerCase().includes(normalizedTerm)
@@ -96,4 +96,4 @@ export default {
   getAllGenres,
   getGenreById,
   isValidGenre
-}; 
+};

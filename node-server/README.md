@@ -47,4 +47,4 @@ Asegúrate de tener un archivo `.env` con las variables necesarias para desarrol
 - PORT=3001
 - NODE_ENV=development
 - CORS_ORIGIN=http://localhost:3000
-- YOUTUBE_API_URL=http://localhost:5000/api 
+- YOUTUBE_API_URL=http://localhost:5000/api

@@ -5,26 +5,26 @@ import { connectToDatabase } from '../mongodb';
 export async function upsertUserWithSpotifyInfo(spotifyInfo: ISpotifyInfo): Promise<IUser> {
   try {
     await connectToDatabase();
-    
+
     // Datos básicos a actualizar
     const userData = {
       spotifyId: spotifyInfo.id,
       email: spotifyInfo.email || `user-${spotifyInfo.id}@example.com`,
       name: spotifyInfo.display_name || `Usuario ${spotifyInfo.id}`,
-      profileImage: spotifyInfo.images && spotifyInfo.images.length > 0 
-        ? spotifyInfo.images[0].url 
+      profileImage: spotifyInfo.images && spotifyInfo.images.length > 0
+        ? spotifyInfo.images[0].url
         : '',
       spotifyInfo
     };
 
     // Buscar usuario existente o crear uno nuevo
     const existingUser = await User.findOne({ spotifyId: spotifyInfo.id });
-    
+
     if (existingUser) {
       // Actualizar usuario existente (solo los campos que vienen de Spotify)
       const updatedUser = await User.findOneAndUpdate(
         { spotifyId: spotifyInfo.id },
-        { 
+        {
           $set: {
             email: userData.email,
             name: userData.name,
@@ -34,7 +34,7 @@ export async function upsertUserWithSpotifyInfo(spotifyInfo: ISpotifyInfo): Prom
         },
         { new: true }
       );
-      
+
       return updatedUser as IUser;
     } else {
       // Crear nuevo usuario
@@ -61,7 +61,7 @@ export async function getUserBySpotifyId(spotifyId: string): Promise<IUser | nul
 
 // Actualizar perfil de usuario
 export async function updateUserProfile(
-  spotifyId: string, 
+  spotifyId: string,
   profileData: {
     username?: string;
     bio?: string;
@@ -72,16 +72,16 @@ export async function updateUserProfile(
 ): Promise<IUser | null> {
   try {
     await connectToDatabase();
-    
+
     // Actualizar solo los campos proporcionados
     const updateData: any = {};
-    
+
     if (profileData.username) updateData.username = profileData.username;
     if (profileData.bio) updateData.bio = profileData.bio;
     if (profileData.profileImage) updateData.profileImage = profileData.profileImage;
     if (profileData.coverImage) updateData.coverImage = profileData.coverImage;
     if (profileData.favoriteGenres) updateData.favoriteGenres = profileData.favoriteGenres;
-    
+
     return await User.findOneAndUpdate(
       { spotifyId },
       { $set: updateData },
@@ -97,9 +97,9 @@ export async function updateUserProfile(
 export async function getAllUsers(page = 1, limit = 20): Promise<{ users: IUser[]; total: number }> {
   try {
     await connectToDatabase();
-    
+
     const skip = (page - 1) * limit;
-    
+
     const [users, total] = await Promise.all([
       User.find({})
         .skip(skip)
@@ -107,10 +107,10 @@ export async function getAllUsers(page = 1, limit = 20): Promise<{ users: IUser[
         .sort({ createdAt: -1 }),
       User.countDocuments({})
     ]);
-    
+
     return { users, total };
   } catch (error) {
     console.error('Error al obtener usuarios:', error);
     throw error;
   }
-} 
+}

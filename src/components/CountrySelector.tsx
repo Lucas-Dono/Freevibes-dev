@@ -34,22 +34,22 @@ export default function CountrySelector({ value, onChange, ...props }: CustomSel
   const [selectedCountry, setSelectedCountry] = React.useState<string>(
     value || getCountryCode() || 'ES'
   );
-  
+
   React.useEffect(() => {
     if (value && value !== selectedCountry) {
       setSelectedCountry(value);
     }
   }, [value]);
-  
+
   const handleChange = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
     const newValue = event.target.value;
     setSelectedCountry(newValue);
-    
+
     if (onChange) {
       onChange(newValue);
     }
   };
-  
+
   return (
     <Select<string>
       value={selectedCountry}
@@ -70,4 +70,4 @@ export default function CountrySelector({ value, onChange, ...props }: CustomSel
       ))}
     </Select>
   );
-} 
+}

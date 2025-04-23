@@ -10,11 +10,11 @@ export const PlayerBar: React.FC = () => {
   const pathname = usePathname();
   const { user, isAuthenticated: authStatus } = useAuth();
   const isAuthenticated = user !== null || authStatus;
-  
+
   // Obtener información del reproductor desde el contexto
-  const { 
-    currentTrack, 
-    isPlaying, 
+  const {
+    currentTrack,
+    isPlaying,
     currentTime: trackCurrentTime,
     duration: trackDuration,
     togglePlay,
@@ -24,12 +24,12 @@ export const PlayerBar: React.FC = () => {
     volume: contextVolume,
     setVolume: setContextVolume
   } = usePlayer();
-  
+
   // No mostrar en las páginas de login y registro o cuando el usuario no está autenticado
   if (pathname === '/login' || pathname === '/register' || !isAuthenticated) {
     return null;
   }
-  
+
   // Estado del reproductor
   const [volume, setVolume] = useState(contextVolume * 100);
   const [progress, setProgress] = useState(0);
@@ -38,10 +38,10 @@ export const PlayerBar: React.FC = () => {
   const [isVolumeVisible, setIsVolumeVisible] = useState(false);
   const [currentTimeFormatted, setCurrentTimeFormatted] = useState('0:00');
   const [totalTimeFormatted, setTotalTimeFormatted] = useState('0:00');
-  
+
   // Referencia para la barra de progreso
   const progressBarRef = useRef<HTMLDivElement>(null);
-  
+
   // Actualizar el progreso y los tiempos formateados cuando cambia el tiempo actual o la duración
   useEffect(() => {
     if (trackDuration > 0) {
@@ -49,24 +49,24 @@ export const PlayerBar: React.FC = () => {
     } else {
       setProgress(0);
     }
-    
+
     setCurrentTimeFormatted(formatTime(trackCurrentTime));
     setTotalTimeFormatted(formatTime(trackDuration));
   }, [trackCurrentTime, trackDuration]);
-  
+
   // Actualizar el volumen del componente cuando cambia en el contexto
   useEffect(() => {
     setVolume(contextVolume * 100);
     setIsMuted(contextVolume === 0);
   }, [contextVolume]);
-  
+
   // Función para formatear el tiempo
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-  
+
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (progressBarRef.current && trackDuration > 0) {
       const rect = progressBarRef.current.getBoundingClientRect();
@@ -76,12 +76,12 @@ export const PlayerBar: React.FC = () => {
       seekTo(newTime);
     }
   };
-  
+
   const handleTogglePlay = () => {
     console.log("PlayerBar: togglePlay llamado, isPlaying actual:", isPlaying);
     togglePlay();
   };
-  
+
   const handleToggleMute = () => {
     if (isMuted) {
       setIsMuted(false);
@@ -91,34 +91,34 @@ export const PlayerBar: React.FC = () => {
       setContextVolume(0);
     }
   };
-  
+
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setVolume(value);
     setContextVolume(value / 100);
-    
+
     if (value === 0) {
       setIsMuted(true);
     } else if (isMuted) {
       setIsMuted(false);
     }
   };
-  
+
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
-  
+
   // Si no hay canción actual, no mostrar el reproductor
   if (!currentTrack) {
     return null;
   }
-  
+
   // Validar la URL de la portada para evitar errores
   const coverUrl = currentTrack?.cover || '/placeholder-album.jpg';
-  
+
   return (
     <AnimatePresence>
-      <motion.div 
+      <motion.div
         className="fixed bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-xl border-t border-white/10 z-40"
         initial={{ y: 100 }}
         animate={{ y: 0 }}
@@ -138,22 +138,22 @@ export const PlayerBar: React.FC = () => {
                 <div className="max-w-7xl mx-auto p-6">
                   <div className="flex">
                     {/* Portada ampliada e información del álbum */}
-                    <div 
+                    <div
                       className="w-1/3 pr-8"
                     >
-                      <motion.div 
+                      <motion.div
                         className="relative aspect-square rounded-lg overflow-hidden shadow-2xl mb-4"
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.1 }}
                       >
-                        <img 
-                          src={coverUrl} 
+                        <img
+                          src={coverUrl}
                           alt={currentTrack.title}
                           className="w-full h-full object-cover"
                         />
                       </motion.div>
-                      <motion.h2 
+                      <motion.h2
                         className="text-xl font-bold mb-1"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -161,7 +161,7 @@ export const PlayerBar: React.FC = () => {
                       >
                         {currentTrack.title}
                       </motion.h2>
-                      <motion.div 
+                      <motion.div
                         className="text-gray-400"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -169,7 +169,7 @@ export const PlayerBar: React.FC = () => {
                       >
                         {currentTrack.artist}
                       </motion.div>
-                      <motion.div 
+                      <motion.div
                         className="text-gray-500 text-sm"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -178,9 +178,9 @@ export const PlayerBar: React.FC = () => {
                         {currentTrack.album}
                       </motion.div>
                     </div>
-                    
+
                     {/* Controles ampliados y visualizaciones */}
-                    <div 
+                    <div
                       className="flex-1"
                     >
                       {/* Visualización de YouTube */}
@@ -190,7 +190,7 @@ export const PlayerBar: React.FC = () => {
                           ID de YouTube: {currentTrack.youtubeId || 'No disponible'}
                         </div>
                       </div>
-                      
+
                       {/* Información adicional */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="p-3 rounded-lg bg-black/20">
@@ -208,53 +208,53 @@ export const PlayerBar: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           <div className="flex items-center px-4 h-20">
             {/* Información de la canción */}
             <div className="flex items-center w-1/4">
-              <motion.div 
+              <motion.div
                 className="relative w-12 h-12 rounded-full overflow-hidden mr-3 shadow-none"
                 whileHover={{ scale: 1.08 }}
                 animate={isPlaying ? { rotate: [0, 360] } : { rotate: 0 }}
-                transition={isPlaying ? 
-                  { rotate: { repeat: Infinity, duration: 16, ease: "linear" } } : 
+                transition={isPlaying ?
+                  { rotate: { repeat: Infinity, duration: 16, ease: "linear" } } :
                   { duration: 0.3 }
                 }
                 style={{ pointerEvents: 'none' }}
               >
                 {/* Diseño de vinilo */}
                 <div className="absolute inset-0 bg-black rounded-full opacity-90"></div>
-                
+
                 {/* Surcos del vinilo */}
                 {[...Array(3)].map((_, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className="absolute inset-0 border border-gray-600 rounded-full opacity-30"
-                    style={{ 
+                    style={{
                       transform: `scale(${0.85 - i * 0.15})`,
-                      borderWidth: '1px' 
+                      borderWidth: '1px'
                     }}
                   ></div>
                 ))}
-                
+
                 {/* Portada del álbum en el centro */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-gray-800">
-                    <img 
-                      src={coverUrl} 
+                    <img
+                      src={coverUrl}
                       alt={currentTrack.title}
                       className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
-                
+
                 {/* Agujero central del vinilo */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
                 </div>
               </motion.div>
               <div className="overflow-hidden">
-                <motion.h3 
+                <motion.h3
                   className="font-medium text-sm truncate"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -262,7 +262,7 @@ export const PlayerBar: React.FC = () => {
                 >
                   {currentTrack.title}
                 </motion.h3>
-                <motion.div 
+                <motion.div
                   className="text-gray-400 text-xs truncate"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -272,13 +272,13 @@ export const PlayerBar: React.FC = () => {
                 </motion.div>
               </div>
             </div>
-            
+
             {/* Controles de reproducción */}
             <div className="flex flex-col items-center justify-center flex-1 px-4 space-y-2">
               {/* Controles principales */}
               <div className="flex items-center justify-center space-x-4">
                 {/* Botón anterior */}
-                <motion.button 
+                <motion.button
                   className="text-gray-400 hover:text-white"
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -288,7 +288,7 @@ export const PlayerBar: React.FC = () => {
                     <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
                   </svg>
                 </motion.button>
-                
+
                 {/* Botón play/pause */}
                 <motion.button
                   className="bg-white text-black rounded-full w-8 h-8 flex items-center justify-center"
@@ -308,9 +308,9 @@ export const PlayerBar: React.FC = () => {
                     </svg>
                   )}
                 </motion.button>
-                
+
                 {/* Botón siguiente */}
-                <motion.button 
+                <motion.button
                   className="text-gray-400 hover:text-white"
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -321,16 +321,16 @@ export const PlayerBar: React.FC = () => {
                   </svg>
                 </motion.button>
               </div>
-              
+
               {/* Barra de progreso */}
               <div className="w-full flex items-center space-x-2">
                 <span className="text-gray-400 text-xs w-8 text-right">{currentTimeFormatted}</span>
-                <div 
+                <div
                   className="flex-1 h-1 bg-gray-700 rounded-full overflow-hidden cursor-pointer relative"
                   onClick={handleProgressClick}
                   ref={progressBarRef}
                 >
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-0 flex items-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -341,15 +341,15 @@ export const PlayerBar: React.FC = () => {
                       <motion.div
                         key={i}
                         className="absolute h-1 w-1 rounded-full bg-primary-lighter"
-                        initial={{ 
-                          x: `${(i * 10)}%`, 
+                        initial={{
+                          x: `${(i * 10)}%`,
                           opacity: Math.random() * 0.7 + 0.3
                         }}
-                        animate={{ 
+                        animate={{
                           y: [0, -3, 0, 3, 0],
                         }}
-                        transition={{ 
-                          repeat: Infinity, 
+                        transition={{
+                          repeat: Infinity,
                           duration: 2 + Math.random() * 3,
                           delay: i * 0.2
                         }}
@@ -360,12 +360,12 @@ export const PlayerBar: React.FC = () => {
                       />
                     ))}
                   </motion.div>
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-primary to-secondary"
                     style={{ width: `${progress}%` }}
                   >
                   </div>
-                  <motion.div 
+                  <motion.div
                     className="absolute top-1/2 w-3 h-3 rounded-full bg-white -translate-y-1/2 -ml-1.5 shadow-lg opacity-0 hover:opacity-100 hover:scale-110 transition-opacity"
                     style={{ left: `${progress}%` }}
                   />
@@ -373,12 +373,12 @@ export const PlayerBar: React.FC = () => {
                 <span className="text-gray-400 text-xs w-8 text-left">{totalTimeFormatted}</span>
               </div>
             </div>
-            
+
             {/* Controles adicionales */}
             <div className="flex items-center justify-end space-x-3 w-1/4">
               {/* Control de volumen */}
               <div className="relative flex items-center">
-                <motion.button 
+                <motion.button
                   className="text-gray-400 hover:text-white"
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -399,10 +399,10 @@ export const PlayerBar: React.FC = () => {
                     </svg>
                   )}
                 </motion.button>
-                
+
                 <AnimatePresence>
                   {isVolumeVisible && (
-                    <motion.div 
+                    <motion.div
                       className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-800 rounded-lg p-2 shadow-lg w-32"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -422,9 +422,9 @@ export const PlayerBar: React.FC = () => {
                   )}
                 </AnimatePresence>
               </div>
-              
+
               {/* Botón expandir */}
-              <motion.button 
+              <motion.button
                 className="text-gray-400 hover:text-white"
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}

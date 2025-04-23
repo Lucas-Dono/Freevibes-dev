@@ -1,6 +1,6 @@
 /**
  * Índice de servicios de orquestación
- * 
+ *
  * Este módulo exporta los servicios de orquestación de carga
  * para gestionar la priorización de contenido y optimización de API.
  */
@@ -12,4 +12,4 @@ export { loadOrchestrator, LoadOrchestrator };
 export type { SectionType, PageType };
 
 // Exportar por defecto para facilitar la importación
-export default loadOrchestrator; 
+export default loadOrchestrator;

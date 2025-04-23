@@ -43,7 +43,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
             </div>
           </div>
         );
-      
+
       case 'playlist':
       case 'album':
         return (
@@ -56,7 +56,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
             </div>
           </div>
         );
-      
+
       case 'list':
         return (
           <div className={`bg-zinc-800/70 rounded-xl overflow-hidden shadow-xl p-3 flex items-center`}>
@@ -68,7 +68,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
             <div className="w-8 h-8 bg-zinc-700/50 rounded-full animate-pulse"></div>
           </div>
         );
-      
+
       case 'grid':
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
@@ -83,7 +83,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
             ))}
           </div>
         );
-      
+
       case 'card':
       default:
         return (
@@ -138,7 +138,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {Array.from({ length: count }).map((_, i) => (
-          <motion.div 
+          <motion.div
             key={i}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -152,4 +152,4 @@ const LoadingState: React.FC<LoadingStateProps> = ({
   );
 };
 
-export default LoadingState; 
+export default LoadingState;

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     // Verificar si estamos en modo demo
     const isDemoMode = API_CONFIG.isDemoMode();
-    
+
     if (isDemoMode) {
       console.log('[MongoDB Status] Modo demo activado - no se conecta a MongoDB');
       return NextResponse.json({
@@ -24,15 +24,15 @@ export async function GET(request: NextRequest) {
         mongodbUri: 'mongodb://demo-user:****@demo-cluster.mongodb.net/demo-db'
       });
     }
-    
+
     // Intentar conectar a MongoDB
     const conn = await connectToDatabase();
-    
+
     // Verificar que tenemos una conexión válida
     if (!conn) {
       throw new Error('Conexión no establecida');
     }
-    
+
     let dbInfo = {
       connected: !!conn,
       connection: !!conn.connection,
@@ -40,14 +40,14 @@ export async function GET(request: NextRequest) {
       readyState: conn.connection ? conn.connection.readyState : -1,
       name: conn.connection && conn.connection.db ? conn.connection.db.databaseName : 'unknown'
     };
-    
+
     // Verificar que podemos listar colecciones
     let collections = [];
     if (conn.connection && conn.connection.db) {
       collections = await conn.connection.db.listCollections().toArray();
       collections = collections.map((c: { name: string }) => c.name);
     }
-    
+
     // Todo OK
     return NextResponse.json({
       status: 'ok',
@@ -58,11 +58,11 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('[MongoDB Status] Error de conexión:', error);
-    
+
     // Detectar errores DNS específicamente
     let errorMessage = 'Error al conectar con MongoDB';
     let errorDetails = error.message;
-    
+
     if (error.message.includes('querySrv ENOTFOUND')) {
       errorMessage = 'Error de resolución DNS al conectar con MongoDB';
       errorDetails = 'No se pudo resolver el host de MongoDB. Verifica tu conexión a internet y que el dominio existe.';
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       errorMessage = 'No se pudo seleccionar un servidor MongoDB';
       errorDetails = 'El servidor no está disponible o la URL es incorrecta.';
     }
-    
+
     // Error de conexión
     return NextResponse.json({
       status: 'error',
@@ -79,4 +79,4 @@ export async function GET(request: NextRequest) {
       mongodbUri: process.env.MONGODB_URI?.replace(/:[^:@]+@/, ':****@') || 'no definido'
     }, { status: 500 });
   }
-} 
+}

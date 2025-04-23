@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     console.log(`[API Find Artist] Calling searchSpotifyArtistId for: ${artistName}`); // <-- LOG B4
 
     try {
-        const artistId = await searchSpotifyArtistId(artistName); 
+        const artistId = await searchSpotifyArtistId(artistName);
         console.log(`[API Find Artist] searchSpotifyArtistId returned: ${artistId}`); // <-- LOG B5
 
         if (!artistId) {
@@ -31,4 +31,4 @@ export async function GET(request: Request) {
         console.error('[API Find Artist] Unexpected Error in GET handler:', error); // <-- LOG B8
         return NextResponse.json({ error: 'Failed to search for artist on Spotify (Internal Server Error)' }, { status: 500 });
     }
-} 
+}

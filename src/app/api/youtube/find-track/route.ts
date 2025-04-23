@@ -41,11 +41,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error(`[API] Error al buscar video para "${title}" de "${artist}":`, error);
-    
+
     // Retornar un error con detalles
     return NextResponse.json(
       { error: 'Error al buscar video', details: (error as Error).message },
       { status: 500 }
     );
   }
-} 
+}

@@ -8,7 +8,7 @@ import GenreImage from '@/components/GenreImage';
 
 export default function GenresPage() {
   const [loading, setLoading] = useState(false);
-  
+
   // Usar directamente los 10 géneros principales
   const topGenres = TOP_GENRES;
 
@@ -26,19 +26,19 @@ export default function GenresPage() {
           return (
             <motion.div
               key={genre.id}
-              whileHover={{ 
+              whileHover={{
                 y: -5,
                 scale: 1.05,
                 transition: { duration: 0.2 }
               }}
             >
               <Link href={`/explore/genre/${genre.id}`}>
-                <div 
+                <div
                   className="relative h-40 rounded-lg overflow-hidden shadow-lg cursor-pointer"
                 >
-                  <GenreImage 
-                    genre={genre.id} 
-                    className="absolute inset-0 w-full h-full object-cover" 
+                  <GenreImage
+                    genre={genre.id}
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-top from-black/80 via-black/40 to-transparent">
                     <div className="absolute bottom-0 left-0 p-4">
@@ -55,4 +55,4 @@ export default function GenresPage() {
       </div>
     </div>
   );
-} 
+}

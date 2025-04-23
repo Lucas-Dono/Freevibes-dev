@@ -51,14 +51,14 @@ import { useRouter } from 'next/navigation';
 
 export default function TemporaryHybridPage() {
   const router = useRouter();
-  
+
   React.useEffect(() => {
     // No hacemos nada en SSR/build time
     if (typeof window !== 'undefined') {
       window.location.href = '/hybrid-adapter';
     }
   }, []);
-  
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
       <div className="text-center">
@@ -99,4 +99,4 @@ try {
 
 console.log(`${colors.magenta}================================================${colors.reset}`);
 console.log(`${colors.cyan}🎉 VERCEL BUILD OVERRIDE - COMPLETADO${colors.reset}`);
-console.log(`${colors.magenta}================================================${colors.reset}`); 
+console.log(`${colors.magenta}================================================${colors.reset}`);

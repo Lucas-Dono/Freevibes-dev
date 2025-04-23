@@ -1,7 +1,7 @@
 /**
  * Sistema de caché isomórfico
- * 
- * Proporciona una implementación de caché que funciona tanto en el navegador 
+ *
+ * Proporciona una implementación de caché que funciona tanto en el navegador
  * como en el servidor, utilizando estrategias diferentes según el entorno.
  */
 
@@ -54,11 +54,11 @@ class IsomorphicCache {
     try {
       // Registrar solicitud para detección de duplicados
       this.logRequest(key);
-      
+
       // Buscar en la caché en memoria
       const now = Date.now();
       const memoryItem = memCache[key];
-      
+
       if (memoryItem) {
         // Si existe en caché
         if (memoryItem.expires > now || allowExpired) {
@@ -71,10 +71,10 @@ class IsomorphicCache {
           return memoryItem.value;
         }
       }
-      
+
       // Si estamos en el navegador, también podríamos buscar en localStorage
       // pero eso sería una implementación adicional opcional
-      
+
       this.cacheMisses++;
       return null;
     } catch (error) {
@@ -83,7 +83,7 @@ class IsomorphicCache {
       return null;
     }
   }
-  
+
   /**
    * Almacena un valor en la caché
    * @param key Clave para almacenar
@@ -94,20 +94,20 @@ class IsomorphicCache {
     try {
       const now = Date.now();
       const expires = now + (ttl * 1000);
-      
+
       // Guardar en memoria
       memCache[key] = { value, expires };
-      
+
       // Si estamos en el navegador, podríamos guardar en localStorage también
       // pero eso sería una implementación adicional opcional
-      
+
       // Limpieza periódica
       this.periodicCleanup();
     } catch (error) {
       console.error('[IsomorphicCache] Error almacenando valor:', error);
     }
   }
-  
+
   /**
    * Elimina una clave de la caché
    * @param key Clave a eliminar
@@ -119,17 +119,17 @@ class IsomorphicCache {
       console.error('[IsomorphicCache] Error eliminando clave:', error);
     }
   }
-  
+
   /**
    * Limpia entradas expiradas de la caché periódicamente
    */
   private periodicCleanup(): void {
     // Solo limpiar ocasionalmente (10% de probabilidad)
     if (Math.random() > 0.1) return;
-    
+
     const now = Date.now();
     let expiredCount = 0;
-    
+
     // Limpiar caché en memoria
     for (const key in memCache) {
       if (memCache[key].expires < now) {
@@ -137,61 +137,61 @@ class IsomorphicCache {
         expiredCount++;
       }
     }
-    
+
     // Limpiar registro de solicitudes antiguas
     for (const key in recentRequests) {
       if (now - recentRequests[key].timestamp > 60 * 1000) { // Más de 1 minuto
         delete recentRequests[key];
       }
     }
-    
+
     if (expiredCount > 0 && ENABLE_CACHE_DEBUG) {
     }
-    
+
     // Si hay demasiadas entradas, eliminar las más antiguas
     const maxEntries = 100;
     const keys = Object.keys(memCache);
-    
+
     if (keys.length > maxEntries) {
       const entriesToRemove = keys.length - maxEntries;
-      
+
       // Ordenar por tiempo de expiración (los que expiran antes primero)
       const sortedKeys = keys.sort((a, b) => memCache[a].expires - memCache[b].expires);
-      
+
       // Eliminar las entradas más antiguas
       for (let i = 0; i < entriesToRemove; i++) {
         delete memCache[sortedKeys[i]];
       }
-      
+
       if (ENABLE_CACHE_DEBUG) {
       }
     }
   }
-  
+
   /**
    * Registra una solicitud para detectar patrones de uso
    * @param key Clave solicitada
    */
   private logRequest(key: string): void {
     const now = Date.now();
-    
+
     if (!recentRequests[key]) {
       recentRequests[key] = { timestamp: now, count: 1 };
       return;
     }
-    
+
     // Incrementar contador y actualizar timestamp
     recentRequests[key].count++;
     recentRequests[key].timestamp = now;
-    
+
     // Detectar patrones de solicitudes excesivas (más de 5 en menos de 10 segundos)
     // Este log siempre se mostrará ya que es una advertencia importante
-    if (recentRequests[key].count > 5 && 
+    if (recentRequests[key].count > 5 &&
         now - recentRequests[key].timestamp < 10000) {
       console.warn(`[IsomorphicCache] Detección de solicitudes duplicadas excesivas: ${key}`);
     }
   }
-  
+
   /**
    * Obtiene estadísticas de la caché
    */
@@ -203,4 +203,4 @@ class IsomorphicCache {
 // Instancia única exportada
 export const isomorphicCache = new IsomorphicCache();
 
-export default isomorphicCache; 
+export default isomorphicCache;

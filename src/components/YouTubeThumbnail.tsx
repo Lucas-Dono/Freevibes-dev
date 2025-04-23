@@ -40,10 +40,10 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
 }) => {
   const [currentQuality, setCurrentQuality] = useState<string>(quality);
   const [hasError, setHasError] = useState<boolean>(false);
-  
+
   // Validar si el videoId es válido antes de usarlo
   const isValidVideoId = videoId && videoId !== 'default' && videoId.length >= 5;
-  
+
   // Generar un texto alternativo descriptivo para la accesibilidad
   const generateAltText = (): string => {
     if (track) {
@@ -55,25 +55,25 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
         return `Portada de canción por ${track.artist}`;
       }
     }
-    
+
     // Si no hay información de track, usar alt proporcionado o un valor predeterminado
     return alt || 'Miniatura de video de YouTube';
   };
-  
+
   // Construir URL de la miniatura solo si el videoId es válido
   const getImageUrl = () => {
     if (!isValidVideoId) {
       console.log(`[THUMBNAIL-FRONTEND] Video ID inválido: "${videoId}"`);
       return fallbackImage;
     }
-    
+
     // Limpiar el videoId para evitar problemas
     let cleanVideoId = videoId.trim();
-    
+
     // Verificar si el ID es un URL completo en lugar de un ID
     if (cleanVideoId.includes('http')) {
       console.error(`[THUMBNAIL-FRONTEND] El Video ID parece ser una URL completa: "${cleanVideoId}"`);
-      
+
       // Intentar extraer el ID de una URL de YouTube
       const extractYouTubeId = (url: string): string => {
         // Patrones para diferentes formatos de URL de YouTube
@@ -86,7 +86,7 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
           /https:\/\/img\.youtube\.com\/vi\/https:\/\/img\.youtube\.com\/vi\/([a-zA-Z0-9_-]{11})/i,
           /https:\/\/img\.youtube\.com\/vi\/https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]{11})/i
         ];
-        
+
         for (const pattern of patterns) {
           const match = url.match(pattern);
           if (match && match[1]) {
@@ -94,10 +94,10 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
             return match[1];
           }
         }
-        
+
         return '';
       };
-      
+
       // Intentar extraer el ID de la URL
       const extractedId = extractYouTubeId(cleanVideoId);
       if (extractedId) {
@@ -107,23 +107,23 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
         return fallbackImage;
       }
     }
-    
+
     const url = `https://img.youtube.com/vi/${cleanVideoId}/${currentQuality}.jpg`;
     console.log(`[THUMBNAIL-FRONTEND] Construyendo URL para ID "${cleanVideoId}": ${url}`);
     return url;
   };
-  
+
   // Función para manejar errores de carga de imagen
   const handleImageError = () => {
     console.log(`[THUMBNAIL-FRONTEND] Error al cargar imagen con calidad: ${currentQuality} para videoId: ${videoId}`);
-    
+
     // Verificar si hay problemas con el videoId
     if (videoId.includes('http') || videoId.includes('.jpg')) {
       console.error(`[THUMBNAIL-FRONTEND] Video ID con formato incorrecto: ${videoId}`);
       setHasError(true);
       return;
     }
-    
+
     // Si la calidad actual falló y no es la calidad por defecto, intentar con una calidad inferior
     if (currentQuality === 'maxresdefault') {
       console.log('[THUMBNAIL-FRONTEND] Cambiando a hqdefault');
@@ -140,7 +140,7 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
       setHasError(true);
     }
   };
-  
+
   // Si hay un error o no hay videoId válido, mostrar imagen de fallback
   if (hasError || !isValidVideoId) {
     console.log(`[THUMBNAIL-FRONTEND] Mostrando imagen de fallback para ID: "${videoId}"`);
@@ -167,15 +167,15 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
       </div>
     );
   }
-  
+
   // Asegurar siempre tener una URL válida para src
   const thumbnailUrl = getImageUrl();
   const accessibleAltText = generateAltText();
-  
+
   return (
     <div className={`relative overflow-hidden ${aspectRatio === 'video' ? 'aspect-video' : aspectRatio === 'square' ? 'aspect-square' : ''} ${borderRadius} ${className}`}
          data-track-id={trackId}>
-      <Image 
+      <Image
         src={thumbnailUrl}
         alt={accessibleAltText}
         width={width}
@@ -189,4 +189,4 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
   );
 };
 
-export default YouTubeThumbnail; 
+export default YouTubeThumbnail;

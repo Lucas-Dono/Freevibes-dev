@@ -35,15 +35,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [isDemo, setIsDemo] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [preferredLanguage, setPreferredLanguage] = useState<string>('es');
-  
+
   // Verificar si hay una sesión real antes de considerar activar el modo demo
   useEffect(() => {
     const checkDemoMode = async () => {
       setLoading(true);
-      
+
       // Leer el estado del modo demo de las cookies (verificar ambas cookies)
       const isDemoMode = Cookies.get('demo-mode') === 'true' || Cookies.get('demoMode') === 'true';
-      
+
       // Si hay una sesión real, desactivamos el modo demo forzosamente
       if (session) {
         if (isDemoMode) {
@@ -58,32 +58,32 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       } else {
         // Si no hay sesión, respetamos la cookie
         setIsDemo(isDemoMode);
-        
+
         // Si está en modo demo, configurar el idioma adecuado y sincronizar cookies
         if (isDemoMode) {
           const demoLang = Cookies.get('demoLanguage') || 'es';
           setPreferredLanguage(demoLang);
-          
+
           // Asegurar que ambas cookies están configuradas
           Cookies.set('demo-mode', 'true', { expires: 7, path: '/' });
           Cookies.set('demoMode', 'true', { expires: 7, path: '/' });
-          
+
           // Informar al servicio de Spotify que estamos en modo demo
           setDemoMode(true, demoLang);
           console.log(`[AuthProvider] Modo demo activado con idioma: ${demoLang}`);
         }
       }
-      
+
       setLoading(false);
     };
-    
+
     checkDemoMode();
   }, [session]);
-  
+
   // Cambiar el idioma preferido
   const handleSetPreferredLanguage = (lang: string) => {
     setPreferredLanguage(lang);
-    
+
     // Si estamos en modo demo, también guardar el idioma en una cookie
     if (isDemo) {
       Cookies.set('demoLanguage', lang, { expires: 7 });
@@ -98,10 +98,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       console.warn('[AuthProvider] No se puede activar el modo demo con una sesión real');
       return;
     }
-    
+
     const newDemoState = forceState !== undefined ? forceState : !isDemo;
     setIsDemo(newDemoState);
-    
+
     if (newDemoState) {
       // Usar el mismo nombre de cookie que el middleware espera: 'demo-mode'
       Cookies.set('demo-mode', 'true', { expires: 7, path: '/' });
@@ -125,10 +125,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     // Solo si no estamos cargando y no tenemos modo demo activo en el estado
     if (!loading && !isDemo) {
-      const isDemoModeFromCookie = 
-        document.cookie.includes('demo-mode=true') || 
+      const isDemoModeFromCookie =
+        document.cookie.includes('demo-mode=true') ||
         document.cookie.includes('demoMode=true');
-      
+
       if (isDemoModeFromCookie) {
         console.log('[AuthProvider] Detectada cookie de modo demo, sincronizando estado');
         // Activar modo demo sin cambiar cookies
@@ -174,13 +174,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  
+
   // No lanzar error si el contexto no existe, devolver valores por defecto
   // Esto ayuda durante SSR y compilación estática
   if (!context) {
     console.warn('useAuth fue llamado fuera de un AuthProvider. Usando valores por defecto.');
     return defaultAuthContext;
   }
-  
+
   return context;
-}; 
+};

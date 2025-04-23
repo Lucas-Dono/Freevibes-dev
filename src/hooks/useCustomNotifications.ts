@@ -6,10 +6,10 @@ import { useNotification } from "@/contexts/NotificationContext";
 type NotificationType = 'success' | 'error' | 'info' | 'warning';
 
 export const useCustomNotifications = () => {
-  const { 
-    showNotification, 
-    notifications, 
-    unreadCount, 
+  const {
+    showNotification,
+    notifications,
+    unreadCount,
     addSystemNotification,
     markAsRead,
     markAllAsRead,
@@ -92,25 +92,25 @@ export const useCustomNotifications = () => {
       { message: "Error al cargar algunas canciones", type: 'error' as NotificationType },
       { message: "Descubre música nueva en la sección 'Para ti'", type: 'info' as NotificationType },
     ];
-    
+
     // Primero, borrar notificaciones existentes si hay demasiadas (para evitar acumulación)
     if (notifications.length > 5) {
       // Opcional: limpiar todas antes de agregar nuevas
       clearNotifications();
     }
-    
+
     // Seleccionar 3 notificaciones aleatorias sin repetición
     const selectedNotifications = [...demoNotifications]
       .sort(() => 0.5 - Math.random())
       .slice(0, 3);
-    
+
     // Verificar si ya existen notificaciones con el mismo mensaje
     // Para evitar duplicados en el panel
     const existingMessages = new Set(notifications.map(n => n.message));
     const uniqueNotifications = selectedNotifications.filter(
       notification => !existingMessages.has(notification.message)
     );
-    
+
     // Solo generar notificaciones únicas que no existan ya en el panel
     uniqueNotifications.forEach((notification, index) => {
       setTimeout(() => {
@@ -138,4 +138,4 @@ export const useCustomNotifications = () => {
     // Función demo
     generateDemoNotifications
   };
-}; 
+};

@@ -57,7 +57,7 @@ next-env.d.ts
 *.sw?
 
 # Cache
-/python-api/cache/ 
+/python-api/cache/
 
 .cursor
 .next

@@ -13,4 +13,4 @@ export default function PlaylistLayout({
       {children}
     </AuthRequired>
   );
-} 
+}

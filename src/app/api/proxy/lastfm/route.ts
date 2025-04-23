@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const method = searchParams.get('method') || 'tag.gettoptracks';
-    
+
     // Verificar que el método solicitado está permitido
     if (!ALLOWED_METHODS.includes(method)) {
       return NextResponse.json(
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     params.append('method', method);
     params.append('api_key', API_KEY);
     params.append('format', 'json');
-    
+
     // Copiar todos los demás parámetros de la solicitud original
     // Solución mejorada para procesar los parámetros
     searchParams.forEach((value, key) => {
@@ -49,10 +49,10 @@ export async function GET(request: NextRequest) {
     });
 
     console.log(`[LastFM API] Proxy para: ${method}, params: ${params.toString()}`);
-    
+
     // Realizar solicitud a Last.fm
     const response = await fetch(`${API_URL}?${params.toString()}`);
-    
+
     if (!response.ok) {
       console.error(`[LastFM API] Error ${response.status}: ${response.statusText}`);
       return NextResponse.json(
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
         { status: response.status }
       );
     }
-    
+
     // Devolver los datos tal cual vienen de Last.fm
     const data = await response.json();
     return NextResponse.json(data);
@@ -94,7 +94,7 @@ function simplifyTag(tag: string): string {
     blues: ['blues', 'rhythm blues', 'chicago blues', 'delta blues', 'electric blues'],
     country: ['country', 'country rock', 'alt-country', 'country pop', 'outlaw country', 'bluegrass'],
     world: ['world', 'afrobeat', 'celtic', 'flamenco', 'indian classical', 'african', 'asian', 'middle eastern'],
-    
+
     // Subgéneros específicos (en crecimiento)
     indie: ['indie', 'indie rock', 'indie pop', 'indie folk', 'indietronica', 'bedroom pop'],
     alternative: ['alternative', 'alt rock', 'alt pop', 'alt metal', 'alternative dance'],
@@ -114,25 +114,25 @@ function simplifyTag(tag: string): string {
     .replace(/\sfeat\..*$/i, '') // Eliminar "feat."
     .replace(/(remix|version|edit).*$/i, '') // Eliminar términos de versiones
     .trim();
-    
+
   // Dividir en palabras para análisis
   const words = cleaned.split(' ');
-  
+
   // 1. Buscar coincidencias exactas de géneros completos
   for (const [mainGenre, subgenres] of Object.entries(musicGenres)) {
     for (const genre of subgenres) {
       if (cleaned.includes(genre)) {
         // Si el género está presente como una frase, es alta prioridad
-        if (cleaned.includes(` ${genre} `) || 
-            cleaned.startsWith(`${genre} `) || 
-            cleaned.endsWith(` ${genre}`) || 
+        if (cleaned.includes(` ${genre} `) ||
+            cleaned.startsWith(`${genre} `) ||
+            cleaned.endsWith(` ${genre}`) ||
             cleaned === genre) {
           return genre;
         }
       }
     }
   }
-  
+
   // 2. Buscar palabras individuales que puedan ser géneros
   for (const word of words) {
     if (word.length > 3) { // Ignorar palabras muy cortas
@@ -141,7 +141,7 @@ function simplifyTag(tag: string): string {
         if (word === mainGenre || word === mainGenre + 's') {
           return mainGenre;
         }
-        
+
         // O si coincide con algún subgénero
         for (const genre of subgenres) {
           if (genre.split(' ').includes(word)) {
@@ -151,16 +151,16 @@ function simplifyTag(tag: string): string {
       }
     }
   }
-  
+
   // 3. Si todo falla, extraer palabras significativas como posibles términos de búsqueda
   const ignoredWords = ['the', 'and', 'feat', 'with', 'from', 'by', 'at', 'of', 'in', 'on', 'to', 'for'];
-  
+
   for (const word of words) {
     if (word.length > 3 && !ignoredWords.includes(word)) {
       return word;
     }
   }
-  
+
   // 4. Fallback final a un género popular genérico
   return 'rock';
 }
@@ -170,7 +170,7 @@ function simplifyTag(tag: string): string {
  */
 function determineGenericTag(input: string): string {
   const lowercaseInput = input.toLowerCase();
-  
+
   // Mapeo de palabras clave a géneros populares
   const genreKeywords: Record<string, string[]> = {
     'rock': ['rock', 'guitar', 'band', 'alternative', 'indie'],
@@ -182,7 +182,7 @@ function determineGenericTag(input: string): string {
     'rnb': ['r&b', 'soul', 'groove', 'rhythm'],
     'country': ['country', 'western', 'folk', 'americana']
   };
-  
+
   // Buscar coincidencias de palabras clave
   for (const [genre, keywords] of Object.entries(genreKeywords)) {
     for (const keyword of keywords) {
@@ -191,7 +191,7 @@ function determineGenericTag(input: string): string {
       }
     }
   }
-  
+
   // Género predeterminado si no hay coincidencias
   return 'pop';
 }
@@ -202,7 +202,7 @@ function determineGenericTag(input: string): string {
 function createFakeResponse(method: string, tag: string = 'rock', limit: number = 30) {
   // Asegurarse de que limit tenga un valor sensible
   limit = Math.min(Math.max(limit, 1), 50);
-  
+
   // Nombres de género para categorizar
   const genreNames = {
     rock: ['Rock Song', 'Alternative Rock', 'Classic Rock', 'Indie Rock', 'Hard Rock'],
@@ -223,7 +223,7 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
 
   // Determinar el tipo de género para generar nombres apropiados
   let genreType = 'rock'; // Género por defecto
-  
+
   if (tag) {
     const tagLower = tag.toLowerCase();
     for (const [key, _] of Object.entries(genreNames)) {
@@ -233,7 +233,7 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
       }
     }
   }
-  
+
   // Nombres de artistas para el género seleccionado
   const artistsByGenre = {
     rock: ['The Guitar Heroes', 'Rockin Band', 'Alternative Sound', 'Classic Rockers', 'Indie Rockers'],
@@ -251,7 +251,7 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
     reggae: ['Reggae Collective', 'Roots Project', 'Dub Masters', 'Island Rhythm', 'Reggae Fusion Band'],
     rnb: ['Soul Collective', 'R&B Project', 'Groove Masters', 'Neo Soul Ensemble', 'Funk Brothers']
   };
-  
+
   // Generar albumes apropiados para el género
   const albumsByGenre = {
     rock: ['Rock Anthems', 'Guitar Heroes', 'Alternative Sounds', 'Classic Collection', 'Indie Vibes'],
@@ -269,7 +269,7 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
     reggae: ['Reggae Classics', 'Roots Collection', 'Dub Sessions', 'Island Rhythms', 'Reggae Essentials'],
     rnb: ['Soul Collection', 'R&B Grooves', 'Funk Sessions', 'Neo Soul Expressions', 'Smooth Jams']
   };
-  
+
   switch (method) {
     case 'tag.gettoptracks':
       return {
@@ -278,7 +278,7 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
             const songNames = genreNames[genreType as keyof typeof genreNames] || genreNames.rock;
             const artists = artistsByGenre[genreType as keyof typeof artistsByGenre] || artistsByGenre.rock;
             const albums = albumsByGenre[genreType as keyof typeof albumsByGenre] || albumsByGenre.rock;
-            
+
             return {
               name: `${songNames[i % songNames.length]} ${i+1}`,
               artist: { name: artists[i % artists.length] },
@@ -307,9 +307,9 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
         reggae: ['dub', 'roots reggae', 'dancehall', 'ska', 'reggae fusion'],
         rnb: ['soul', 'neo soul', 'contemporary r&b', 'funk', 'hip hop']
       };
-      
+
       const relatedGenres = similarGenres[genreType as keyof typeof similarGenres] || similarGenres.rock;
-      
+
       return {
         similartags: {
           tag: relatedGenres.map(tag => ({
@@ -321,4 +321,4 @@ function createFakeResponse(method: string, tag: string = 'rock', limit: number 
     default:
       return { status: 'ok', results: [] };
   }
-} 
+}

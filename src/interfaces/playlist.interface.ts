@@ -32,7 +32,7 @@ export interface Playlist {
     createdAt: Date;
     updatedAt: Date;
   }
-  
+
   export interface PlayHistory {
     id: string;
     userId: string;

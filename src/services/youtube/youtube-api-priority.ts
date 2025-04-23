@@ -1,8 +1,8 @@
 /**
  * Sistema de priorización para API keys de YouTube
- * 
- * Este módulo asegura que siempre existan claves API disponibles 
- * para la reproducción de música, incluso si otras operaciones 
+ *
+ * Este módulo asegura que siempre existan claves API disponibles
+ * para la reproducción de música, incluso si otras operaciones
  * agotan las cuotas de las claves de menor prioridad.
  */
 
@@ -12,10 +12,10 @@ import { apiKeyManager } from './youtube-api-keys';
 export enum OperationType {
   // Operaciones de alta prioridad (reproducción musical)
   MUSIC_PLAYBACK = 'music_playback',
-  
+
   // Operaciones de media prioridad
   SEARCH = 'search',
-  
+
   // Operaciones de baja prioridad
   RECOMMENDATIONS = 'recommendations',
   EXPLORE = 'explore',
@@ -28,10 +28,10 @@ export enum OperationType {
 const PRIORITY_CONFIG = {
   // Reservar el 60% de las claves para reproducción
   [OperationType.MUSIC_PLAYBACK]: 0.6,
-  
+
   // Reservar el 25% para búsquedas
   [OperationType.SEARCH]: 0.25,
-  
+
   // El 15% restante para otras operaciones
   [OperationType.RECOMMENDATIONS]: 0.05,
   [OperationType.EXPLORE]: 0.03,
@@ -66,14 +66,14 @@ let lastResetDate = new Date();
 function checkAndResetQuotas(): void {
   const now = new Date();
   const dayDifference = Math.floor((now.getTime() - lastResetDate.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   if (dayDifference >= 1) {
     // Reiniciar contadores
     quotaUsed = Object.keys(OperationType).reduce((acc, key) => {
       acc[key] = 0;
       return acc;
     }, {} as Record<string, number>);
-    
+
     lastResetDate = now;
     console.log('[APIPriority] Contadores de cuota reiniciados');
   }
@@ -92,24 +92,24 @@ export async function executeWithPriority<T>(
   cacheKey: string
 ): Promise<T> {
   checkAndResetQuotas();
-  
+
   // Verificar si se ha excedido la cuota para esta operación
   const currentQuota = quotaUsed[operationType] || 0;
   const quotaLimit = QUOTA_LIMITS[operationType] || 500;
-  
+
   if (currentQuota >= quotaLimit) {
     console.warn(`[APIPriority] Cuota excedida para operación ${operationType}: ${currentQuota}/${quotaLimit}`);
     throw new Error(`Cuota diaria excedida para operación ${operationType}`);
   }
-  
+
   // Ejecutar la función con el administrador de claves API
   return apiKeyManager.withApiKey(async (apiKey: string) => {
     const result = await fn(apiKey);
-    
+
     // Actualizar la cuota usada
     // La cantidad depende del tipo de operación
     let quotaIncrement = 1;
-    
+
     switch (operationType) {
       case OperationType.SEARCH:
         quotaIncrement = 100; // Las búsquedas cuestan 100 unidades
@@ -123,10 +123,10 @@ export async function executeWithPriority<T>(
       default:
         quotaIncrement = 10; // Otras operaciones cuestan 10 unidades
     }
-    
+
     quotaUsed[operationType] = (quotaUsed[operationType] || 0) + quotaIncrement;
     console.log(`[APIPriority] Operación ${operationType} - Cuota actual: ${quotaUsed[operationType]}/${quotaLimit}`);
-    
+
     return result;
   }, cacheKey);
 }
@@ -148,4 +148,4 @@ export default {
   executeWithPriority,
   OperationType,
   getQuotaStatistics
-}; 
+};

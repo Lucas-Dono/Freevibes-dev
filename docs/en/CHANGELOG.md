@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [ Home ](../../README.md) | [ Getting Started ](README.md) | [ Technical Documentation ](TECHNICAL.md)
-  
+
 </div>
 
 ---
@@ -68,4 +68,4 @@ This document maintains a detailed record of all significant changes made to my 
 
 <div align="center">
   <p>© 2025 FreeVibes Web</p>
-</div> 
+</div>

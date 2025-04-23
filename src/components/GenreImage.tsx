@@ -51,13 +51,13 @@ const genreColors: Record<string, string> = {
 // Función para obtener un color aleatorio pero consistente para géneros no mapeados
 const getRandomGenreColor = (genre: string): string => {
   if (!genre) return genreColors.default;
-  
+
   // Generar un hash simple del nombre del género
   let hash = 0;
   for (let i = 0; i < genre.length; i++) {
     hash = genre.charCodeAt(i) + ((hash << 5) - hash);
   }
-  
+
   // Colorear en el rango de los colores existentes
   const allColors = Object.values(genreColors);
   const colorIndex = Math.abs(hash) % allColors.length;
@@ -80,16 +80,16 @@ interface GenreImageProps {
   size?: string; // Tamaño predefinido (small, medium, large)
 }
 
-const GenreImage = ({ 
-  genre, 
-  track, 
-  artist, 
-  title, 
-  artistName, 
+const GenreImage = ({
+  genre,
+  track,
+  artist,
+  title,
+  artistName,
   trackTitle,
   index = 0,
-  width = 200, 
-  height = 200, 
+  width = 200,
+  height = 200,
   priority = false,
   className,
   showFallback = true,
@@ -135,7 +135,7 @@ const GenreImage = ({
   // Función para detectar placeholders de Last.fm
   const isLastFmPlaceholder = (url: string): boolean => {
     if (!url) return false;
-    
+
     const lastfmIndicators = [
       '2a96cbd8b46e442fc41c2b86b821562f', // ID común de placeholder de Last.fm (estrella)
       'lastfm.freetls.fastly.net/i/u/',    // URLs de Last.fm para placeholders
@@ -149,7 +149,7 @@ const GenreImage = ({
       'c6f59c1e5e7240a4c0d427abd71f3dbb', // Otro ID de placeholder conocido
       '4128a6eb29f94943c9d206c08e625904' // Otro ID de placeholder conocido
     ];
-    
+
     return lastfmIndicators.some(indicator => url.includes(indicator));
   };
 
@@ -161,7 +161,7 @@ const GenreImage = ({
       // OPTIMIZACIÓN: Verificar la caché de memoria primero
       const cacheKey = `genre_${genre || ''}_${artist || artistName || ''}_${title || trackTitle || ''}`;
       const cachedImage = sessionStorage.getItem(cacheKey);
-      
+
       if (cachedImage) {
         console.log(`[GenreImage] Usando imagen cacheada para: ${cacheKey}`);
         setImageUrl(cachedImage);
@@ -181,7 +181,7 @@ const GenreImage = ({
         setIsLoading(false);
         return;
       }
-      
+
       // PRIORIDAD 1: Si tenemos un género específico, usar directamente la imagen de género
       if (effectiveGenre && genreBackgrounds[effectiveGenre]) {
         const genreImageUrl = genreBackgrounds[effectiveGenre];
@@ -198,14 +198,14 @@ const GenreImage = ({
         try {
           // Intentar primero obtener de caché con una única solicitud
           const cachedDetails = await getTrackImageFromCache(trackCacheKey);
-          
+
           if (cachedDetails && cachedDetails.cover && !isLastFmPlaceholder(cachedDetails.cover)) {
             setImageUrl(cachedDetails.cover);
             sessionStorage.setItem(cacheKey, cachedDetails.cover);
             setIsLoading(false);
             return;
           }
-          
+
           // No hacer peticiones a APIs externas para imágenes de géneros
           // esto ayuda a reducir la carga y las peticiones innecesarias
           if (effectiveGenre) {
@@ -214,13 +214,13 @@ const GenreImage = ({
             setError(true); // Forzar el fallback de color
             return;
           }
-          
+
           // Solo para tracks específicos (no géneros), buscar imágenes
           if (!effectiveGenre && pathname && !pathname.includes('/explore/genres')) {
             // Si no está en caché, buscar directamente con preferencia por Spotify
             // PERO limitamos a páginas relevantes, no de género
             const foundDetails = await findTrackImage(effectiveArtist, effectiveTitle, { preferSpotify: true });
-            
+
             if (foundDetails && foundDetails.cover && !isLastFmPlaceholder(foundDetails.cover)) {
               setImageUrl(foundDetails.cover);
               sessionStorage.setItem(cacheKey, foundDetails.cover);
@@ -236,10 +236,10 @@ const GenreImage = ({
       // PRIORIDAD 3: Intentar extraer posible género del artista
       if (effectiveArtist) {
         const artistLower = effectiveArtist.toLowerCase();
-        const possibleGenres = Object.keys(genreBackgrounds).filter(g => 
+        const possibleGenres = Object.keys(genreBackgrounds).filter(g =>
           g !== 'default' && artistLower.includes(g)
         );
-        
+
         if (possibleGenres.length > 0) {
           const detectedGenre = possibleGenres[0];
           console.log(`[GenreImage] Género detectado a partir del artista "${effectiveArtist}": ${detectedGenre}`);
@@ -255,7 +255,7 @@ const GenreImage = ({
       console.log(`[GenreImage] Usando fallback de color para: ${effectiveGenre || effectiveArtist || effectiveTitle}`);
       setIsLoading(false);
       setError(true); // Esto activará el fallback visual
-      
+
     } catch (err) {
       console.error('Error cargando imagen:', err);
       setIsLoading(false);
@@ -264,12 +264,12 @@ const GenreImage = ({
   };
 
   return (
-    <div 
-      ref={imageRef} 
+    <div
+      ref={imageRef}
       className={`overflow-hidden w-full h-full relative ${className || ''}`}
-      style={{ 
-        backgroundColor: error || !imageUrl 
-          ? (genre && genreColors[genre.toLowerCase()]) || getRandomGenreColor(genre || '') 
+      style={{
+        backgroundColor: error || !imageUrl
+          ? (genre && genreColors[genre.toLowerCase()]) || getRandomGenreColor(genre || '')
           : undefined,
       }}
     >
@@ -281,7 +281,7 @@ const GenreImage = ({
           height={height}
           priority={priority || index < 10}
           className="w-full h-full object-cover"
-          style={{ 
+          style={{
             objectFit: 'cover',
             objectPosition: 'center',
             width: '100%',
@@ -296,8 +296,8 @@ const GenreImage = ({
         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-black">
           <div className="text-center px-2">
             <div className="text-white font-bold uppercase text-lg md:text-xl truncate max-w-full">
-              {genre 
-                ? genre.charAt(0).toUpperCase() + genre.slice(1) 
+              {genre
+                ? genre.charAt(0).toUpperCase() + genre.slice(1)
                 : artist || title || 'Música'}
             </div>
           </div>
@@ -307,4 +307,4 @@ const GenreImage = ({
   );
 };
 
-export default GenreImage; 
+export default GenreImage;

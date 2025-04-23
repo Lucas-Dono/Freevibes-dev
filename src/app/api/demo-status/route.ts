@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  
+
   // Forzar que el modo demo esté disponible siempre
   return NextResponse.json({
     status: 'OK',
@@ -9,4 +9,4 @@ export async function GET(request: NextRequest) {
     demoReady: true,
     message: 'El sistema está listo para el modo demo'
   });
-} 
+}

@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Grid, 
-  Card, 
-  CardContent, 
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
   CardMedia,
   Button,
   Divider,
@@ -53,7 +53,7 @@ export default function ChartsPage() {
   const [error, setError] = useState<string | null>(null);
   const [country, setCountry] = useState('ES'); // Default a España
   const [currentTab, setCurrentTab] = useState(0);
-  
+
   const router = useRouter();
   const { playTrack } = usePlayer();
   const { isAuthenticated, isDemo } = useAuth();
@@ -96,7 +96,7 @@ export default function ChartsPage() {
       source: 'youtube',
       youtubeId: item.videoId
     };
-    
+
     universalPlayTrack(track);
   };
 
@@ -130,11 +130,11 @@ export default function ChartsPage() {
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
           {t('explore.chartsTitle')}
         </Typography>
-        
+
         <Box display="flex" alignItems="center">
           <Flag sx={{ mr: 1, color: 'text.secondary' }} />
-          <CountrySelector 
-            value={country} 
+          <CountrySelector
+            value={country}
             onChange={handleCountryChange}
             variant="standard"
           />
@@ -156,10 +156,10 @@ export default function ChartsPage() {
         <>
           {charts && (
             <Box>
-              <Tabs 
-                value={currentTab} 
+              <Tabs
+                value={currentTab}
                 onChange={handleTabChange}
-                sx={{ 
+                sx={{
                   mb: 4,
                   '& .MuiTabs-indicator': {
                     backgroundColor: 'primary.main',
@@ -181,8 +181,8 @@ export default function ChartsPage() {
                 <Tab label={t('charts.artists')} />
                 {charts.genres && <Tab label={t('charts.genres')} />}
               </Tabs>
-              
-              <motion.div 
+
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -209,7 +209,7 @@ export default function ChartsPage() {
                     ))}
                   </Grid>
                 )}
-                
+
                 {currentTab === 1 && charts.songs && (
                   <Grid container spacing={2}>
                     {charts.songs?.map((item: ChartItem, index: number) => (
@@ -228,7 +228,7 @@ export default function ChartsPage() {
                     ))}
                   </Grid>
                 )}
-                
+
                 {currentTab === 2 && charts.videos && (
                   <Grid container spacing={2}>
                     {charts.videos?.map((item: ChartItem, index: number) => (
@@ -251,14 +251,14 @@ export default function ChartsPage() {
                     ))}
                   </Grid>
                 )}
-                
+
                 {currentTab === 3 && charts.artists && (
                   <Grid container spacing={2}>
                     {charts.artists?.map((artist: any, index: number) => (
                       <Grid item xs={12} sm={6} md={4} lg={3} key={`artist-${artist.id || index}`}>
                         <motion.div variants={itemVariants}>
-                          <Card 
-                            sx={{ 
+                          <Card
+                            sx={{
                               height: '100%',
                               display: 'flex',
                               flexDirection: 'column',
@@ -282,7 +282,7 @@ export default function ChartsPage() {
                                 fill
                                 style={{ objectFit: 'cover' }}
                               />
-                              <Box 
+                              <Box
                                 sx={{
                                   position: 'absolute',
                                   top: 8,
@@ -316,14 +316,14 @@ export default function ChartsPage() {
                     ))}
                   </Grid>
                 )}
-                
+
                 {currentTab === 4 && charts.genres && (
                   <Grid container spacing={2}>
                     {charts.genres?.map((genre: any, index: number) => (
                       <Grid item xs={12} sm={6} md={4} key={`genre-${index}`}>
                         <motion.div variants={itemVariants}>
-                          <Card 
-                            sx={{ 
+                          <Card
+                            sx={{
                               display: 'flex',
                               borderRadius: 2,
                               overflow: 'hidden',
@@ -353,8 +353,8 @@ export default function ChartsPage() {
                                 </Typography>
                               </CardContent>
                               <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                                <Button 
-                                  size="small" 
+                                <Button
+                                  size="small"
                                   startIcon={<PlayArrow />}
                                   sx={{ ml: 1 }}
                                 >
@@ -371,16 +371,16 @@ export default function ChartsPage() {
               </motion.div>
             </Box>
           )}
-          
+
           {!charts && !loading && !error && (
             <Box sx={{ py: 8, textAlign: 'center' }}>
               <Typography variant="h6" gutterBottom>
                 {t('explore.selectCountry')}
               </Typography>
               <ServerStatus showDetailed={true} />
-              <Button 
-                variant="contained" 
-                color="primary" 
+              <Button
+                variant="contained"
+                color="primary"
                 startIcon={<Refresh />}
                 onClick={() => fetchCharts('ZZ')} // ZZ = Global
                 sx={{ mt: 2 }}
@@ -393,4 +393,4 @@ export default function ChartsPage() {
       )}
     </Container>
   );
-} 
+}

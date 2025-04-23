@@ -1,6 +1,6 @@
 /**
  * Proxy para la API de YouTube con control de cuota
- * 
+ *
  * Este endpoint permite acceder a la API de YouTube con control de cuota
  * y cacheo de resultados para evitar exceder los límites diarios.
  */
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     // Obtener parámetros de la solicitud
     const params = Object.fromEntries(request.nextUrl.searchParams);
     const { query, videoId, limit, type } = params as YouTubeProxyParams;
-    
+
     // Verificar que tenemos al menos uno de los parámetros necesarios
     if (!query && !videoId) {
       return NextResponse.json(
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Verificar el estado de la cuota
     const quotaStatus = youtube.getQuotaStatus();
     if (!quotaStatus.hasQuota) {
@@ -39,10 +39,10 @@ export async function GET(request: NextRequest) {
         { status: 429 }
       );
     }
-    
+
     // Procesar según el tipo de solicitud
     let response: any;
-    
+
     if (videoId) {
       // Buscar detalles de un video específico
       const videoDetails = await fetchVideoDetails(videoId);
@@ -53,12 +53,12 @@ export async function GET(request: NextRequest) {
       const searchResults = await youtube.searchVideos(query, maxResults);
       response = searchResults;
     }
-    
+
     // Devolver resultados
     return NextResponse.json(response);
   } catch (error: any) {
     console.error('[YouTube Proxy] Error:', error);
-    
+
     // Si es un error de cuota, devolver un estado específico
     if (error.message?.includes('quota')) {
       return NextResponse.json(
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         { status: 429 }
       );
     }
-    
+
     return NextResponse.json(
       { error: 'Error en el proxy de YouTube', details: error.message },
       { status: 500 }
@@ -90,7 +90,7 @@ async function fetchVideoDetails(videoId: string) {
       high: { url: '' }
     }
   };
-  
+
   return placeholderDetails;
 }
 
@@ -99,14 +99,14 @@ export async function POST(request: NextRequest) {
     // Obtener el cuerpo de la solicitud
     const body = await request.json();
     const { tracks } = body as { tracks?: any[] };
-    
+
     if (!tracks || !Array.isArray(tracks)) {
       return NextResponse.json(
         { error: 'Se requiere un array de tracks' },
         { status: 400 }
       );
     }
-    
+
     // Verificar el estado de la cuota
     const quotaStatus = youtube.getQuotaStatus();
     if (!quotaStatus.canEnrichTracks) {
@@ -115,20 +115,20 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       );
     }
-    
+
     // Enriquecer tracks con IDs de YouTube
     const enrichedTracks = await youtube.enrichTracksWithYouTubeIds(tracks);
-    
+
     return NextResponse.json({
       tracks: enrichedTracks,
       enriched: enrichedTracks.filter(t => t.youtubeId).length
     });
   } catch (error: any) {
     console.error('[YouTube Proxy] Error en POST:', error);
-    
+
     return NextResponse.json(
       { error: 'Error en el proxy de YouTube', details: error.message },
       { status: 500 }
     );
   }
-} 
+}

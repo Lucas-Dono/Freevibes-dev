@@ -10,8 +10,8 @@ let debugMode = false;
 
 // Lista de mensajes de error a ignorar
 const ignoredMessages = [
-  'validateDOMNesting', 
-  'cannot appear as a descendant of', 
+  'validateDOMNesting',
+  'cannot appear as a descendant of',
   'Warning: Each child in a list',
   'Warning: React does not recognize the',
   'Warning: Failed prop type'
@@ -43,7 +43,7 @@ export const suppressConsoleMessages = () => {
     }
     originalConsoleError.apply(console, args);
   };
-  
+
   // Sobrescribir console.warn
   console.warn = (...args: any[]) => {
     // Igual lógica para advertencias
@@ -111,4 +111,4 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     return this.props.children;
   }
-} 
+}

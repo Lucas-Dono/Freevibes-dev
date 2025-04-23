@@ -1,6 +1,6 @@
 /**
  * Caché especializado para la API de YouTube
- * 
+ *
  * Este módulo implementa un sistema de caché para guardar resultados de
  * consultas a la API de YouTube y reducir el uso de la cuota diaria.
  */
@@ -16,19 +16,19 @@ const DEBUG = process.env.DEBUG_YOUTUBE_CACHE === 'true';
  */
 export class YouTubeCache {
   private static instance: YouTubeCache;
-  
+
   private constructor() {}
-  
+
   static getInstance(): YouTubeCache {
     if (!YouTubeCache.instance) {
       YouTubeCache.instance = new YouTubeCache();
     }
     return YouTubeCache.instance;
   }
-  
+
   /**
    * Guarda resultados de búsqueda en caché
-   * 
+   *
    * @param query Consulta realizada
    * @param maxResults Número máximo de resultados solicitados
    * @param data Datos devueltos por la API
@@ -37,16 +37,16 @@ export class YouTubeCache {
     try {
       const cacheKey = this.getSearchCacheKey(query, maxResults);
       await searchCache.set(cacheKey, JSON.stringify(data), YOUTUBE_SEARCH_TTL);
-      
+
       if (DEBUG) console.log(`[YouTube Cache] Guardada búsqueda: "${query}" (${maxResults} resultados)`);
     } catch (error) {
       console.error(`[YouTube Cache] Error guardando búsqueda: ${query}`, error);
     }
   }
-  
+
   /**
    * Obtiene resultados de búsqueda desde caché
-   * 
+   *
    * @param query Consulta a buscar
    * @param maxResults Número máximo de resultados
    * @returns Datos de la caché o null si no existen
@@ -55,12 +55,12 @@ export class YouTubeCache {
     try {
       const cacheKey = this.getSearchCacheKey(query, maxResults);
       const cachedData = await searchCache.get(cacheKey);
-      
+
       if (cachedData) {
         if (DEBUG) console.log(`[YouTube Cache] Hit para búsqueda: "${query}"`);
         return JSON.parse(cachedData);
       }
-      
+
       if (DEBUG) console.log(`[YouTube Cache] Miss para búsqueda: "${query}"`);
       return null;
     } catch (error) {
@@ -68,10 +68,10 @@ export class YouTubeCache {
       return null;
     }
   }
-  
+
   /**
    * Guarda la asociación entre canción y video de YouTube
-   * 
+   *
    * @param trackName Nombre de la canción
    * @param artistName Nombre del artista
    * @param youtubeId ID del video de YouTube
@@ -80,16 +80,16 @@ export class YouTubeCache {
     try {
       const cacheKey = this.getTrackCacheKey(trackName, artistName);
       await trackCache.set(cacheKey, JSON.stringify({ youtubeId }), YOUTUBE_TRACK_TTL);
-      
+
       if (DEBUG) console.log(`[YouTube Cache] Guardada asociación de track: "${trackName} - ${artistName}" -> ${youtubeId || 'null'}`);
     } catch (error) {
       console.error(`[YouTube Cache] Error guardando track: ${trackName} - ${artistName}`, error);
     }
   }
-  
+
   /**
    * Obtiene el ID de video de YouTube para una canción desde caché
-   * 
+   *
    * @param trackName Nombre de la canción
    * @param artistName Nombre del artista
    * @returns ID del video o null si no está en caché
@@ -98,21 +98,21 @@ export class YouTubeCache {
     try {
       const cacheKey = this.getTrackCacheKey(trackName, artistName);
       const cachedData = await trackCache.get(cacheKey);
-      
+
       if (cachedData) {
         const data = JSON.parse(cachedData);
         if (data.youtubeId) {
           if (DEBUG) console.log(`[YouTube Cache] Hit para track: "${trackName} - ${artistName}"`);
           return data.youtubeId;
         }
-        
+
         // Si el valor es explícitamente null (indicando que ya intentamos y no encontramos)
         if (data.youtubeId === null) {
           if (DEBUG) console.log(`[YouTube Cache] Hit para track (sin video): "${trackName} - ${artistName}"`);
           return null;
         }
       }
-      
+
       if (DEBUG) console.log(`[YouTube Cache] Miss para track: "${trackName} - ${artistName}"`);
       return null;
     } catch (error) {
@@ -120,24 +120,24 @@ export class YouTubeCache {
       return null;
     }
   }
-  
+
   /**
    * Genera una clave única para la búsqueda
    */
   private getSearchCacheKey(query: string, maxResults: number): string {
     return `youtube_search:${query.toLowerCase().trim()}:${maxResults}`;
   }
-  
+
   /**
    * Genera una clave única para el track
    */
   private getTrackCacheKey(trackName: string, artistName: string): string {
     return `youtube_track:${artistName.toLowerCase().trim()}:${trackName.toLowerCase().trim()}`;
   }
-  
+
   /**
    * Busca coincidencias aproximadas en caché para un track
-   * 
+   *
    * @param trackName Nombre de la canción
    * @param artistName Nombre del artista
    * @returns Mejor coincidencia encontrada o null
@@ -150,13 +150,13 @@ export class YouTubeCache {
         .replace(/ ?\(.*?\)$/, '')  // Eliminar texto entre paréntesis al final
         .replace(/ ?- .*$/, '')     // Eliminar texto después de guión
         .trim();
-      
+
       // Probar con el nombre normalizado
       if (normalizedTrackName !== trackName) {
         const result = await this.getCachedTrackVideo(normalizedTrackName, artistName);
         if (result) return result;
       }
-      
+
       // 2. Probar solo con las primeras palabras del título (hasta 4)
       const trackWords = trackName.split(' ');
       if (trackWords.length > 4) {
@@ -164,7 +164,7 @@ export class YouTubeCache {
         const result = await this.getCachedTrackVideo(shortTrackName, artistName);
         if (result) return result;
       }
-      
+
       return null;
     } catch (error) {
       console.error(`[YouTube Cache] Error buscando similares: ${trackName} - ${artistName}`, error);
@@ -174,4 +174,4 @@ export class YouTubeCache {
 }
 
 // Exportar instancia del caché
-export const youtubeCache = YouTubeCache.getInstance(); 
+export const youtubeCache = YouTubeCache.getInstance();

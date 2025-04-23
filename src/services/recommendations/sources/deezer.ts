@@ -18,36 +18,36 @@ const TIMEOUT = 5000;
  */
 export async function getRecommendationsByGenre(genre: string, limit: number = 25): Promise<Track[]> {
   try {
-    
+
     // Deezer permite buscar canciones por género usando el endpoint de búsqueda
     const searchEndpoint = `${PROXY_URL}?endpoint=search&q=${encodeURIComponent(genre)}&limit=${limit}`;
-    
+
     // Utilizamos un tiempo límite para que la solicitud no quede colgada
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-    
-    const response = await fetch(searchEndpoint, { 
+
+    const response = await fetch(searchEndpoint, {
       signal: controller.signal,
       cache: 'no-store'
     });
-    
+
     clearTimeout(timeoutId);
-    
+
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Si no hay resultados, intentar con pistas relacionadas
     if (!data.data || data.data.length === 0) {
       return await getRelatedTracks(genre, limit);
     }
-    
+
     return convertDeezerTracks(data.data);
   } catch (error) {
     console.error(`[Deezer] Error en getRecommendationsByGenre:`, error);
-    
+
     // En caso de error, intentar un método alternativo
     return await getRelatedTracks(genre, limit);
   }
@@ -61,54 +61,54 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 2
  */
 async function getRelatedTracks(genre: string, limit: number): Promise<Track[]> {
   try {
-    
+
     // Primero buscar artistas del género
     const artistSearchEndpoint = `${PROXY_URL}?endpoint=search/artist&q=${encodeURIComponent(genre)}&limit=5`;
-    
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-    
-    const response = await fetch(artistSearchEndpoint, { 
-      signal: controller.signal 
+
+    const response = await fetch(artistSearchEndpoint, {
+      signal: controller.signal
     });
-    
+
     clearTimeout(timeoutId);
-    
+
     if (!response.ok) {
       throw new Error(`Error obteniendo artistas: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Si no hay artistas, devolver fallback
     if (!data.data || data.data.length === 0) {
       return getFallbackTracks(genre, limit);
     }
-    
+
     // Buscar tracks del primer artista
     const artist = data.data[0];
-    
+
     const tracksEndpoint = `${PROXY_URL}?endpoint=artist/${artist.id}/top&limit=${limit}`;
-    
+
     const tracksController = new AbortController();
     const tracksTimeoutId = setTimeout(() => tracksController.abort(), TIMEOUT);
-    
-    const tracksResponse = await fetch(tracksEndpoint, { 
-      signal: tracksController.signal 
+
+    const tracksResponse = await fetch(tracksEndpoint, {
+      signal: tracksController.signal
     });
-    
+
     clearTimeout(tracksTimeoutId);
-    
+
     if (!tracksResponse.ok) {
       throw new Error(`Error obteniendo tracks: ${tracksResponse.status}`);
     }
-    
+
     const tracksData = await tracksResponse.json();
-    
+
     if (!tracksData.data || tracksData.data.length === 0) {
       return getFallbackTracks(genre, limit);
     }
-    
+
     return convertDeezerTracks(tracksData.data);
   } catch (error) {
     console.error(`[Deezer] Error en getRelatedTracks:`, error);
@@ -163,17 +163,17 @@ function getRelatedTerms(genre: string): string[] {
     'indie': ['indie', 'indie pop', 'indie folk', 'alternative'],
     'alternative': ['alternative', 'alt rock', 'alternative music', 'indie']
   };
-  
+
   // Normalizar el género (minúsculas y sin espacios al principio/final)
   const normalizedGenre = genre.toLowerCase().trim();
-  
+
   // Buscar el género exacto o uno similar
   for (const [key, terms] of Object.entries(genreMap)) {
     if (key === normalizedGenre || key.includes(normalizedGenre) || normalizedGenre.includes(key)) {
       return [genre, ...terms]; // Primero el género original, luego los relacionados
     }
   }
-  
+
   // Si no se encuentra un género relacionado, devolver algunos términos genéricos junto con el original
   return [
     genre,
@@ -192,9 +192,9 @@ function getRelatedTerms(genre: string): string[] {
  * @returns Tracks fallback
  */
 function getFallbackTracks(genre: string, limit: number): Track[] {
-  
+
   const fallbackTracks: Track[] = [];
-  
+
   // Crear tracks fallback según el género
   for (let i = 0; i < Math.min(limit, 10); i++) {
     fallbackTracks.push({
@@ -209,6 +209,6 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
-} 
+}

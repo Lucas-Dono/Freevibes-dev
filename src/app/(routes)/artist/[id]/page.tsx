@@ -7,9 +7,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getYouTubeArtistInfo, YTArtistInfo } from '@/services/youtube/artist-service';
 import axios from 'axios';
-import { 
-  Box, 
-  Typography, 
+import {
+  Box,
+  Typography,
   Container,
   Grid,
   Paper,
@@ -24,11 +24,11 @@ import {
   ListItemIcon,
   ListItemText
 } from '@mui/material';
-import { 
-  PlayArrow, 
-  Album, 
-  MusicNote, 
-  VideoLibrary, 
+import {
+  PlayArrow,
+  Album,
+  MusicNote,
+  VideoLibrary,
   PeopleAlt,
   VerifiedUser,
   Refresh,
@@ -81,21 +81,21 @@ export default function ArtistPage() {
   const artistId = params ? (params.id as string) : '';
   const { isDemo } = useAuth();
   const { findArtistByName } = useArtistNavigation();
-  
+
   // Estado principal
   const [artist, setArtist] = useState<Artist | null>(null);
   const [originalSpotifyTopTracks, setOriginalSpotifyTopTracks] = useState<Track[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [relatedArtists, setRelatedArtists] = useState<Artist[]>([]);
   const [youtubeArtist, setYoutubeArtist] = useState<YTArtistInfo | null>(null);
-  
+
   // Estados de control generales
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [dataSource, setDataSource] = useState<'spotify' | 'youtube'>('spotify');
   const [spotifyArtistName, setSpotifyArtistName] = useState<string | null>(null);
-  
+
   // Estados para carga diferida de Artistas Relacionados
   const [relatedArtistsLoading, setRelatedArtistsLoading] = useState<boolean>(false);
   const [relatedArtistsLoaded, setRelatedArtistsLoaded] = useState<boolean>(false);
@@ -103,7 +103,7 @@ export default function ArtistPage() {
 
   const fetchArtistData = useCallback(async (source: 'spotify' | 'youtube') => {
     if (!artistId) return;
-    
+
     console.log(`[ArtistPage] fetchArtistData llamado para ${artistId}, source: ${source}`);
     setLoading(true);
     setError(null);
@@ -146,7 +146,7 @@ export default function ArtistPage() {
       const initialSource = isYouTubeId ? 'youtube' : 'spotify';
       console.log(`[ArtistPage] Fuente inicial determinada: ${initialSource}`);
       setDataSource(initialSource);
-      fetchArtistData(initialSource); 
+      fetchArtistData(initialSource);
     }
   }, [artistId, fetchArtistData]); // fetchArtistData ahora es una dependencia estable
 
@@ -194,7 +194,7 @@ export default function ArtistPage() {
       throw err; // Relanzar para que lo capture el catch de fetchArtistData
     }
   };
-  
+
   // Función para cargar los artistas relacionados (lógica híbrida)
   const loadRelatedArtists = useCallback(async () => {
     if (!spotifyArtistName) {
@@ -207,7 +207,7 @@ export default function ArtistPage() {
     console.log(`[ArtistPage] Iniciando carga diferida de relacionados vía YouTube para "${spotifyArtistName}"...`);
     setRelatedArtistsLoading(true);
     setRelatedArtistsError(null);
-    setRelatedArtists([]); 
+    setRelatedArtists([]);
 
     let youtubeArtistId: string | null = null;
 
@@ -265,7 +265,7 @@ export default function ArtistPage() {
               console.error('[ArtistPage] Failed to parse YouTube API response as JSON.', parseError);
               throw new Error ('Error procesando respuesta de YouTube Music.');
             }
-            
+
             const rawRelatedResults = ytData?.related?.results;
             if (rawRelatedResults && Array.isArray(rawRelatedResults)) {
               relatedFromYouTube = rawRelatedResults.map((related: any) => ({
@@ -316,14 +316,14 @@ export default function ArtistPage() {
       console.error('[ArtistPage] Error durante la carga diferida de relacionados:', err);
       const message = err instanceof Error ? err.message : 'Error desconocido.';
       setRelatedArtistsError(`Error al cargar artistas similares: ${message}`);
-      setRelatedArtists([]); 
+      setRelatedArtists([]);
     } finally {
       setRelatedArtistsLoading(false);
       setRelatedArtistsLoaded(true);
       console.log('[ArtistPage] Carga diferida de relacionados finalizada.');
     }
   }, [spotifyArtistName]); // Depende del nombre del artista principal
-  
+
   // *** Preservar fetchYouTubeMusicArtist ***
   // (El código original de esta función debe estar aquí o importado)
   const fetchYouTubeMusicArtist = async (ytArtistId: string) => {
@@ -332,7 +332,7 @@ export default function ArtistPage() {
     // Esta función debería:
     // 1. Llamar a `/api/youtube-artist?artistId=${ytArtistId}`
     // 2. Procesar la respuesta completa (incluyendo description, views, videos, albums, related)
-    // 3. Actualizar los estados: setArtist, setYoutubeArtist, setOriginalSpotifyTopTracks (con videos), 
+    // 3. Actualizar los estados: setArtist, setYoutubeArtist, setOriginalSpotifyTopTracks (con videos),
     //    setAlbums (con albums de YT), setRelatedArtists (con related de YT)
     // 4. Manejar errores y el estado de carga (setLoading, setError)
     console.log(`[ArtistPage] fetchYouTubeMusicArtist para ID: ${ytArtistId}`);
@@ -344,13 +344,13 @@ export default function ArtistPage() {
       const response = await fetch(`/api/youtube-artist?artistId=${ytArtistId}`);
       if (!response.ok) throw new Error(`Error ${response.status}`);
       const data = await response.json();
-      
+
       // Parsear y establecer estados (artist, youtubeArtist, originalSpotifyTopTracks, albums, relatedArtists)
       // ... lógica de parseo y setStates ...
-      
+
       console.log(`[ArtistPage] Datos de YouTube para ${ytArtistId} cargados.`);
       setDataSource('youtube'); // Asegurar que la fuente es correcta
-      
+
     } catch (err) {
         console.error('[ArtistPage] Error fetching YouTube Music artist data:', err);
         const message = err instanceof Error ? err.message : 'Error desconocido.';
@@ -366,7 +366,7 @@ export default function ArtistPage() {
     }
   };
   // ******************************************
-  
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
     const relatedArtistsTabIndex = dataSource === 'youtube' ? 3 : 2;
@@ -376,7 +376,7 @@ export default function ArtistPage() {
     }
     // Si la fuente es YouTube, los relacionados ya se cargaron en fetchYouTubeMusicArtist
   };
-  
+
   const handleRetry = () => {
     setError(null);
     fetchArtistData(dataSource);
@@ -403,11 +403,11 @@ export default function ArtistPage() {
         <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" size="small" onClick={handleRetry}>Reintentar</Button>}>
           {error || 'No se encontró información del artista'}
         </Alert>
-        {/* Podrías añadir aquí el bloque de consejos si es relevante */} 
+        {/* Podrías añadir aquí el bloque de consejos si es relevante */}
       </Container>
     );
   }
-  
+
   // Renderizado (Artista no encontrado después de carga)
   if (!artist) {
     return (
@@ -420,7 +420,7 @@ export default function ArtistPage() {
   // Renderizado principal
   return (
     <Container maxWidth="xl">
-      {/* Cabecera del artista - Sin cambios */} 
+      {/* Cabecera del artista - Sin cambios */}
       <Paper elevation={0} sx={{ position: 'relative', mb: 4, borderRadius: 4, overflow: 'hidden', bgcolor: 'background.paper', backgroundImage: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4))' }}>
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.4, '&::after': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7))' } }}>
           {artist.images && artist.images[0] && (
@@ -450,22 +450,22 @@ export default function ArtistPage() {
           </Grid>
         </Box>
       </Paper>
-      
+
       {/* Tabs de contenido */}
       <Box sx={{ mb: 4 }}>
         <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{ borderBottom: 1, borderColor: 'divider', mb: 2, '& .MuiTab-root': { minWidth: 100, py: 2 } }}>
           <Tab label="Top Tracks" icon={<MusicNote />} iconPosition="start" />
           <Tab label="Álbumes" icon={<Album />} iconPosition="start" />
-          {dataSource === 'youtube' && <Tab label="Videos" icon={<VideoLibrary />} iconPosition="start" />} 
+          {dataSource === 'youtube' && <Tab label="Videos" icon={<VideoLibrary />} iconPosition="start" />}
           <Tab label="Artistas similares" icon={<PeopleAlt />} iconPosition="start" />
         </Tabs>
-        
+
         {/* Contenido de las pestañas */}
         <Box sx={{ py: 2 }}>
           {/* Pestaña 1: Top Tracks - Sin cambios */}
           {activeTab === 0 && (
             <Box>
-                {/* Loading/Error/Data rendering */} 
+                {/* Loading/Error/Data rendering */}
                 {!loading && !error && originalSpotifyTopTracks.length === 0 && (<Typography>No se encontraron canciones populares.</Typography>)}
                 {!loading && originalSpotifyTopTracks.length > 0 && (<TrackList tracks={originalSpotifyTopTracks} />)}
             </Box>
@@ -498,7 +498,7 @@ export default function ArtistPage() {
               )}
             </Box>
           )}
-          {/* Pestaña 4: Artistas similares - Actualizada */} 
+          {/* Pestaña 4: Artistas similares - Actualizada */}
           {activeTab === (dataSource === 'youtube' ? 3 : 2) && (
             <Box sx={{ minHeight: 200, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               {relatedArtistsLoading ? (
@@ -514,9 +514,9 @@ export default function ArtistPage() {
               ) : (
                 <Grid container spacing={1.5}>
                   {relatedArtists.map((relArtist) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={relArtist.id}> 
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={relArtist.id}>
                       <UnifiedMusicCard
-                        id={relArtist.id} 
+                        id={relArtist.id}
                         title={relArtist.name}
                         coverUrl={relArtist.images?.[0]?.url || '/placeholder-artist.jpg'}
                         isPlayable={false}
@@ -531,7 +531,7 @@ export default function ArtistPage() {
           )}
         </Box>
       </Box>
-      
+
       {/* Descripción del artista (solo YouTube) - Sin cambios */}
       {youtubeArtist?.description && (
         <Paper elevation={0} sx={{ p: 3, mb: 4, borderRadius: 2, backgroundColor: 'background.paper' }}>
@@ -546,4 +546,4 @@ export default function ArtistPage() {
 // Componentes auxiliares - Sin cambios
 const Chip = ({ label, size, color, variant }: any) => (<Box sx={{ display: 'inline-flex', borderRadius: '16px', px: 1.5, py: 0.5, backgroundColor: variant === 'outlined' ? 'transparent' : 'primary.main', border: variant === 'outlined' ? '1px solid' : 'none', borderColor: 'primary.main', color: variant === 'outlined' ? 'primary.main' : 'white', fontSize: size === 'small' ? '0.75rem' : '0.875rem', fontWeight: 'medium' }}>{label}</Box>);
 const YoutubeIcon = (props: any) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>);
-const SpotifyIcon = (props: any) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>); 
+const SpotifyIcon = (props: any) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>);

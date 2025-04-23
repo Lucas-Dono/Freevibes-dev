@@ -213,9 +213,9 @@ export function formatSpotifyTrack(spotifyTrack: SpotifyTrack): any /* YourTrack
     source: 'spotify',
     spotifyId: spotifyTrack.id, // Keep spotify ID explicitly
     youtubeId: undefined, // Needs separate lookup if required
-    // --- Add any other fields your Track interface requires --- 
+    // --- Add any other fields your Track interface requires ---
     // Example: popularity: spotifyTrack.popularity,
-    // Example: previewUrl: spotifyTrack.preview_url, 
+    // Example: previewUrl: spotifyTrack.preview_url,
     // Example: externalUrl: spotifyTrack.external_urls?.spotify,
   };
 }
@@ -278,7 +278,7 @@ export async function getSpotifyArtistAlbums(artistId: string, limit: number = 2
   }
 
   // Incluir álbumes y sencillos, ordenar por fecha
-  const url = `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single&limit=${limit}&market=ES`; 
+  const url = `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single&limit=${limit}&market=ES`;
   console.log(`[Spotify Server] Solicitando álbumes del artista a: ${url}`);
 
   try {
@@ -338,7 +338,7 @@ export async function getSpotifyRelatedArtists(artistId: string): Promise<any[] 
       // Si es un 404, significa que no hay relacionados, devolver array vacío
       if (response.status === 404) {
         console.log(`[Spotify Server] Artista ${artistId} no tiene relacionados según Spotify API (404).`);
-        return []; 
+        return [];
       }
       return null; // Para otros errores (500, 401, 403, etc.), devolver null
     }
@@ -466,4 +466,4 @@ export async function getSpotifyAlbumTracks(albumId: string, limit: number = 50)
     console.error(`[Spotify Server] Excepción al obtener pistas del álbum ${albumId}:`, error);
     return [];
   }
-} 
+}

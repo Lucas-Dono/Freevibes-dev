@@ -4,7 +4,7 @@ import { API_CONFIG } from '@/config/api-config';
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-    
+
     // Validar que se proporcionen email y password
     if (!email || !password) {
       return NextResponse.json(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // Devolver el token y otros datos relevantes
     return NextResponse.json(data);
-    
+
   } catch (error) {
     console.error('Error en login:', error);
     return NextResponse.json(
@@ -42,4 +42,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

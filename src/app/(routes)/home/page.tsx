@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Grid, 
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
   Card,
-  CardContent, 
+  CardContent,
   CardMedia,
   Button,
   Tab,
@@ -118,16 +118,16 @@ const TimeLabel = styled(Typography)(({ theme }) => ({
 function formatRelativeTime(timestamp: number): string {
   const now = new Date().getTime();
   const diff = now - timestamp;
-  
+
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-  
+
   if (minutes < 1) return 'justo ahora';
   if (minutes < 60) return `hace ${minutes} minutos`;
   if (hours < 24) return `hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`;
   if (days < 7) return `hace ${days} ${days === 1 ? 'día' : 'días'}`;
-  
+
   const date = new Date(timestamp);
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 }
@@ -177,15 +177,15 @@ const PrevArrow = (props: any) => {
 // Componente para mostrar alerta de login cuando se requiere autenticación
 const LoginAlert = ({ onLogin }: { onLogin: () => void }) => {
   const { t } = useTranslation();
-  
+
   return (
-    <Alert 
-      severity="warning" 
+    <Alert
+      severity="warning"
       sx={{ mb: 3, '& .MuiAlert-message': { width: '100%' } }}
       action={
-        <Button 
-          color="warning" 
-          variant="outlined" 
+        <Button
+          color="warning"
+          variant="outlined"
           size="small"
           onClick={onLogin}
         >
@@ -211,7 +211,7 @@ const featuredGenre = {
   image: '/img/indie-rock.webp', // Cambiado a imagen local
   artistCount: 4200,
 };
-  
+
   // Definir un tipo para las pistas personales
   interface PersonalTrack {
     id: string;
@@ -225,7 +225,7 @@ const featuredGenre = {
     duration_ms?: number;
     uri?: string;
   }
-  
+
   // Definir un tipo para unificar diferentes elementos en la rotación personal
   interface MixedContentItem {
     id: string;
@@ -245,20 +245,20 @@ const featuredGenre = {
     description?: string;
     uri?: string;
   }
-  
-  // Función de utilidad para eliminar duplicados basados en título y artista  
+
+  // Función de utilidad para eliminar duplicados basados en título y artista
   const removeDuplicateTracks = <T extends {
-    name?: string; 
-    title?: string; 
+    name?: string;
+    title?: string;
     artists?: Array<{name: string}>;
     artist?: string;
   }>(tracks: T[]): T[] => {
     const seen = new Map<string, boolean>();
-    
+
     return tracks.filter((track) => {
       // Obtener título normalizado
       const title = (track.title || track.name || '').toLowerCase().trim();
-      
+
       // Obtener artista normalizado
       let artist = '';
       if (track.artists && track.artists.length > 0) {
@@ -266,21 +266,21 @@ const featuredGenre = {
       } else if (track.artist) {
         artist = track.artist.toLowerCase().trim();
       }
-      
+
       // Crear clave única basada en título y artista
       const key = `${title}:${artist}`;
-      
+
       // Si ya hemos visto esta combinación, filtrar el elemento
       if (seen.has(key)) {
         return false;
       }
-      
+
       // Caso contrario, marcar como visto y mantener el elemento
       seen.set(key, true);
       return true;
     });
   };
-  
+
 // Función de utilidad para obtener la URL de imagen de un artista
 function getArtistImageUrl(artist: any) {
   // Si tiene propiedad images y hay al menos una imagen
@@ -288,19 +288,19 @@ function getArtistImageUrl(artist: any) {
     console.log(`[ArtistCard] Usando imagen de images[0].url para ${artist.name}`);
     return artist.images[0].url;
   }
-  
+
   // Si tiene una imagen directa en la propiedad image
   if (artist.image) {
     console.log(`[ArtistCard] Usando imagen de image para ${artist.name}`);
     return artist.image;
   }
-  
+
   // Si hay una imagen en image_url
   if (artist.image_url) {
     console.log(`[ArtistCard] Usando imagen de image_url para ${artist.name}`);
     return artist.image_url;
   }
-  
+
   // Usar placeholder si no hay imagen
   console.warn(`[ArtistCard] No se encontró imagen para ${artist.name}, usando placeholder`);
   return "https://placehold.co/400x400/purple/white?text=Artista";
@@ -313,10 +313,10 @@ export default function HomePage() {
   const router = useRouter();
   const theme = useTheme();
   const userId = spotifySession?.user?.id || '';
-  
+
   const [activeTab, setActiveTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Estados unificados
   const [personalTracks, setPersonalTracks] = useState<PersonalTrack[]>([]);
   // Reemplazar por un estado para contenido mixto
@@ -349,7 +349,7 @@ export default function HomePage() {
     newReleases: null,
     artists: null
   });
-  
+
   // Lista de géneros predefinidos con nombres amigables
   const genres = [
     { id: 'pop', name: 'Pop' },
@@ -383,7 +383,7 @@ export default function HomePage() {
   useEffect(() => {
     console.log('[HomePage] Cargando página Home');
     console.log('[HomePage] Estado de autenticación:', { isAuthenticated, isLoading: !!spotifyAuth });
-    
+
     // Verificar cookies disponibles
     const cookies = {
       hasRefreshToken: !!Cookies.get('spotify_refresh_token'),
@@ -391,7 +391,7 @@ export default function HomePage() {
       hasUser: !!Cookies.get('spotify_user'),
       hasExpiration: !!Cookies.get('spotify_token_expiration'),
     };
-    
+
     setCookieData(cookies);
     console.log('[HomePage] Cookies disponibles:', cookies);
 
@@ -405,7 +405,7 @@ export default function HomePage() {
     if (isDemo && preferredLanguage) {
       demoDataService.setLanguage(preferredLanguage);
       console.log(`[Home] Modo demo activo con idioma: ${preferredLanguage}`);
-      
+
       // Asegurarnos de cargar datos demo para la rotación personal
       setTimeout(() => {
         if (personalContent.length === 0 && !loading.personal) {
@@ -431,7 +431,7 @@ export default function HomePage() {
         console.error('Error cargando playlists destacadas:', error);
       }
     };
-    
+
     loadFeaturedPlaylists();
   }, [preferredLanguage]);
 
@@ -440,7 +440,7 @@ export default function HomePage() {
       console.log(`Cargando contenido para pestaña ${tabIndex}`);
       setExploreLoading(true);
       setExploreError('');
-      
+
       // Dar un breve tiempo para que otras operaciones (como la verificación de disponibilidad) se completen
       await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -452,14 +452,14 @@ export default function HomePage() {
               // Utilizamos getTopTracks en lugar de getNewReleases
               const spotifyData = await getTopTracks(20);
               console.log('Datos de canciones populares recibidos:', spotifyData);
-              
+
               if (spotifyData && spotifyData.items && spotifyData.items.length > 0) {
                 // Marcar todas las canciones como tipo 'track'
                 const tracks = spotifyData.items.map((track: any) => ({
                   ...track,
                   type: 'track'  // Aseguramos que todos sean tipo track
                 }));
-                
+
                 setNewReleases(tracks);
                 console.log('Canciones populares cargadas:', tracks.length);
                   } else {
@@ -471,31 +471,31 @@ export default function HomePage() {
             }
           }
           break;
-          
+
         case 1: // Escuchado recientemente
           if (recentlyPlayed.length === 0) {
             console.log('Cargando canciones escuchadas recientemente...');
             // Configurar un tiempo máximo para el indicador de carga
             setRecentTracksMinLoadingTime(true);
-            
+
             // Establecer un temporizador de seguridad para desactivar el loading después de 10 segundos
             if (recentTracksTimer) {
               clearTimeout(recentTracksTimer);
             }
-            
+
             const timer = setTimeout(() => {
               setRecentTracksMinLoadingTime(false);
             }, 10000);
-            
+
             setRecentTracksTimer(timer);
-            
+
             fetchRecentlyPlayedTracks();
           } else {
             // Si ya tenemos datos, asegurarse de que no se muestre el indicador de loading
             setRecentTracksMinLoadingTime(false);
           }
           break;
-          
+
         case 2: // Playlists destacadas
           if (featuredPlaylists.length === 0) {
             console.log('Cargando playlists destacadas...');
@@ -513,7 +513,7 @@ export default function HomePage() {
             }
           }
           break;
-          
+
         case 3: // Artistas recomendados
           if (recommendedArtists.length === 0) {
             console.log('Cargando artistas recomendados...');
@@ -521,10 +521,10 @@ export default function HomePage() {
               // Intentar obtener artistas basados en géneros
               const userGenres = ['pop', 'rock', 'hiphop', 'electronic', 'latin'];
               let artists: any[] = [];
-              
+
               // Seleccionar un género aleatorio
               const mainGenre = userGenres[Math.floor(Math.random() * userGenres.length)];
-              
+
               // Verificar si estamos en modo demo
               if (isDemo) {
                 console.log(`[Home] Modo demo: Cargando artistas desde datos demo para ${mainGenre}`);
@@ -541,7 +541,7 @@ export default function HomePage() {
                 try {
                   console.log(`Buscando artistas para género: ${mainGenre}`);
                   const artistsData = await searchArtists(mainGenre);
-                  
+
                   if (artistsData && artistsData.artists && artistsData.artists.items) {
                     artists = artistsData.artists.items;
                     console.log(`Artistas encontrados para ${mainGenre}:`, artists.length);
@@ -550,7 +550,7 @@ export default function HomePage() {
                   console.error(`Error al buscar artistas para ${mainGenre}:`, error);
                 }
               }
-              
+
               setRecommendedArtists(artists);
             } catch (error) {
               console.error('Error al cargar artistas recomendados:', error);
@@ -558,7 +558,7 @@ export default function HomePage() {
             }
           }
           break;
-          
+
         default:
           break;
       }
@@ -566,7 +566,7 @@ export default function HomePage() {
       setExploreLoading(false);
     } catch (error) {
       console.error('Cargando contenido de pestaña:', error);
-      
+
       // Verificar si es un error de autenticación
       if (error instanceof Error && error.message.includes('No autenticado')) {
         console.warn('Error de autenticación detectado en carga de contenido');
@@ -575,7 +575,7 @@ export default function HomePage() {
       } else {
       setExploreError('Ocurrió un error al cargar el contenido. Por favor intenta de nuevo.');
       }
-      
+
       setExploreLoading(false);
       setRecentTracksMinLoadingTime(false); // Asegurar que se detenga el loading mínimo en caso de error
     }
@@ -589,7 +589,7 @@ export default function HomePage() {
       let artists: any[] = [];
       let playlists: any[] = [];
       let albums: any[] = [];
-      
+
       if (isDemo) {
         // En modo demo, obtener datos de archivos JSON
         console.log('[Home] Cargando datos demo para rotación personal mixta');
@@ -597,7 +597,7 @@ export default function HomePage() {
           // Cargar tracks
           const demoTopTracks = await demoDataService.getTopTracks();
           console.log('[Home] Estructura de demoTopTracks:', JSON.stringify(demoTopTracks).substring(0, 150));
-          
+
           // Extraer correctamente las canciones - verificando la estructura
           if (demoTopTracks && demoTopTracks.items && Array.isArray(demoTopTracks.items)) {
             tracks = demoTopTracks.items;
@@ -607,7 +607,7 @@ export default function HomePage() {
             console.warn('[Home] Estructura inesperada de demoTopTracks:', demoTopTracks);
             tracks = [];
           }
-          
+
           // Cargar artistas (utilizando las funciones disponibles en el servicio demo)
           try {
             // El servicio demo no tiene getTopArtists, usamos los resultados de búsqueda de artistas
@@ -617,18 +617,18 @@ export default function HomePage() {
             console.warn('[Home] Error al cargar artistas demo:', e);
             artists = [];
           }
-          
+
           // Cargar álbumes (usando new_releases como fuente de álbumes)
           try {
             const demoAlbums = await demoDataService.getNewReleases();
-            albums = demoAlbums && demoAlbums.albums && demoAlbums.albums.items 
-              ? demoAlbums.albums.items 
+            albums = demoAlbums && demoAlbums.albums && demoAlbums.albums.items
+              ? demoAlbums.albums.items
               : [];
         } catch (e) {
             console.warn('[Home] Error al cargar álbumes demo:', e);
             albums = [];
           }
-          
+
         } catch (e) {
           console.warn('[Home] Error al cargar contenido demo para rotación personal:', e);
         }
@@ -640,11 +640,11 @@ export default function HomePage() {
             getUserPersonalRotation(8),
             getSavedTracks(8)
           ]);
-          
-          tracks = [...(Array.isArray(personalRotation) ? personalRotation : []), 
+
+          tracks = [...(Array.isArray(personalRotation) ? personalRotation : []),
                     ...(Array.isArray(userSavedTracks) ? userSavedTracks : [])];
           tracks = removeDuplicateTracks(tracks);
-          
+
           // Obtener playlists destacadas
           try {
             const playlists_data = await getFeaturedPlaylists(5);
@@ -654,7 +654,7 @@ export default function HomePage() {
         } catch (e) {
             console.warn('[Home] Error al cargar playlists destacadas:', e);
           }
-          
+
           // Obtener nuevos lanzamientos como álbumes
           try {
             const newAlbums = await getNewReleases(5);
@@ -664,11 +664,11 @@ export default function HomePage() {
           } catch (e) {
             console.warn('[Home] Error al cargar nuevos lanzamientos:', e);
           }
-          
+
           // Obtener artistas recomendados basados en géneros populares
           const userGenres = ['pop', 'rock', 'latin', 'indie', 'electronic'];
           const randomGenre = userGenres[Math.floor(Math.random() * userGenres.length)];
-          
+
           try {
             // Corregimos la llamada a searchArtists: no acepta un objeto como segundo parámetro
             const artistsData = await searchArtists(randomGenre, 5);
@@ -682,21 +682,21 @@ export default function HomePage() {
           console.error('[Home] Error al obtener datos para rotación personal:', e);
         }
       }
-      
+
       console.log('[Home] Datos obtenidos para rotación personal mixta:', {
         tracks: tracks.length,
         artists: artists.length,
         playlists: playlists.length,
         albums: albums.length
       });
-      
+
       // Convertir todo a formato MixedContentItem
       const mixedItems: MixedContentItem[] = [
         // Convertir tracks - con mejor manejo de propiedades
         ...tracks.map(track => {
           // Depurar el objeto track
           console.log('[Home] Estructura de track:', JSON.stringify(track).substring(0, 150));
-          
+
           return {
             id: track.id || `track-${Math.random()}`,
             name: track.name || track.title || 'Canción sin título',
@@ -708,7 +708,7 @@ export default function HomePage() {
             uri: track.uri || `spotify:track:${track.id}`
           };
         }),
-        
+
         // Convertir artistas
         ...artists.map(artist => ({
           id: artist.id,
@@ -718,7 +718,7 @@ export default function HomePage() {
           image: artist.images?.[0]?.url || '/placeholder-artist.jpg',
           description: artist.description || `Artista de ${artist.genres?.[0] || 'música'}`
         })),
-        
+
         // Convertir playlists
         ...playlists.map(playlist => ({
           id: playlist.id,
@@ -729,7 +729,7 @@ export default function HomePage() {
           owner: playlist.owner,
           description: playlist.description || 'Playlist'
         })),
-        
+
         // Convertir álbumes
         ...albums.map(album => ({
           id: album.id,
@@ -740,16 +740,16 @@ export default function HomePage() {
           artists: album.artists || []
         }))
       ];
-      
+
       // Mezclar aleatoriamente los elementos
       const shuffledItems = mixedItems.sort(() => 0.5 - Math.random());
-      
+
       // Seleccionar hasta 20 elementos para mostrar
       setPersonalContent(shuffledItems.slice(0, 20));
-      
+
       // Mantener el estado anterior para compatibilidad
       setPersonalTracks(tracks.slice(0, 20));
-      
+
       setError(prev => ({ ...prev, personal: null }));
       setAuthError(false); // Resetear error de autenticación si la petición fue exitosa
     } catch (error) {
@@ -812,8 +812,8 @@ export default function HomePage() {
     <Slider {...sliderSettings}>
       {Array.from(new Array(6)).map((_: any, index: number) => (
         <div key={`skeleton-${index}`}>
-          <Card sx={{ 
-            backgroundColor: 'rgba(255, 255, 255, 0.05)', 
+          <Card sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
             borderRadius: '8px',
             margin: '0 8px',
             height: '100%'
@@ -832,27 +832,27 @@ export default function HomePage() {
   // Componente para mostrar un artista
   const ArtistCard = ({ artist }: { artist: any }) => {
     const { navigateToArtist } = useArtistNavigation();
-    
+
     const artistImage = getArtistImageUrl(artist);
-    
+
     console.log(`[ArtistCard] Renderizando artista:`, {
       name: artist.name,
       id: artist.id,
       imageUrl: artistImage,
       popularity: artist.popularity
     });
-    
+
     // Convertir la popularidad a una escala de 1-5 estrellas (3 estrellas por defecto si no hay info)
     const starRating = artist.popularity ? Math.round(artist.popularity / 20) : 3;
-    
+
     // Identificar la fuente del artista (YouTube, Spotify o fallback) - mantener para compatibilidad
     const artistSource = artist.source || (artist.id?.startsWith('spotify:') ? 'spotify' : 'unknown');
     const isFallback = artist.isFallback || artist.id?.startsWith('fallback-') || artistSource === 'fallback';
-    
+
     const handleArtistClick = (e: React.MouseEvent) => {
       e.preventDefault();
       console.log(`[ArtistCard] Clic en tarjeta de artista: ${artist.name} (${artist.id})`);
-      
+
       navigateToArtist(artist.id, artist.name, {
         redirigirABusqueda: true,
         mostrarDetalles: true,
@@ -864,14 +864,14 @@ export default function HomePage() {
         console.error(`[ArtistCard] Error en navegación:`, err);
       });
     };
-    
+
     return (
-      <div 
+      <div
         className="artist-card group bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden cursor-pointer shadow-xl hover:shadow-2xl hover:translate-y-[-5px] transform h-full"
         onClick={handleArtistClick}
       >
           <div className="aspect-square relative overflow-hidden">
-            <Image 
+            <Image
               src={artistImage}
               alt={artist.name}
               width={300}
@@ -884,7 +884,7 @@ export default function HomePage() {
                 target.src = "https://placehold.co/400x400/purple/white?text=Artista";
               }}
             />
-            
+
             {/* Gradiente de superposición */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end">
               <div className="p-4 w-full">
@@ -917,7 +917,7 @@ export default function HomePage() {
         try {
           // Intentar obtener datos demo de múltiples fuentes
           let demoTracks = [];
-          
+
           // 1. Intentar obtener datos del servicio demo
           try {
             // Usar datos de canciones populares del servicio demo
@@ -929,7 +929,7 @@ export default function HomePage() {
           } catch (error) {
             console.warn('[Home] Error al obtener canciones populares del servicio demo:', error);
           }
-          
+
           // 2. Si no hay suficientes tracks, añadir datos de búsqueda
           if (demoTracks.length < 15) {
             try {
@@ -943,7 +943,7 @@ export default function HomePage() {
               console.warn('[Home] Error al obtener resultados de búsqueda:', error);
             }
           }
-          
+
           // 3. Si aún no hay suficientes, usar getTopTracks como último recurso
           if (demoTracks.length < 5) {
             try {
@@ -956,14 +956,14 @@ export default function HomePage() {
               console.warn('[Home] Error al obtener tracks con getTopTracks:', error);
             }
           }
-          
+
           // Transformar canciones populares en formato de historial reciente
           if (demoTracks.length > 0) {
             const recentTracksData = demoTracks.map((track: any, index: number) => {
               // Generar tiempo aleatorio en las últimas 24 horas
               const hoursAgo = Math.random() * 24;
               const timestamp = Date.now() - (hoursAgo * 60 * 60 * 1000);
-              
+
               // Enriquecer track con información adicional
               return {
                 id: track.id || `track-${Math.random().toString(36).substr(2, 9)}`,
@@ -988,10 +988,10 @@ export default function HomePage() {
                 sortIndex: Math.random()
               };
             });
-            
+
             // Ordenar los tracks por tiempo de reproducción (más recientes primero)
             recentTracksData.sort((a: any, b: any) => b.playedAt - a.playedAt);
-            
+
             // Limitar a 20 tracks y actualizar estado
             setRecentlyPlayed(removeDuplicateTracks(recentTracksData as EnrichedTrack[]).slice(0, 20));
             console.log('[Home] Historial demo generado con', recentTracksData.length, 'canciones');
@@ -1011,7 +1011,7 @@ export default function HomePage() {
         }
         return;
       }
-      
+
       // Para modo normal, mantener la implementación original
       // Agregar un timeout local adicional como respaldo
       const timeoutPromise = new Promise<never>((_, reject) => {
@@ -1025,7 +1025,7 @@ export default function HomePage() {
         RecentTracksService.getHistory(20),
         timeoutPromise
       ]);
-      
+
       // Aplicar filtro de duplicados antes de actualizar el estado
       setRecentlyPlayed(removeDuplicateTracks(tracks));
     } catch (error) {
@@ -1047,12 +1047,12 @@ export default function HomePage() {
   const handlePlayTrack = async (uri: string | undefined, e: React.MouseEvent, trackInfo?: any) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!uri) {
       console.error('URI de canción no disponible');
       return;
     }
-    
+
     try {
       // Si es la misma canción, pausar/reanudar
       if (currentTrack === uri) {
@@ -1064,10 +1064,10 @@ export default function HomePage() {
         setCurrentTrack(uri);
         setIsPlaying(true);
         console.log('Reproduciendo:', uri);
-        
+
         // Verificar si tenemos información de la pista para enviar
         let trackName, artistName, trackData;
-        
+
         if (trackInfo) {
           // Si se proporciona información directamente como parámetro
           trackName = trackInfo.title || (trackInfo as any).name || '';
@@ -1081,34 +1081,34 @@ export default function HomePage() {
           // Intentar extraer del evento a partir del DOM (para casos donde no se pasa trackInfo)
           // Buscar información del track en el DOM cercano al botón de reproducción
           const card = (e.currentTarget as HTMLElement).closest('.MuiCard-root');
-          
+
           if (card) {
-            const nameElement = card.querySelector('[data-track-name]'); 
+            const nameElement = card.querySelector('[data-track-name]');
             const artistElement = card.querySelector('[data-track-artist]');
-            
+
             trackName = nameElement?.getAttribute('data-track-name') || '';
             artistName = artistElement?.getAttribute('data-track-artist') || '';
-            
+
             // Si no encontramos datos en atributos, intentar obtener del texto
             if (!trackName || !artistName) {
               // Extraer del texto visible en el card
               const titleElement = card.querySelector('h3, .MuiTypography-body2');
               const subtitleElement = card.querySelector('.MuiTypography-caption');
-              
+
               trackName = titleElement?.textContent || '';
               artistName = subtitleElement?.textContent || '';
             }
           }
-          
+
           trackData = {
             trackId: uri,
             name: trackName,
             artist: artistName
           };
         }
-        
+
         console.log(`Intentando reproducir: "${trackData.name}" de "${trackData.artist}"`);
-        
+
         // Llamar a la API para obtener el ID de YouTube
         try {
           const response = await fetch('/api/spotify/play', {
@@ -1118,18 +1118,18 @@ export default function HomePage() {
             },
             body: JSON.stringify(trackData),
           });
-          
+
           if (!response.ok) {
             const error = await response.json();
             throw new Error(error.message || 'Error al reproducir');
           }
-          
+
           // Obtener la respuesta con el ID de YouTube
           const youtubeData = await response.json();
-          
+
           if (youtubeData.videoId) {
             // Aquí es donde necesitamos conectarnos con el PlayerContext para reproducir el video
-            
+
             // Crear un objeto Track con la información necesaria para el reproductor
             const track = {
               id: uri,
@@ -1141,9 +1141,9 @@ export default function HomePage() {
               spotifyId: uri,
               youtubeId: youtubeData.videoId
             };
-            
+
             console.log('Enviando evento de reproducción con track:', JSON.stringify(track));
-            
+
             try {
               // Usar el evento personalizado para comunicar con otros componentes
               const event = new CustomEvent('playTrack', { detail: track });
@@ -1153,7 +1153,7 @@ export default function HomePage() {
             } catch (error) {
               console.error('Error al disparar evento playTrack:', error);
             }
-            
+
             console.log(`Reproduciendo YouTube video: ${youtubeData.videoTitle} (ID: ${youtubeData.videoId})`);
           } else {
             console.error('No se recibió ID de YouTube válido');
@@ -1181,7 +1181,7 @@ export default function HomePage() {
               duration_ms: trackInfo.duration || (trackInfo as any).duration_ms || 0
             }
           };
-          
+
           // Registramos la canción en el historial
           await RecentTracksService.addTrackToHistory(trackData);
         } catch (error) {
@@ -1203,7 +1203,7 @@ export default function HomePage() {
       isPlayable: false,
       linkTo: `/playlist/${playlist.id}`
     };
-    
+
     return <UnifiedMusicCard {...cardData} />;
   };
 
@@ -1221,7 +1221,7 @@ export default function HomePage() {
         // Logic to play the album
       }
     };
-    
+
     return <UnifiedMusicCard {...cardData} />;
   };
 
@@ -1229,14 +1229,14 @@ export default function HomePage() {
   const RecentTrackCard = ({ item }: { item: EnrichedTrack }) => {
     // Usar las propiedades correctas según EnrichedTrack
     const { id, title, artist, album, cover, playedAt, source = 'default', spotifyId, sourceData } = item;
-    
+
     // Intentar obtener uri de forma más estructurada:
     // 1. Primero desde sourceData (que está en el modelo IRecentTrack)
     // 2. Luego desde el spotifyId (construyendo un URI de Spotify)
     // 3. Finalmente como fallback desde la propiedad directa (para datos demo)
-    const uri = sourceData?.uri || 
+    const uri = sourceData?.uri ||
                 (spotifyId ? `spotify:track:${spotifyId}` : (item as any).uri);
-    
+
     // Determinar color de la insignia según la fuente
     const getBadgeColor = (source: string) => {
       switch (source.toLowerCase()) {
@@ -1247,7 +1247,7 @@ export default function HomePage() {
         default: return 'bg-purple-600';
       }
     };
-    
+
     // Convertir playedAt a número de forma segura
     const getTimestamp = (played: number | Date | string | undefined): number => {
       if (typeof played === 'undefined') return Date.now();
@@ -1260,10 +1260,10 @@ export default function HomePage() {
         return Date.now(); // Fallback a la hora actual
       }
     };
-    
+
     // Obtener el timestamp
     const timestamp = getTimestamp(playedAt);
-    
+
     // Crear datos para la tarjeta unificada
     const cardData = {
       id: `recent-${id || timestamp}`,
@@ -1275,8 +1275,8 @@ export default function HomePage() {
         color: getBadgeColor(source)
       },
       isPlayable: true,
-      onClick: (e: React.MouseEvent) => handlePlayTrack(spotifyId || uri, e, { 
-        name: title, 
+      onClick: (e: React.MouseEvent) => handlePlayTrack(spotifyId || uri, e, {
+        name: title,
         artist: artist,
         album: album,
         cover: cover,
@@ -1284,7 +1284,7 @@ export default function HomePage() {
         spotifyId: spotifyId
       })
     };
-    
+
     return (
       <div className="flex flex-col">
         <UnifiedMusicCard {...cardData} />
@@ -1309,10 +1309,10 @@ export default function HomePage() {
       return (
         <Box sx={{ textAlign: 'center', py: 6 }}>
           <Typography color="error" variant="body1">{exploreError}</Typography>
-          <Button 
-            variant="outlined" 
-            color="secondary" 
-            startIcon={<Refresh />} 
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<Refresh />}
             sx={{ mt: 2 }}
             onClick={() => loadTabContent(activeTab)}
           >
@@ -1364,26 +1364,26 @@ export default function HomePage() {
         ) : (
           <Box sx={{ textAlign: 'center', py: 6 }}>
             <Typography color="text.secondary">No hay canciones escuchadas recientemente</Typography>
-            <Button 
-              variant="outlined" 
-              color="secondary" 
-              startIcon={<Refresh />} 
+            <Button
+              variant="outlined"
+              color="secondary"
+              startIcon={<Refresh />}
               sx={{ mt: 2 }}
               onClick={() => {
                 setRecentTracksMinLoadingTime(true);
-                
+
                 // Limpiar temporizador anterior si existe
                 if (recentTracksTimer) {
                   clearTimeout(recentTracksTimer);
                 }
-                
+
                 // Crear un nuevo temporizador y guardarlo
                 const newTimer = setTimeout(() => {
                   setRecentTracksMinLoadingTime(false);
                 }, 10000);
-                
+
                 setRecentTracksTimer(newTimer);
-                
+
                 // Cargar los datos
                 fetchRecentlyPlayedTracks();
               }}
@@ -1396,8 +1396,8 @@ export default function HomePage() {
       case 2: // Playlists destacadas
         return featuredPlaylists.length > 0 ? (
           // Usar el componente FeaturedPlaylists que ahora puede manejar tanto playlists como álbumes
-          <FeaturedPlaylists 
-            playlists={featuredPlaylists} 
+          <FeaturedPlaylists
+            playlists={featuredPlaylists}
             title={t('home.featuredPlaylists')}
           />
         ) : (
@@ -1476,7 +1476,7 @@ export default function HomePage() {
       if (item.coverUrl) return item.coverUrl;
       if (item.images && item.images[0] && item.images[0].url) return item.images[0].url;
       if (item.image) return item.image;
-      
+
       // Por tipo de elemento
       switch (item.type) {
         case 'track': return '/placeholder-album.jpg';
@@ -1486,7 +1486,7 @@ export default function HomePage() {
         default: return '/placeholder-album.jpg';
       }
     };
-    
+
     const getSubtitle = () => {
       switch (item.type) {
         case 'track':
@@ -1507,7 +1507,7 @@ export default function HomePage() {
           return '';
       }
     };
-    
+
     const getLinkTo = () => {
       switch (item.type) {
         case 'track':
@@ -1520,7 +1520,7 @@ export default function HomePage() {
           return `/album/${item.id}`;
       }
     };
-    
+
     const handleItemPlay = (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -1528,7 +1528,7 @@ export default function HomePage() {
         handlePlayTrack(item.uri, e, item);
       }
     };
-    
+
     return (
       <UnifiedMusicCard
         id={item.id}
@@ -1548,16 +1548,16 @@ export default function HomePage() {
     try {
       console.log(`[HomePage] Obteniendo playlists destacadas (idioma: ${language}, límite: ${limit})`);
       setLoading(prev => ({ ...prev, featured: true }));
-      
+
       // Obtener la URL base de la API
       const apiBaseUrl = getApiBaseUrl();
-      
+
       // Llamar a nuestro nuevo endpoint de playlists
       const response = await axios.get(`${apiBaseUrl}/api/playlists`, {
         params: { language, limit },
         timeout: 10000
       });
-      
+
       if (response.data && Array.isArray(response.data)) {
         console.log(`[HomePage] Se encontraron ${response.data.length} playlists destacadas`);
         return response.data;
@@ -1578,14 +1578,14 @@ export default function HomePage() {
     <Container maxWidth="xl">
       {/* Mostrar alerta de autenticación si es necesario */}
       {authError && <LoginAlert onLogin={handleLogin} />}
-      
+
       <Grid container spacing={3}>
       {/* Primera sección - Banner y rotación personal */}
         <Grid item xs={12}>
       <Box sx={{ mb: 6 }}>
         {/* Banner principal */}
-        <Box 
-          sx={{ 
+        <Box
+          sx={{
             position: 'relative',
             height: '250px',
             borderRadius: '16px',
@@ -1596,8 +1596,8 @@ export default function HomePage() {
             alignItems: 'center'
           }}
         >
-          <Box 
-            sx={{ 
+          <Box
+            sx={{
               position: 'absolute',
               top: 0,
               left: 0,
@@ -1619,7 +1619,7 @@ export default function HomePage() {
                   }
             }}
           />
-          
+
           <Box sx={{ position: 'relative', zIndex: 1, px: 4 }}>
             <Typography variant="h3" fontWeight="bold" color="white">
               {t('home.welcome')}
@@ -1627,7 +1627,7 @@ export default function HomePage() {
             <Typography variant="h6" color="rgba(255,255,255,0.8)" sx={{ mb: 2 }}>
               {t('home.description')}
             </Typography>
-            <Box 
+            <Box
               component="form"
               onSubmit={(e) => {
                 e.preventDefault();
@@ -1635,7 +1635,7 @@ export default function HomePage() {
                   router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
                 }
               }}
-              sx={{ 
+              sx={{
                 display: 'flex',
                 alignItems: 'center',
                 backgroundColor: 'rgba(255,255,255,0.1)',
@@ -1648,11 +1648,11 @@ export default function HomePage() {
               }}
             >
               <Search sx={{ color: 'rgba(255,255,255,0.7)', mr: 1 }} />
-              <input 
+              <input
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('search.searchPlaceholder')} 
-                style={{ 
+                placeholder={t('search.searchPlaceholder')}
+                style={{
                   backgroundColor: 'transparent',
                   border: 'none',
                   color: 'white',
@@ -1662,10 +1662,10 @@ export default function HomePage() {
                 }}
               />
               {searchTerm && (
-                <IconButton 
+                <IconButton
                   type="submit"
                   size="small"
-                  sx={{ 
+                  sx={{
                     color: 'white',
                     position: 'absolute',
                     right: '8px',
@@ -1678,14 +1678,14 @@ export default function HomePage() {
             </Box>
           </Box>
         </Box>
-        
+
             {/* Sección rotación personal */}
             {showPersonalSection && (
-              <Paper 
+              <Paper
                 elevation={0}
-                sx={{ 
-                  p: 3, 
-                  mb: 4, 
+                sx={{
+                  p: 3,
+                  mb: 4,
                   borderRadius: 4,
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
                   backdropFilter: 'blur(10px)',
@@ -1693,14 +1693,14 @@ export default function HomePage() {
               >
                 <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
-                    {isDemo 
+                    {isDemo
                       ? t('demo.demoModeRotation')
                       : t('home.personalRotation')}
                   </Typography>
                   {!isDemo && !isAuthenticated && (
-                    <Button 
-                      variant="outlined" 
-                      color="secondary" 
+                    <Button
+                      variant="outlined"
+                      color="secondary"
                       startIcon={<Login />}
                       onClick={handleLogin}
                     >
@@ -1708,12 +1708,12 @@ export default function HomePage() {
                     </Button>
                   )}
                 </Box>
-        
+
           {loading.personal ? (
             renderLoadingSkeletons()
           ) : error.personal ? (
-            <Alert 
-              severity="error" 
+            <Alert
+              severity="error"
               action={
                 <Button color="inherit" size="small" onClick={handleRetry}>
                   {t('common.retry')}
@@ -1723,7 +1723,7 @@ export default function HomePage() {
               {error.personal}
             </Alert>
           ) : personalContent.length > 0 ? (
-            <div 
+            <div
               onContextMenu={(e: React.MouseEvent) => {
                 // Permitir que el evento se propague normalmente
                 // para que lo capturen los elementos hijos
@@ -1741,7 +1741,7 @@ export default function HomePage() {
             </div>
           ) : (
             <Alert severity="info">
-              {isDemo 
+              {isDemo
                 ? t('home.demoModeContent')
                 : t('home.emptyContent')
               }
@@ -1751,22 +1751,22 @@ export default function HomePage() {
       )}
     </Box>
         </Grid>
-      
+
       {/* Segunda sección - Explora Música */}
         <Grid item xs={12}>
         <Typography variant="h4" component="h1" fontWeight="bold" sx={{ mb: 2 }}>
           {t('home.exploreMusic')}
         </Typography>
-        
+
         {/* Pestañas de navegación */}
         <Box sx={{ mb: 3 }}>
-          <Tabs 
-            value={activeTab} 
+          <Tabs
+            value={activeTab}
             onChange={handleTabChange}
             variant="scrollable"
             scrollButtons="auto"
-            sx={{ 
-              '.MuiTab-root': { 
+            sx={{
+              '.MuiTab-root': {
                 borderRadius: '20px',
                 mx: 0.5,
                 color: 'text.primary',
@@ -1783,39 +1783,39 @@ export default function HomePage() {
             <Tab label={t('home.recommendedArtist')} />
           </Tabs>
         </Box>
-        
+
         {/* Contenido de las pestañas */}
         <Box sx={{ minHeight: '400px' }}>
           {renderTabContent()}
         </Box>
         </Grid>
-      
+
       {/* Zona de descubrimiento */}
         <Grid item xs={12}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
         {t('home.discoveryZone')}
       </Typography>
-      
+
       <Grid container spacing={3}>
         {/* Artista recomendado */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
             {t('home.recommendedArtist')}
           </Typography>
-          <Paper sx={{ 
-            p: 2, 
-            display: 'flex', 
+          <Paper sx={{
+            p: 2,
+            display: 'flex',
             alignItems: 'center',
             backgroundColor: 'rgba(255,255,255,0.05)',
             borderRadius: '12px'
           }}>
-            <Box 
-              component="img" 
-              src={recommendedArtist.image} 
+            <Box
+              component="img"
+              src={recommendedArtist.image}
               alt={recommendedArtist.name}
-              sx={{ 
-                width: 80, 
-                height: 80, 
+              sx={{
+                width: 80,
+                height: 80,
                 borderRadius: '50%',
                 mr: 2
               }}
@@ -1825,9 +1825,9 @@ export default function HomePage() {
               <Typography variant="body2" color="text.secondary">
                 {language === 'es' ? 'Banda de rock' : 'Rock band'}
               </Typography>
-              <Button 
-                variant="text" 
-                color="secondary" 
+              <Button
+                variant="text"
+                color="secondary"
                 sx={{ mt: 1, pl: 0, textTransform: 'none' }}
               >
                 {t('home.listenNow')}
@@ -1835,20 +1835,20 @@ export default function HomePage() {
             </Box>
           </Paper>
         </Grid>
-        
+
         {/* Género destacado */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" fontWeight="medium" sx={{ mb: 2 }}>
             {t('home.featuredGenre')}
           </Typography>
-          <Paper sx={{ 
-            position: 'relative', 
+          <Paper sx={{
+            position: 'relative',
             height: 120,
             borderRadius: '12px',
             overflow: 'hidden'
           }}>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
@@ -1868,9 +1868,9 @@ export default function HomePage() {
                 }
               }}
             />
-            <Box 
-              sx={{ 
-                position: 'relative', 
+            <Box
+              sx={{
+                position: 'relative',
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -1889,7 +1889,7 @@ export default function HomePage() {
           </Paper>
         </Grid>
       </Grid>
-      
+
       {/* Información basada en el historial */}
       <Box sx={{ mt: 4 }}>
         <Typography variant="body2" color="text.secondary">
@@ -1906,17 +1906,17 @@ export default function HomePage() {
 async function getFeaturedPlaylistsGlobal(language: string) {
   try {
     const apiBaseUrl = getApiBaseUrl();
-    
+
     const response = await axios.get(`${apiBaseUrl}/api/playlists`, {
       params: {
         language,
         limit: 6
       }
     });
-    
+
     return response.data || [];
   } catch (error) {
     console.error('Error obteniendo playlists destacadas:', error);
     return [];
   }
-} 
+}

@@ -24,15 +24,15 @@ export const DYNAMIC_APP_ROUTES = [
 export function isDynamicRoute(route: string): boolean {
   // Limpiar la ruta para comparación consistente
   const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
-  
+
   // Verificar rutas exactas
   if (DYNAMIC_PAGE_ROUTES.includes(normalizedRoute) || DYNAMIC_APP_ROUTES.includes(normalizedRoute)) {
     return true;
   }
-  
+
   // Verificar rutas que comienzan con algún prefijo dinámico
   const allDynamicRoutes = [...DYNAMIC_PAGE_ROUTES, ...DYNAMIC_APP_ROUTES];
-  return allDynamicRoutes.some(dynamicRoute => 
+  return allDynamicRoutes.some(dynamicRoute =>
     normalizedRoute.startsWith(dynamicRoute + '/'));
 }
 
@@ -41,4 +41,4 @@ export default {
   DYNAMIC_PAGE_ROUTES,
   DYNAMIC_APP_ROUTES,
   isDynamicRoute
-}; 
+};

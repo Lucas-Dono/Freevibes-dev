@@ -12,27 +12,27 @@ import { useAuth } from '@/components/providers/AuthProvider';
  */
 function forceClearDemoMode() {
   console.log('[useSpotify] Forzando limpieza completa del modo demo');
-  
+
   // Eliminar todas las cookies relacionadas
   document.cookie = 'demoMode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'demoLang=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'next-auth.session-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'next-auth.callback-url=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'next-auth.csrf-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-  
+
   // Limpiar localStorage
   localStorage.removeItem('demoMode');
   localStorage.removeItem('localSpotifyDemoMode');
-  
+
   // Limpiar sessionStorage
   sessionStorage.removeItem('demoMode');
   sessionStorage.removeItem('demoLang');
-  
+
   // Establecer la bandera global para forzar desactivación
   window.__FORCE_DISABLE_DEMO__ = true;
-  
+
   console.log('[useSpotify] Limpieza completa realizada, recargando página...');
-  
+
   // Forzar recarga completa de la página sin caché
   window.location.href = window.location.href.split('?')[0] + '?forcenodemo=true&t=' + new Date().getTime();
 }
@@ -73,4 +73,4 @@ export default function useSpotify() {
     login,
     isDemo: auth.isDemo
   };
-} 
+}

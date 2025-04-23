@@ -86,7 +86,7 @@ const YOUTUBE_API_URL = API_CONFIG.YOUTUBE_API_BASE;
 export async function searchYouTubeArtist(artistName: string) {
   try {
     console.log(`[YouTubeAPI] Buscando artista: "${artistName}"`);
-    
+
     if (!YOUTUBE_API_KEY) {
       console.error('[YouTubeAPI] Error: API key no configurada');
       return {
@@ -94,7 +94,7 @@ export async function searchYouTubeArtist(artistName: string) {
         error: 'API key de YouTube no configurada'
       };
     }
-    
+
     // Buscar canales con el nombre del artista
     const channelResponse = await axios.get<YouTubeChannelResponse>(`${YOUTUBE_API_URL}/search`, {
       params: {
@@ -105,19 +105,19 @@ export async function searchYouTubeArtist(artistName: string) {
         key: YOUTUBE_API_KEY
       }
     });
-    
-    console.log(`[YouTubeAPI] Respuesta de búsqueda de canales:`, 
-      channelResponse.data.items ? 
-      `${channelResponse.data.items.length} resultados` : 
+
+    console.log(`[YouTubeAPI] Respuesta de búsqueda de canales:`,
+      channelResponse.data.items ?
+      `${channelResponse.data.items.length} resultados` :
       'Sin resultados');
 
     if (channelResponse.data.items && channelResponse.data.items.length > 0) {
       // Tomar el primer canal que parece ser oficial
       const channel = channelResponse.data.items[0];
       const channelId = channel.id.channelId;
-      
+
       console.log(`[YouTubeAPI] Canal encontrado: ${channel.snippet.title} (ID: ${channelId})`);
-      
+
       // Obtener detalles adicionales del canal
       const channelDetailsResponse = await axios.get<YouTubeChannelDetailsResponse>(`${YOUTUBE_API_URL}/channels`, {
         params: {
@@ -126,10 +126,10 @@ export async function searchYouTubeArtist(artistName: string) {
           key: YOUTUBE_API_KEY
         }
       });
-      
+
       if (channelDetailsResponse.data.items && channelDetailsResponse.data.items.length > 0) {
         const channelDetails = channelDetailsResponse.data.items[0];
-        
+
         // Formatear los datos para que sean compatibles con el formato de artista de YouTube Music
         return {
           success: true,
@@ -137,7 +137,7 @@ export async function searchYouTubeArtist(artistName: string) {
             browseId: channelId, // El ID del canal de YouTube es compatible con YouTube Music
             title: channelDetails.snippet.title,
             name: channelDetails.snippet.title,
-            thumbnails: channelDetails.snippet.thumbnails ? 
+            thumbnails: channelDetails.snippet.thumbnails ?
               Object.values(channelDetails.snippet.thumbnails).map((thumb: YouTubeThumbnail) => ({
                 url: thumb.url,
                 width: thumb.width,
@@ -151,7 +151,7 @@ export async function searchYouTubeArtist(artistName: string) {
         };
       }
     }
-    
+
     console.log(`[YouTubeAPI] No se encontró canal para "${artistName}"`);
     return {
       success: false,
@@ -175,14 +175,14 @@ export async function searchYouTubeArtist(artistName: string) {
 export async function searchArtistVideos(artistName: string, limit = 10) {
   try {
     console.log(`[YouTubeAPI] Buscando videos para: "${artistName}"`);
-    
+
     if (!YOUTUBE_API_KEY) {
       return {
         success: false,
         error: 'API key de YouTube no configurada'
       };
     }
-    
+
     const videosResponse = await axios.get<YouTubeVideoSearchResponse>(`${YOUTUBE_API_URL}/search`, {
       params: {
         part: 'snippet',
@@ -194,11 +194,11 @@ export async function searchArtistVideos(artistName: string, limit = 10) {
         videoSyndicated: true
       }
     });
-    
+
     if (videosResponse.data.items && videosResponse.data.items.length > 0) {
       // Extraer IDs de videos para obtener detalles
       const videoIds = videosResponse.data.items.map((item) => item.id.videoId).join(',');
-      
+
       // Obtener detalles de los videos
       const videoDetailsResponse = await axios.get<YouTubeVideoDetailsResponse>(`${YOUTUBE_API_URL}/videos`, {
         params: {
@@ -207,7 +207,7 @@ export async function searchArtistVideos(artistName: string, limit = 10) {
           key: YOUTUBE_API_KEY
         }
       });
-      
+
       if (videoDetailsResponse.data.items && videoDetailsResponse.data.items.length > 0) {
         // Formatear videos en un formato compatible con YouTube Music
         const videos = videoDetailsResponse.data.items.map((video) => ({
@@ -224,14 +224,14 @@ export async function searchArtistVideos(artistName: string, limit = 10) {
           channelTitle: video.snippet.channelTitle,
           publishedAt: video.snippet.publishedAt
         }));
-        
+
         return {
           success: true,
           results: videos
         };
       }
     }
-    
+
     return {
       success: false,
       error: 'No se encontraron videos'
@@ -301,15 +301,15 @@ export async function searchYouTubeChannels(query: string, maxResults: number = 
     };
 
     console.log(`[YouTube API] Buscando canales con término: "${query}"`);
-    
+
     // Realizar la petición a la API
     const response = await axios.get<YouTubeApiResponse>(url, { params });
-    
+
     if (response.data && response.data.items && response.data.items.length > 0) {
       console.log(`[YouTube API] Se encontraron ${response.data.items.length} canales`);
       return response.data.items;
     }
-    
+
     console.log('[YouTube API] No se encontraron canales');
     return [];
   } catch (error) {
@@ -322,4 +322,4 @@ export default {
   searchYouTubeArtist,
   searchArtistVideos,
   searchYouTubeChannels
-}; 
+};

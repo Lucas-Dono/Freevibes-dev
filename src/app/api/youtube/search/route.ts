@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get('query');
   const filter = searchParams.get('filter') || 'songs';
   const limit = parseInt(searchParams.get('limit') || '10', 10);
-  
+
   // Obtener la clave API si se proporciona (prioridad para reproducción)
   const apiKey = searchParams.get('api_key') || request.headers.get('X-Youtube-Api-Key') || null;
 
@@ -27,42 +27,42 @@ export async function GET(request: NextRequest) {
   try {
     // URL del servidor Python (leída desde la variable de entorno correcta)
     const pythonServerUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5100';
-    
+
     // URL completa para la solicitud
     let fullUrl = `${pythonServerUrl}/search?query=${encodeURIComponent(query)}&filter=${filter}&limit=${limit}`;
-    
+
     // Incluir la clave API si existe
     if (apiKey) {
       fullUrl += `&api_key=${encodeURIComponent(apiKey)}`;
       console.log(`[API] Usando clave API específica para búsqueda de reproducción`);
     }
-    
+
     console.log(`[API] Solicitando búsqueda a: ${fullUrl}`);
-    
+
     // Llamar directamente a la API de Python para la búsqueda
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'MusicPlayer/1.0'
     };
-    
+
     // Agregar la clave a los headers también para compatibilidad
     if (apiKey) {
       headers['X-Youtube-Api-Key'] = apiKey;
     }
-    
+
     const response = await axios.get(fullUrl, {
       headers,
       timeout: API_TIMEOUTS?.DETAILS || 15000
     });
 
     console.log(`[API] Respuesta exitosa del servidor Python para búsqueda de "${query}"`);
-    
+
     // Obtener los datos de la respuesta
     const rawData = response.data;
-    
+
     // Normalizar la respuesta para asegurar que siempre sea un array
     let normalizedData = [];
-    
+
     if (Array.isArray(rawData)) {
       // Si ya es un array, usarlo directamente
       normalizedData = rawData;
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         }
       }
     }
-    
+
     // Log detallado para depuración
     if (filter === 'artists') {
       console.log(`[API] Búsqueda de artistas completada. Resultados normalizados: ${normalizedData.length}`);
@@ -119,20 +119,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(normalizedData);
   } catch (error) {
     console.error(`[API] Error al buscar en YouTube Music: "${query}":`, error);
-    
+
     // Información de error más detallada para depuración
     if (axios.isAxiosError(error)) {
       const statusCode = error.response?.status || 500;
       const responseData = error.response?.data || {};
       const errorMessage = error.message || 'Error desconocido';
-      
+
       console.error(`[API] Detalles del error: Status=${statusCode}, Mensaje=${errorMessage}, Datos=${JSON.stringify(responseData)}`);
     }
-    
+
     // Retornar un array vacío con información de error
     return NextResponse.json(
       [],
       { status: 200 } // Devolver 200 pero con array vacío para evitar problemas
     );
   }
-} 
+}

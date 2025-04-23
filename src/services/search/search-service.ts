@@ -32,7 +32,7 @@ export class SearchService {
     try {
       // Clave única para la caché
       const cacheKey = `search:${query}:${limit}`;
-      
+
       // Primero verificar la caché en memoria (más rápida)
       const now = Date.now();
       const cached = SearchService.memoryCache[cacheKey];
@@ -42,7 +42,7 @@ export class SearchService {
         }
         return cached.data;
       }
-      
+
       // Luego verificar la caché persistente
       try {
         const cachedData = await recommendationsCache.get(cacheKey);
@@ -53,7 +53,7 @@ export class SearchService {
             timestamp: now,
             data: parsedData
           };
-          
+
           // Solo mostrar log si se habilita el debug
           if (ENABLE_CACHE_DEBUG) {
           }
@@ -62,7 +62,7 @@ export class SearchService {
       } catch (cacheError) {
         console.warn(`[SearchService] Error accediendo a caché para "${query}":`, cacheError);
       }
-      
+
       // Región del usuario para búsquedas contextuales
       const region = getCountryCode();
       // Este log se mantiene porque es una búsqueda real a la API
@@ -95,10 +95,10 @@ export class SearchService {
 
       // Ordenar resultados por relevancia
       const sortedResults = this.sortByRelevance(uniqueResults, query);
-      
+
       // Limitar al número solicitado
       const finalResults = sortedResults.slice(0, limit);
-      
+
       // Guardar en caché para futuras búsquedas
       if (finalResults.length > 0) {
         // Primero en memoria (acceso más rápido)
@@ -106,7 +106,7 @@ export class SearchService {
           timestamp: now,
           data: finalResults
         };
-        
+
         // Luego en caché persistente
         try {
           await recommendationsCache.set(
@@ -118,7 +118,7 @@ export class SearchService {
           console.warn(`[SearchService] Error guardando en caché "${query}":`, cacheError);
         }
       }
-      
+
       // Limpieza periódica de la caché en memoria
       this.cleanMemoryCache();
 
@@ -135,10 +135,10 @@ export class SearchService {
   private cleanMemoryCache() {
     const now = Date.now();
     const cacheSize = Object.keys(SearchService.memoryCache).length;
-    
+
     // Si la caché es pequeña, no es necesario limpiarla
     if (cacheSize < 100) return;
-    
+
     // Eliminar entradas expiradas
     let expiredCount = 0;
     for (const key in SearchService.memoryCache) {
@@ -147,7 +147,7 @@ export class SearchService {
         expiredCount++;
       }
     }
-    
+
     // Si aún hay demasiadas entradas, eliminar las más antiguas
     const remainingKeys = Object.keys(SearchService.memoryCache);
     if (remainingKeys.length > 100) {
@@ -155,13 +155,13 @@ export class SearchService {
       const sortedEntries = remainingKeys
         .map(key => ({ key, timestamp: SearchService.memoryCache[key].timestamp }))
         .sort((a, b) => a.timestamp - b.timestamp);
-      
+
       // Eliminar las entradas más antiguas (25% del total)
       const toRemove = Math.ceil(sortedEntries.length * 0.25);
       for (let i = 0; i < toRemove; i++) {
         delete SearchService.memoryCache[sortedEntries[i].key];
       }
-      
+
       // Solo mostrar log si se habilita el debug
       if (ENABLE_CACHE_DEBUG) {
       }
@@ -213,7 +213,7 @@ export class SearchService {
       } catch (error) {
         // Limpiar el timeout si hay un error
         clearTimeout(timeoutId);
-        
+
         console.error('[SearchService] Error en búsqueda de YouTube Music:', error);
         // Resolvemos con array vacío en lugar de rechazar para no interrumpir toda la búsqueda
         resolve([]);
@@ -223,13 +223,13 @@ export class SearchService {
 
   private removeDuplicates(results: any[]): any[] {
     const uniqueMap = new Map();
-    
+
     results.forEach(item => {
       // Crear una clave única basada en el título y artista
       const artistName = item.artists?.[0]?.name || item.artist || 'Unknown';
       const trackName = item.name || item.title || '';
       const key = `${trackName.toLowerCase()}_${artistName.toLowerCase()}`;
-      
+
       // Solo mantener el primer resultado para esta clave
       if (!uniqueMap.has(key)) {
         uniqueMap.set(key, item);
@@ -241,32 +241,32 @@ export class SearchService {
         }
       }
     });
-    
+
     return Array.from(uniqueMap.values());
   }
 
   private sortByRelevance(results: any[], query: string): any[] {
     const lowerQuery = query.toLowerCase();
-    
+
     return results.sort((a, b) => {
       const titleA = (a.name || a.title || '').toLowerCase();
       const titleB = (b.name || b.title || '').toLowerCase();
-      
+
       const artistA = (a.artists?.[0]?.name || a.artist || '').toLowerCase();
       const artistB = (b.artists?.[0]?.name || b.artist || '').toLowerCase();
-      
+
       // Calcular relevancia basada en si la consulta está en el título o el artista
-      const relevanceA = 
-        (titleA.includes(lowerQuery) ? 2 : 0) + 
+      const relevanceA =
+        (titleA.includes(lowerQuery) ? 2 : 0) +
         (artistA.includes(lowerQuery) ? 1 : 0) +
         (a.source === 'spotify' ? 0.5 : 0); // Ligera preferencia por Spotify
-      
-      const relevanceB = 
-        (titleB.includes(lowerQuery) ? 2 : 0) + 
+
+      const relevanceB =
+        (titleB.includes(lowerQuery) ? 2 : 0) +
         (artistB.includes(lowerQuery) ? 1 : 0) +
         (b.source === 'spotify' ? 0.5 : 0);
-      
+
       return relevanceB - relevanceA;
     });
   }
-} 
+}

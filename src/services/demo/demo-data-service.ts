@@ -73,7 +73,7 @@ export class DemoDataService {
       albums: [],
       playlists: []
     };
-    
+
     // Cargar datos acumulados del localStorage al iniciar
     this.loadAccumulatedData();
   }
@@ -91,7 +91,7 @@ export class DemoDataService {
    */
   private loadAccumulatedData(): void {
     if (typeof window === 'undefined') return;
-    
+
     try {
       // Artistas
       const artistsJson = localStorage.getItem(STORAGE_KEYS.ARTISTS);
@@ -99,21 +99,21 @@ export class DemoDataService {
         this.accumulatedData.artists = JSON.parse(artistsJson);
         console.log(`[Demo Data Service] Cargados ${this.accumulatedData.artists.length} artistas acumulados`);
       }
-      
+
       // Tracks
       const tracksJson = localStorage.getItem(STORAGE_KEYS.TRACKS);
       if (tracksJson) {
         this.accumulatedData.tracks = JSON.parse(tracksJson);
         console.log(`[Demo Data Service] Cargados ${this.accumulatedData.tracks.length} tracks acumulados`);
       }
-      
+
       // Álbumes
       const albumsJson = localStorage.getItem(STORAGE_KEYS.ALBUMS);
       if (albumsJson) {
         this.accumulatedData.albums = JSON.parse(albumsJson);
         console.log(`[Demo Data Service] Cargados ${this.accumulatedData.albums.length} álbumes acumulados`);
       }
-      
+
       // Playlists
       const playlistsJson = localStorage.getItem(STORAGE_KEYS.PLAYLISTS);
       if (playlistsJson) {
@@ -125,20 +125,20 @@ export class DemoDataService {
       this.resetAccumulatedData();
     }
   }
-  
+
   /**
    * Guarda los datos acumulados en localStorage
    */
   private saveAccumulatedData(): void {
     if (typeof window === 'undefined') return;
-    
+
     try {
       localStorage.setItem(STORAGE_KEYS.ARTISTS, JSON.stringify(this.accumulatedData.artists));
       localStorage.setItem(STORAGE_KEYS.TRACKS, JSON.stringify(this.accumulatedData.tracks));
       localStorage.setItem(STORAGE_KEYS.ALBUMS, JSON.stringify(this.accumulatedData.albums));
       localStorage.setItem(STORAGE_KEYS.PLAYLISTS, JSON.stringify(this.accumulatedData.playlists));
       localStorage.setItem(STORAGE_KEYS.LAST_UPDATE, new Date().toISOString());
-      
+
       console.log(`[Demo Data Service] Datos acumulados guardados con éxito. Total:`, {
         artists: this.accumulatedData.artists.length,
         tracks: this.accumulatedData.tracks.length,
@@ -149,9 +149,9 @@ export class DemoDataService {
       console.error('[Demo Data Service] Error al guardar datos acumulados:', error);
     }
   }
-  
+
   /**
-   * Restablece los datos acumulados 
+   * Restablece los datos acumulados
    */
   resetAccumulatedData(): void {
     this.accumulatedData = {
@@ -160,7 +160,7 @@ export class DemoDataService {
       albums: [],
       playlists: []
     };
-    
+
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEYS.ARTISTS);
       localStorage.removeItem(STORAGE_KEYS.TRACKS);
@@ -176,17 +176,17 @@ export class DemoDataService {
    */
   private accumulateArtists(newArtists: any[]): void {
     if (!newArtists || !Array.isArray(newArtists)) return;
-    
-    const artistsWithImages = newArtists.filter(artist => 
+
+    const artistsWithImages = newArtists.filter(artist =>
       artist && artist.id && artist.name && artist.images && artist.images.length > 0
     );
-    
+
     if (artistsWithImages.length === 0) return;
-    
+
     // Combinar con los artistas existentes, evitando duplicados por ID
     const existingIds = new Set(this.accumulatedData.artists.map(a => a.id));
     const uniqueNewArtists = artistsWithImages.filter(a => !existingIds.has(a.id));
-    
+
     if (uniqueNewArtists.length > 0) {
       this.accumulatedData.artists = [...this.accumulatedData.artists, ...uniqueNewArtists];
       console.log(`[Demo Data Service] Añadidos ${uniqueNewArtists.length} nuevos artistas únicos`);
@@ -199,21 +199,21 @@ export class DemoDataService {
    */
   private accumulateTracks(newTracks: any[]): void {
     if (!newTracks || !Array.isArray(newTracks)) return;
-    
-    const tracksWithImages = newTracks.filter(track => 
-      track && 
-      track.id && 
-      track.name && 
-      ((track.album && track.album.images && track.album.images.length > 0) || 
+
+    const tracksWithImages = newTracks.filter(track =>
+      track &&
+      track.id &&
+      track.name &&
+      ((track.album && track.album.images && track.album.images.length > 0) ||
        (track.thumbnails && track.thumbnails.length > 0))
     );
-    
+
     if (tracksWithImages.length === 0) return;
-    
+
     // Combinar con los tracks existentes, evitando duplicados por ID
     const existingIds = new Set(this.accumulatedData.tracks.map(t => t.id));
     const uniqueNewTracks = tracksWithImages.filter(t => !existingIds.has(t.id));
-    
+
     if (uniqueNewTracks.length > 0) {
       this.accumulatedData.tracks = [...this.accumulatedData.tracks, ...uniqueNewTracks];
       console.log(`[Demo Data Service] Añadidos ${uniqueNewTracks.length} nuevos tracks únicos`);
@@ -226,21 +226,21 @@ export class DemoDataService {
    */
   private accumulateAlbums(newAlbums: any[]): void {
     if (!newAlbums || !Array.isArray(newAlbums)) return;
-    
-    const albumsWithImages = newAlbums.filter(album => 
-      album && 
-      album.id && 
-      (album.name || album.title) && 
-      ((album.images && album.images.length > 0) || 
+
+    const albumsWithImages = newAlbums.filter(album =>
+      album &&
+      album.id &&
+      (album.name || album.title) &&
+      ((album.images && album.images.length > 0) ||
        (album.thumbnails && album.thumbnails.length > 0))
     );
-    
+
     if (albumsWithImages.length === 0) return;
-    
+
     // Combinar con los álbumes existentes, evitando duplicados por ID
     const existingIds = new Set(this.accumulatedData.albums.map(a => a.id));
     const uniqueNewAlbums = albumsWithImages.filter(a => !existingIds.has(a.id));
-    
+
     if (uniqueNewAlbums.length > 0) {
       this.accumulatedData.albums = [...this.accumulatedData.albums, ...uniqueNewAlbums];
       console.log(`[Demo Data Service] Añadidos ${uniqueNewAlbums.length} nuevos álbumes únicos`);
@@ -257,22 +257,22 @@ export class DemoDataService {
       const url = new URL('/api/demo/data', window.location.origin);
       url.searchParams.append('language', this.language);
       url.searchParams.append('endpoint', endpoint);
-      
+
       // Añadir parámetros adicionales
       Object.entries(params).forEach(([key, value]) => {
         url.searchParams.append(key, value);
       });
-      
+
       console.log(`[Demo Data Service] Solicitando datos de: ${url.toString()}`);
-      
+
       const response = await fetch(url.toString());
-      
+
       if (!response.ok) {
         throw new Error(`Error ${response.status} al obtener datos demo`);
       }
-      
+
       const data = await response.json();
-      
+
       // Acumular datos según el endpoint
       if (data) {
         // Procesar artistas
@@ -280,7 +280,7 @@ export class DemoDataService {
           if (data.items && Array.isArray(data.items)) {
             this.accumulateArtists(data.items);
           }
-        } 
+        }
         // Procesar resultados de búsqueda
         else if (endpoint === 'search') {
           const type = params.type || 'track';
@@ -302,7 +302,7 @@ export class DemoDataService {
           this.accumulateAlbums(data.albums.items);
         }
       }
-      
+
       return data;
     } catch (error) {
       console.error('[Demo Data Service] Error al obtener datos demo:', error);
@@ -330,29 +330,29 @@ export class DemoDataService {
   async getFeaturedArtists(limit: number = 10): Promise<any> {
     try {
       console.log(`[Demo Data Service] Obteniendo artistas destacados (limit=${limit})...`);
-      
+
       // Si ya tenemos suficientes artistas acumulados, usarlos
       if (this.accumulatedData.artists.length >= limit) {
         console.log(`[Demo Data Service] Usando ${limit} artistas de la colección acumulada (total: ${this.accumulatedData.artists.length})`);
-        
+
         // Obtener una selección aleatoria de artistas
         const randomArtists = this.getRandomItems(this.accumulatedData.artists, limit);
         return { items: randomArtists };
       }
-      
+
       // Si no tenemos suficientes, solicitar más
       const data = await this.fetchDemoData('featured-artists', { limit: (limit * 2).toString() });
-      
+
       if (!data || !data.items) {
         console.warn('[Demo Data Service] No se obtuvieron artistas destacados válidos');
         return { items: this.accumulatedData.artists.slice(0, limit) };
       }
-      
+
       // Filtrar para asegurar que solo se incluyen artistas con imágenes
-      const filteredArtists = data.items.filter((artist: any) => 
+      const filteredArtists = data.items.filter((artist: any) =>
         artist && artist.images && artist.images.length > 0
       );
-      
+
       console.log(`[Demo Data Service] ${filteredArtists.length} artistas destacados con imágenes obtenidos`);
       return { items: filteredArtists };
     } catch (error) {
@@ -367,7 +367,7 @@ export class DemoDataService {
    */
   private getRandomItems<T>(array: T[], count: number): T[] {
     if (array.length <= count) return [...array];
-    
+
     const shuffled = [...array].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }
@@ -404,13 +404,13 @@ export class DemoDataService {
    */
   async getSavedTracks(): Promise<any> {
     try {
-      
+
       // Intentar usar top_tracks primero
       try {
         const topTracksData = await this.fetchDemoData('top-tracks');
         if (topTracksData && topTracksData.items && topTracksData.items.length > 0) {
           console.log('[Demo Data Service] Usando top tracks como fuente para saved tracks');
-          
+
           // Convertir el formato de top tracks al formato de saved tracks
           return {
             href: "https://api.spotify.com/v1/me/tracks",
@@ -428,13 +428,13 @@ export class DemoDataService {
       } catch (err) {
         console.warn('[Demo Data Service] No se pudieron cargar top tracks, intentando con datos de búsqueda');
       }
-      
+
       // Si no hay top tracks, usar datos de búsqueda
       try {
         const searchData = await this.fetchDemoData('search', { type: 'track' });
         if (searchData && searchData.tracks && searchData.tracks.items && searchData.tracks.items.length > 0) {
           console.log('[Demo Data Service] Usando resultados de búsqueda como fuente para saved tracks');
-          
+
           // Convertir resultados de búsqueda al formato de saved tracks
           return {
             href: "https://api.spotify.com/v1/me/tracks",
@@ -452,11 +452,11 @@ export class DemoDataService {
       } catch (err) {
         console.warn('[Demo Data Service] No se pudieron cargar datos de búsqueda');
       }
-      
+
       // Si todo falla, generar tracks aleatorios
       console.log('[Demo Data Service] Generando tracks aleatorios para saved tracks');
       const randomTracks = this.generateRandomTracks(20);
-      
+
       return {
         href: "https://api.spotify.com/v1/me/tracks",
         items: randomTracks.tracks.map((track: any) => ({
@@ -485,15 +485,15 @@ export class DemoDataService {
         const multilangData = await this.fetchDemoData('recommendations-multilanguage');
         if (multilangData && multilangData.tracks && multilangData.tracks.length > 0) {
           console.log(`[DemoData] Cargadas ${multilangData.tracks.length} recomendaciones multilingüe`);
-          
+
           // Función para determinar el idioma más probable de una canción
           const determineLanguage = (track: any): string => {
             // Si ya tiene un idioma definido, usarlo
             if (track.language) return track.language;
-            
+
             // Nombres de artistas conocidos por país/idioma
             const artistsByLanguage: {[language: string]: string[]} = {
-              'Español': ['bad bunny', 'j balvin', 'rosalía', 'maluma', 'ozuna', 'karol g', 'shakira', 'enrique iglesias', 
+              'Español': ['bad bunny', 'j balvin', 'rosalía', 'maluma', 'ozuna', 'karol g', 'shakira', 'enrique iglesias',
                           'daddy yankee', 'becky g', 'nicky jam', 'anuel aa', 'rauw alejandro', 'manuel turizo', 'sebastián yatra',
                           'c. tangana', 'duki', 'bizarrap', 'mora', 'quevedo', 'myke towers', 'feid'],
               'English': ['taylor swift', 'ed sheeran', 'adele', 'justin bieber', 'ariana grande', 'beyoncé', 'drake', 'the weeknd',
@@ -505,7 +505,7 @@ export class DemoDataService {
               'Italiano': ['maneskin', 'fedez', 'mahmood', 'elodie', 'blanco', 'madame', 'geolier', 'tananai', 'irama',
                           'gianna nannini', 'zucchero', 'laura pausini', 'eros ramazzotti', 'andrea bocelli']
             };
-            
+
             // Palabras comunes por idioma para detectar en títulos de canciones
             const wordsByLanguage: {[language: string]: string[]} = {
               'Español': ['de', 'la', 'el', 'mi', 'tu', 'amor', 'corazón', 'vida', 'noche', 'día', 'como', 'sin', 'con'],
@@ -514,7 +514,7 @@ export class DemoDataService {
               'Français': ['mon', 'ma', 'ton', 'ta', 'amour', 'coeur', 'vie', 'nuit', 'jour', 'comme', 'sans', 'avec'],
               'Italiano': ['il', 'la', 'mio', 'tuo', 'amore', 'cuore', 'vita', 'notte', 'giorno', 'come', 'senza', 'con']
             };
-            
+
             // Mercados principales por idioma
             const marketsByLanguage: {[language: string]: string[]} = {
               'Español': ['ES', 'MX', 'AR', 'CO', 'CL', 'PE', 'VE', 'EC', 'UY', 'PA', 'CR', 'DO', 'BO', 'PY', 'SV', 'HN', 'NI', 'GT'],
@@ -523,7 +523,7 @@ export class DemoDataService {
               'Français': ['FR', 'BE', 'CH', 'MC', 'LU', 'CA', 'MA', 'TN', 'DZ', 'SN'],
               'Italiano': ['IT', 'CH', 'SM', 'VA']
             };
-            
+
             // Sistema de puntuación para cada idioma
             const scores: {[language: string]: number} = {
               'Español': 0,
@@ -532,7 +532,7 @@ export class DemoDataService {
               'Français': 0,
               'Italiano': 0
             };
-            
+
             // 1. Evaluar por nombre de artista
             if (track.artists && track.artists.length > 0) {
               const artistName = track.artists[0].name.toLowerCase();
@@ -542,7 +542,7 @@ export class DemoDataService {
                 }
               });
             }
-            
+
             // 2. Evaluar por título de canción
             if (track.name) {
               const title = track.name.toLowerCase();
@@ -552,7 +552,7 @@ export class DemoDataService {
                 scores[language] += matchCount * 2;
               });
             }
-            
+
             // 3. Evaluar por mercados disponibles
             if (track.available_markets && Array.isArray(track.available_markets)) {
               Object.entries(marketsByLanguage).forEach(([language, markets]) => {
@@ -562,7 +562,7 @@ export class DemoDataService {
                 scores[language] += coverage * 3;
               });
             }
-            
+
             // Géneros asociados a idiomas
             if (track.genres && Array.isArray(track.genres)) {
               const genreMap: {[genre: string]: string} = {
@@ -587,7 +587,7 @@ export class DemoDataService {
                 'funk carioca': 'Português',
                 'mpb': 'Português'
               };
-              
+
               track.genres.forEach((genre: string) => {
                 const lowerGenre = genre.toLowerCase();
                 Object.entries(genreMap).forEach(([genreKeyword, language]) => {
@@ -599,72 +599,72 @@ export class DemoDataService {
                 });
               });
             }
-            
+
             // Asignar un valor predeterminado para English/Español si no hay una clara determinación
             if (Object.values(scores).every(score => score === 0)) {
               // Si no hay pistas, asignar Español o English con una probabilidad del 70%
               return Math.random() < 0.5 ? 'Español' : 'English';
             }
-            
+
             // Devolver el idioma con la puntuación más alta
             return Object.entries(scores)
               .sort((a, b) => b[1] - a[1])[0][0]; // Ordenar por puntuación y tomar el primero
           };
-          
+
           // Aplicar la función a cada track
           const tracksWithLanguage = multilangData.tracks.map((track: any) => {
             track.language = determineLanguage(track);
             return track;
           });
-          
+
           // Contar cuántas canciones hay de cada idioma para diagnóstico
           const languageCounts = tracksWithLanguage.reduce((counts: {[key: string]: number}, track: any) => {
             counts[track.language] = (counts[track.language] || 0) + 1;
             return counts;
           }, {});
-          
+
           console.log(`[DemoData] Distribución de idiomas en recomendaciones:`, languageCounts);
-          
+
           return { tracks: tracksWithLanguage };
         }
       } catch (err) {
         console.warn('[DemoData] No se pudieron cargar recomendaciones multilingüe, continuando con general');
       }
-      
+
       // Si no hay multilingüe, usar recomendaciones generales
       const data = await this.fetchDemoData('recommendations');
-      
+
       // Verificar que tenemos datos de calidad
       if (data && data.tracks && data.tracks.length > 0) {
         // Filtrar solo tracks con imágenes válidas para mejorar experiencia visual
         const validTracks = data.tracks.filter((track: any) => {
-          return track && 
-                 track.id && 
-                 track.name && 
+          return track &&
+                 track.id &&
+                 track.name &&
                  (track.artists || track.artist) &&
                  ((track.album && track.album.images && track.album.images.length > 0) || track.cover);
         });
-        
+
         if (validTracks.length > 0) {
           console.log(`[DemoData] Cargadas ${validTracks.length} recomendaciones con imágenes válidas`);
           return { tracks: validTracks };
         }
       }
-      
+
       // Si todavía no tenemos datos, usar saved_tracks como fallback
       console.warn('[DemoData] No se encontraron tracks válidos en recommendations, usando saved-tracks');
       const savedData = await this.fetchDemoData('saved-tracks');
-      
+
       if (savedData && savedData.items && savedData.items.length > 0) {
         const validSavedTracks = savedData.items
           .filter((item: any) => item.track && item.track.album && item.track.album.images && item.track.album.images.length > 0)
           .map((item: any) => item.track);
-        
+
         if (validSavedTracks.length > 0) {
           return { tracks: validSavedTracks };
         }
       }
-      
+
       // Si todo falla, generar datos aleatorios de calidad con imágenes de ejemplo
       console.warn('[DemoData] Todos los intentos de obtener tracks fallaron, generando datos sintéticos');
       return this.generateRandomTracks(30);
@@ -673,7 +673,7 @@ export class DemoDataService {
       return this.generateRandomTracks(20);
     }
   }
-  
+
   /**
    * Generar tracks aleatorios con imágenes de ejemplo para cuando todo falla
    */
@@ -681,11 +681,11 @@ export class DemoDataService {
     const languages = ['Español', 'English', 'Português', 'Français', 'Italiano'];
     const genres = ['Pop', 'Rock', 'Electrónica', 'Hip Hop', 'R&B', 'Jazz', 'Indie'];
     const tracks = [];
-    
+
     for (let i = 0; i < count; i++) {
       const language = languages[i % languages.length];
       const genre = genres[Math.floor(Math.random() * genres.length)];
-      
+
       // Usar colores que coincidan con el idioma
       const colorMap: Record<string, string> = {
         'Español': 'ff5252',      // Rojo
@@ -694,9 +694,9 @@ export class DemoDataService {
         'Français': '9c27b0',     // Púrpura
         'Italiano': 'ffa726'      // Ámbar
       };
-      
+
       const color = colorMap[language] || 'cccccc';
-      
+
       tracks.push({
         id: `demo-track-${i}`,
         name: `${language} ${genre} Track ${i+1}`,
@@ -720,7 +720,7 @@ export class DemoDataService {
         language: language
       });
     }
-    
+
     return { tracks };
   }
 
@@ -748,12 +748,12 @@ export class DemoDataService {
       return data;
     } catch (error) {
       console.error(`[Demo Data Service] Error al obtener resultados de búsqueda para ${type}:`, error);
-      return type === 'track' 
-        ? { tracks: { items: [] } } 
-        : type === 'album' 
-          ? { albums: { items: [] } } 
-          : type === 'artist' 
-            ? { artists: { items: [] } } 
+      return type === 'track'
+        ? { tracks: { items: [] } }
+        : type === 'album'
+          ? { albums: { items: [] } }
+          : type === 'artist'
+            ? { artists: { items: [] } }
             : { playlists: { items: [] } };
     }
   }
@@ -833,52 +833,52 @@ export class DemoDataService {
   async searchArtists(query: string, limit: number = 20): Promise<any> {
     try {
       console.log(`[Demo Data Service] Buscando artistas con término: "${query}" (limit=${limit})...`);
-      
+
       // Buscar en la colección acumulada primero
       const lowercaseQuery = query.toLowerCase();
-      const matchingAccumulatedArtists = this.accumulatedData.artists.filter(artist => 
+      const matchingAccumulatedArtists = this.accumulatedData.artists.filter(artist =>
         artist.name.toLowerCase().includes(lowercaseQuery)
       );
-      
+
       console.log(`[Demo Data Service] Encontrados ${matchingAccumulatedArtists.length} artistas coincidentes en la colección acumulada`);
-      
+
       // Si tenemos suficientes coincidencias, devolverlas
       if (matchingAccumulatedArtists.length >= limit) {
         return { items: matchingAccumulatedArtists.slice(0, limit) };
       }
-      
+
       // Si no tenemos suficientes, solicitar más
-      const data = await this.fetchDemoData('search-artists', { 
-        query, 
-        limit: (limit * 2).toString() 
+      const data = await this.fetchDemoData('search-artists', {
+        query,
+        limit: (limit * 2).toString()
       });
-      
+
       const apiArtists = data?.items || [];
-      
+
       // Filtrar para que solo incluya artistas con imágenes
-      const filteredApiArtists = apiArtists.filter((artist: any) => 
+      const filteredApiArtists = apiArtists.filter((artist: any) =>
         artist && artist.images && artist.images.length > 0
       );
-      
+
       // Combinar artistas de API y acumulados, eliminando duplicados
       const combinedArtists = [...matchingAccumulatedArtists];
       const existingIds = new Set(combinedArtists.map(a => a.id));
-      
+
       for (const artist of filteredApiArtists) {
         if (!existingIds.has(artist.id)) {
           combinedArtists.push(artist);
           existingIds.add(artist.id);
-          
+
           if (combinedArtists.length >= limit) break;
         }
       }
-      
+
       console.log(`[Demo Data Service] Devolviendo ${combinedArtists.length} artistas combinados para "${query}"`);
       return { items: combinedArtists };
     } catch (error) {
       console.error('[Demo Data Service] Error al buscar artistas:', error);
       // Devolver los artistas acumulados que coincidan en caso de error
-      const matchingAccumulatedArtists = this.accumulatedData.artists.filter(artist => 
+      const matchingAccumulatedArtists = this.accumulatedData.artists.filter(artist =>
         artist.name.toLowerCase().includes(query.toLowerCase())
       );
       return { items: matchingAccumulatedArtists.slice(0, limit) };
@@ -888,4 +888,4 @@ export class DemoDataService {
 
 // Exportar una instancia única del servicio
 const demoDataService = new DemoDataService();
-export default demoDataService; 
+export default demoDataService;

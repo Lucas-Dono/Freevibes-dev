@@ -14,15 +14,15 @@ async function checkDemoAvailability() {
     // Comprobar si existe el directorio de datos demo
     const demoDir = path.join(process.cwd(), 'node-server', 'demo-data');
     await fs.access(demoDir);
-    
+
     // Comprobar si existen archivos esenciales
     const spotifyDir = path.join(demoDir, 'spotify');
     await fs.access(spotifyDir);
-    
+
     // Verificar al menos un archivo de recomendaciones
     const recsFile = path.join(spotifyDir, 'recommendations.json');
     const recsMultiFile = path.join(spotifyDir, 'recommendations_multilanguage.json');
-    
+
     try {
       await fs.access(recsFile);
     } catch (error) {
@@ -32,7 +32,7 @@ async function checkDemoAvailability() {
         return false;
       }
     }
-    
+
     return true;
   } catch (error) {
     console.error('Error al verificar disponibilidad del modo demo:', error);
@@ -46,7 +46,7 @@ async function checkDemoAvailability() {
 export async function GET() {
   try {
     const available = await checkDemoAvailability();
-    
+
     return NextResponse.json({
       available,
       mode: process.env.NEXT_PUBLIC_DEMO_MODE === 'true' ? 'active' : 'disabled',
@@ -54,10 +54,10 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error en API route demo/status:', error);
-    return NextResponse.json({ 
+    return NextResponse.json({
       available: false,
       error: 'Error al verificar estado del modo demo',
       details: error instanceof Error ? error.message : String(error)
     }, { status: 500 });
   }
-} 
+}

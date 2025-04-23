@@ -16,7 +16,7 @@ interface LanguageSwitcherProps {
   className?: string;
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ 
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   variant = 'compact',
   className = '',
 }) => {
@@ -38,8 +38,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             key={option.code}
             onClick={() => handleLanguageChange(option.code)}
             className={`text-xl ${
-              language === option.code 
-                ? 'opacity-100 scale-110' 
+              language === option.code
+                ? 'opacity-100 scale-110'
                 : 'opacity-50 hover:opacity-80'
             } transition-all duration-200`}
             title={option.label}
@@ -55,7 +55,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   // Renderizar variante compacta (banderas con el actual seleccionado)
   if (variant === 'compact') {
     const currentOption = languageOptions.find(option => option.code === language);
-    
+
     return (
       <div className={`relative group ${className}`}>
         <button
@@ -64,7 +64,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
           <span>{currentOption?.flag}</span>
           <span className="text-sm font-medium">{currentOption?.label}</span>
         </button>
-        
+
         {/* Menú desplegable */}
         <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg overflow-hidden z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
           {languageOptions.map((option) => (
@@ -72,8 +72,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
               key={option.code}
               onClick={() => handleLanguageChange(option.code)}
               className={`flex items-center space-x-3 w-full px-3 py-2 text-left text-sm ${
-                language === option.code 
-                  ? 'bg-gray-100 dark:bg-gray-800' 
+                language === option.code
+                  ? 'bg-gray-100 dark:bg-gray-800'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
@@ -98,8 +98,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             key={option.code}
             onClick={() => handleLanguageChange(option.code)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-md border ${
-              language === option.code 
-                ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800' 
+              language === option.code
+                ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800'
                 : 'border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800'
             } transition-all duration-200`}
           >
@@ -112,4 +112,4 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   );
 };
 
-export default LanguageSwitcher; 
+export default LanguageSwitcher;

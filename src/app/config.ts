@@ -7,4 +7,4 @@ export const revalidate = 0;
 
 // Exportar cualquier otra configuración global necesaria
 export const APP_NAME = 'FreeVibes';
-export const APP_VERSION = '1.0.0'; 
+export const APP_VERSION = '1.0.0';

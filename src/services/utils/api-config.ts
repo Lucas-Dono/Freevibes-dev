@@ -11,7 +11,7 @@ export function getApiBaseUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return `${process.env.NEXT_PUBLIC_APP_URL}/api`;
   }
-  
+
   // Si no está definida la variable de entorno, usar el puerto actual del navegador
   if (typeof window !== 'undefined' && window.location) {
     // Obtener el puerto actual del navegador
@@ -19,7 +19,7 @@ export function getApiBaseUrl() {
     // Construir la URL base con el puerto actual
     return `${window.location.protocol}//${window.location.hostname}:${currentPort}/api`;
   }
-  
+
   // Valor por defecto
   return '/api';
-} 
+}

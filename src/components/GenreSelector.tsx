@@ -12,10 +12,10 @@ export default function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [currentSource, setCurrentSource] = useState<SourceType>('youtube');
   const router = useRouter();
-  
+
   // Lista fija de los 10 géneros principales
   const topGenres = TOP_GENRES;
-  
+
   // Manejar selección de género
   const handleGenreClick = (genre: string) => {
     if (onGenreSelect) {
@@ -24,7 +24,7 @@ export default function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
       router.push(`/explore/genre/${genre}?source=${currentSource}`);
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-40">
@@ -32,14 +32,14 @@ export default function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
       </div>
     );
   }
-  
+
   return (
     <div className="overflow-hidden">
       <h2 className="text-xl font-semibold mb-3 text-white">Géneros</h2>
-      
+
       <div className="flex overflow-x-auto pb-4 gap-3 scrollbar-hide">
         {topGenres.map((genre: GenreItem) => (
-          <div 
+          <div
             key={genre.id}
             onClick={() => handleGenreClick(genre.id)}
             className="flex-none cursor-pointer transition-transform hover:scale-105"
@@ -55,4 +55,4 @@ export default function GenreSelector({ onGenreSelect }: GenreSelectorProps) {
       </div>
     </div>
   );
-} 
+}

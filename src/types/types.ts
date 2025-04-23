@@ -50,4 +50,4 @@ export interface Playlist {
   tracks?: { total: number };
   external_urls?: { spotify: string };
   uri?: string;
-} 
+}

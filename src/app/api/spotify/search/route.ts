@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 
     // Obtener la sesión del servidor para acceder al token
     const session = await getServerSession(authOptions);
-    
+
     if (!session || !session.accessToken) {
       return NextResponse.json(
         { error: 'No se pudo obtener el token de acceso de Spotify. Usuario no autenticado.' },
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
     if (!response.ok) {
       const error = await response.json();
       console.error('[SpotifySearch] Error al buscar en Spotify:', error);
-      
+
       return NextResponse.json(
         { error: 'Error al buscar en Spotify', details: error },
         { status: response.status }
@@ -65,14 +65,14 @@ export async function GET(req: NextRequest) {
 
     // Obtener datos y devolver respuesta
     const data = await response.json();
-    
+
     return NextResponse.json(data);
   } catch (error) {
     console.error('[SpotifySearch] Error en el endpoint de búsqueda:', error);
-    
+
     return NextResponse.json(
       { error: 'Error interno del servidor' },
       { status: 500 }
     );
   }
-} 
+}

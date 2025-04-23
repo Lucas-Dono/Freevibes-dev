@@ -22,7 +22,7 @@ interface SpotifyArtist {
 export async function getUserGenres(userId: string): Promise<string[]> {
   try {
     await connectToDatabase();
-    
+
     // Obtener el usuario con sus géneros favoritos
     const user = await User.findOne({ spotifyId: userId });
 
@@ -32,37 +32,37 @@ export async function getUserGenres(userId: string): Promise<string[]> {
     }
 
     // Si no hay géneros guardados, intentar obtenerlos de Spotify
-    
+
     try {
       // Obtener los artistas top del usuario en Spotify
       const sp = await getSpotify();
       const topArtists = await sp.getMyTopArtists({ limit: 10, time_range: 'medium_term' });
-      
+
       if (!topArtists.items || topArtists.items.length === 0) {
         return [];
       }
-      
+
       // Extraer géneros de los artistas favoritos
       const artistGenres = topArtists.items.flatMap((artist: SpotifyArtist) => artist.genres || []);
-      
+
       // Contar la frecuencia de cada género
       const genreCounts: Record<string, number> = {};
       artistGenres.forEach((genre: string) => {
         genreCounts[genre] = (genreCounts[genre] || 0) + 1;
       });
-      
+
       // Ordenar géneros por frecuencia
       const sortedGenres = Object.entries(genreCounts)
         .sort((a, b) => b[1] - a[1])
         .map(entry => entry[0]);
-      
+
       // Guardar los géneros en la base de datos para futuras consultas
       if (sortedGenres.length > 0 && user) {
         const genreObjects = sortedGenres.map(name => ({ name }));
         user.favoriteGenres = genreObjects;
         await user.save();
       }
-      
+
       return sortedGenres;
     } catch (spotifyError) {
       console.error('Error al obtener géneros de Spotify:', spotifyError);
@@ -83,16 +83,16 @@ export async function getUserGenres(userId: string): Promise<string[]> {
 export async function saveUserGenres(userId: string, genres: string[]) {
   try {
     await connectToDatabase();
-    
+
     // Transformar géneros a formato IGenre
     const genreObjects = genres.map(name => ({ name }));
-    
+
     const updatedUser = await User.findOneAndUpdate(
       { spotifyId: userId },
       { favoriteGenres: genreObjects },
       { new: true }
     );
-    
+
     return updatedUser;
   } catch (error) {
     console.error('Error al guardar géneros del usuario:', error);
@@ -109,24 +109,24 @@ export async function saveUserGenres(userId: string, genres: string[]) {
 export async function addUserGenre(userId: string, genre: string) {
   try {
     await connectToDatabase();
-    
+
     const user = await User.findOne({ spotifyId: userId });
-    
+
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-    
+
     // Verificar si el género ya existe
     const genreExists = user.favoriteGenres.some((g: IGenre) => g.name === genre);
-    
+
     if (genreExists) {
       return user;
     }
-    
+
     // Agregar el nuevo género
     user.favoriteGenres.push({ name: genre });
     await user.save();
-    
+
     return user;
   } catch (error) {
     console.error('Error al agregar género al usuario:', error);
@@ -143,20 +143,20 @@ export async function addUserGenre(userId: string, genre: string) {
 export async function removeUserGenre(userId: string, genre: string) {
   try {
     await connectToDatabase();
-    
+
     const user = await User.findOne({ spotifyId: userId });
-    
+
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-    
+
     // Filtrar el género a eliminar
     user.favoriteGenres = user.favoriteGenres.filter((g: IGenre) => g.name !== genre);
     await user.save();
-    
+
     return user;
   } catch (error) {
     console.error('Error al eliminar género del usuario:', error);
     throw error;
   }
-} 
+}

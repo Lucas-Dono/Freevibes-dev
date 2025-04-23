@@ -56,7 +56,7 @@ const demoYoutubeIds: Record<string, string> = {
 const findDemoYoutubeId = (title: string, artist: string): string => {
   // Convertir título y artista a minúsculas para búsqueda insensible a mayúsculas
   const searchString = (title + ' ' + artist).toLowerCase();
-  
+
   // Buscar en el mapeo de canciones populares
   for (const [keyword, youtubeId] of Object.entries(demoYoutubeIds)) {
     if (searchString.includes(keyword)) {
@@ -64,7 +64,7 @@ const findDemoYoutubeId = (title: string, artist: string): string => {
       return youtubeId;
     }
   }
-  
+
   // Si no encontramos una coincidencia específica, usar el ID por defecto
   console.log(`[PlayService] Usando ID de YouTube por defecto para "${title} - ${artist}"`);
   return demoYoutubeIds.default;
@@ -74,7 +74,7 @@ const findDemoYoutubeId = (title: string, artist: string): string => {
  * Busca una canción en YouTube por su título y artista
  * @param title - Título de la canción
  * @param artist - Nombre del artista
- * @returns Objeto con la información del video de YouTube 
+ * @returns Objeto con la información del video de YouTube
  */
 const searchYouTube = async (title: string, artist: string): Promise<any> => {
   if (!title || !artist) {
@@ -86,26 +86,26 @@ const searchYouTube = async (title: string, artist: string): Promise<any> => {
     // Normalizar la consulta para mejorar resultados
     const cleanTitle = title.trim().replace(/\(.*?\)|\[.*?\]/g, '').trim();
     const cleanArtist = artist.trim();
-    
+
     // Crear la consulta con formato: "título artista audio"
     // Quitar "official" puede dar más resultados a veces, aunque "official audio" suele ser bueno.
     // Probemos sin "official" primero.
     const query = `${cleanTitle} ${cleanArtist} audio`;
     console.log(`[PlayService] Buscando en YouTube: "${query}"`);
-    
+
     // Usar la clave API dedicada para reproducción
     return await apiKeyManager.withApiKey(
       async (apiKey, cacheKey) => {
         // Aumentar el límite para tener más opciones en caso de que la primera no funcione
         const response = await fetch(`/api/youtube/search?query=${encodeURIComponent(query)}&filter=songs&limit=3&api_key=${apiKey}`);
-        
+
         if (!response.ok) {
           throw new Error(`Error en API de YouTube: ${response.status} - ${response.statusText}`);
         }
-        
+
         const data = await response.json();
         console.log(`[PlayService] Resultados de búsqueda: ${data.length || 0} elementos`);
-        
+
         if (Array.isArray(data) && data.length > 0) {
           // Filtrar resultados que contienen "karaoke", "cover", "live" o "remix"
           // a menos que esas palabras estén en el título original
@@ -115,15 +115,15 @@ const searchYouTube = async (title: string, artist: string): Promise<any> => {
             const isCover = resultTitle.includes('cover') && !cleanTitle.toLowerCase().includes('cover');
             const isLive = resultTitle.includes('live') && !cleanTitle.toLowerCase().includes('live');
             const isRemix = resultTitle.includes('remix') && !cleanTitle.toLowerCase().includes('remix');
-            
+
             return !(isKaraoke || isCover || isLive || isRemix);
           });
-          
+
           if (filteredResults.length > 0) {
             console.log(`[PlayService] Usando resultado filtrado: "${filteredResults[0].title}"`);
             return filteredResults[0];
           }
-          
+
           // Si no hay resultados filtrados, usar el primer resultado original
           console.log(`[PlayService] Usando primer resultado sin filtrar: "${data[0].title}"`);
           return data[0];
@@ -137,22 +137,22 @@ const searchYouTube = async (title: string, artist: string): Promise<any> => {
     );
   } catch (error) {
     console.error('[PlayService] Error buscando en YouTube:', error);
-    
+
     // Intentar una búsqueda alternativa con menos palabras
     try {
       console.log('[PlayService] Intentando búsqueda alternativa con menos términos...');
       const simpleQuery = `${title.split(' ').slice(0, 2).join(' ')} ${artist.split(' ')[0]}`;
-      
+
       return await apiKeyManager.withApiKey(
         async (apiKey) => {
           const response = await fetch(`/api/youtube/search?query=${encodeURIComponent(simpleQuery)}&filter=songs&limit=1&api_key=${apiKey}`);
-          
+
           if (!response.ok) {
             throw new Error(`Error en API alternativa: ${response.status}`);
           }
-          
+
           const data = await response.json();
-          
+
           if (Array.isArray(data) && data.length > 0) {
             console.log(`[PlayService] Resultado alternativo encontrado: "${data[0].title}"`);
             return data[0];
@@ -178,17 +178,17 @@ export const playTrack = async (track: any): Promise<void> => {
   try {
     // Normalizar los datos de la pista
     let normalizedTrack: Track;
-    
+
     // Verificar si estamos en modo demo (mejorando la detección)
-    const isInDemoMode = 
-      document.cookie.includes('demo-mode=true') || 
-      document.cookie.includes('demoMode=true') || 
+    const isInDemoMode =
+      document.cookie.includes('demo-mode=true') ||
+      document.cookie.includes('demoMode=true') ||
       window.location.href.includes('demo=true') ||
       localStorage.getItem('demoMode') === 'true';
-    
+
     // Eliminar el forzado de modo demo para la versión final
     const forceDemo = false;
-    
+
     console.log(`[PlayService] Modo demo detectado: ${isInDemoMode} (Cookies: ${document.cookie})`);
 
     // Si ya recibimos un objeto Track formateado (como en la página de búsqueda)
@@ -215,37 +215,37 @@ export const playTrack = async (track: any): Promise<void> => {
       const trackId = track.id || (track.uri ? track.uri.split(':').pop() : '');
       const artistNames = track.artists.map((a: any) => a.name).join(', ');
       const trackTitle = track.title || track.name || '';
-      
+
       if (!trackTitle) {
         console.error('[PlayService] Error: No se pudo determinar el título de la canción para la búsqueda.', track);
         return;
       }
 
       console.log(`[PlayService] Procesando canción: "${trackTitle}" por "${artistNames}"`);
-      
+
       try {
         let youtubeId = '';
         let youtubeThumbnail = '';
         let youtubeTitle = '';
-        
+
         // Determinar qué método usar según el modo
         if (isInDemoMode || forceDemo) {
           try {
             console.log(`[PlayService] Buscando en YouTube directamente (modo demo): "${trackTitle} ${artistNames}"`);
             // Buscar la canción en YouTube
             const youtubeResult = await searchYouTube(trackTitle, artistNames);
-            
+
             // ---> Log para depurar la estructura del resultado seleccionado
             console.log('[PlayService] Resultado seleccionado de searchYouTube:', JSON.stringify(youtubeResult, null, 2));
 
             youtubeId = youtubeResult.id || youtubeResult.videoId;
             youtubeThumbnail = youtubeResult.thumbnail || '';
             youtubeTitle = youtubeResult.title || trackTitle;
-            
+
             if (!youtubeId) {
               throw new Error('ID de YouTube no encontrado');
             }
-            
+
             console.log(`[PlayService] Encontrado en YouTube: "${youtubeTitle}" (ID: ${youtubeId})`);
           } catch (youtubeError) {
             console.error('[PlayService] Error buscando en YouTube, usando fallback:', youtubeError);
@@ -274,22 +274,22 @@ export const playTrack = async (track: any): Promise<void> => {
 
             const data = await response.json();
             youtubeId = data.videoId;
-            
+
             if (!youtubeId) {
               throw new Error('No se encontró video en YouTube');
             }
-            
+
             console.log(`[PlayService] API de Spotify devolvió YouTube ID: ${youtubeId}`);
           } catch (spotifyError) {
             console.error('[PlayService] Error en API de Spotify, intentando directamente con YouTube:', spotifyError);
-            
+
             // Si falla Spotify, intentar búsqueda directa en YouTube como fallback
             try {
               const youtubeResult = await searchYouTube(trackTitle, artistNames);
               youtubeId = youtubeResult.videoId;
               youtubeThumbnail = youtubeResult.thumbnail || '';
               youtubeTitle = youtubeResult.title || trackTitle;
-              
+
               if (!youtubeId) {
                 throw new Error('Fallback: ID de YouTube no encontrado');
               }
@@ -299,7 +299,7 @@ export const playTrack = async (track: any): Promise<void> => {
             }
           }
         }
-        
+
         // Crear el objeto normalizado
         normalizedTrack = {
           id: trackId,
@@ -313,13 +313,13 @@ export const playTrack = async (track: any): Promise<void> => {
         };
 
         console.log(`[PlayService] Enviando track para reproducción:`, normalizedTrack);
-        
+
         // Disparar evento para reproducir la pista
         const event = new CustomEvent('playTrack', { detail: normalizedTrack });
         window.dispatchEvent(event);
       } catch (error) {
         console.error('[PlayService] Error en reproducción:', error);
-        
+
         // Si hay un error, intentar usando la búsqueda de YouTube o el fallback
         try {
           console.log('[PlayService] Intentando fallback para reproducción');
@@ -328,15 +328,15 @@ export const playTrack = async (track: any): Promise<void> => {
             // Intentar con una búsqueda más general
             const generalQuery = `${trackTitle} ${artistNames.split(' ')[0]} audio`;
             console.log(`[PlayService] Intentando búsqueda general: "${generalQuery}"`);
-            
+
             const response = await fetch(`/api/youtube/search?query=${encodeURIComponent(generalQuery)}&filter=songs&limit=1`);
-            
+
             if (response.ok) {
               const data = await response.json();
-              
+
               if (Array.isArray(data) && data.length > 0) {
                 console.log(`[PlayService] Resultado de búsqueda general:`, data[0]);
-                
+
                 const fallbackTrack = {
                   id: trackId,
                   title: data[0].title || trackTitle,
@@ -347,21 +347,21 @@ export const playTrack = async (track: any): Promise<void> => {
                   youtubeId: data[0].videoId,
                   source: 'youtube-fallback'
                 };
-                
+
                 console.log('[PlayService] Usando track de fallback:', fallbackTrack);
                 const event = new CustomEvent('playTrack', { detail: fallbackTrack });
                 window.dispatchEvent(event);
                 return;
               }
             }
-            
+
             throw new Error('No se encontraron resultados en búsqueda general');
           } catch (generalError) {
             console.error('[PlayService] Error en búsqueda general:', generalError);
-            
+
             // Si falla la búsqueda general, usar el fallback predefinido
             const fallbackYoutubeId = findDemoYoutubeId(trackTitle, artistNames);
-            
+
             const fallbackTrack = {
               id: trackId,
               title: trackTitle,
@@ -372,7 +372,7 @@ export const playTrack = async (track: any): Promise<void> => {
               youtubeId: fallbackYoutubeId,
               source: 'fallback'
             };
-            
+
             console.log('[PlayService] Usando fallback final:', fallbackTrack);
             const event = new CustomEvent('playTrack', { detail: fallbackTrack });
             window.dispatchEvent(event);
@@ -390,7 +390,7 @@ export const playTrack = async (track: any): Promise<void> => {
             youtubeId: demoYoutubeIds.default,
             source: 'ultimate-fallback'
           };
-          
+
           console.log('[PlayService] Usando fallback de último recurso:', defaultTrack);
           const event = new CustomEvent('playTrack', { detail: defaultTrack });
           window.dispatchEvent(event);
@@ -413,7 +413,7 @@ export const playTrack = async (track: any): Promise<void> => {
         // Buscar la canción en YouTube
         console.log(`[PlayService] Buscando formato genérico en YouTube (modo demo): "${title} ${artist}"`);
         const youtubeResult = await searchYouTube(title, artist);
-        
+
         normalizedTrack = {
           id: trackId,
           title: youtubeResult.title || title,
@@ -424,17 +424,17 @@ export const playTrack = async (track: any): Promise<void> => {
           youtubeId: youtubeResult.videoId,
           source: 'youtube'
         };
-        
+
         console.log('[PlayService] Reproduciendo formato genérico:', normalizedTrack);
         const event = new CustomEvent('playTrack', { detail: normalizedTrack });
         window.dispatchEvent(event);
         return;
       } catch (youtubeError) {
         console.error('[PlayService] Error en búsqueda directa de YouTube, usando fallback:', youtubeError);
-        
+
         // Usar ID predefinido como fallback
         const demoYoutubeId = findDemoYoutubeId(title, artist);
-        
+
         normalizedTrack = {
           id: trackId,
           title: title,
@@ -445,7 +445,7 @@ export const playTrack = async (track: any): Promise<void> => {
           youtubeId: demoYoutubeId,
           source: 'demo-fallback'
         };
-        
+
         console.log('[PlayService] Reproduciendo fallback para formato genérico:', normalizedTrack);
         const event = new CustomEvent('playTrack', { detail: normalizedTrack });
         window.dispatchEvent(event);
@@ -494,11 +494,11 @@ export const playTrack = async (track: any): Promise<void> => {
         }
       } catch (spotifyError) {
         console.error('[PlayService] Error en Spotify API, intentando YouTube:', spotifyError);
-        
+
         // Si falla Spotify, intentar con YouTube como fallback
         try {
           const youtubeResult = await searchYouTube(title, artist);
-          
+
           normalizedTrack = {
             id: trackId,
             title: youtubeResult.title || title,
@@ -509,17 +509,17 @@ export const playTrack = async (track: any): Promise<void> => {
             youtubeId: youtubeResult.videoId,
             source: 'youtube-fallback'
           };
-          
+
           console.log('[PlayService] Reproduciendo fallback YouTube (modo normal):', normalizedTrack);
           const event = new CustomEvent('playTrack', { detail: normalizedTrack });
           window.dispatchEvent(event);
           return;
         } catch (finalError) {
           console.error('[PlayService] Error total, usando ID predefinido:', finalError);
-          
+
           // Si todo falla, usar ID predefinido como último recurso
           const fallbackYoutubeId = findDemoYoutubeId(title, artist);
-          
+
           normalizedTrack = {
             id: trackId,
             title: title,
@@ -530,7 +530,7 @@ export const playTrack = async (track: any): Promise<void> => {
             youtubeId: fallbackYoutubeId,
             source: 'last-resort'
           };
-          
+
           console.log('[PlayService] Último recurso de reproducción:', normalizedTrack);
           const event = new CustomEvent('playTrack', { detail: normalizedTrack });
           window.dispatchEvent(event);
@@ -542,7 +542,7 @@ export const playTrack = async (track: any): Promise<void> => {
     // Código de respaldo final - no debería llegarse a este punto con los cambios anteriores
     console.warn('[PlayService] Llegando a código de respaldo final (no debería suceder)');
     const fallbackYoutubeId = track.youtubeId || track.videoId || findDemoYoutubeId(title, artist);
-    
+
     normalizedTrack = {
       id: trackId,
       title: title,
@@ -559,7 +559,7 @@ export const playTrack = async (track: any): Promise<void> => {
     window.dispatchEvent(event);
   } catch (error) {
     console.error('Error en el servicio de reproducción:', error);
-    
+
     // Intentar una última reproducción de fallback en caso de error general
     try {
       const fallbackTrack = {
@@ -572,7 +572,7 @@ export const playTrack = async (track: any): Promise<void> => {
         youtubeId: demoYoutubeIds.default, // Usar el ID por defecto
         source: 'fallback'
       };
-      
+
       console.log('[PlayService] Usando track de emergencia por error general');
       const event = new CustomEvent('playTrack', { detail: fallbackTrack });
       window.dispatchEvent(event);
@@ -585,4 +585,4 @@ export const playTrack = async (track: any): Promise<void> => {
 
 export default {
   playTrack
-}; 
+};

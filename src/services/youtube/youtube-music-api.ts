@@ -1,6 +1,6 @@
 /**
  * Servicio de YouTube Music API
- * 
+ *
  * Este servicio implementa funciones específicas para música usando la API de YouTube.
  * Se basa en las prácticas de ytmusicapi para ofrecer funcionalidades similares.
  */
@@ -151,23 +151,23 @@ function normalizeYTMusicTracks(tracks: any[]): Track[] {
     .map((track, index) => {
       // Validar IDs
       const trackId = track.id || track.videoId || '';
-      
+
       // Validar y procesar la miniatura
       let coverUrl = '';
-      
-      console.log(`[YTMusic API] Procesando track ${index}:`, 
-                  `ID=${trackId}`, 
-                  `thumbnail=${track.thumbnail}`, 
+
+      console.log(`[YTMusic API] Procesando track ${index}:`,
+                  `ID=${trackId}`,
+                  `thumbnail=${track.thumbnail}`,
                   `cover=${track.cover}`);
-      
+
       // Preferir thumbnail si existe y parece ser una URL válida
-      if (track.thumbnail && typeof track.thumbnail === 'string' && track.thumbnail.length > 10 && 
+      if (track.thumbnail && typeof track.thumbnail === 'string' && track.thumbnail.length > 10 &&
           (track.thumbnail.startsWith('http') || track.thumbnail.startsWith('/'))) {
         coverUrl = track.thumbnail;
         console.log(`[YTMusic API] Track ${index}: usando thumbnail: ${coverUrl}`);
-      } 
+      }
       // Si no hay thumbnail pero hay cover, usar cover
-      else if (track.cover && typeof track.cover === 'string' && track.cover.length > 10 && 
+      else if (track.cover && typeof track.cover === 'string' && track.cover.length > 10 &&
               (track.cover.startsWith('http') || track.cover.startsWith('/'))) {
         coverUrl = track.cover;
         console.log(`[YTMusic API] Track ${index}: usando cover: ${coverUrl}`);
@@ -176,38 +176,38 @@ function normalizeYTMusicTracks(tracks: any[]): Track[] {
       else if (track.thumbnails && Array.isArray(track.thumbnails) && track.thumbnails.length > 0) {
         // Encontrar la primera URL válida
         const validThumbnail = track.thumbnails.find(
-          (t: any) => t && t.url && typeof t.url === 'string' && t.url.length > 10 && 
+          (t: any) => t && t.url && typeof t.url === 'string' && t.url.length > 10 &&
           (t.url.startsWith('http') || t.url.startsWith('/'))
         );
-        
+
         if (validThumbnail && validThumbnail.url) {
           coverUrl = validThumbnail.url;
           console.log(`[YTMusic API] Track ${index}: usando thumbnails[].url: ${coverUrl}`);
         }
       }
-      
+
       // Si tenemos un ID válido de YouTube y no tenemos coverUrl o es inválida, generar uno
-      if (trackId && trackId !== 'default' && trackId.length > 5 && 
+      if (trackId && trackId !== 'default' && trackId.length > 5 &&
           (!coverUrl || !coverUrl.startsWith('http'))) {
         // Asegurarse de que estamos usando un ID real y no una URL completa
         const cleanId = extractYouTubeId(trackId);
         coverUrl = `https://img.youtube.com/vi/${cleanId}/hqdefault.jpg`;
         console.log(`[YTMusic API] Track ${index}: generando thumbnail desde ID: ${coverUrl}`);
       }
-      
+
       // Verificar si la URL es una URL de imagen válida
-      const isValidImageUrl = 
-        coverUrl && 
-        typeof coverUrl === 'string' && 
-        coverUrl.length > 10 && 
-        coverUrl.startsWith('http') && 
-        (coverUrl.includes('.jpg') || 
-         coverUrl.includes('.jpeg') || 
-         coverUrl.includes('.png') || 
-         coverUrl.includes('.webp') || 
-         coverUrl.includes('ytimg.com') || 
+      const isValidImageUrl =
+        coverUrl &&
+        typeof coverUrl === 'string' &&
+        coverUrl.length > 10 &&
+        coverUrl.startsWith('http') &&
+        (coverUrl.includes('.jpg') ||
+         coverUrl.includes('.jpeg') ||
+         coverUrl.includes('.png') ||
+         coverUrl.includes('.webp') ||
+         coverUrl.includes('ytimg.com') ||
          coverUrl.includes('googleusercontent.com'));
-      
+
       // Fallback final si después de todo no tenemos URL válida
       if (!isValidImageUrl) {
         // Usar una URL de fallback conocida si tenemos un ID de YouTube
@@ -246,15 +246,15 @@ function extractYouTubeId(idOrUrl: string): string {
     console.log('[YTMusic API] ID vacío o nulo, usando default_img');
     return 'default_img';
   }
-  
+
   // Limpiar la URL si contiene espacios o caracteres no deseados
   const cleanedUrl = idOrUrl.trim();
-  
+
   // Primero verificar si la URL está duplicada
-  if (cleanedUrl.includes('https://img.youtube.com/vi/https://') || 
+  if (cleanedUrl.includes('https://img.youtube.com/vi/https://') ||
       cleanedUrl.includes('https://i.ytimg.com/vi/https://')) {
     console.log('[YTMusic API] Detectada URL duplicada:', cleanedUrl);
-    
+
     // Usar una regex más robusta para extraer el ID de la URL duplicada
     const duplicatedPatterns = [
       /https:\/\/img\.youtube\.com\/vi\/https:\/\/img\.youtube\.com\/vi\/([a-zA-Z0-9_-]{11})\/[^\/]+\.jpg/i,
@@ -262,7 +262,7 @@ function extractYouTubeId(idOrUrl: string): string {
       /https:\/\/i\.ytimg\.com\/vi\/https:\/\/img\.youtube\.com\/vi\/([a-zA-Z0-9_-]{11})\/[^\/]+\.jpg/i,
       /https:\/\/i\.ytimg\.com\/vi\/https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]{11})\/[^\/]+\.jpg/i
     ];
-    
+
     for (const pattern of duplicatedPatterns) {
       const match = cleanedUrl.match(pattern);
       if (match && match[1]) {
@@ -270,7 +270,7 @@ function extractYouTubeId(idOrUrl: string): string {
         return match[1];
       }
     }
-    
+
     // Si los patrones específicos fallan, intentar extraer usando una regex más genérica
     const genericDuplicatedMatch = cleanedUrl.match(/https:\/\/[^\/]+\/vi\/https:\/\/[^\/]+\/vi\/([a-zA-Z0-9_-]{11})/i);
     if (genericDuplicatedMatch && genericDuplicatedMatch[1]) {
@@ -278,12 +278,12 @@ function extractYouTubeId(idOrUrl: string): string {
       return genericDuplicatedMatch[1];
     }
   }
-  
+
   // Si ya es un ID limpio (11 caracteres), devolverlo directamente
   if (/^[a-zA-Z0-9_-]{11}$/.test(cleanedUrl)) {
     return cleanedUrl;
   }
-  
+
   // Extraer ID de una URL de YouTube
   const patterns = [
     // YouTube video URL
@@ -293,7 +293,7 @@ function extractYouTubeId(idOrUrl: string): string {
     // Last attempt to find any 11-character sequence that looks like a YouTube ID
     /([a-zA-Z0-9_-]{11})/
   ];
-  
+
   for (const pattern of patterns) {
     const match = cleanedUrl.match(pattern);
     if (match && match[1]) {
@@ -301,7 +301,7 @@ function extractYouTubeId(idOrUrl: string): string {
       return match[1];
     }
   }
-  
+
   // Si no pudimos extraer un ID válido, registrar el problema y devolver un valor por defecto
   console.warn('[YTMusic API] No se pudo extraer un ID válido de:', cleanedUrl);
   return 'default_img';
@@ -321,7 +321,7 @@ function normalizeFeaturedPlaylists(playlists: any[]): YouTubeMusicPlaylist[] {
     .map((playlist, index) => {
       // Validar y procesar las miniaturas
       let thumbnails = playlist.thumbnails || [];
-      
+
       // Si thumbnails no es un array, intentar convertirlo
       if (!Array.isArray(thumbnails)) {
         if (typeof thumbnails === 'string') {
@@ -335,18 +335,18 @@ function normalizeFeaturedPlaylists(playlists: any[]): YouTubeMusicPlaylist[] {
           thumbnails = [];
         }
       }
-      
+
       // Procesar cada URL de thumbnail para asegurarse de que son válidas
       const processedThumbnails = thumbnails.map((thumb: any) => {
         if (!thumb) return { url: '/placeholder-playlist.jpg' };
-        
+
         let imgUrl = '';
         if (typeof thumb === 'string') {
           imgUrl = thumb;
         } else if (thumb.url && typeof thumb.url === 'string') {
           imgUrl = thumb.url;
         }
-        
+
         // Si la URL parece ser un ID de YouTube o URL malformada, corregirla
         if (imgUrl && (imgUrl.includes('youtube.com/vi/') || imgUrl.includes('ytimg.com/vi/'))) {
           const cleanId = extractYouTubeId(imgUrl);
@@ -358,15 +358,15 @@ function normalizeFeaturedPlaylists(playlists: any[]): YouTubeMusicPlaylist[] {
             imgUrl = '/placeholder-playlist.jpg';
           }
         }
-        
+
         return { url: imgUrl || '/placeholder-playlist.jpg' };
       }).filter((thumb: any) => thumb.url && thumb.url.length > 0);
-      
+
       // Si no hay thumbnails válidos después del procesamiento, usar placeholder
       if (processedThumbnails.length === 0) {
         processedThumbnails.push({ url: '/placeholder-playlist.jpg' });
       }
-      
+
       // Crear objeto normalizado
       return {
         title: playlist.title || 'Playlist sin título',
@@ -395,7 +395,7 @@ function normalizeAlbums(albums: any[]): YouTubeMusicAlbum[] {
     .map((album, index) => {
       // Validar y procesar las imágenes
       let images = album.images || [];
-      
+
       // Si images no es un array, intentar convertirlo
       if (!Array.isArray(images)) {
         if (typeof images === 'string') {
@@ -409,18 +409,18 @@ function normalizeAlbums(albums: any[]): YouTubeMusicAlbum[] {
           images = [];
         }
       }
-      
+
       // Procesar cada URL de imagen para asegurarse de que son válidas
       const processedImages = images.map((img: any) => {
         if (!img) return { url: '/placeholder-album.jpg' };
-        
+
         let imgUrl = '';
         if (typeof img === 'string') {
           imgUrl = img;
         } else if (img.url && typeof img.url === 'string') {
           imgUrl = img.url;
         }
-        
+
         // Si la URL parece ser un ID de YouTube o URL malformada, corregirla
         if (imgUrl && (imgUrl.includes('youtube.com/vi/') || imgUrl.includes('ytimg.com/vi/'))) {
           const cleanId = extractYouTubeId(imgUrl);
@@ -432,15 +432,15 @@ function normalizeAlbums(albums: any[]): YouTubeMusicAlbum[] {
             imgUrl = '/placeholder-album.jpg';
           }
         }
-        
+
         return { url: imgUrl || '/placeholder-album.jpg' };
       }).filter((img: any) => img.url && img.url.length > 0);
-      
+
       // Si no hay imágenes válidas después del procesamiento, usar placeholder
       if (processedImages.length === 0) {
         processedImages.push({ url: '/placeholder-album.jpg' });
       }
-      
+
       // Asegurar que artists es un array válido
       let artists = album.artists || [];
       if (!Array.isArray(artists)) {
@@ -452,7 +452,7 @@ function normalizeAlbums(albums: any[]): YouTubeMusicAlbum[] {
           artists = [{ name: 'Artista desconocido' }];
         }
       }
-      
+
       // Crear objeto normalizado
       return {
         id: album.id || `unknown-album-${index}`,
@@ -481,7 +481,7 @@ function normalizeArtists(artists: any[]): YouTubeMusicArtist[] {
     .map((artist, index) => {
       // Validar y procesar las imágenes
       let images = artist.thumbnails || artist.images || [];
-      
+
       // Si images no es un array, intentar convertirlo
       if (!Array.isArray(images)) {
         if (typeof images === 'string') {
@@ -495,18 +495,18 @@ function normalizeArtists(artists: any[]): YouTubeMusicArtist[] {
           images = [];
         }
       }
-      
+
       // Procesar cada URL de imagen para asegurarse de que son válidas
       const processedImages = images.map((img: any) => {
         if (!img) return { url: '/placeholder-artist.jpg' };
-        
+
         let imgUrl = '';
         if (typeof img === 'string') {
           imgUrl = img;
         } else if (img.url && typeof img.url === 'string') {
           imgUrl = img.url;
         }
-        
+
         // Si la URL parece ser un ID de YouTube o URL malformada, corregirla
         if (imgUrl && (imgUrl.includes('youtube.com/vi/') || imgUrl.includes('ytimg.com/vi/'))) {
           const cleanId = extractYouTubeId(imgUrl);
@@ -518,15 +518,15 @@ function normalizeArtists(artists: any[]): YouTubeMusicArtist[] {
             imgUrl = '/placeholder-artist.jpg';
           }
         }
-        
+
         return { url: imgUrl || '/placeholder-artist.jpg' };
       }).filter((img: any) => img.url && img.url.length > 0);
-      
+
       // Si no hay imágenes válidas después del procesamiento, usar placeholder
       if (processedImages.length === 0) {
         processedImages.push({ url: '/placeholder-artist.jpg' });
       }
-      
+
       // Asegurar que genres es un array válido
       let genres = artist.genres || [];
       if (!Array.isArray(genres)) {
@@ -539,7 +539,7 @@ function normalizeArtists(artists: any[]): YouTubeMusicArtist[] {
           genres = [];
         }
       }
-      
+
       // Normalizar el objeto de artista
       return {
         id: artist.id || artist.artistId || `unknown-artist-${index}`,
@@ -563,10 +563,10 @@ export class YouTubeMusicAPI {
   private available: boolean = false;
   private pingAttempted: boolean = false;
   private lastAvailabilityCheck: number = 0;
-  
+
   constructor() {
     this.baseUrl = YTMUSIC_API_URL;
-    
+
     // Verificar disponibilidad al inicializar sólo si no está deshabilitado
     if (!DISABLE_YT_MUSIC_PING) {
       this.checkAvailabilityAsync();
@@ -575,7 +575,7 @@ export class YouTubeMusicAPI {
       this.available = false;
     }
   }
-  
+
   /**
    * Verifica si el servicio está disponible
    * Permite forzar una nueva verificación si se pasa force=true
@@ -585,40 +585,40 @@ export class YouTubeMusicAPI {
     if (!force && this.pingAttempted && (Date.now() - this.lastAvailabilityCheck < 60000)) {
       return this.available;
     }
-    
+
     // Si se fuerza la verificación o no se ha intentado aún, iniciar una verificación asíncrona
     if (force || !this.pingAttempted) {
       // Programar una verificación asíncrona
       setTimeout(() => this.checkAvailabilityAsync(), 0);
     }
-    
+
     // Devolver el estado actual mientras se verifica de nuevo
     return this.available;
   }
-  
+
   /**
    * Método privado para verificar activamente la disponibilidad del servicio
    * Devuelve una promesa que se resuelve con el estado de disponibilidad
    */
   private async checkAvailabilityAsync(): Promise<boolean> {
     const now = Date.now();
-    
+
     // Actualizar timestamp de verificación
     this.pingAttempted = true;
     this.lastAvailabilityCheck = now;
-    
+
     try {
       // En lugar de usar endpoints especiales, intentar una búsqueda simple
       // Esto verificará toda la cadena de comunicación: Frontend -> Node.js -> Python
       const testSearchResponse = await axios.get(`${this.baseUrl}/search`, {
         params: {
-          query: 'test', 
+          query: 'test',
           filter: 'songs',
-          limit: 1 
+          limit: 1
         },
         timeout: 8000 // Timeout mayor para dar tiempo a que responda
       });
-      
+
       // Si llegamos aquí, la búsqueda funcionó - el servicio está disponible
       this.available = true;
       globalAvailabilityStatus = {
@@ -626,7 +626,7 @@ export class YouTubeMusicAPI {
         available: true,
         lastCheck: now
       };
-      
+
       console.log(`[YouTubeMusicAPI] Servicio disponible (verificado con búsqueda de prueba)`);
       return true;
     } catch (error) {
@@ -635,37 +635,37 @@ export class YouTubeMusicAPI {
         const statusResponse = await axios.get<StatusResponse>(`${this.baseUrl.replace('/youtube', '/status')}`, {
           timeout: 5000
         });
-        
+
         // Verificar que la respuesta incluya el estado de YouTube Music
-        this.available = statusResponse.status === 200 && 
+        this.available = statusResponse.status === 200 &&
                         statusResponse.data.services?.youtube_music === true;
       } catch (statusError) {
         // Si ambos intentos fallan, el servicio no está disponible
         this.available = false;
       }
-      
+
       // Actualizar estado global
       globalAvailabilityStatus = {
         checked: true,
         available: this.available,
         lastCheck: now
       };
-      
+
       if (this.available) {
         console.log(`[YouTubeMusicAPI] Servicio disponible (verificado con /status)`);
       } else {
         if (SHOW_YT_MUSIC_ERRORS) {
-          console.error('[YouTubeMusicAPI] Error al verificar disponibilidad:', 
+          console.error('[YouTubeMusicAPI] Error al verificar disponibilidad:',
             error instanceof Error ? error.message : 'Error desconocido');
         } else {
           console.log('[YouTubeMusicAPI] Servicio no disponible');
         }
       }
-      
+
       return this.available;
     }
   }
-  
+
   /**
    * Método principal de búsqueda - será utilizado por searchSongs
    */
@@ -673,32 +673,32 @@ export class YouTubeMusicAPI {
     if (!this.available) {
       return [];
     }
-    
+
     try {
       return await withRetry(async () => {
         const response = await axios.get(`${this.baseUrl}/search`, {
           params: { query, filter: 'songs', limit },
           timeout: API_CONFIG.getSearchTimeout()
       });
-      
+
       return Array.isArray(response.data) ? response.data : [];
       });
     } catch (error) {
       if (SHOW_YT_MUSIC_ERRORS) {
-        console.error('[YouTubeMusicAPI] Error buscando canciones:', 
+        console.error('[YouTubeMusicAPI] Error buscando canciones:',
           error instanceof Error ? error.message : 'Error desconocido');
       }
       return [];
     }
   }
-  
+
   /**
    * Alias para search - para compatibilidad con el código existente
    */
   searchSongs(query: string, limit: number = 10): Promise<any[]> {
     return this.search(query, limit);
   }
-  
+
   /**
    * Busca tracks en YouTube Music
    */
@@ -712,19 +712,19 @@ export class YouTubeMusicAPI {
     try {
       const countryCode = getCountryCode();
       const url = `${this.baseUrl}/search?q=${encodeURIComponent(query)}&limit=${limit}&country=${countryCode}`;
-      
+
       console.log(`[YTMusic API] Buscando tracks: "${query}" (límite: ${limit}, país: ${countryCode})`);
-      
+
       const response = await withRetry(() => api.get(url, { timeout: API_CONFIG.getSearchTimeout() }));
-      
+
       if (response.status === 200 && response.data) {
         const { tracks = [], artists = [], albums = [] } = response.data;
-        
+
         console.log(`[YTMusic API] Resultados encontrados: ${tracks.length} tracks, ${artists.length} artistas, ${albums.length} álbumes`);
-        
+
         // Utilizar la función normalizeYTMusicTracks para procesar los resultados
         const normalizedTracks = normalizeYTMusicTracks(tracks);
-        
+
         return {
           tracks: normalizedTracks,
           artists,
@@ -737,13 +737,13 @@ export class YouTubeMusicAPI {
       return EMPTY_RESPONSE;
     }
   }
-  
+
   /**
    * Convierte resultados a formato Track
    */
   toTracks(items: any[]): TrackInterface[] {
     if (!items || !Array.isArray(items)) return [];
-    
+
     return items.map(item => ({
       id: item.videoId || item.id || '',
       title: item.title || item.name || '',
@@ -755,7 +755,7 @@ export class YouTubeMusicAPI {
       youtubeId: item.videoId || item.id || ''
     }));
   }
-  
+
   /**
    * Encuentra un video de YouTube Music basado en información de Spotify
    * @param spotifyId ID de Spotify (opcional)
@@ -763,32 +763,32 @@ export class YouTubeMusicAPI {
    * @param artist Artista
    */
   async spotifyToYoutube(
-    spotifyId: string | undefined, 
-    title: string, 
+    spotifyId: string | undefined,
+    title: string,
     artist: string
   ): Promise<any> {
     try {
       const params: Record<string, string> = {};
-      
+
       if (spotifyId) {
         params.id = spotifyId;
       }
-      
+
       params.title = title;
       params.artist = artist;
-      
+
       const response = await axios.get(`${this.baseUrl}/spotify-to-youtube`, {
         params,
         timeout: API_CONFIG.getSearchTimeout()
       });
-      
+
       return response.data;
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error en spotifyToYoutube:', error);
       return null;
     }
   }
-  
+
   /**
    * Encuentra un track específico en YouTube Music
    * @param title Título de la canción
@@ -803,22 +803,22 @@ export class YouTubeMusicAPI {
         },
         timeout: API_CONFIG.getSearchTimeout()
       });
-      
+
       const data = response.data;
-      
+
       // Normalizar el resultado para asegurar que thumbnail se mapea a cover
       if (data && data.thumbnail) {
         console.log(`[YTMusic API] FindTrack - Mapeando thumbnail a cover: ${data.thumbnail}`);
         data.cover = data.thumbnail;
       }
-      
+
       return data;
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error en findTrack:', error);
       return null;
     }
   }
-  
+
   /**
    * Obtiene recomendaciones variadas de YouTube Music
    * @param limit Límite de resultados
@@ -829,9 +829,9 @@ export class YouTubeMusicAPI {
         params: { limit },
         timeout: API_CONFIG.getRecommendationsTimeout()
       });
-      
+
       const results = Array.isArray(response.data) ? response.data : [];
-      
+
       // Aplicar normalización para asegurar que las miniaturas se manejan correctamente
       return normalizeYTMusicTracks(results);
     } catch (error) {
@@ -839,7 +839,7 @@ export class YouTubeMusicAPI {
       return [];
     }
   }
-  
+
   /**
    * Obtiene artistas populares de YouTube Music
    * @param limit Número máximo de artistas a retornar
@@ -851,31 +851,31 @@ export class YouTubeMusicAPI {
         params: { limit },
         timeout: API_CONFIG.getRecommendationsTimeout()
       });
-      
+
       // Definimos un tipo para la respuesta esperada
       interface ArtistsResponse {
         items: Artist[];
       }
-      
+
       const data = response.data as ArtistsResponse;
       if (data && data.items && Array.isArray(data.items)) {
         return data.items;
       }
-      
+
       return [];
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error al obtener artistas populares:', error);
       return [];
     }
   }
-  
+
   /**
    * Obtiene recomendaciones por géneros
    */
   async getRecommendationsByGenres(genres: string[], limit: number = 20): Promise<any> {
     try {
       const response = await axios.get(`${this.baseUrl}/recommendations-by-genres`, {
-        params: { 
+        params: {
           genres: genres,
           limit,
           artistsPerGenre: 20,
@@ -898,14 +898,14 @@ export class YouTubeMusicAPI {
           return result.slice(0, -1); // Eliminar el último '&'
         }
       });
-      
+
       // Normalizar los tracks en la respuesta
       const data = response.data || {};
-      
+
       if (data.tracks && Array.isArray(data.tracks)) {
         data.tracks = normalizeYTMusicTracks(data.tracks);
       }
-      
+
       return data;
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error obteniendo recomendaciones por géneros:', error);
@@ -914,32 +914,32 @@ export class YouTubeMusicAPI {
   }
 
   async convertSpotifyTrackToYTMusic(
-    spotifyId: string | undefined, 
-    title: string, 
+    spotifyId: string | undefined,
+    title: string,
     artist: string
   ): Promise<any> {
     try {
       const params: Record<string, string> = {};
-      
+
       if (spotifyId) {
         params.id = spotifyId;
       }
-      
+
       params.title = title;
       params.artist = artist;
-      
+
       const response = await axios.get(`${this.baseUrl}/spotify-to-youtube`, {
         params,
         timeout: API_CONFIG.getSearchTimeout()
       });
-      
+
       const data = response.data;
-      
+
       // Normalizar el resultado para asegurar que thumbnail se mapea a cover
       if (data && data.thumbnail) {
         data.cover = data.thumbnail;
       }
-      
+
       return data;
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error en spotifyToYoutube:', error);
@@ -957,11 +957,11 @@ export class YouTubeMusicAPI {
       // Obtener código de país del usuario
       const region = getCountryCode();
       console.log(`[YTMusic API] Obteniendo playlists destacadas con región: ${region}`);
-      
+
       const response = await api.get('/featured-playlists', {
         params: { limit, region }
       });
-      
+
       // Asegurar que el valor devuelto es un array y normalizarlo
       const playlists = Array.isArray(response.data) ? response.data : [];
       return normalizeFeaturedPlaylists(playlists);
@@ -981,11 +981,11 @@ export class YouTubeMusicAPI {
       // Obtener código de país del usuario
       const region = getCountryCode();
       console.log(`[YTMusic API] Obteniendo nuevos lanzamientos con región: ${region}`);
-      
+
       const response = await api.get('/new-releases', {
         params: { limit, region }
       });
-      
+
       // Asegurar que el valor devuelto es un array y normalizarlo
       const albums = Array.isArray(response.data) ? response.data : [];
       return normalizeAlbums(albums);
@@ -1005,26 +1005,26 @@ export class YouTubeMusicAPI {
       // Obtener código de país del usuario
       const region = getCountryCode();
       console.log(`[YTMusic API] Obteniendo top charts con región: ${region}`);
-      
+
       // Primero intentamos con el endpoint charts que tiene singles (canciones)
       const response = await api.get('/charts', {
         params: { limit, region }
       });
-      
+
       if (response.data && response.data.singles && Array.isArray(response.data.singles)) {
         const tracks = response.data.singles.slice(0, limit);
         console.log(`[YTMusic API] Obtenidos ${tracks.length} singles de charts`);
         return tracks;
       }
-      
+
       // Si no hay singles, intentamos con getRecommendations
       console.log(`[YTMusic API] No se encontraron singles en charts, probando con recomendaciones`);
       const recommendations = await this.getRecommendations(limit);
-      
+
       if (recommendations && recommendations.length > 0) {
         return recommendations;
       }
-      
+
       // Si todo falla, devolver array vacío
       console.warn(`[YTMusic API] No se pudieron obtener top charts`);
       return [];
@@ -1046,13 +1046,13 @@ export class YouTubeMusicAPI {
       const region = getCountryCode();
       // Obtener idioma del navegador para la búsqueda
       const language = navigator?.language?.split('-')[0] || 'en';
-      
+
       console.log(`[YTMusic API] Obteniendo artistas por género ${genre} con región: ${region} y idioma: ${language}`);
-      
+
       const response = await api.get('/artists-by-genre', {
         params: { genre, limit, region, language }
       });
-      
+
       // Asegurar que el valor devuelto es un array y normalizarlo
       const artists = Array.isArray(response.data) ? response.data : [];
       return normalizeArtists(artists);
@@ -1070,11 +1070,11 @@ export class YouTubeMusicAPI {
     try {
       const apiBaseUrl = API_CONFIG.getNodeApiUrl();
       const response = await fetch(`${apiBaseUrl}/api/youtube/get-mood-categories`);
-      
+
       if (!response.ok) {
         throw new Error(`Error obteniendo categorías de moods: ${response.statusText}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error obteniendo categorías de moods:', error);
@@ -1091,11 +1091,11 @@ export class YouTubeMusicAPI {
     try {
       const apiBaseUrl = API_CONFIG.getNodeApiUrl();
       const response = await fetch(`${apiBaseUrl}/api/youtube/get-mood-playlists?params=${encodeURIComponent(params)}`);
-      
+
       if (!response.ok) {
         throw new Error(`Error obteniendo playlists de mood: ${response.statusText}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error obteniendo playlists de mood:', error);
@@ -1112,11 +1112,11 @@ export class YouTubeMusicAPI {
     try {
       const apiBaseUrl = API_CONFIG.getNodeApiUrl();
       const response = await fetch(`${apiBaseUrl}/api/youtube/get-charts?country=${encodeURIComponent(country)}`);
-      
+
       if (!response.ok) {
         throw new Error(`Error obteniendo charts: ${response.statusText}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('[YouTubeMusicAPI] Error obteniendo charts:', error);
@@ -1136,19 +1136,19 @@ const youtubeMusicAPI = {
   searchSongs: withThrottle(baseAPI.searchSongs.bind(baseAPI), 'youtube'),
   findTrack: withThrottle(baseAPI.findTrack.bind(baseAPI), 'youtube'),
   findExactTrack: withThrottle(baseAPI.findTrack.bind(baseAPI), 'youtube'),
-  
+
   // Funciones para artistas y géneros
   searchByGenre: withThrottle(baseAPI.getArtistsByGenre.bind(baseAPI), 'youtube'),
   searchArtist: withThrottle(baseAPI.findTrack.bind(baseAPI), 'youtube'),
   getPredefinedArtistsByGenre: withThrottle(baseAPI.getArtistsByGenre.bind(baseAPI), 'youtube'),
-  
+
   // Funciones de recomendaciones
   getRecommendations: withThrottle(baseAPI.getRecommendations.bind(baseAPI), 'youtube'),
-  
+
   // Funciones de exploración
   getFeaturedPlaylists: withThrottle(baseAPI.getFeaturedPlaylists.bind(baseAPI), 'youtube'),
   getNewReleases: withThrottle(baseAPI.getNewReleases.bind(baseAPI), 'youtube'),
-  
+
   // Funciones de utilidad
   toTracks: baseAPI.toTracks.bind(baseAPI),
   isAvailable: () => baseAPI.isAvailable(),
@@ -1160,4 +1160,4 @@ const youtubeMusicAPI = {
 
 // Exportar la función normalizeYTMusicTracks para uso en otros módulos
 export { normalizeYTMusicTracks, youtubeMusicAPI };
-export default youtubeMusicAPI; 
+export default youtubeMusicAPI;

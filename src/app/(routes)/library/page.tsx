@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Grid, 
-  Card, 
-  CardContent, 
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
   CardMedia,
   IconButton,
   CircularProgress,
@@ -87,16 +87,16 @@ export default function LibraryPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const { playTrack } = usePlayer();
-  
+
   // Referencia para el observador de intersección
   const observer = useRef<IntersectionObserver | null>(null);
   // Referencia para el último elemento
   const lastTrackElementRef = useCallback((node: HTMLDivElement | null) => {
     if (loading) return;
-    
+
     // Desconectar el observador anterior si existe
     if (observer.current) observer.current.disconnect();
-    
+
     // Crear un nuevo observador
     observer.current = new IntersectionObserver(entries => {
       // Si el último elemento es visible y hay más elementos por cargar
@@ -104,11 +104,11 @@ export default function LibraryPage() {
         setPage(prevPage => prevPage + 1);
       }
     });
-    
+
     // Observar el último elemento
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
-  
+
   // Formatear la duración de la pista
   const formatDuration = (ms: number | undefined): string => {
     if (!ms) return '0:00';
@@ -116,27 +116,27 @@ export default function LibraryPage() {
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
-  
+
   // Cargar canciones
   const loadTracks = async (pageNumber: number) => {
     try {
       setLoading(true);
-      
+
       // Calculamos el offset basado en la página
       const offset = (pageNumber - 1) * 50;
       // Para la primera página, usamos 50 elementos; para las siguientes, 20 para mejorar el rendimiento
       const count = pageNumber === 1 ? 50 : 20;
-      
+
       // Llamada al servicio para obtener canciones con offset
       const newTracks = await getUserPersonalRotation(count);
-      
+
       // Si no hay nuevas canciones, significa que hemos llegado al final
       if (newTracks.length === 0) {
         setHasMore(false);
         setLoading(false);
         return;
       }
-      
+
       if (pageNumber === 1) {
         setTracks(newTracks);
       } else {
@@ -145,7 +145,7 @@ export default function LibraryPage() {
         const filteredNewTracks = newTracks.filter(t => !trackIds.has(t.id));
         setTracks(prev => [...prev, ...filteredNewTracks]);
       }
-      
+
       setLoading(false);
       setInitialLoading(false);
     } catch (error) {
@@ -155,34 +155,34 @@ export default function LibraryPage() {
       setInitialLoading(false);
     }
   };
-  
+
   // Efecto para cargar la primera página al montar
   useEffect(() => {
     loadTracks(1);
   }, []);
-  
+
   // Efecto para cargar más canciones cuando cambia la página
   useEffect(() => {
     if (page > 1) {
       loadTracks(page);
     }
   }, [page]);
-  
+
   // Control del botón para volver arriba
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const shouldShow = scrollY > 400;
-      
+
       if (shouldShow !== showScrollTop) {
         setShowScrollTop(shouldShow);
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [showScrollTop]);
-  
+
   // Función para volver arriba
   const scrollToTop = () => {
     window.scrollTo({
@@ -190,7 +190,7 @@ export default function LibraryPage() {
       behavior: 'smooth'
     });
   };
-  
+
   // Manejar clic en pestaña
   const handleTabClick = (index: number) => {
     setActiveTab(index);
@@ -200,7 +200,7 @@ export default function LibraryPage() {
   const handlePlayTrack = async (track: SpotifyTrack) => {
     try {
       console.log('[Library] Reproduciendo track:', track);
-      
+
       // Convertir el formato SpotifyTrack al formato Track esperado por playTrack
       // con todos los campos necesarios explícitamente mapeados
       const convertedTrack = {
@@ -218,9 +218,9 @@ export default function LibraryPage() {
         spotifyId: track.id, // Incluir spotifyId explícitamente
         uri: track.id // Proporcionar uri como alternativa
       };
-      
+
       console.log('[Library] Track convertido:', convertedTrack);
-      
+
       // Usar explícitamente homePlayTrack para evitar confusiones
       await homePlayTrack(convertedTrack);
     } catch (error) {
@@ -229,7 +229,7 @@ export default function LibraryPage() {
       alert('No se pudo reproducir la canción. Por favor, intenta con otra.');
     }
   };
-  
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Cabecera */}
@@ -243,16 +243,16 @@ export default function LibraryPage() {
           {t('library.personalLibrary')}
         </Typography>
       </Box>
-      
+
       <Divider sx={{ mb: 4, opacity: 0.1 }} />
-      
+
       {/* Descripción */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="body1" color="text.secondary">
           {t('library.libraryDescription')}
         </Typography>
       </Box>
-      
+
       {/* Interfaz de pestañas */}
       <div className="mb-8">
         <div className="flex space-x-4 border-b border-gray-700">
@@ -270,7 +270,7 @@ export default function LibraryPage() {
           </button>
         </div>
       </div>
-      
+
       {/* Loading inicial */}
       {initialLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
@@ -286,7 +286,7 @@ export default function LibraryPage() {
           {activeTab === 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
               {tracks.map((track, index) => (
-                <div 
+                <div
                   key={track.id}
                   className="mb-6"
                   // Referencia al último elemento para detección de scroll
@@ -307,15 +307,15 @@ export default function LibraryPage() {
               ))}
             </div>
           )}
-          
+
           {/* Pestaña de Playlists */}
           {activeTab === 1 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {playlists.map((playlist) => (
                 <StyledMusicCard key={playlist.id} className="bg-gray-800 rounded-lg overflow-hidden">
                   <div className="relative aspect-square">
-                    <img 
-                      src={playlist.images[0]?.url || '/placeholder-playlist.jpg'} 
+                    <img
+                      src={playlist.images[0]?.url || '/placeholder-playlist.jpg'}
                       alt={playlist.name}
                       className="w-full h-full object-cover"
                     />
@@ -328,14 +328,14 @@ export default function LibraryPage() {
               ))}
             </div>
           )}
-          
+
           {/* Indicador de carga para más elementos */}
           {loading && !initialLoading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
               <CircularProgress color="secondary" />
             </Box>
           )}
-          
+
           {/* Mensaje de fin de lista */}
           {!hasMore && !loading && (
             <Box sx={{ textAlign: 'center', py: 4 }}>
@@ -344,7 +344,7 @@ export default function LibraryPage() {
               </Typography>
             </Box>
           )}
-          
+
           {/* Botón para volver arriba */}
           {showScrollTop && (
             <Box
@@ -375,4 +375,4 @@ export default function LibraryPage() {
       )}
     </Container>
   );
-} 
+}

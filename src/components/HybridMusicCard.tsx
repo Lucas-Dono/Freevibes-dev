@@ -22,7 +22,7 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
   const fallbackCover = 'https://placehold.co/300x300/2b2b2b/FFFFFF?text=No+Image';
   const coverUrl = (track.cover && !imageError) ? track.cover : fallbackCover;
   const source = track.source || 'desconocido';
-  
+
   // Formatear duración de segundos a minutos:segundos
   const formatDuration = (seconds: number): string => {
     if (!seconds) return '--:--';
@@ -35,9 +35,9 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
   const handlePlay = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     console.log('Reproduciendo track:', track);
-    
+
     if (onPlay && track) {
       // Asegurarse de que la pista tenga un id válido
       if (!track.id && track.youtubeId) {
@@ -58,7 +58,7 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
   };
 
   return (
-    <div 
+    <div
       className="group relative bg-card hover:bg-card/80 transition-all duration-300 rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-lg hover:scale-105 transform hover:border border-purple-500/20"
       onClick={handlePlay}
       onMouseEnter={() => setIsHovered(true)}
@@ -72,14 +72,14 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
         } text-white font-medium opacity-80`}>
           {source === 'spotify' ? 'Spotify' : 'YT'}
         </div>
-        
+
         {/* Duración */}
         <div className="absolute bottom-2 right-2 z-10 px-1.5 py-0.5 text-xs rounded-sm bg-black/70 text-white">
           {formatDuration(track.duration || 0)}
         </div>
-        
+
         {/* Portada */}
-        <Image 
+        <Image
           src={coverUrl}
           alt={`${title} por ${artist}`}
           width={400}
@@ -87,7 +87,7 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
           className="w-full h-full absolute inset-0 object-cover transition-transform duration-500 group-hover:scale-110"
           onError={handleImageError}
         />
-        
+
         {/* Gradiente para texto */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 group-hover:opacity-90 flex items-end justify-start transition-opacity duration-300">
           <div className="p-3 w-full">
@@ -99,7 +99,7 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
             </p>
           </div>
         </div>
-        
+
         {/* Mensaje al pasar el cursor */}
         <div className={`absolute inset-0 bg-black/60 flex flex-col items-center justify-center transition-opacity duration-300 ${
           isHovered ? 'opacity-100' : 'opacity-0'
@@ -116,4 +116,4 @@ const HybridMusicCard: React.FC<HybridMusicCardProps> = ({ track, onPlay }) => {
   );
 };
 
-export default HybridMusicCard; 
+export default HybridMusicCard;

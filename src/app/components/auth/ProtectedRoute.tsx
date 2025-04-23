@@ -16,10 +16,10 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Si la autenticación está cargando, no hacer nada todavía
     if (isLoading) return;
-    
+
     // Si la ruta es pública, permitir el acceso sin verificar autenticación
     if (pathname && publicRoutes.includes(pathname)) return;
-    
+
     // Si no está autenticado y no es una ruta pública, redirigir al login
     if (!isAuthenticated) {
       router.push('/login');
@@ -43,4 +43,4 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
 
   // Por defecto, mostrar un mensaje mientras se redirige
   return <div>Redirigiendo al login...</div>;
-} 
+}

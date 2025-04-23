@@ -32,7 +32,7 @@ export async function GET(
     if (albums === null) {
       console.error(`[API Artist Albums] Error al obtener álbumes para ${artistId} desde el servidor`);
       // Podría ser 404 si el artista no existe o 500 si hubo otro error
-      return NextResponse.json({ error: 'Failed to fetch artist albums' }, { status: 500 }); 
+      return NextResponse.json({ error: 'Failed to fetch artist albums' }, { status: 500 });
     }
 
     console.log(`[API Artist Albums] Álbumes para ${artistId} encontrados: ${albums.length}`);
@@ -43,4 +43,4 @@ export async function GET(
     console.error(`[API Artist Albums] Error interno al obtener álbumes para ${artistId}:`, error);
     return NextResponse.json({ error: 'Internal server error fetching artist albums' }, { status: 500 });
   }
-} 
+}

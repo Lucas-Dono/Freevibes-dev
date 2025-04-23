@@ -25,7 +25,7 @@ const DEFAULT_GENRES = ['pop', 'rock', 'electronic', 'hip-hop', 'latin'];
 
 // Lista extendida de géneros disponibles en Spotify (pre-cargada para evitar llamadas a la API)
 const SPOTIFY_GENRES = [
-    'acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'anime', 
+    'acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'anime',
     'black-metal', 'bluegrass', 'blues', 'bossanova', 'brazil', 'breakbeat',
     'british', 'cantopop', 'chicago-house', 'children', 'chill', 'classical',
     'club', 'comedy', 'country', 'dance', 'dancehall', 'death-metal', 'deep-house',
@@ -60,29 +60,29 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
     // Verificar cache
     const cacheKey = `${endpoint}:${JSON.stringify(options)}`;
     const cachedData = apiCache.get(cacheKey);
-    
+
     if (cachedData && cachedData.expiry > Date.now()) {
       console.log(`[Spotify] Usando datos en caché para: ${endpoint}`);
       return cachedData.data;
     }
-    
+
     // Rate limiting - esperar si la última solicitud fue muy reciente
     const now = Date.now();
     const timeSinceLastRequest = now - lastRequestTime;
-    
+
     if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
       const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
       console.log(`[Spotify] Rate limiting: esperando ${waitTime}ms`);
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
-    
+
     // Actualizar timestamp para rate limiting
     lastRequestTime = Date.now();
-    
+
     // Construir URL completa
     const url = `https://api.spotify.com/v1${endpoint}`;
     console.log(`[Fetch] Llamando a Spotify URL: ${url}`);
-    
+
     const startTime = Date.now();
     const response = await fetch(url, {
       ...options,
@@ -91,10 +91,10 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
         'Content-Type': 'application/json',
       },
     });
-    
+
     const elapsed = Date.now() - startTime;
     console.log(`[Fetch] Tiempo de respuesta: ${elapsed}ms para ${endpoint}`);
-    
+
     // Si la respuesta no es exitosa, manejar el error
     if (!response.ok) {
       console.log('[Fetch] Error en respuesta de Spotify:', {
@@ -102,46 +102,46 @@ export async function fetchFromSpotify(endpoint: string, token: string, options 
         statusText: response.statusText,
         url: response.url,
       });
-      
+
       const errorData = await response.json();
       console.log('[Fetch] Detalles de error de Spotify:', JSON.stringify(errorData, null, 2));
-      
+
       // Manejar error 429 (demasiadas solicitudes) con reintento
       if (response.status === 429) {
         console.log('[Fetch] Error detallado:', errorData);
         console.log('[Fetch] Mensaje específico de error:', errorData.error?.message);
-        
+
         // Obtener el encabezado Retry-After si está disponible
         const retryAfter = response.headers.get('Retry-After');
         let retryDelay = retryAfter ? parseInt(retryAfter) * 1000 : 5000;
-        
+
         console.log(`[Spotify] Rate limit excedido. Esperando ${retryDelay/1000} segundos antes de reintentar.`);
-        
+
         // Esperar antes de reintentar
         await new Promise(resolve => setTimeout(resolve, retryDelay));
-        
+
         // Usar datos en caché como respaldo si están disponibles
         if (cachedData) {
           console.log('[Spotify] Usando datos en caché como respaldo mientras se espera el rate limit');
           return cachedData.data;
         }
-        
+
         // Si no hay caché, devolver una respuesta genérica de error
         throw new Error(`Error en la llamada a Spotify: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
       }
-      
+
       throw new Error(`Error en la llamada a Spotify: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
     }
-    
+
     // Procesar respuesta exitosa
     const data = await response.json();
-    
+
     // Guardar en caché
     apiCache.set(cacheKey, {
       data,
       expiry: Date.now() + CACHE_DURATION
     });
-    
+
     return data;
   } catch (error) {
     console.log(`[Fetch] Error al realizar petición a https://api.spotify.com/v1${endpoint}:`, error);
@@ -161,7 +161,7 @@ export function createSpotifyApi(accessToken: string) {
     const getProfile = async () => {
         return fetchFromSpotify('/me', accessToken);
     };
-    
+
     /**
      * Busca pistas en Spotify
      * @param query Texto de búsqueda
@@ -186,12 +186,12 @@ export function createSpotifyApi(accessToken: string) {
             limit: options.limit?.toString() || '20',
             market: options.market || 'ES'
         });
-        
+
         // Añadir offset si está definido
         if (options.offset !== undefined) {
             params.append('offset', options.offset.toString());
         }
-        
+
         return fetchFromSpotify(`/me/tracks?${params.toString()}`, accessToken);
     };
 
@@ -205,12 +205,12 @@ export function createSpotifyApi(accessToken: string) {
             time_range: options.time_range || 'medium_term',
             market: options.market || 'ES'
         });
-        
+
         // Añadir offset si está definido
         if (options.offset !== undefined) {
             params.append('offset', options.offset.toString());
         }
-        
+
         return fetchFromSpotify(`/me/top/tracks?${params.toString()}`, accessToken);
     };
 
@@ -236,17 +236,17 @@ export function createSpotifyApi(accessToken: string) {
             limit: options.limit?.toString() || '20',
             market: options.market || 'ES'
         });
-        
+
         // Añadir offset si está definido
         if (options.offset !== undefined) {
             params.append('offset', options.offset.toString());
         }
-        
+
         // Añadir locale si está definido
         if (options.locale) {
             params.append('locale', options.locale);
         }
-        
+
         try {
             console.log(`Intentando obtener playlists destacadas con URL: /browse/featured-playlists?${params.toString()}`);
             const featuredData = await fetchFromSpotify(`/browse/featured-playlists?${params.toString()}`, accessToken);
@@ -254,12 +254,12 @@ export function createSpotifyApi(accessToken: string) {
             return featuredData;
         } catch (error) {
             console.error('Error al obtener playlists destacadas, intentando alternativa:', error);
-            
+
             // Plan B: Intentar obtener playlists del usuario
             try {
                 console.log('Intentando obtener playlists del usuario como alternativa');
                 const userPlaylists = await fetchFromSpotify(`/me/playlists?limit=${options.limit || 20}`, accessToken);
-                
+
                 // Transformar formato para que coincida con el de featured playlists
                 return {
                     message: "Playlists alternativas",
@@ -275,7 +275,7 @@ export function createSpotifyApi(accessToken: string) {
                 };
             } catch (fallbackError) {
                 console.error('También falló la alternativa de playlists de usuario:', fallbackError);
-                
+
                 // Plan C: Si todo falla, devolver un conjunto de datos mockeados
                 console.log('Devolviendo datos mockeados de playlists destacadas');
                 return {
@@ -333,7 +333,7 @@ export function createSpotifyApi(accessToken: string) {
         const params = new URLSearchParams({
             limit: options.limit?.toString() || '20'
         });
-        
+
         // Añadir after (usado en lugar de offset para recently played)
         if (options.offset !== undefined) {
             // La API de Spotify usa timestamps en lugar de offset numérico para paginación
@@ -343,7 +343,7 @@ export function createSpotifyApi(accessToken: string) {
             const timestampMs = now.getTime() - (options.offset * 3600000);
             params.append('after', timestampMs.toString());
         }
-        
+
         return fetchFromSpotify(`/me/player/recently-played?${params.toString()}`, accessToken);
     };
 
@@ -354,7 +354,7 @@ export function createSpotifyApi(accessToken: string) {
      */
     const getAvailableGenreSeeds = async () => {
         console.log('Usando lista predefinida de géneros en lugar de llamar a la API');
-        return { 
+        return {
             genres: SPOTIFY_GENRES,
             source: 'cached'
         };
@@ -366,18 +366,18 @@ export function createSpotifyApi(accessToken: string) {
      */
     const getRecommendations = async (options: SpotifyRecommendationOptions = {}) => {
         console.log('Iniciando solicitud de recomendaciones alternativa');
-        
+
         // Si no hay seeds definidos o hay errores, intentaremos usar una búsqueda
         // en lugar del endpoint de recomendaciones
-        
+
         // Determinar el género a usar como semilla para la búsqueda
         let searchGenre = 'pop'; // género por defecto
-        
+
         if (options.seed_genres && options.seed_genres.length > 0) {
             searchGenre = options.seed_genres[0]; // usar el primer género como semilla
             console.log('Usando género para búsqueda alternativa:', searchGenre);
         }
-        
+
         // Construir una búsqueda de tracks con el género
         const params = new URLSearchParams({
             q: `genre:${searchGenre}`,
@@ -385,12 +385,12 @@ export function createSpotifyApi(accessToken: string) {
             limit: (options.limit || 20).toString(),
             market: options.market || 'ES'
         });
-        
+
         console.log('Realizando búsqueda alternativa:', `/search?${params.toString()}`);
         try {
             // Usar búsqueda en lugar de recomendaciones
             const searchResults = await fetchFromSpotify(`/search?${params.toString()}`, accessToken);
-            
+
             // Transformar los resultados de búsqueda en formato similar al de recomendaciones
             return {
                 tracks: searchResults.tracks?.items || [],
@@ -406,7 +406,7 @@ export function createSpotifyApi(accessToken: string) {
             };
         } catch (error) {
             console.error('Error en la búsqueda alternativa:', error);
-            
+
             // Si todo falla, intentar con una búsqueda por popularidad
             console.log('Intentando búsqueda general por popularidad');
             const fallbackParams = new URLSearchParams({
@@ -415,7 +415,7 @@ export function createSpotifyApi(accessToken: string) {
                 limit: (options.limit || 20).toString(),
                 market: options.market || 'ES'
             });
-            
+
             try {
                 const fallbackResults = await fetchFromSpotify(`/search?${fallbackParams.toString()}`, accessToken);
                 return {
@@ -628,13 +628,13 @@ export function createSpotifyApi(accessToken: string) {
     const makeRequest = async (endpoint: string) => {
         // Normalizar el endpoint para asegurar formato correcto
         const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-        
+
         // Verificar si es una búsqueda y si tiene el parámetro type
         if (normalizedEndpoint.includes('/search') && !normalizedEndpoint.includes('type=')) {
             console.error('[Spotify] Error: Solicitud a /search sin parámetro type');
             throw new Error('El parámetro type es obligatorio para búsquedas en Spotify');
         }
-        
+
         return fetchFromSpotify(normalizedEndpoint, accessToken);
     };
 
@@ -649,24 +649,24 @@ export function createSpotifyApi(accessToken: string) {
         console.warn('[Spotify] searchMultiType: La consulta está vacía');
         return {};
       }
-      
+
       const limit = options.limit || 20;
-      
+
       try {
         // Unir los tipos como string separado por comas (formato requerido por Spotify)
         const typesParam = types.join(',');
         console.log(`[Spotify] Búsqueda multi-tipo: "${query}" (tipos: ${typesParam}, límite: ${limit})`);
-        
+
         const response = await makeRequest(`/search?q=${encodeURIComponent(query)}&type=${typesParam}&limit=${limit}`);
-        
+
         if (!response) {
           console.error(`[Spotify] Error en búsqueda multi-tipo: sin respuesta`);
           return {};
         }
-        
+
         // Mapear la respuesta por tipo
         const result: Record<string, any> = {};
-        
+
         // Extraer resultados para cada tipo solicitado
         types.forEach(type => {
           const key = `${type}s`; // Spotify usa plural (tracks, artists, etc.)
@@ -676,7 +676,7 @@ export function createSpotifyApi(accessToken: string) {
             result[type] = [];
           }
         });
-        
+
         return result;
       } catch (error) {
         console.error(`[Spotify] Error en búsqueda multi-tipo:`, error);
@@ -721,6 +721,6 @@ export const getSpotify = async (accessToken?: string) => {
     console.error('[getSpotify] No se proporcionó token de acceso');
     throw new Error('No se proporcionó token de acceso');
   }
-  
+
   return createSpotifyApi(accessToken);
 };

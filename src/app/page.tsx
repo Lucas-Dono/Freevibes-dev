@@ -13,12 +13,12 @@ export default function Page() {
   }, [router]);
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
+    <Box
+      sx={{
+        display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', 
-        justifyContent: 'center', 
+        alignItems: 'center',
+        justifyContent: 'center',
         height: '100vh',
         backgroundColor: '#0F0F18'
       }}
@@ -32,4 +32,4 @@ export default function Page() {
       </Typography>
     </Box>
   );
-} 
+}

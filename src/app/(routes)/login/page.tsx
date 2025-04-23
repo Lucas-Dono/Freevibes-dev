@@ -16,65 +16,65 @@ export default function LoginPage() {
   const [currentUrl, setCurrentUrl] = useState('');
   const [demoLang, setDemoLang] = useState<string>('es');
   const [isDemoReady, setIsDemoReady] = useState<boolean>(false);
-  
+
   useEffect(() => {
     // Marcar que el componente está montado
     setIsMounted(true);
-    
+
     // Establecer la URL actual (seguro solo en el cliente)
     setCurrentUrl(window.location.href);
-    
+
     // Verificar si hay un error en la URL
     const searchParams = new URLSearchParams(window.location.search);
     const error = searchParams.get('error');
     if (error) {
       setAuthError(decodeURIComponent(error));
     }
-    
+
     // Si el usuario ya está autenticado, redirigir a home
     if (!isLoading && (isAuthenticated || isDemo)) {
       console.log('[LoginPage] Usuario ya autenticado, redirigiendo a home');
-      
+
       // Evitar redirecciones múltiples
       const lastRedirect = sessionStorage.getItem('lastLoginRedirect');
       const now = Date.now();
-      
+
       if (lastRedirect && now - parseInt(lastRedirect) < 2000) {
         console.log('[LoginPage] Redirección reciente, omitiendo');
         return;
       }
-      
+
       sessionStorage.setItem('lastLoginRedirect', now.toString());
       router.push('/home');
     }
   }, [isAuthenticated, isDemo, isLoading, router]);
-  
+
   // Efecto para habilitar el modo demo automáticamente
   useEffect(() => {
     // Forzar que el modo demo esté siempre disponible
     setIsDemoReady(true);
     console.log('[Login] Modo demo habilitado automáticamente');
   }, []);
-  
+
   const handleSpotifyLogin = () => {
     signIn('spotify', { callbackUrl: '/home' });
   };
-  
+
   const handleDemoLogin = () => {
-    // Activar modo demo 
+    // Activar modo demo
     toggleDemoMode();
     sessionStorage.setItem('demoLang', demoLang);
-    
+
     // Establecer también la cookie como respaldo
     document.cookie = `demoMode=true; path=/; max-age=${60 * 60 * 24}`;
-    
+
     // Establecer el header x-demo-mode para todas las solicitudes fetch como respaldo
     if (typeof window !== 'undefined' && window.fetch) {
       const originalFetch = window.fetch;
       window.fetch = function(input, init) {
         init = init || {};
         init.headers = init.headers || {};
-        
+
         // Añadir headers de modo demo
         if (init.headers instanceof Headers) {
           init.headers.set('x-demo-mode', 'true');
@@ -86,23 +86,23 @@ export default function LoginPage() {
             'x-demo-lang': demoLang
           };
         }
-        
+
         return originalFetch(input, init);
       };
       console.log('[LoginPage] Fetch modificado para incluir headers de modo demo');
     }
-    
+
     // Registrar para evitar redirecciones múltiples
     sessionStorage.setItem('lastLoginRedirect', Date.now().toString());
-    
+
     // Mostrar mensaje de éxito
     console.log('[LoginPage] Modo demo activado, redirigiendo a home');
     console.log('[LoginPage] Se debe ver el header x-demo-mode: true en las solicitudes');
-    
+
     // Redireccionar a home
     router.push('/home');
   };
-  
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-900 to-black p-4">
       <div className="text-center mb-10">
@@ -111,21 +111,21 @@ export default function LoginPage() {
           Descubre y disfruta de música sin límites
         </p>
       </div>
-      
+
       {authError && (
         <Alert severity="error" className="mb-6 max-w-md w-full">
           <AlertTitle>Error de autenticación</AlertTitle>
           {authError}
         </Alert>
       )}
-      
+
       {isAuthenticated && (
         <Alert severity="info" className="mb-6 max-w-md w-full">
           <AlertTitle>Sesión activa</AlertTitle>
           Sesión detectada. Redirigiendo...
         </Alert>
       )}
-      
+
       <div className="grid gap-4 w-full max-w-md">
         <button
           onClick={handleSpotifyLogin}
@@ -134,7 +134,7 @@ export default function LoginPage() {
           <SpotifyIcon className="w-6 h-6" />
           Iniciar sesión con Spotify
         </button>
-        
+
         <div className="relative my-4 text-center">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-700"></div>
@@ -143,9 +143,9 @@ export default function LoginPage() {
             <span className="px-3 bg-black text-gray-400 text-sm">o</span>
           </div>
         </div>
-        
+
         <div className="flex flex-col items-center">
-          <select 
+          <select
             value={demoLang}
             onChange={(e) => setDemoLang(e.target.value)}
             className="bg-gray-800 text-white rounded-md px-3 py-2 mb-3 w-full max-w-[150px] border border-gray-700"
@@ -156,7 +156,7 @@ export default function LoginPage() {
             <option value="fr">Français</option>
             <option value="it">Italiano</option>
           </select>
-          
+
           <button
             onClick={handleDemoLogin}
             disabled={!isDemoReady}
@@ -172,7 +172,7 @@ export default function LoginPage() {
             <p className="text-xs text-red-400 mt-1">El servicio demo no está disponible</p>
           )}
         </div>
-        
+
         <div className="mt-4 text-center text-sm text-gray-400">
           Al iniciar sesión, aceptas nuestros{' '}
           <Link href="/terms" className="text-blue-400 hover:underline">
@@ -184,7 +184,7 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
-      
+
       {/* Información de diagnóstico - solo renderizar en el cliente */}
       {isMounted && (
         <div className="mt-10 text-xs text-gray-500 w-full max-w-md">
@@ -206,4 +206,4 @@ export default function LoginPage() {
       )}
     </div>
   );
-} 
+}

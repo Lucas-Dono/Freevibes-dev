@@ -31,4 +31,4 @@ export async function GET(
     console.error(`[API Related Artists] Error interno al obtener relacionados para ${artistId}:`, error);
     return NextResponse.json({ error: 'Internal server error fetching related artists' }, { status: 500 });
   }
-} 
+}

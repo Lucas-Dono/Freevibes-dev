@@ -66,20 +66,20 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
   return (
     <ErrorBoundary>
       {/* Inicializador de YouTube que se encarga de cargar la API */}
-      <YouTubeInitializer 
-        onReady={handleYouTubeReady} 
-        onError={handleYouTubeError} 
+      <YouTubeInitializer
+        onReady={handleYouTubeReady}
+        onError={handleYouTubeError}
       />
-      
+
       {/* Envolvemos todo en el SessionProvider para que useSession funcione */}
       <SessionProvider>
         <LanguageProvider>
           <AuthProvider>
             <PlayerProvider youtubeReady={youtubeReady}>
               <ClientLayout>{children}</ClientLayout>
-              <ServerLoadingModal 
-                isOpen={isServerModalOpen} 
-                onClose={() => setIsServerModalOpen(false)} 
+              <ServerLoadingModal
+                isOpen={isServerModalOpen}
+                onClose={() => setIsServerModalOpen(false)}
               />
             </PlayerProvider>
           </AuthProvider>
@@ -89,4 +89,4 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
   );
 };
 
-export default ClientWrapper; 
+export default ClientWrapper;

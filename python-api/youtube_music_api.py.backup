@@ -64,13 +64,13 @@ def cached(cache_file):
             # Crear nombre de caché específico para la región
             region_cache_file = f"{region}_{cache_file}"
             cache_path = os.path.join(CACHE_DIR, region_cache_file)
-            
+
             try:
                 # Verificar si existe un caché válido
                 if os.path.exists(cache_path):
                     with open(cache_path, 'r') as f:
                         cached_data = json.load(f)
-                    
+
                     # Verificar si el caché está vigente
                     if time.time() - cached_data.get('timestamp', 0) < CACHE_DURATION:
                         logger.info(
@@ -79,23 +79,23 @@ def cached(cache_file):
                         # Importante: devolver como jsonify para que sea una
                         # respuesta válida
                         return jsonify(cached_data.get('data'))
-            
+
                 # Si no hay caché o expiró, ejecutar función
                 result = func(*args, **kwargs)
-                
+
                 # Extraer los datos JSON si es una respuesta Flask
                 if hasattr(result, 'get_json'):
                     data_to_cache = result.get_json()
                 else:
                     data_to_cache = result
-                
+
                 # Guardar en caché
                 with open(cache_path, 'w') as f:
                     json.dump({
                         'timestamp': time.time(),
                         'data': data_to_cache
                     }, f)
-                
+
                 return result
             except Exception as e:
                 logger.error(f"Error en caché para {func.__name__}: {str(e)}")
@@ -122,7 +122,7 @@ def get_ytmusic():
 def get_cached(key, ttl_hours=24):
     """Obtiene resultados cacheados si existen y no han expirado"""
     cache_file = os.path.join(CACHE_DIR, f"{key}.json")
-    
+
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
@@ -138,7 +138,7 @@ def get_cached(key, ttl_hours=24):
                 pass
         except Exception as e:
             logger.warning(f"Error leyendo caché para {key}: {str(e)}")
-            
+
     return None
 
 
@@ -171,12 +171,12 @@ def get_cache_file_path(key):
 def get_cached_results(key):
     """Obtiene resultados cacheados si existen y no han expirado"""
     cache_file = get_cache_file_path(key)
-    
+
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
                 cached_data = json.load(f)
-                
+
             # Verificar si el caché ha expirado
             cache_time = cached_data.get('timestamp', 0)
             if time.time() - cache_time < CACHE_DURATION:
@@ -186,22 +186,22 @@ def get_cached_results(key):
                 print(f"Cache expirado para {key}")
         except Exception as e:
             print(f"Error leyendo caché para {key}: {e}")
-    
+
     return None
 
 
 def get_best_thumbnail(thumbnails):
     """Obtiene la mejor calidad de thumbnail disponible"""
     default_thumbnail = 'https://img.youtube.com/vi/default/hqdefault.jpg'
-    
+
     # Validar entrada
     if not thumbnails or not isinstance(thumbnails, list):
         logger.debug("[DEBUG-THUMBNAIL] Sin miniaturas disponibles para procesar")
         return default_thumbnail
-        
+
     # Log detallado de la entrada
     logger.info(f"[DEBUG-THUMBNAIL] Procesando thumbnails: {json.dumps(thumbnails[:2], indent=2, ensure_ascii=False)}")
-    
+
     # Filtrar y ordenar miniaturas por tamaño (width * height) de mayor a menor
     valid_thumbnails = []
     for t in thumbnails:
@@ -212,19 +212,19 @@ def get_best_thumbnail(thumbnails):
             # Si no tiene dimensiones pero tiene URL, también incluirla
             else:
                 valid_thumbnails.append(t)
-    
+
     logger.info(f"[DEBUG-THUMBNAIL] Thumbnails válidos: {len(valid_thumbnails)}")
-    
+
     # Ordenar las miniaturas que tienen dimensiones (las mejores primero)
     sorted_thumbnails = sorted(
         [t for t in valid_thumbnails if 'width' in t and 'height' in t],
         key=lambda x: x['width'] * x['height'],
         reverse=True
     )
-    
+
     # Preparar URL para devolver
     thumbnail_url = ""
-    
+
     # Intentar obtener la mejor miniatura disponible
     if sorted_thumbnails:
         thumbnail_url = sorted_thumbnails[0]['url']
@@ -235,17 +235,17 @@ def get_best_thumbnail(thumbnails):
     else:
         logger.warning("[DEBUG-THUMBNAIL] No se encontraron URLs válidas en las miniaturas")
         return default_thumbnail
-    
+
     # Validar y corregir la URL
     if not thumbnail_url:
         logger.warning("[DEBUG-THUMBNAIL] URL de miniatura vacía")
         return default_thumbnail
-    
+
     # Asegurar que la URL use HTTPS
     if thumbnail_url.startswith('http:'):
         thumbnail_url = thumbnail_url.replace('http:', 'https:')
         logger.info(f"[DEBUG-THUMBNAIL] Convertida URL a HTTPS: {thumbnail_url}")
-    
+
     # Verificar si es una URL relativa y convertirla a absoluta si es necesario
     if not thumbnail_url.startswith(('http://', 'https://')):
         if thumbnail_url.startswith('//'):
@@ -254,7 +254,7 @@ def get_best_thumbnail(thumbnails):
         else:
             logger.warning(f"[DEBUG-THUMBNAIL] URL de miniatura inválida: {thumbnail_url}")
             return default_thumbnail
-    
+
     logger.info(f"[DEBUG-THUMBNAIL] URL final de miniatura: {thumbnail_url}")
     return thumbnail_url
 
@@ -267,15 +267,15 @@ def normalize_track_data(track, default_artist=''):
     if not track:
         logger.warning("[DEBUG-NORMALIZE] Se recibió un objeto track nulo o vacío")
         return None
-    
+
     # Loggear los datos de entrada para depuración
     logger.info(f"[DEBUG-NORMALIZE] Normalizando track: {track.get('title', 'Sin título')}")
-    
+
     # ID del video es obligatorio
     original_track_id = track.get('videoId', '')
     track_id = original_track_id
     logger.info(f"[DEBUG-NORMALIZE] ID de video original: '{track_id}'")
-    
+
     # Validar ID del video
     if not track_id:
         # Buscar en campo 'id' como alternativa
@@ -285,11 +285,11 @@ def normalize_track_data(track, default_artist=''):
         else:
             logger.warning(f"[DEBUG-NORMALIZE] ID de video vacío para track: {track.get('title', 'Sin título')}")
             # No rechazamos el track aquí para poder seguir procesando otros datos
-    
+
     # Verificar si el ID es "default" o un valor no válido
     if track_id == 'default' or (track_id and len(track_id) < 5):
         logger.warning(f"[DEBUG-NORMALIZE] ID de video inválido: '{track_id}' para track: {track.get('title', 'Sin título')}")
-        
+
         # Intentar buscar un ID alternativo en otros campos
         if 'id' in track and track['id'] and track['id'] != 'default' and track['id'] != track_id and len(track['id']) > 5:
             track_id = track['id']
@@ -304,7 +304,7 @@ def normalize_track_data(track, default_artist=''):
                     track_id = value
                     logger.info(f"[DEBUG-NORMALIZE] Usando ID alternativo '{key}': {track_id}")
                     break
-            
+
         # Verificar si finalmente tenemos un ID válido
         if track_id == 'default' or not track_id or len(track_id) < 5:
             logger.warning(f"[DEBUG-NORMALIZE] No se encontró un ID alternativo válido. Usando un ID generado.")
@@ -313,16 +313,16 @@ def normalize_track_data(track, default_artist=''):
             artist_str = track.get('artist', track.get('author', 'unknown'))
             track_id = f"gen_{hash(title_str + artist_str) % 10000000:07d}"
             logger.info(f"[DEBUG-NORMALIZE] ID generado: {track_id}")
-    
+
     # Obtener el título con valor predeterminado
     title = track.get('title', 'Sin título')
-    
+
     # Extraer el artista de manera robusta desde diferentes posibles campos
     artist = ''
-    
+
     # Estructura para registrar la fuente del artista (debug)
     artist_source = "ninguna"
-    
+
     # 1. Primero intentar con el campo 'artists' que es el más completo
     if 'artists' in track and isinstance(track['artists'], list) and track['artists']:
         for artist_obj in track['artists']:
@@ -330,17 +330,17 @@ def normalize_track_data(track, default_artist=''):
                 artist = artist_obj['name']
                 artist_source = "artists[].name"
                 break
-    
+
     # 2. Si no hay 'artists', intentar con 'artist'
     if not artist and 'artist' in track and track['artist']:
         artist = track['artist']
         artist_source = "artist"
-    
+
     # 3. Si no hay 'artist', intentar con 'author'
     if not artist and 'author' in track and track['author']:
         artist = track['author']
         artist_source = "author"
-    
+
     # 4. Intentar con campo 'authors'
     if not artist and 'authors' in track and isinstance(track['authors'], list) and track['authors']:
         for author_obj in track['authors']:
@@ -348,13 +348,13 @@ def normalize_track_data(track, default_artist=''):
                 artist = author_obj['name']
                 artist_source = "authors[].name"
                 break
-    
+
     # 5. Verificar si hay un campo artistInfo
     if not artist and 'artistInfo' in track:
         if isinstance(track['artistInfo'], dict) and 'artist' in track['artistInfo']:
             artist = track['artistInfo']['artist']
             artist_source = "artistInfo.artist"
-    
+
     # 6. Si todavía no hay artista, intentar buscar en cualquier otra estructura
     if not artist:
         # Buscar cualquier campo que contenga 'artist' en su nombre
@@ -363,7 +363,7 @@ def normalize_track_data(track, default_artist=''):
                 artist = track[key]
                 artist_source = f"campo_{key}"
                 break
-    
+
     # 7. Si no se encontró ningún campo de artista, usar el valor predeterminado
     if not artist:
         if default_artist:
@@ -372,41 +372,41 @@ def normalize_track_data(track, default_artist=''):
         else:
             artist = 'Artista desconocido'
             artist_source = "valor_predeterminado"
-    
+
     # Depuración detallada para comprender la estructura de datos
     logger.debug(f"[NORMALIZE] Track: '{title}' | Artist: '{artist}' | Fuente: {artist_source}")
-    
+
     # Extraer la mejor imagen o usar URL predeterminada de YouTube basada en el ID del video
     thumbnail = get_best_thumbnail(track.get('thumbnails', []))
-    
+
     # Verificar si tenemos una URL de miniatura válida
     has_valid_thumbnail = thumbnail and isinstance(thumbnail, str) and len(thumbnail) > 10 and 'default' not in thumbnail
-    
+
     if not has_valid_thumbnail:
         # Si no hay thumbnail o no es válida, intentar con otros campos de imágenes
         logger.info(f"[DEBUG-NORMALIZE] Thumbnail no válida: {thumbnail}")
-        
+
         # Probar diferentes fuentes de imágenes
         alternative_thumbnails = []
-        
+
         # 1. Verificar si hay un campo 'thumbnail' directo
         if 'thumbnail' in track and isinstance(track['thumbnail'], str) and len(track['thumbnail']) > 10:
             alternative_thumbnails.append(('campo_thumbnail', track['thumbnail']))
-        
+
         # 2. Verificar si hay un campo 'cover'
         if 'cover' in track and isinstance(track['cover'], str) and len(track['cover']) > 10:
             alternative_thumbnails.append(('campo_cover', track['cover']))
-            
+
         # 3. Verificar si hay un campo 'albumArt'
         if 'albumArt' in track and isinstance(track['albumArt'], str) and len(track['albumArt']) > 10:
             alternative_thumbnails.append(('campo_albumArt', track['albumArt']))
-        
+
         # 4. Buscar cualquier campo que parezca contener una URL de imagen
         for key, value in track.items():
             if isinstance(value, str) and ('image' in key.lower() or 'thumbnail' in key.lower() or 'cover' in key.lower()):
                 if value.startswith('http') and len(value) > 10:
                     alternative_thumbnails.append((f'campo_{key}', value))
-        
+
         # Usar la primera alternativa válida que encontremos
         if alternative_thumbnails:
             source, value = alternative_thumbnails[0]
@@ -416,14 +416,14 @@ def normalize_track_data(track, default_artist=''):
         elif track_id and track_id != 'default':
             thumbnail = f'https://img.youtube.com/vi/{track_id}/hqdefault.jpg'
             logger.info(f"[DEBUG-NORMALIZE] Creando URL de miniatura basada en ID: {thumbnail}")
-    
+
     # Verificar si la URL de la miniatura contiene "default"
     if 'default' in thumbnail and track_id != 'default':
         logger.warning(f"[DEBUG-NORMALIZE] URL de miniatura contiene 'default' cuando el ID no debería ser 'default': {thumbnail}")
         # Corregir URL si es necesario
         thumbnail = f'https://img.youtube.com/vi/{track_id}/hqdefault.jpg'
         logger.info(f"[DEBUG-NORMALIZE] URL de miniatura corregida: {thumbnail}")
-    
+
     # Crear y devolver objeto de datos normalizado
     normalized_track = {
         'id': track_id,
@@ -433,7 +433,7 @@ def normalize_track_data(track, default_artist=''):
         'duration': track.get('duration', track.get('length', '')),
         'source': track.get('source', 'youtube_music')
     }
-    
+
     logger.info(f"[DEBUG-NORMALIZE] Track normalizado: ID={track_id}, Título={title}, Artista={artist}, Thumbnail={thumbnail}")
     return normalized_track
 
@@ -441,7 +441,7 @@ def normalize_track_data(track, default_artist=''):
 def setup_ytmusic_auth():
     """Configura la autenticación para YTMusic"""
     global yt_music
-    
+
     try:
         # Obtener la región de la solicitud actual (si estamos en un contexto
         # de solicitud)
@@ -453,12 +453,12 @@ def setup_ytmusic_auth():
             # Si no estamos en un contexto de solicitud, usamos el valor
             # predeterminado
             pass
-        
+
         # Si ya tenemos una instancia y la región coincide, la reutilizamos
         if yt_music and hasattr(
                 yt_music, 'region') and yt_music.region == region:
             return yt_music
-        
+
         # Caso contrario, creamos una nueva instancia
         if AUTH_FILE and os.path.exists(AUTH_FILE):
             # Usar archivo de autenticación si existe
@@ -466,10 +466,10 @@ def setup_ytmusic_auth():
         else:
             # Usar autenticación básica sin credenciales
             yt_music = YTMusic(language=region)
-        
+
         # Guardar la región utilizada
         yt_music.region = region
-        
+
         logger.info(f"YTMusic configurado correctamente con región: {region}")
         return yt_music
     except Exception as e:
@@ -508,27 +508,27 @@ def search():
         region = request.args.get('region', 'US')
         language = request.args.get(
             'language', 'en')  # Idioma por defecto inglés
-        
+
         # Lista de idiomas soportados por YouTube Music
         supported_languages = ['de', 'fr', 'pt', 'zh_CN', 'hi', 'ar',
                                'tr', 'zh_TW', 'ja', 'ko', 'es', 'nl', 'ru', 'ur', 'en', 'it']
-        
+
         # Asegurarse de usar un idioma soportado
         if language not in supported_languages:
             logger.warning(
                 f"Idioma '{language}' no soportado. Usando 'en' como fallback.")
             language = 'en'  # Usar inglés como fallback
-        
+
         if not query:
             return jsonify({'error': 'Se requiere parámetro query'}), 400
-        
+
         logger.info(
             f"Búsqueda en YouTube Music: {query} (filtro: {filter_type}, límite: {limit}, región: {region}, idioma: {language})")
-        
+
         # Configurar YTMusic con la región e idioma específicos
         try:
             music = YTMusic(language=language)
-            
+
             # Realizar la búsqueda
             start_time = time.time()
             search_results = music.search(
@@ -538,11 +538,11 @@ def search():
                 f"Búsqueda completada en {
         elapsed:.2f}s, resultados: {
             len(search_results) if search_results else 0}")
-            
+
             if search_results and len(search_results) > 0:
                 # Transformar los resultados
                 transformed_results = []
-                
+
                 for item in search_results:
                     if item.get('resultType', '').lower() in ['song', 'video']:
                         track_data = {
@@ -556,7 +556,7 @@ def search():
                             'language': language  # Incluir el idioma usado
                         }
                         transformed_results.append(track_data)
-                
+
                 return jsonify(transformed_results)
             else:
                 logger.warning(f"No se encontraron resultados para: {query}")
@@ -574,11 +574,11 @@ def search():
                     music_fallback = YTMusic(language='en')
                     search_results = music_fallback.search(
                         query, filter=filter_type, limit=limit)
-                    
+
                     if search_results and len(search_results) > 0:
                         # Transformar los resultados igual que antes
                         transformed_results = []
-                        
+
                         for item in search_results:
                             if item.get('resultType', '').lower() in [
                                 'song', 'video']:
@@ -593,7 +593,7 @@ def search():
                                     'language': 'en'  # Indicar que se usó inglés como fallback
                                 }
                                 transformed_results.append(track_data)
-                        
+
                         return jsonify(transformed_results)
                     else:
                         logger.warning(
@@ -613,11 +613,11 @@ def search():
                     music_fallback = YTMusic()
                     search_results = music_fallback.search(
                         query, filter=filter_type, limit=limit)
-                    
+
                     if search_results and len(search_results) > 0:
                         # Transformar los resultados igual que antes
                         transformed_results = []
-                        
+
                         for item in search_results:
                             if item.get('resultType', '').lower() in [
                                 'song', 'video']:
@@ -632,7 +632,7 @@ def search():
                                     'language': 'default'  # Indicar que se usó la configuración predeterminada
                                 }
                                 transformed_results.append(track_data)
-                        
+
                         return jsonify(transformed_results)
                     else:
                         logger.warning(
@@ -654,7 +654,7 @@ def find_track():
     title = request.args.get('title', '')
     artist = request.args.get('artist', '')
     query = request.args.get('query', f"{title} {artist}").strip()
-    
+
     if not query:
         return jsonify({
             'id': '',
@@ -662,7 +662,7 @@ def find_track():
             'artist': '',
             'error': 'Se requiere una consulta'
         }), 400
-    
+
     # Verificar caché
     cache_key = f"find_track_{query.replace(' ', '_')}"
     cached_track = get_cached(cache_key, ttl_hours=24 * 7)  # 1 semana
@@ -674,7 +674,7 @@ def find_track():
         # Configuración regional
         region = request.args.get('region', 'US')
         language = request.args.get('language', 'en')
-        
+
         logger.info(f"[RASTREO-PLAYLIST] Configuración: region={region}, language={language}")
 
         start_time = time.time()
@@ -765,22 +765,22 @@ def spotify_to_youtube():
     spotify_id = request.args.get('id', '')
     title = request.args.get('title', '')
     artist = request.args.get('artist', '')
-    
+
     if not spotify_id and (not title or not artist):
         return jsonify(
             {"error": "Se requiere ID de Spotify o título y artista"}), 400
-    
+
     # Verificar caché
     cache_key = f"spotify_to_youtube_{spotify_id}_{title}_{artist}"
     cached = get_cached(cache_key, ttl_hours=168)  # 1 semana de caché
     if cached:
         return jsonify(cached)
-    
+
     try:
         # En producción usaríamos ytmusicapi
         # ytmusic = YTMusic(AUTH_FILE) if os.path.exists(AUTH_FILE) else YTMusic()
         # results = ytmusic.search(f"{title} {artist}", filter="songs", limit=5)
-        
+
         # Simulamos un resultado para desarrollo
         result = {
             'youtube_id': "dQw4w9WgXcQ",
@@ -790,7 +790,7 @@ def spotify_to_youtube():
             'duration': 180,  # 3 minutos en segundos
             'thumbnail': "https://via.placeholder.com/150"
         }
-        
+
         save_to_cache(cache_key, result)
         return jsonify(result)
     except Exception as e:
@@ -808,7 +808,7 @@ def get_recommendations():
     seed_track = request.args.get('seed_track', '')
 
     logger.info(f"[RASTREO-PLAYLIST] Parámetros: limit={limit}, seed_artist='{seed_artist}', seed_track='{seed_track}'")
-    
+
     # Verificar caché
     cache_key = f"recommendations_{seed_artist}_{seed_track}_{limit}"
 
@@ -821,11 +821,11 @@ def get_recommendations():
             return jsonify(cached)
     except Exception as cache_error:
         logger.warning(f"[RASTREO-PLAYLIST] ERROR CACHÉ: {str(cache_error)}")
-    
+
     try:
         logger.info("[RASTREO-PLAYLIST] Obteniendo YTMusic")
         ytm = get_ytmusic()
-        
+
         results = []
 
         # Si tenemos una semilla de artista
@@ -853,7 +853,7 @@ def get_recommendations():
                                     if not song.get('artist') and not song.get('artists'):
                                         # Si no hay información de artista, usar el artista semilla
                                         song['artist'] = seed_artist
-                                    
+
                                     # Usar la función de normalización para datos consistentes
                                     track_data = normalize_track_data(song, default_artist=seed_artist)
                                     if track_data:
@@ -893,16 +893,16 @@ def get_recommendations():
                                 seed_track_artist = search_results[0]['artists'][0].get('name', '')
                             elif search_results[0].get('artist'):
                                 seed_track_artist = search_results[0]['artist']
-                            
+
                             # Log adicional para debugging
                             logger.info(f"[RASTREO-PLAYLIST] Artista de la semilla: '{seed_track_artist}'")
-                            
+
                             # Registra algunos detalles de track para debugging
                             if tracks and len(tracks) > 0:
                                 sample_track = tracks[0]
                                 logger.info(f"[RASTREO-PLAYLIST] Muestra de estructura de track: " +
                                           f"Keys disponibles: {list(sample_track.keys())}")
-                                          
+
                             # Obtener información adicional sobre artistas para las pistas que no tienen
                             for track in tracks:
                                 if track.get('videoId') != video_id:  # Excluir la canción original
@@ -911,7 +911,7 @@ def get_recommendations():
                                         (track.get('artists') and len(track['artists']) > 0) or
                                         track.get('artist', '').strip() != ''
                                     )
-                                    
+
                                     # Si no hay información de artista, intentar buscarla
                                     if not has_artist_info:
                                         try:
@@ -919,14 +919,14 @@ def get_recommendations():
                                             logger.info(f"[RASTREO-PLAYLIST] Buscando información del artista para el video {track.get('videoId', '')}")
                                             # Obtener información de la canción desde el título si es necesario
                                             track_title = track.get('title', '')
-                                            
+
                                             # Si tiene un formato "Artist - Title", extraerlo
                                             if " - " in track_title:
                                                 parts = track_title.split(" - ", 1)
                                                 if len(parts) == 2:
                                                     track['artist'] = parts[0].strip()
                                                     logger.info(f"[RASTREO-PLAYLIST] Artista extraído del título: '{track['artist']}'")
-                                            
+
                                             # Si sigue sin artista, intentar buscar la canción
                                             if not track.get('artist', '').strip():
                                                 try:
@@ -943,7 +943,7 @@ def get_recommendations():
                                                     logger.warning(f"[RASTREO-PLAYLIST] Error buscando información adicional: {str(search_error)}")
                                         except Exception as info_error:
                                             logger.warning(f"[RASTREO-PLAYLIST] Error obteniendo información adicional: {str(info_error)}")
-                                    
+
                                     # Usar la función de normalización para obtener datos consistentes
                                     track_data = normalize_track_data(track, default_artist='')
                                     if track_data:
@@ -990,7 +990,7 @@ def get_recommendations():
                                                                 (track.get('artists') and len(track['artists']) > 0) or
                                                                 track.get('artist', '').strip() != ''
                                                             )
-                                                            
+
                                                             # Si no hay información de artista, intentar extraerla del título
                                                             if not has_artist_info:
                                                                 track_title = track.get('title', '')
@@ -999,7 +999,7 @@ def get_recommendations():
                                                                     if len(parts) == 2:
                                                                         track['artist'] = parts[0].strip()
                                                                         logger.info(f"[RASTREO-PLAYLIST] Artista extraído de título: '{track['artist']}'")
-                                                            
+
                                                             # Usar la función de normalización para datos consistentes
                                                             track_data = normalize_track_data(track, default_artist='')
                                                             if track_data:
@@ -1012,17 +1012,17 @@ def get_recommendations():
                                 logger.error(f"[RASTREO-PLAYLIST] Error obteniendo mood playlists: {str(mood_error)}")
             except Exception as mood_error:
                 logger.error(f"[RASTREO-PLAYLIST] Error obteniendo categorías de mood: {str(mood_error)}")
-        
+
         # Eliminar duplicados basados en ID
         unique_results = {}
         for track in results:
             if track.get('id') and track['id'] not in unique_results:
                 unique_results[track['id']] = track
-        
+
         # Convertir diccionario de nuevo a lista
         results = list(unique_results.values())
         logger.info(f"[RASTREO-PLAYLIST] {len(results)} tracks únicos después de eliminar duplicados")
-        
+
         # Limitar a la cantidad solicitada
         final_results = []
         for track in results[:limit]:
@@ -1037,23 +1037,23 @@ def get_recommendations():
                         if len(parts) == 2:
                             track['artist'] = parts[0].strip()
                             logger.info(f"[RASTREO-PLAYLIST] Artista extraído de último intento: '{track['artist']}'")
-                
+
                 # Añadir información extra de diagnóstico si es necesario
                 logger.debug(f"[RASTREO-PLAYLIST] Track validado: id={track['id']}, "
                           f"title='{track['title']}', artist='{track.get('artist', 'Desconocido')}'")
                 final_results.append(track)
             else:
                 logger.warning(f"[RASTREO-PLAYLIST] Omitiendo track con datos incompletos: {track}")
-        
+
         # Log de resultados
         logger.info(f"[RASTREO-PLAYLIST] Total de recomendaciones validadas: {len(final_results)}")
-        
+
         # Verificar diversidad de artistas
         artist_counts = {}
         for track in final_results:
             artist = track.get('artist', 'Desconocido')
             artist_counts[artist] = artist_counts.get(artist, 0) + 1
-        
+
         unique_artists = list(artist_counts.keys())
         logger.info(f"[RASTREO-PLAYLIST] Artistas únicos: {len(unique_artists)}, distribución: {artist_counts}")
 
@@ -1079,20 +1079,20 @@ def get_recommendations():
 def get_top_artists():
     """Obtiene artistas populares de YouTube Music"""
     limit = int(request.args.get('limit', 16))
-    
+
     # Verificar caché
     cache_key = f"top_artists_{limit}"
     cached = get_cached(cache_key, ttl_hours=24)  # Caché por 24 horas
     if cached:
         return jsonify(cached)
-    
+
     try:
         ytm = get_ytmusic()
-        
+
         # Obtener diferentes géneros para diversificar resultados
         genres = ["pop", "rock", "hip hop", "electrónica", "latin"]
         all_artists = []
-        
+
         # Buscar artistas por género
         for genre in genres[:3]:  # Limitamos a 3 géneros para no hacer muchas llamadas
             search_results = ytm.search(f"{genre} artist", filter="artists", limit=limit //3)
@@ -1100,7 +1100,7 @@ def get_top_artists():
     f"Búsqueda de artistas para género {genre}, resultados: {
         len(search_results)}")
             all_artists.extend(search_results)
-        
+
         # Formatear resultados en un formato similar al que espera nuestra
         # aplicación
         formatted_artists = []
@@ -1115,11 +1115,11 @@ def get_top_artists():
                     'popularity': 80  # No disponible en YTMusic, asignamos un valor por defecto
                 }
                 formatted_artists.append(artist_data)
-        
+
         logger.info(
     f"Artistas populares encontrados: {
         len(formatted_artists)}")
-        
+
         # Si no encontramos artistas, crear algunos de ejemplo
         if not formatted_artists:
             for i in range(min(16, limit)):
@@ -1130,7 +1130,7 @@ def get_top_artists():
                     'genres': [genres[i % len(genres)]],
                     'popularity': 80 + (i % 20)
                 })
-        
+
         result = {'items': formatted_artists[:limit]}
         save_to_cache(cache_key, result)
         return jsonify(result)
@@ -1154,19 +1154,19 @@ def get_top_artists():
 def get_recommendations_by_genres():
     """Obtiene recomendaciones basadas en los géneros favoritos del usuario"""
     # Parámetros
-    genres = request.args.getlist('genres[]') or [] 
+    genres = request.args.getlist('genres[]') or []
     artists_per_genre = int(request.args.get('artistsPerGenre', 20))
     playlists_per_genre = int(request.args.get('playlistsPerGenre', 10))
     tracks_per_genre = int(request.args.get('tracksPerGenre', 30))
-    
+
     # Verificar que se hayan proporcionado géneros
     if not genres:
         return jsonify({"error": "Se requieren géneros favoritos"}), 400
-    
+
     # Limitar a los 3 principales géneros
     top_genres = genres[:3]
     logger.info(f"Obteniendo recomendaciones para géneros: {top_genres}")
-    
+
     # Verificar caché
     cache_key = f"recommendations_by_genres_{
     '-'.join(top_genres)}_{artists_per_genre}_{playlists_per_genre}_{tracks_per_genre}"
@@ -1175,7 +1175,7 @@ def get_recommendations_by_genres():
         logger.info(
     f"Usando caché para recomendaciones de géneros: {top_genres}")
         return jsonify(cached)
-    
+
     try:
         ytm = get_ytmusic()
         result = {
@@ -1183,11 +1183,11 @@ def get_recommendations_by_genres():
             "playlists": [],
             "tracks": []
         }
-        
+
         # Obtener artistas, playlists y tracks para cada género
         for genre in top_genres:
             logger.info(f"Procesando género: {genre}")
-            
+
             # 1. Artistas
             logger.info(f"Buscando artistas para género: {genre}")
             artists_results = ytm.search(
@@ -1209,7 +1209,7 @@ def get_recommendations_by_genres():
                             'sourceGenre': genre
                         }
                         result['artists'].append(artist_data)
-            
+
             # 2. Playlists
             logger.info(f"Buscando playlists para género: {genre}")
             playlists_results = ytm.search(
@@ -1231,7 +1231,7 @@ def get_recommendations_by_genres():
                             'sourceGenre': genre
                         }
                         result['playlists'].append(playlist_data)
-            
+
             # 3. Tracks
             logger.info(f"Buscando tracks para género: {genre}")
             tracks_results = ytm.search(
@@ -1252,7 +1252,7 @@ def get_recommendations_by_genres():
                             'sourceGenre': genre
                         }
                         result['tracks'].append(track_data)
-        
+
         # Guardar en caché
         save_to_cache(cache_key, result)
         logger.info(
@@ -1263,7 +1263,7 @@ def get_recommendations_by_genres():
                     result['playlists'])} playlists, {
                         len(
                             result['tracks'])} tracks")
-        
+
         return jsonify(result)
     except Exception as e:
         logger.error(f"Error al obtener recomendaciones por géneros: {str(e)}")
@@ -1273,7 +1273,7 @@ def get_recommendations_by_genres():
             "playlists": [],
             "tracks": []
         }
-        
+
         # Generar algunos datos de ejemplo para cada género
         for genre in top_genres:
             # Artistas fallback
@@ -1287,7 +1287,7 @@ def get_recommendations_by_genres():
                     'source': 'youtube_music',
                     'sourceGenre': genre
                 })
-            
+
             # Playlists fallback
             for i in range(3):
                 fallback_result['playlists'].append({
@@ -1300,7 +1300,7 @@ def get_recommendations_by_genres():
                     'source': 'youtube_music',
                     'sourceGenre': genre
                 })
-            
+
             # Tracks fallback
             for i in range(10):
                 fallback_result['tracks'].append({
@@ -1314,7 +1314,7 @@ def get_recommendations_by_genres():
                     'youtubeId': f"fallback_track_{genre}_{i}",
                     'sourceGenre': genre
                 })
-        
+
         return jsonify(fallback_result)
 
 
@@ -1325,17 +1325,17 @@ def get_featured_playlists():
     try:
         limit = int(request.args.get('limit', 10))
         region = request.args.get('region', 'US')  # Nuevo parámetro de región
-        
+
         logger.info(
     f"Obteniendo playlists destacadas para región {region}, límite {limit}")
-        
+
         # Intentar obtener la sección de exploración
         try:
             # Usar YTMusic directamente sin get_ytmusic
             # Configurar YTMusic con la región del usuario
             ytmusic = YTMusic(language=region)
             explore_data = ytmusic.get_explore()
-            
+
             # Verificar si la respuesta es válida y contiene playlists
             if explore_data and 'sections' in explore_data:
                 # Buscar la sección de playlists destacadas (generalmente la
@@ -1345,11 +1345,11 @@ def get_featured_playlists():
                     if 'Playlists' in section.get('title', ''):
                         playlists_section = section
                         break
-                
+
                 # Si encontramos la sección de playlists
                 if playlists_section and 'playlists' in playlists_section:
                     playlists = playlists_section['playlists'][:limit]
-                    
+
                     # Asegurar que todas las playlists tienen thumbnails
                     # válidos
                     valid_playlists = []
@@ -1358,7 +1358,7 @@ def get_featured_playlists():
                             # Agregar región a la información de la playlist
                             playlist['region'] = region
                             valid_playlists.append(playlist)
-                    
+
                     logger.info(
     f"Encontradas {
         len(valid_playlists)} playlists destacadas para región {region}")
@@ -1372,7 +1372,7 @@ def get_featured_playlists():
         # predefinidas según la región
         logger.info(
     f"Usando playlists predefinidas como fallback para región {region}")
-        
+
         # Playlists específicas por región
         region_playlists = { 'ES': [ { "title": "Éxitos España",
                     "playlistId": "ES_top_hits",
@@ -1409,7 +1409,7 @@ def get_featured_playlists():
                     "trackCount": 40,
                     "thumbnails": [{"url": "https://i.ytimg.com/vi/3V-bu_i-w_o/maxresdefault.jpg"}],
      "region": "AR" } ] }
-        
+
         # Playlists genéricas para todas las regiones
         generic_playlists = [ { "title": "Top Hits Globales",
                 "playlistId": "PL55713C70BA91BD6E",
@@ -1446,14 +1446,14 @@ def get_featured_playlists():
                 "trackCount": 30,
                 "thumbnails": [{"url": "https://i.ytimg.com/vi/8SbUC-UaAxE/maxresdefault.jpg"}],
      "region": "global" } ]
-        
+
         # Combinar playlists específicas de la región con las genéricas
         combined_playlists = region_playlists.get(
             region, []) + generic_playlists
-        
+
         # Limitar al número solicitado
         combined_playlists = combined_playlists[:limit]
-        
+
         return jsonify(combined_playlists)
     except Exception as e:
         logger.error(f"Error en get_featured_playlists: {str(e)}")
@@ -1468,34 +1468,34 @@ def get_new_releases():
         limit = int(request.args.get('limit', 10))
         # Parámetro de región, por defecto US
         region = request.args.get('region', 'US')
-        
+
         logger.info(
     f"Obteniendo nuevos lanzamientos para región {region}, límite {limit}")
-        
+
         # Intentar obtener la sección de exploración
         try:
             # Usar YTMusic directamente sin get_ytmusic
             # Configurar YTMusic con el idioma/región del usuario
             ytmusic = YTMusic(language=region)
-            
+
             # Obtener nuevos lanzamientos a través de la API de charts
             # Ya que los charts suelen tener contenido más actualizado
             charts = ytmusic.get_charts(country=region)
-            
+
             # También obtener la sección de exploración para tener más fuentes
             explore_data = ytmusic.get_explore()
-            
+
             # Lista para almacenar los lanzamientos combinados
             all_releases = []
-            
+
             # 1. Primero intentar con la sección de nuevos lanzamientos de
             # explore
             if explore_data and 'sections' in explore_data:
                 # Buscar la sección de nuevos lanzamientos (generalmente la
                 # primera sección)
                 for section in explore_data['sections']:
-                    if ('New' in section.get('title', '') or 
-                        'Nuevo' in section.get('title', '') or 
+                    if ('New' in section.get('title', '') or
+                        'Nuevo' in section.get('title', '') or
                         'reciente' in section.get('title', '').lower()):
                         if 'items' in section:
                             all_releases.extend(section['items'])
@@ -1506,14 +1506,14 @@ def get_new_releases():
                 section.get(
                     'title',
                      '')}'")
-            
+
             # 2. Agregar lanzamientos de charts (tendencias)
             if charts and 'singles' in charts:
                 # Los singles en charts suelen ser más recientes
                 singles = charts['singles'][:limit]
                 logger.info(f"Encontrados {len(singles)} singles en charts")
                 all_releases.extend(singles)
-            
+
             # 3. También intentar con los álbumes nuevos de charts
             if charts and 'albums' in charts:
                 # Filtrar solo los álbumes que parecen más recientes basados en
@@ -1525,37 +1525,37 @@ def get_new_releases():
                     # Así que usamos claves en los títulos que sugieren novedad
                     if album and 'title' in album:
                         title = album['title'].lower()
-                        if ('new' in title or 'nuevo' in title or 
+                        if ('new' in title or 'nuevo' in title or
                             '2025' in title or '2024' in title):
                             recent_albums.append(album)
-                
+
                 logger.info(
     f"Encontrados {
         len(recent_albums)} álbumes recientes en charts")
                 all_releases.extend(recent_albums)
-            
+
             # Eliminar duplicados basados en videoId o browseId
             unique_releases = {}
             for release in all_releases:
                 if not release:
                     continue
-                
+
                 # Usar videoId o browseId como clave única
                 release_id = release.get(
     'videoId', release.get(
         'browseId', ''))
                 if release_id and release_id not in unique_releases:
                     unique_releases[release_id] = release
-            
+
             # Convertir a lista
             filtered_releases = list(unique_releases.values())
             logger.info(
     f"Total de {
         len(filtered_releases)} lanzamientos únicos encontrados")
-            
+
             # Limitar al número solicitado
             filtered_releases = filtered_releases[:limit]
-            
+
             # Transformar el formato para hacerlo compatible con el frontend
             formatted_releases = []
             for release in filtered_releases:
@@ -1570,7 +1570,7 @@ def get_new_releases():
                         'region': region
                     }
                     formatted_releases.append(formatted_release)
-            
+
             if formatted_releases:
                 logger.info(
     f"Devolviendo {
@@ -1580,11 +1580,11 @@ def get_new_releases():
             logger.error(
     f"Error al obtener nuevos lanzamientos desde la exploración: {
         str(e)}")
-        
+
         # Si no hay datos de explore o hubo un error, usar álbumes predefinidos
         logger.info(
     f"Usando álbumes predefinidos como fallback para región {region}")
-        
+
         # Personalizar algunos álbumes predefinidos basados en la región
         region_specific_albums = { 'ES': [ { 'id': 'yt-album-es-1',
                     'name': 'El Madrileño',
@@ -1621,7 +1621,7 @@ def get_new_releases():
                     'release_date': '2025',
                     'type': 'album',
      'region': 'AR' } ] }
-        
+
         # Álbumes predefinidos generales
         default_albums = [ { 'id': 'yt-album-1',
                 'name': 'Future Nostalgia (2025 Edition)',
@@ -1658,14 +1658,14 @@ def get_new_releases():
                 'release_date': '2025',
                 'type': 'album',
      'region': 'global' } ]
-        
+
         # Combinar álbumes específicos de región con los predeterminados
         fallback_albums = region_specific_albums.get(
             region, []) + default_albums
-        
+
         # Asegurarnos de que no excedemos el límite
         fallback_albums = fallback_albums[:limit]
-        
+
         return jsonify(fallback_albums)
     except Exception as e:
         logger.error(f"Error en get_new_releases: {str(e)}")
@@ -1681,14 +1681,14 @@ def get_artists_by_genre():
     language = request.args.get('language', 'en')  # Añadir parámetro de idioma
     # Parámetro para forzar bypass del caché
     no_cache = request.args.get('_t', None)
-    
+
     logger.info(
     f"[DEBUG] NUEVA SOLICITUD de artistas por género: género={genre}, límite={limit}, región={region}, idioma={language}")
-    
+
     if not genre:
         logger.warning("[DEBUG] No se proporcionó ningún género")
         return jsonify([])
-    
+
     # Lista de idiomas soportados por YouTube Music
     supported_languages = [
     'ja',
@@ -1707,16 +1707,16 @@ def get_artists_by_genre():
     'zh_TW',
     'tr',
      'it']
-    
+
     # Verificar si el idioma es soportado
     if language not in supported_languages:
         logger.warning(
     f"Idioma '{language}' no soportado. Usando inglés como fallback.")
         language = 'en'  # Usar inglés como fallback si el idioma no es soportado
-    
+
     # Verificar caché solo si no se ha especificado no_cache
     use_cache = no_cache is None
-    
+
     if use_cache:
         # Verificar caché con la clave correcta que incluye idioma
         cache_key = f"artists_by_genre_{genre}_{limit}_{region}_{language}"
@@ -1727,36 +1727,36 @@ def get_artists_by_genre():
             return jsonify(cached_results)
     else:
         logger.info(f"Omitiendo caché por solicitud explícita")
-    
+
     try:
         logger.info(
     f"[DEBUG] BUSCANDO ACTIVAMENTE artistas para género: {genre}, idioma: {language}")
-        
+
         # Lista para almacenar artistas
         artists = []
-        
+
         # Intentar buscar artistas con la API, pero envolver en try/except
         try:
             # Crear una instancia YTMusic con el idioma correcto
             music = YTMusic(language=language)
             logger.info(
     f"[DEBUG] Instancia YTMusic creada con idioma {language}")
-            
+
             # Evitar formar consultas inválidas como "genre:Lucky Jason Mraz"
             # En su lugar, buscar directamente con el género como término de
             # búsqueda
             start_time = time.time()
             logger.info(
     f"[DEBUG] Iniciando búsqueda con parámetros: género={genre}, idioma={language}")
-            
+
             search_results = music.search(genre, filter='artists', limit=limit)
             elapsed_time = time.time() - start_time
-            
+
             logger.info(
     f"Búsqueda completada en {
         elapsed_time:.2f}s. Resultados: {
             len(search_results) if search_results else 0}")
-            
+
             # Procesar resultados
             if search_results and len(search_results) > 0:
                 logger.info(
@@ -1765,11 +1765,11 @@ def get_artists_by_genre():
                 for artist_data in search_results:
                     if not artist_data:
                         continue
-                        
+
                     thumbnails = artist_data.get('thumbnails', [])
                     if not thumbnails:
                         thumbnails = [{'url': ''}]
-                        
+
                     artist = {
                         'id': artist_data.get('browseId', f'yt-artist-{len(artists)}'),
                         'name': artist_data.get('artist', artist_data.get('name', 'Artista desconocido')),
@@ -1781,7 +1781,7 @@ def get_artists_by_genre():
                         'fromSearch': True  # Marcar como resultado real de búsqueda
                     }
                     artists.append(artist)
-                
+
                 logger.info(
     f"[DEBUG] Búsqueda exitosa para género {genre}. {
         len(artists)} artistas encontrados")
@@ -1789,7 +1789,7 @@ def get_artists_by_genre():
                 logger.warning(
     f"[DEBUG] No se encontraron artistas para el género '{genre}'")
                 artists = []
-        
+
         except Exception as search_error:
             # Si hay un error en la búsqueda, registrarlo pero continuar usando
             # artistas predefinidos
@@ -1810,7 +1810,7 @@ def get_artists_by_genre():
     f"[DEBUG] Reintentando búsqueda con idioma 'en'")
                     search_results = music.search(
     genre, filter='artists', limit=limit)
-                    
+
                     if search_results and len(search_results) > 0:
                         logger.info(
     f"[DEBUG] Búsqueda con inglés exitosa. Procesando {
@@ -1818,11 +1818,11 @@ def get_artists_by_genre():
                         for artist_data in search_results:
                             if not artist_data:
                                 continue
-                                
+
                             thumbnails = artist_data.get('thumbnails', [])
                             if not thumbnails:
                                 thumbnails = [{'url': ''}]
-                                
+
                             artist = {
                                 'id': artist_data.get('browseId', f'yt-artist-{len(artists)}'),
                                 'name': artist_data.get('artist', artist_data.get('name', 'Artista desconocido')),
@@ -1841,12 +1841,12 @@ def get_artists_by_genre():
                     logger.error(
     f"Error al reintentar búsqueda con idioma 'en': {
         str(retry_error)}")
-            
+
             if len(artists) == 0:
                 logger.info(
                     "Usando artistas predefinidos debido a error en búsqueda")
                 artists = []  # Asegurar que la lista está vacía para usar predefinidos
-        
+
         # Si no hay suficientes artistas (ya sea porque falló la búsqueda o no devolvió suficientes),
         # añadir predefinidos según el género y región
         if len(artists) < limit:
@@ -1855,7 +1855,7 @@ def get_artists_by_genre():
         len(artists)}). Usando artistas predefinidos para género '{genre}' en región '{region}'")
             genre_specific_artists = get_predefined_artists_by_genre(
                 genre, limit, region)
-            
+
             # Si ya tenemos algunos artistas, combinarlos con los predefinidos
             if len(artists) > 0:
                 # Combinar los artistas existentes con los predefinidos
@@ -1868,10 +1868,10 @@ def get_artists_by_genre():
             else:
                 # Si no tenemos artistas, usar solo los predefinidos
                 artists = genre_specific_artists
-        
+
         # Limitar al número solicitado
         artists = artists[:limit]
-        
+
         # Guardar en caché (sólo si hay artistas reales y no todos son
         # fallback)
         if use_cache and any(artist.get('source', '') ==
@@ -1880,7 +1880,7 @@ def get_artists_by_genre():
             save_to_cache(cache_key, artists)
             logger.info(
     f"[DEBUG] Resultados guardados en caché con clave: {cache_key}")
-        
+
         logger.info(
     f"[DEBUG] Devolviendo {
         len(artists)} artistas para el género '{genre}'")
@@ -1888,7 +1888,7 @@ def get_artists_by_genre():
     except Exception as e:
         logger.error(
     f"Error general en get_artists_by_genre para {genre} en región {region}: {e}")
-        
+
         # En caso de error general, devolver directamente artistas predefinidos
         predefined_artists = get_predefined_artists_by_genre(
             genre, limit, region)
@@ -1951,7 +1951,7 @@ def get_predefined_artists_by_genre(genre, count, region='US'):
             {'id': 'indie4', 'name': 'MGMT', 'images': [{'url': 'https://i.scdn.co/image/ab6761610000e5eb68151ade82ce461f9f761a5e'}]}
         ]
     }
-    
+
     # Artistas por región y género (para personalizar aún más los resultados)
     region_genre_artists = {
         'ES': {
@@ -1980,16 +1980,16 @@ def get_predefined_artists_by_genre(genre, count, region='US'):
             ]
         }
     }
-    
+
     # Normalizar el género para la búsqueda
     normalized_genre = genre.lower()
     matched_genre = None
-    
+
     for key in genre_artists:
         if key in normalized_genre or normalized_genre in key:
             matched_genre = key
             break
-    
+
     # Intentar primero obtener artistas específicos por región y género
     region_specific_artists = []
     if region in region_genre_artists and matched_genre in region_genre_artists[region]:
@@ -1997,7 +1997,7 @@ def get_predefined_artists_by_genre(genre, count, region='US'):
         logger.info(
     f"Usando {
         len(region_specific_artists)} artistas específicos para región {region} y género {matched_genre}")
-    
+
     # Si no encontramos un género específico, usar una mezcla de todos
     if not matched_genre:
         all_artists = []
@@ -2014,14 +2014,14 @@ def get_predefined_artists_by_genre(genre, count, region='US'):
             0, count - len(region_specific_artists))]
         result = region_specific_artists + general_genre_artists
         result = result[:count]  # Asegurarnos de no exceder el límite
-    
+
     # Añadir información común a todos los artistas
     for artist in result:
         artist['genres'] = [genre]
         artist['popularity'] = 50
         artist['source'] = 'youtube'
         artist['region'] = region
-    
+
     return result
 
 
@@ -2032,12 +2032,12 @@ def health_check():
         # Verificar si YTMusic está inicializado
         ytm = get_ytmusic()
         ytmusic_available = ytm is not None
-        
+
         # Actualizar estado del servicio
         with setup_auth_lock:
             service_status["ytmusic_available"] = ytmusic_available
             service_status["last_check"] = datetime.now().isoformat()
-        
+
         # Si YTMusic está disponible, intentar una consulta ligera para verificar que realmente funciona
         test_results = None
         if ytmusic_available:
@@ -2046,7 +2046,7 @@ def health_check():
                 start_time = time.time()
                 test_results = ytm.get_mood_categories()
                 elapsed_time = time.time() - start_time
-                
+
                 has_results = test_results is not None and len(test_results) > 0
                 service_status["last_successful_operation"] = datetime.now().isoformat()
                 service_status["last_test_time_ms"] = round(elapsed_time * 1000)
@@ -2055,7 +2055,7 @@ def health_check():
                 logger.error(f"Error en prueba de estado: {str(test_error)}")
                 service_status["last_test_error"] = str(test_error)
                 service_status["last_test_success"] = False
-        
+
         # Construir respuesta de estado
         response = {
             "status": "ok" if ytmusic_available else "degraded",
@@ -2073,7 +2073,7 @@ def health_check():
                 "python_api_version": "1.1.0"
             }
         }
-        
+
         return jsonify(response)
     except Exception as e:
         # Registrar el error
@@ -2085,7 +2085,7 @@ def health_check():
             })
             # Mantener solo los últimos 10 errores
             service_status["errors"] = service_status["errors"][-10:]
-        
+
         # Devolver respuesta de error
         return jsonify({
             "status": "error",
@@ -2113,16 +2113,16 @@ if __name__ == '__main__':
                  'key.pem')):
             context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
             context.load_cert_chain(
-                os.path.join(cert_path, 'cert.pem'), 
+                os.path.join(cert_path, 'cert.pem'),
                 os.path.join(cert_path, 'key.pem')
             )
             print("Usando certificados SSL")
     except Exception as e:
         print(f"Error configurando SSL: {e}")
         context = None
-    
+
     # Iniciar el servidor
     if context:
         app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
     else:
-        app.run(host='0.0.0.0', port=5000, debug=True) 
+        app.run(host='0.0.0.0', port=5000, debug=True)

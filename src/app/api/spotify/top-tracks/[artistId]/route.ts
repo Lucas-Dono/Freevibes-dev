@@ -35,4 +35,4 @@ export async function GET(
         console.error(`[API Top Tracks] Error fetching top tracks for Spotify artist ID ${artistId}:`, error);
         return NextResponse.json({ error: 'Failed to fetch top tracks from Spotify' }, { status: 500 });
     }
-} 
+}

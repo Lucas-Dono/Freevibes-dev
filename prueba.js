@@ -4,7 +4,7 @@ const readline = require('readline-sync');
 // Función para obtener el token de acceso
 async function getAccessToken(clientId, clientSecret) {
     const authHeader = 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64');
-    
+
     try {
         const response = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
@@ -16,7 +16,7 @@ async function getAccessToken(clientId, clientSecret) {
         });
 
         if (!response.ok) throw new Error('Error en la autenticación');
-        
+
         const data = await response.json();
         return data.access_token;
     } catch (error) {
@@ -35,7 +35,7 @@ async function searchArtist(accessToken, artistName) {
         });
 
         if (!response.ok) throw new Error('Error en la búsqueda');
-        
+
         const data = await response.json();
         return data.artists.items[0]?.id;
     } catch (error) {
@@ -54,7 +54,7 @@ async function getRelatedArtists(accessToken, artistId) {
         });
 
         if (!response.ok) throw new Error('Error obteniendo artistas relacionados');
-        
+
         const data = await response.json();
         return data.artists;
     } catch (error) {
@@ -70,28 +70,28 @@ async function main() {
     const clientSecret = readline.question('Ingresa tu Client Secret de Spotify: ', {
         hideEchoBack: true // Para ocultar la entrada del secret
     });
-    
+
     // Obtener token
     const accessToken = await getAccessToken(clientId, clientSecret);
     if (!accessToken) return;
-    
+
     // Solicitar artista
     const artistName = readline.question('\nIngresa el nombre del artista: ');
     const artistId = await searchArtist(accessToken, artistName);
-    
+
     if (!artistId) {
         console.log('Artista no encontrado');
         return;
     }
-    
+
     // Obtener relacionados
     const relatedArtists = await getRelatedArtists(accessToken, artistId);
-    
+
     if (!relatedArtists || relatedArtists.length === 0) {
         console.log('No se encontraron artistas relacionados');
         return;
     }
-    
+
     // Mostrar resultados
     console.log('\nArtistas relacionados:');
     relatedArtists.forEach((artist, index) => {

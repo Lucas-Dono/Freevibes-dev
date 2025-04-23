@@ -29,7 +29,7 @@ export function SearchInput({ onSearch, placeholder = "Buscar en todo..." }: Sea
   const [isSearching, setIsSearching] = useState(false);
   // Aplicar debounce al valor de búsqueda (500ms)
   const debouncedSearchValue = useDebounce(searchValue, 500);
-  
+
   // Referencia para cancelar búsquedas en curso
   const searchRequestRef = useRef<AbortController | null>(null);
 
@@ -41,18 +41,18 @@ export function SearchInput({ onSearch, placeholder = "Buscar en todo..." }: Sea
       if (searchRequestRef.current) {
         searchRequestRef.current.abort();
       }
-      
+
       // Crear un nuevo controller para esta búsqueda
       searchRequestRef.current = new AbortController();
-      
+
       setIsSearching(true);
-      
+
       // Realizar la búsqueda
       const performSearch = async () => {
         try {
           // Simular un retraso para mostrar el indicador de carga
           await new Promise(resolve => setTimeout(resolve, 300));
-          
+
           // Llamar a la función de búsqueda proporcionada
           onSearch(debouncedSearchValue);
         } catch (error: any) {
@@ -63,7 +63,7 @@ export function SearchInput({ onSearch, placeholder = "Buscar en todo..." }: Sea
           setIsSearching(false);
         }
       };
-      
+
       performSearch();
     }
   }, [debouncedSearchValue, onSearch]);
@@ -74,8 +74,8 @@ export function SearchInput({ onSearch, placeholder = "Buscar en todo..." }: Sea
 
   return (
     <div className="search-input-container">
-      <input 
-        type="text" 
+      <input
+        type="text"
         value={searchValue}
         onChange={handleInputChange}
         placeholder={placeholder}
@@ -84,4 +84,4 @@ export function SearchInput({ onSearch, placeholder = "Buscar en todo..." }: Sea
       {isSearching && <div className="search-loading-indicator">Buscando...</div>}
     </div>
   );
-} 
+}

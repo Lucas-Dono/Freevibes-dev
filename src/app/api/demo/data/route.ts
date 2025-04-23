@@ -15,12 +15,12 @@ async function loadDemoFile(filePath: string): Promise<any> {
   try {
     const fullPath = path.join(DEMO_DATA_BASE_PATH, filePath);
     console.log(`[Demo API] Cargando archivo: ${fullPath}`);
-    
+
     const data = await fs.readFile(fullPath, 'utf8');
     return JSON.parse(data);
   } catch (error) {
     console.error(`[Demo API] Error al cargar archivo ${filePath}:`, error);
-    
+
     // Si falla la carga de un archivo específico por idioma, intentar con el fallback en español
     if (!filePath.startsWith('es/') && filePath.includes('/')) {
       const parts = filePath.split('/');
@@ -28,7 +28,7 @@ async function loadDemoFile(filePath: string): Promise<any> {
       console.log(`[Demo API] Intentando cargar fallback: ${fallbackPath}`);
       return loadDemoFile(fallbackPath);
     }
-    
+
     throw new Error(`No se pudo cargar el archivo de datos demo: ${filePath}`);
   }
 }
@@ -56,7 +56,7 @@ async function generateRandomHistory(language: string, count: number = 10): Prom
     // Usar top tracks por privacidad en lugar de saved_tracks
     const topTracksData = await loadDemoFile(`${language}/top_tracks.json`);
     const topTracks = topTracksData.items || [];
-    
+
     // Cargar también resultados de búsqueda para tener más variedad
     let searchTracks: any[] = [];
     try {
@@ -68,7 +68,7 @@ async function generateRandomHistory(language: string, count: number = 10): Prom
     } catch (error) {
       console.warn('[Demo API] No se pudieron cargar tracks de búsqueda para el historial', error);
     }
-    
+
     // Cargar nuevos lanzamientos si es posible
     let newReleaseTracks: any[] = [];
     try {
@@ -86,40 +86,40 @@ async function generateRandomHistory(language: string, count: number = 10): Prom
     } catch (error) {
       console.warn('[Demo API] No se pudo cargar nuevos lanzamientos para el historial', error);
     }
-    
+
     // Combinar todas las pistas disponibles
     const allTracks = [...topTracks, ...searchTracks, ...newReleaseTracks];
-    
+
     if (allTracks.length === 0) {
       throw new Error('No hay suficientes tracks para generar historial');
     }
-    
+
     // Seleccionar tracks aleatorios
     const randomHistory: any[] = [];
     const selectedIndexes = new Set<number>();
-    
+
     for (let i = 0; i < Math.min(count, allTracks.length); i++) {
       // Generar índice aleatorio que no haya sido seleccionado
       let randomIndex: number;
       do {
         randomIndex = Math.floor(Math.random() * allTracks.length);
       } while (selectedIndexes.has(randomIndex));
-      
+
       selectedIndexes.add(randomIndex);
-      
+
       // Añadir la pista al historial con timestamp aleatorio (últimas 24 horas)
       const track = allTracks[randomIndex];
       const hoursAgo = Math.floor(Math.random() * 24);
       const minutesAgo = Math.floor(Math.random() * 60);
-      
+
       randomHistory.push({
         track: track,
         played_at: new Date(Date.now() - (hoursAgo * 3600000 + minutesAgo * 60000)).toISOString()
       });
     }
-    
+
     // Ordenar por timestamp (más reciente primero)
-    return randomHistory.sort((a, b) => 
+    return randomHistory.sort((a, b) =>
       new Date(b.played_at).getTime() - new Date(a.played_at).getTime()
     );
   } catch (error) {
@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const endpoint = searchParams.get('endpoint') || '';
     const language = searchParams.get('language') || 'es';
-    
+
     // Verificar si los datos demo están disponibles
     const isAvailable = await isDemoDataAvailable();
     if (!isAvailable) {
@@ -145,12 +145,12 @@ export async function GET(request: NextRequest) {
         { status: 404 }
       );
     }
-    
+
     // Determinar qué archivo cargar según el endpoint
     let filePath: string;
     let responseData: any = null;
     const artistId = searchParams.get('artistId');
-    
+
     if (endpoint === 'artist' && artistId) {
       // Cargar datos de un artista específico
       const artistSlug = artistId.replace(/[^a-z0-9_]/gi, '_').toLowerCase();
@@ -173,7 +173,7 @@ export async function GET(request: NextRequest) {
       filePath = `${language}/search_artist.json`;
       console.log(`[Demo API] Usando archivo search_artist.json para artistas destacados`);
       const data = await loadDemoFile(filePath);
-      
+
       // Mostrar información de diagnóstico sobre los artistas
       if (data && data.artists && data.artists.items) {
         const artistsInfo = data.artists.items.map((artist: any) => ({
@@ -181,10 +181,10 @@ export async function GET(request: NextRequest) {
           popularity: artist.popularity || 0,
           hasImages: !!(artist.images && artist.images.length > 0)
         }));
-        
-        console.log(`[Demo API] Artistas disponibles en search_artist.json:`, 
+
+        console.log(`[Demo API] Artistas disponibles en search_artist.json:`,
           artistsInfo.length > 0 ? artistsInfo.slice(0, 5) : 'Ninguno');
-        
+
         // Contar artistas por popularidad para diagnóstico
         const popularityStats = {
           total: artistsInfo.length,
@@ -193,14 +193,14 @@ export async function GET(request: NextRequest) {
           '60+': artistsInfo.filter((a: any) => a.popularity >= 60).length,
           sinImagen: artistsInfo.filter((a: any) => !a.hasImages).length
         };
-        
+
         console.log(`[Demo API] Estadísticas de popularidad:`, popularityStats);
-        
+
         // Extraer artistas sin aplicar filtro de popularidad
         const topArtists = data.artists.items
           .filter((artist: any) => artist.images && artist.images.length > 0) // Solo incluir artistas con imágenes
           .slice(0, parseInt(searchParams.get('limit') || '10'));
-        
+
         console.log(`[Demo API] Devolviendo ${topArtists.length} artistas destacados`);
         return NextResponse.json({ items: topArtists });
       } else {
@@ -211,15 +211,15 @@ export async function GET(request: NextRequest) {
       console.log(`[Demo API] Búsqueda específica de artistas en modo demo`);
       filePath = `${language}/search_artist.json`;
       const data = await loadDemoFile(filePath);
-      
+
       if (data && data.artists && data.artists.items) {
         // MODIFICADO: Filtrar artistas sin imágenes antes de devolverlos
-        data.artists.items = data.artists.items.filter((artist: any) => 
+        data.artists.items = data.artists.items.filter((artist: any) =>
           artist.images && artist.images.length > 0
         );
         console.log(`[Demo API] Encontrados ${data.artists.items.length} artistas con imágenes en búsqueda`);
       }
-      
+
       // Devolver en el formato que espera el cliente (igual que el endpoint principal search-artists)
       return NextResponse.json({ items: data.artists?.items || [] });
     } else {
@@ -238,7 +238,7 @@ export async function GET(request: NextRequest) {
         case 'saved-tracks':
           console.log('[Demo API] Solicitando saved tracks, usando top_tracks para proteger privacidad');
           filePath = `${language}/top_tracks.json`;
-          
+
           // Convertir el formato de top tracks al formato de saved tracks
           try {
             const topTracksData = await loadDemoFile(`${language}/top_tracks.json`);
@@ -266,13 +266,13 @@ export async function GET(request: NextRequest) {
           filePath = `${language}/search_artist.json`;
           console.log(`[Demo API] Usando archivo search_artist.json para top artistas`);
           const artistData = await loadDemoFile(`${language}/search_artist.json`);
-          
+
           if (artistData && artistData.artists && artistData.artists.items) {
             // MODIFICADO: Extraer artistas con filtro para incluir solo los que tienen imágenes
             const topArtists = artistData.artists.items
               .filter((artist: any) => artist.images && artist.images.length > 0) // Solo incluir artistas con imágenes
               .slice(0, parseInt(searchParams.get('limit') || '10'));
-            
+
             console.log(`[Demo API] Devolviendo ${topArtists.length} artistas top con imágenes`);
             return NextResponse.json({ items: topArtists });
           }
@@ -295,15 +295,15 @@ export async function GET(request: NextRequest) {
           );
       }
     }
-    
+
     // Cargar y devolver los datos
     console.log(`[Demo API] Solicitando datos de: ${filePath}`);
     const data = await loadDemoFile(filePath);
-    
+
     // Si son playlists destacadas y estamos usando álbumes, asegurarnos de que se muestran correctamente
     if (endpoint === 'featured-playlists' && data && data.playlists && Array.isArray(data.playlists.items)) {
       console.log(`[Demo API] PLAYLISTS DESTACADAS: Procesando ${data.playlists.items.length} playlists`);
-      
+
       // Imprimir los primeros elementos para diagnóstico
       if (data.playlists.items.length > 0) {
         const sampleItem = data.playlists.items[0];
@@ -314,15 +314,15 @@ export async function GET(request: NextRequest) {
           hasArtists: !!sampleItem.artists
         });
       }
-      
+
       // Asegurar que cada playlist tiene la información correcta de owner y name
       data.playlists.items = data.playlists.items.map((playlist: any) => {
         // Si la playlist ya tiene la estructura correcta, no hacer cambios
-        if (playlist && playlist.owner && playlist.owner.display_name && 
+        if (playlist && playlist.owner && playlist.owner.display_name &&
             playlist.owner.display_name !== 'freevibes Demo') {
           return playlist;
         }
-        
+
         // Intentar extraer información del artista si está disponible
         if (playlist.artists && playlist.artists.length > 0) {
           return {
@@ -334,7 +334,7 @@ export async function GET(request: NextRequest) {
             }
           };
         }
-        
+
         // Si no hay información de artista, usar un valor por defecto
         return {
           ...playlist,
@@ -345,7 +345,7 @@ export async function GET(request: NextRequest) {
         };
       });
     }
-    
+
     return NextResponse.json(data);
   } catch (error) {
     console.error('[Demo API] Error:', error);
@@ -354,4 +354,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

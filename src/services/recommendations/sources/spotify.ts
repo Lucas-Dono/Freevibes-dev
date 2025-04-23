@@ -14,7 +14,7 @@ function getApiBaseUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return `${process.env.NEXT_PUBLIC_APP_URL}/api`;
   }
-  
+
   // Si no está definida la variable de entorno, usar el puerto actual del navegador
   if (typeof window !== 'undefined' && window.location) {
     // Obtener el puerto actual del navegador
@@ -22,7 +22,7 @@ function getApiBaseUrl() {
     // Construir la URL base con el puerto actual
     return `${window.location.protocol}//${window.location.hostname}:${currentPort}/api`;
   }
-  
+
   // Valor por defecto
   return '/api';
 }
@@ -36,26 +36,26 @@ function getApiBaseUrl() {
 export async function getRecommendationsByGenre(genre: string, limit: number = 30): Promise<Track[]> {
   try {
     console.log(`[Spotify] Obteniendo recomendaciones para género: ${genre}`);
-    
+
     // Usamos el endpoint de genre-recommendations que implementaremos en la API
     const apiBaseUrl = getApiBaseUrl();
-    
+
     // Verificar si el género existe antes de hacer la solicitud
     if (!genre || genre.trim() === '') {
       console.error(`[Spotify] Error: género vacío o no válido`);
       return await searchTracksByGenre('pop', limit); // Usar pop como alternativa segura
     }
-    
+
     // Intentar hacer la solicitud con manejo de errores mejorado
     try {
       const response = await fetch(
         `${apiBaseUrl}/spotify?action=genre-recommendations&genre=${encodeURIComponent(genre)}&limit=${limit}`,
         { cache: 'no-store' }
       );
-      
+
       if (!response.ok) {
         console.error(`[Spotify] Error al obtener recomendaciones (${response.status}): ${response.statusText}`);
-        
+
         if (response.status === 401) {
           const errorData = await response.json();
           if (errorData.redirect) {
@@ -66,24 +66,24 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 3
           }
           return [];
         }
-        
+
         // Si el error es 400 Bad Request o 404 Not Found, intentaremos con búsqueda alternativa
         if (response.status === 400 || response.status === 404) {
           console.log(`[Spotify] Intentando búsqueda alternativa para género: ${genre} (error ${response.status})`);
           return await searchTracksByGenre(genre, limit);
         }
-        
+
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
       const tracks = data.tracks || [];
-      
+
       if (!tracks.length) {
         console.log(`[Spotify] Sin resultados para género ${genre}, probando búsqueda alternativa`);
         return await searchTracksByGenre(genre, limit);
       }
-      
+
       return tracks;
     } catch (requestError) {
       console.error(`[Spotify] Error en la solicitud de recomendaciones:`, requestError);
@@ -91,7 +91,7 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 3
     }
   } catch (error) {
     console.error(`[Spotify] Error en getRecommendationsByGenre:`, error);
-    
+
     // En caso de error, intentar el método alternativo
     return await searchTracksByGenre(genre, limit);
   }
@@ -106,49 +106,49 @@ export async function getRecommendationsByGenre(genre: string, limit: number = 3
 async function searchTracksByGenre(genre: string, limit: number): Promise<Track[]> {
   try {
     console.log(`[Spotify] Buscando canciones para género: ${genre}`);
-    
+
     // Intentaremos primero una búsqueda específica con genre:
     const apiBaseUrl = getApiBaseUrl();
     const searchQuery = `genre:${genre}`;
-    
+
     const response = await fetch(
       `${apiBaseUrl}/spotify?action=search&q=${encodeURIComponent(searchQuery)}&type=track&limit=${limit}`,
       { cache: 'no-store' }
     );
-    
+
     if (!response.ok) {
       console.error(`[Spotify] Error en searchTracksByGenre específico (${response.status}): ${response.statusText}`);
-      
+
       // Si falla la búsqueda específica, intentar búsqueda general
       const broadResponse = await fetch(
         `${apiBaseUrl}/spotify?action=search&q=${encodeURIComponent(genre)}&type=track&limit=${limit}`,
         { cache: 'no-store' }
       );
-      
+
       if (!broadResponse.ok) {
         console.error(`[Spotify] Error en searchTracksByGenre general (${broadResponse.status}): ${broadResponse.statusText}`);
         return getFallbackTracks(genre, limit);
       }
-      
+
       const broadData = await broadResponse.json();
       const tracks = broadData.tracks?.items || [];
-      
+
       if (!tracks.length) {
         console.log(`[Spotify] Sin resultados para búsqueda general de ${genre}, usando fallback`);
         return getFallbackTracks(genre, limit);
       }
-      
+
       return convertSpotifyTracks(tracks);
     }
-    
+
     const data = await response.json();
     const tracks = data.tracks?.items || [];
-    
+
     if (!tracks.length) {
       console.log(`[Spotify] Sin resultados para búsqueda específica de ${genre}, intentando búsqueda general`);
       return await searchTracksByGenre(genre, limit);
     }
-    
+
     return convertSpotifyTracks(tracks);
   } catch (error) {
     console.error(`[Spotify] Error en searchTracksByGenre:`, error);
@@ -188,9 +188,9 @@ function convertSpotifyTracks(tracks: any[]): Track[] {
  */
 function getFallbackTracks(genre: string, limit: number): Track[] {
   console.log(`[Spotify] Generando tracks fallback para género: ${genre}`);
-  
+
   const fallbackTracks: Track[] = [];
-  
+
   // URLs de carátulas reales categorizadas por género
   const coverUrlsByGenre: {[key: string]: string[]} = {
     'rock': [
@@ -224,14 +224,14 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       'https://i.scdn.co/image/ab67616d0000b273533fd0b248052d04e6b732c0'
     ]
   };
-  
+
   // Seleccionar las carátulas para el género actual
   const genreCovers = coverUrlsByGenre[genre.toLowerCase()] || coverUrlsByGenre['default'];
-  
+
   // Crear tracks fallback según el género
   for (let i = 0; i < Math.min(limit, 10); i++) {
     const coverIndex = i % genreCovers.length;
-    
+
     fallbackTracks.push({
       id: `fallback_${genre}_${i}`,
       title: `Canción ${i + 1} (${genre})`,
@@ -244,7 +244,7 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
 }
 
@@ -257,17 +257,17 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
 export async function searchTracks(query: string, limit: number = 20): Promise<Track[]> {
   try {
     console.log(`[Spotify Source] Buscando canciones para: ${query}`);
-    
+
     // Importar el servicio principal de Spotify
     const spotifyService = await import('@/services/spotify');
-    
+
     // Obtener los resultados usando el servicio existente
     const spotifyResults = await spotifyService.searchTracks(query, limit * 2);
-    
+
     // Filtrar y convertir los resultados al formato Track de la aplicación
     const tracks = spotifyResults
-      .filter((item: any) => 
-        item.album?.images?.[0]?.url && 
+      .filter((item: any) =>
+        item.album?.images?.[0]?.url &&
         !item.album.images[0].url.includes('placehold') &&
         !item.album.images[0].url.includes('lastfm')
       )
@@ -283,10 +283,10 @@ export async function searchTracks(query: string, limit: number = 20): Promise<T
         source: 'spotify'
       }))
       .slice(0, limit);
-    
+
     return tracks;
   } catch (error) {
     console.error(`[Spotify Source] Error en searchTracks:`, error);
     return [];
   }
-} 
+}

@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [ Inicio ](../../README.md) | [ Documentación Técnica ](TECHNICAL.md) | [ Historial de Cambios ](CHANGELOG.md)
-  
+
 </div>
 
 ---
@@ -200,4 +200,4 @@ Configura cada servicio por separado según la [Documentación Técnica](TECHNIC
 
 <div align="center">
   <p>© 2025 FreeVibes Web</p>
-</div> 
+</div>

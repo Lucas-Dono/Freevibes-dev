@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [ Inicio ](../../README.md) | [ Guía de Inicio ](README.md) | [ Historial de Cambios ](CHANGELOG.md)
-  
+
 </div>
 
 ---
@@ -146,37 +146,37 @@ El reproductor de música es un componente complejo que he desarrollado con:
 ```typescript
 // Ejemplo simplificado del reproductor
 export function MusicPlayer() {
-  const { 
-    currentTrack, 
-    isPlaying, 
-    volume, 
+  const {
+    currentTrack,
+    isPlaying,
+    volume,
     playbackRate,
-    togglePlay, 
-    setVolume 
+    togglePlay,
+    setVolume
   } = usePlayerStore();
-  
+
   // Determinar la fuente del reproductor
   const getPlayerUrl = () => {
     if (!currentTrack) return null;
-    
+
     // Priorizar YouTube si está disponible
     if (currentTrack.youtubeId) {
       return `https://www.youtube.com/watch?v=${currentTrack.youtubeId}`;
     }
-    
+
     // Fallback a otras fuentes
     return currentTrack.sourceUrl;
   };
-  
+
   // Manejo de eventos
   const handleProgress = (state) => {
     // Actualizar estado de progreso
   };
-  
+
   const handleEnded = () => {
     // Pasar a la siguiente canción
   };
-  
+
   return (
     <div className="player-container">
       <ReactPlayer
@@ -198,7 +198,7 @@ export function MusicPlayer() {
           }
         }}
       />
-      
+
       <PlayerControls />
       <PlayerQueue />
     </div>
@@ -220,22 +220,22 @@ export function useUnifiedSearch() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Búsqueda con debounce
   useEffect(() => {
     if (!query || query.length < 3) {
       setResults([]);
       return;
     }
-    
+
     const handler = setTimeout(async () => {
       try {
         setIsLoading(true);
-        
+
         // Realizar búsqueda en API combinada
         const response = await fetch(`/api/combined/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
-        
+
         setResults(data);
       } catch (error) {
         console.error('Error en búsqueda:', error);
@@ -243,10 +243,10 @@ export function useUnifiedSearch() {
         setIsLoading(false);
       }
     }, 300); // 300ms debounce
-    
+
     return () => clearTimeout(handler);
   }, [query]);
-  
+
   return { query, setQuery, results, isLoading };
 }
 ```
@@ -268,20 +268,20 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
       volume: 0.7,
       repeat: 'none',
       shuffle: false,
-      
+
       // Acciones
       setTrack: (track) => set({ currentTrack: track, isPlaying: true }),
-      addToQueue: (track) => set((state) => ({ 
-        queue: [...state.queue, track] 
+      addToQueue: (track) => set((state) => ({
+        queue: [...state.queue, track]
       })),
-      playQueue: (tracks, startIndex = 0) => set({ 
-        queue: tracks, 
+      playQueue: (tracks, startIndex = 0) => set({
+        queue: tracks,
         queueIndex: startIndex,
         currentTrack: tracks[startIndex],
         isPlaying: true
       }),
-      togglePlay: () => set((state) => ({ 
-        isPlaying: !state.isPlaying 
+      togglePlay: () => set((state) => ({
+        isPlaying: !state.isPlaying
       })),
       nextTrack: () => {
         const { queue, queueIndex, repeat } = get();
@@ -292,7 +292,7 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
             set({ isPlaying: false });
           }
         } else {
-          set({ 
+          set({
             queueIndex: queueIndex + 1,
             currentTrack: queue[queueIndex + 1]
           });
@@ -304,7 +304,7 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
     }),
     {
       name: 'music-player-store',
-      partialize: (state) => ({ 
+      partialize: (state) => ({
         volume: state.volume,
         repeat: state.repeat,
         shuffle: state.shuffle
@@ -372,13 +372,13 @@ app.get('/api/combined/search', async (req, res) => {
   try {
     const { q, limit = 20, type = 'all' } = req.query;
     const cacheKey = `search_${q}_${type}_${limit}`;
-    
+
     // Comprobar caché
     const cachedResults = searchCache.get(cacheKey);
     if (cachedResults) {
       return res.json(cachedResults);
     }
-    
+
     // Resultados combinados
     let combinedResults = {
       tracks: [],
@@ -386,15 +386,15 @@ app.get('/api/combined/search', async (req, res) => {
       albums: [],
       playlists: []
     };
-    
+
     // Ejecutar búsquedas en paralelo
     const promises = [];
-    
+
     // FreeVibes
     if (['all', 'tracks', 'videos'].includes(type)) {
       promises.push(
-        axios.get(`${YTMUSIC_API_URL}/search`, { 
-          params: { query: q, limit } 
+        axios.get(`${YTMUSIC_API_URL}/search`, {
+          params: { query: q, limit }
         })
         .then(response => {
           combinedResults.tracks = [
@@ -405,11 +405,11 @@ app.get('/api/combined/search', async (req, res) => {
         .catch(error => console.error('YouTube search error:', error))
       );
     }
-    
+
     // Spotify
     if (['all', 'tracks', 'artists', 'albums'].includes(type)) {
       const spotifyToken = await getSpotifyToken();
-      
+
       promises.push(
         axios.get('https://api.spotify.com/v1/search', {
           params: {
@@ -429,7 +429,7 @@ app.get('/api/combined/search', async (req, res) => {
               ...response.data.tracks.items.map(formatSpotifyTrack)
             ];
           }
-          
+
           // Procesar artistas
           if (response.data.artists) {
             combinedResults.artists = [
@@ -437,7 +437,7 @@ app.get('/api/combined/search', async (req, res) => {
               ...response.data.artists.items.map(formatSpotifyArtist)
             ];
           }
-          
+
           // Procesar álbumes
           if (response.data.albums) {
             combinedResults.albums = [
@@ -449,7 +449,7 @@ app.get('/api/combined/search', async (req, res) => {
         .catch(error => console.error('Spotify search error:', error))
       );
     }
-    
+
     // Last.fm - Solo si se solicitan artistas o tracks
     if (['all', 'tracks', 'artists'].includes(type)) {
       promises.push(
@@ -459,17 +459,17 @@ app.get('/api/combined/search', async (req, res) => {
             const artists = suggestions
               .filter(item => item.type === 'artist')
               .map(formatLastfmArtist);
-            
+
             // Extraer tracks
             const tracks = suggestions
               .filter(item => item.type === 'track')
               .map(formatLastfmTrack);
-            
+
             combinedResults.artists = [
               ...combinedResults.artists,
               ...artists
             ];
-            
+
             combinedResults.tracks = [
               ...combinedResults.tracks,
               ...tracks
@@ -478,32 +478,32 @@ app.get('/api/combined/search', async (req, res) => {
           .catch(error => console.error('Last.fm search error:', error))
       );
     }
-    
+
     // Esperar a que todas las búsquedas terminen
     await Promise.all(promises);
-    
+
     // Eliminar duplicados y ordenar resultados
     Object.keys(combinedResults).forEach(key => {
       if (combinedResults[key].length > 0) {
         // Eliminar duplicados por ID
         combinedResults[key] = eliminateDuplicates(combinedResults[key]);
-        
+
         // Ordenar por relevancia (implementación personalizada)
         combinedResults[key] = sortByRelevance(combinedResults[key], q);
-        
+
         // Limitar resultados
         combinedResults[key] = combinedResults[key].slice(0, limit);
       }
     });
-    
+
     // Guardar en caché
     searchCache.set(cacheKey, combinedResults, 3600); // 1 hora TTL
-    
+
     // Devolver resultados
     res.json(combinedResults);
   } catch (error) {
     console.error('Error en búsqueda combinada:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Error al realizar la búsqueda combinada',
       message: error.message
     });
@@ -536,24 +536,24 @@ He desarrollado un sistema centralizado de manejo de errores:
 // Middleware de captura de errores
 app.use((err, req, res, next) => {
   console.error('Error en servidor:', err);
-  
+
   // Determinar el tipo de error
   if (err.response) {
     // Error de respuesta de API externa
     const status = err.response.status || 500;
     const message = err.response.data?.message || 'Error en servicio externo';
-    
+
     return res.status(status).json({
       error: message,
       code: status,
       path: req.path
     });
   }
-  
+
   // Error de tiempo de ejecución
   const status = err.status || 500;
   const message = err.message || 'Error interno del servidor';
-  
+
   res.status(status).json({
     error: message,
     code: status,
@@ -596,7 +596,7 @@ app.use((err, req, res, next) => {
 La API de FreeVibes impone ciertas limitaciones:
 
 - Uso no comercial recomendado
-- Rate limiting por IP 
+- Rate limiting por IP
 - No acceso oficial a través de API pública
 - Posibles cambios en la estructura HTML/API sin aviso
 
@@ -1001,12 +1001,12 @@ describe('PlayerControls', () => {
   it('should toggle play state when play button is clicked', () => {
     const togglePlay = jest.fn();
     const { getByLabelText } = render(
-      <PlayerControls 
-        isPlaying={false} 
-        togglePlay={togglePlay} 
+      <PlayerControls
+        isPlaying={false}
+        togglePlay={togglePlay}
       />
     );
-    
+
     fireEvent.click(getByLabelText('Play'));
     expect(togglePlay).toHaveBeenCalledTimes(1);
   });
@@ -1034,15 +1034,15 @@ export class NewMusicSourceAdapter implements MusicSourceAdapter {
   async search(query: string, options: SearchOptions): Promise<SearchResults> {
     // Implementación de búsqueda
   }
-  
+
   async getTrackDetails(id: string): Promise<Track> {
     // Implementación para obtener detalles
   }
-  
+
   async getStreamUrl(id: string): Promise<string> {
     // Implementación para obtener URL de reproducción
   }
-  
+
   async getRecommendations(seed: RecommendationSeed): Promise<Track[]> {
     // Implementación para recomendaciones
   }
@@ -1097,4 +1097,4 @@ playerCore.registerPlugin(analyticsPlugin);
 
 <div align="center">
   <p>© 2025 Freevibes - Documentación Técnica</p>
-</div> 
+</div>

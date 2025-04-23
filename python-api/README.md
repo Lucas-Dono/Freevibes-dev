@@ -63,4 +63,4 @@ Asegúrate de tener un archivo `.env` con las variables necesarias para desarrol
 - `/recommendations` - Obtener recomendaciones
 - `/featured-playlists` - Obtener playlists destacadas
 - `/new-releases` - Obtener nuevos lanzamientos
-- `/artists-by-genre` - Buscar artistas por género 
+- `/artists-by-genre` - Buscar artistas por género

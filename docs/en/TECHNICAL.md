@@ -6,9 +6,9 @@
 </div>
 
 <div align="center">
-  
+
   [ Home ](../../README.md) | [ Getting Started ](README.md) | [ Changelog ](CHANGELOG.md)
-  
+
 </div>
 
 ---
@@ -146,37 +146,37 @@ The music player is a complex component I've developed with:
 ```typescript
 // Simplified player example
 export function MusicPlayer() {
-  const { 
-    currentTrack, 
-    isPlaying, 
-    volume, 
+  const {
+    currentTrack,
+    isPlaying,
+    volume,
     playbackRate,
-    togglePlay, 
-    setVolume 
+    togglePlay,
+    setVolume
   } = usePlayerStore();
-  
+
   // Determine player source
   const getPlayerUrl = () => {
     if (!currentTrack) return null;
-    
+
     // Prioritize YouTube if available
     if (currentTrack.youtubeId) {
       return `https://www.youtube.com/watch?v=${currentTrack.youtubeId}`;
     }
-    
+
     // Fallback to other sources
     return currentTrack.sourceUrl;
   };
-  
+
   // Event handling
   const handleProgress = (state) => {
     // Update progress state
   };
-  
+
   const handleEnded = () => {
     // Move to next song
   };
-  
+
   return (
     <div className="player-container">
       <ReactPlayer
@@ -198,7 +198,7 @@ export function MusicPlayer() {
           }
         }}
       />
-      
+
       <PlayerControls />
       <PlayerQueue />
     </div>
@@ -220,22 +220,22 @@ export function useUnifiedSearch() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Debounced search
   useEffect(() => {
     if (!query || query.length < 3) {
       setResults([]);
       return;
     }
-    
+
     const handler = setTimeout(async () => {
       try {
         setIsLoading(true);
-        
+
         // Perform combined API search
         const response = await fetch(`/api/combined/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
-        
+
         setResults(data);
       } catch (error) {
         console.error('Search error:', error);
@@ -243,10 +243,10 @@ export function useUnifiedSearch() {
         setIsLoading(false);
       }
     }, 300); // 300ms debounce
-    
+
     return () => clearTimeout(handler);
   }, [query]);
-  
+
   return { query, setQuery, results, isLoading };
 }
 ```
@@ -268,20 +268,20 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
       volume: 0.7,
       repeat: 'none',
       shuffle: false,
-      
+
       // Actions
       setTrack: (track) => set({ currentTrack: track, isPlaying: true }),
-      addToQueue: (track) => set((state) => ({ 
-        queue: [...state.queue, track] 
+      addToQueue: (track) => set((state) => ({
+        queue: [...state.queue, track]
       })),
-      playQueue: (tracks, startIndex = 0) => set({ 
-        queue: tracks, 
+      playQueue: (tracks, startIndex = 0) => set({
+        queue: tracks,
         queueIndex: startIndex,
         currentTrack: tracks[startIndex],
         isPlaying: true
       }),
-      togglePlay: () => set((state) => ({ 
-        isPlaying: !state.isPlaying 
+      togglePlay: () => set((state) => ({
+        isPlaying: !state.isPlaying
       })),
       nextTrack: () => {
         const { queue, queueIndex, repeat } = get();
@@ -292,7 +292,7 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
             set({ isPlaying: false });
           }
         } else {
-          set({ 
+          set({
             queueIndex: queueIndex + 1,
             currentTrack: queue[queueIndex + 1]
           });
@@ -304,7 +304,7 @@ export const usePlayerStore = create<PlayerState & PlayerActions>()(
     }),
     {
       name: 'music-player-store',
-      partialize: (state) => ({ 
+      partialize: (state) => ({
         volume: state.volume,
         repeat: state.repeat,
         shuffle: state.shuffle
@@ -372,13 +372,13 @@ app.get('/api/combined/search', async (req, res) => {
   try {
     const { q, limit = 20, type = 'all' } = req.query;
     const cacheKey = `search_${q}_${type}_${limit}`;
-    
+
     // Check cache
     const cachedResults = searchCache.get(cacheKey);
     if (cachedResults) {
       return res.json(cachedResults);
     }
-    
+
     // Combined results
     let combinedResults = {
       tracks: [],
@@ -386,15 +386,15 @@ app.get('/api/combined/search', async (req, res) => {
       albums: [],
       playlists: []
     };
-    
+
     // Execute searches in parallel
     const promises = [];
-    
+
     // FreeVibes
     if (['all', 'tracks', 'videos'].includes(type)) {
       promises.push(
-        axios.get(`${YTMUSIC_API_URL}/search`, { 
-          params: { query: q, limit } 
+        axios.get(`${YTMUSIC_API_URL}/search`, {
+          params: { query: q, limit }
         })
         .then(response => {
           combinedResults.tracks = [
@@ -405,11 +405,11 @@ app.get('/api/combined/search', async (req, res) => {
         .catch(error => console.error('YouTube search error:', error))
       );
     }
-    
+
     // Spotify
     if (['all', 'tracks', 'artists', 'albums'].includes(type)) {
       const spotifyToken = await getSpotifyToken();
-      
+
       promises.push(
         axios.get('https://api.spotify.com/v1/search', {
           params: {
@@ -429,7 +429,7 @@ app.get('/api/combined/search', async (req, res) => {
               ...response.data.tracks.items.map(formatSpotifyTrack)
             ];
           }
-          
+
           // Process artists
           if (response.data.artists) {
             combinedResults.artists = [
@@ -437,7 +437,7 @@ app.get('/api/combined/search', async (req, res) => {
               ...response.data.artists.items.map(formatSpotifyArtist)
             ];
           }
-          
+
           // Process albums
           if (response.data.albums) {
             combinedResults.albums = [
@@ -449,7 +449,7 @@ app.get('/api/combined/search', async (req, res) => {
         .catch(error => console.error('Spotify search error:', error))
       );
     }
-    
+
     // Last.fm - Only if artists or tracks are requested
     if (['all', 'tracks', 'artists'].includes(type)) {
       promises.push(
@@ -459,17 +459,17 @@ app.get('/api/combined/search', async (req, res) => {
             const artists = suggestions
               .filter(item => item.type === 'artist')
               .map(formatLastfmArtist);
-            
+
             // Extract tracks
             const tracks = suggestions
               .filter(item => item.type === 'track')
               .map(formatLastfmTrack);
-            
+
             combinedResults.artists = [
               ...combinedResults.artists,
               ...artists
             ];
-            
+
             combinedResults.tracks = [
               ...combinedResults.tracks,
               ...tracks
@@ -478,32 +478,32 @@ app.get('/api/combined/search', async (req, res) => {
           .catch(error => console.error('Last.fm search error:', error))
       );
     }
-    
+
     // Wait for all searches to complete
     await Promise.all(promises);
-    
+
     // Remove duplicates and sort results
     Object.keys(combinedResults).forEach(key => {
       if (combinedResults[key].length > 0) {
         // Remove duplicates by ID
         combinedResults[key] = eliminateDuplicates(combinedResults[key]);
-        
+
         // Sort by relevance (custom implementation)
         combinedResults[key] = sortByRelevance(combinedResults[key], q);
-        
+
         // Limit results
         combinedResults[key] = combinedResults[key].slice(0, limit);
       }
     });
-    
+
     // Cache results
     searchCache.set(cacheKey, combinedResults, 3600); // 1 hour TTL
-    
+
     // Return results
     res.json(combinedResults);
   } catch (error) {
     console.error('Combined search error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Error performing combined search',
       message: error.message
     });
@@ -536,24 +536,24 @@ I've developed a centralized error handling system:
 // Error catching middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
-  
+
   // Determine error type
   if (err.response) {
     // External API response error
     const status = err.response.status || 500;
     const message = err.response.data?.message || 'External service error';
-    
+
     return res.status(status).json({
       error: message,
       code: status,
       path: req.path
     });
   }
-  
+
   // Runtime error
   const status = err.status || 500;
   const message = err.message || 'Internal server error';
-  
+
   res.status(status).json({
     error: message,
     code: status,
@@ -1001,12 +1001,12 @@ describe('PlayerControls', () => {
   it('should toggle play state when play button is clicked', () => {
     const togglePlay = jest.fn();
     const { getByLabelText } = render(
-      <PlayerControls 
-        isPlaying={false} 
-        togglePlay={togglePlay} 
+      <PlayerControls
+        isPlaying={false}
+        togglePlay={togglePlay}
       />
     );
-    
+
     fireEvent.click(getByLabelText('Play'));
     expect(togglePlay).toHaveBeenCalledTimes(1);
   });
@@ -1034,15 +1034,15 @@ export class NewMusicSourceAdapter implements MusicSourceAdapter {
   async search(query: string, options: SearchOptions): Promise<SearchResults> {
     // Search implementation
   }
-  
+
   async getTrackDetails(id: string): Promise<Track> {
     // Implementation to get details
   }
-  
+
   async getStreamUrl(id: string): Promise<string> {
     // Implementation to get playback URL
   }
-  
+
   async getRecommendations(seed: RecommendationSeed): Promise<Track[]> {
     // Implementation for recommendations
   }
@@ -1097,4 +1097,4 @@ playerCore.registerPlugin(analyticsPlugin);
 
 <div align="center">
   <p>© 2025 FreeVibes Web - Technical Documentation</p>
-</div> 
+</div>

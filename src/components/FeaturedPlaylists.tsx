@@ -6,9 +6,9 @@ interface FeaturedPlaylistsProps {
   title?: string;
 }
 
-const FeaturedPlaylists: React.FC<FeaturedPlaylistsProps> = ({ 
-  playlists, 
-  title = "Colecciones destacadas" 
+const FeaturedPlaylists: React.FC<FeaturedPlaylistsProps> = ({
+  playlists,
+  title = "Colecciones destacadas"
 }) => {
   return (
     <div className="mb-8">
@@ -18,18 +18,18 @@ const FeaturedPlaylists: React.FC<FeaturedPlaylistsProps> = ({
           // Determinar si es un álbum o una playlist
           const isAlbum = item.album === true || item.type === 'album';
           const linkHref = isAlbum ? `/album/${item.id}` : `/playlist/${item.id}`;
-          
+
           return (
-            <Link 
-              href={linkHref} 
-              key={item.id} 
+            <Link
+              href={linkHref}
+              key={item.id}
               className="bg-gray-800/70 rounded-lg overflow-hidden hover:bg-gray-700/80 transition cursor-pointer shadow-md hover:shadow-lg"
             >
               <div>
                 <div className="aspect-square relative">
-                  <img 
-                    src={item.images?.[0]?.url || "https://placehold.co/300x300/333/white?text=Música"} 
-                    alt={item.name} 
+                  <img
+                    src={item.images?.[0]?.url || "https://placehold.co/300x300/333/white?text=Música"}
+                    alt={item.name}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
@@ -60,4 +60,4 @@ const FeaturedPlaylists: React.FC<FeaturedPlaylistsProps> = ({
   );
 };
 
-export default FeaturedPlaylists; 
+export default FeaturedPlaylists;

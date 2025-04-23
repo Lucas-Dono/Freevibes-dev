@@ -59,18 +59,18 @@ class SourceManager {
   // Registrar un éxito en una fuente
   public registerSourceSuccess(source: SourceType): void {
     const now = Date.now();
-    
+
     if (this.sources[source]) {
       this.sources[source].available = true;
       this.sources[source].successCount = (this.sources[source].successCount || 0) + 1;
       this.sources[source].lastSuccess = now;
       this.sources[source].lastAttempt = now;
-      
+
       // Si ha tenido éxito después de muchos errores, reducimos el contador de errores
       if (this.sources[source].errorCount > 0) {
         this.sources[source].errorCount = Math.max(0, this.sources[source].errorCount - 1);
       }
-      
+
       this.saveState();
     }
   }
@@ -78,17 +78,17 @@ class SourceManager {
   // Registrar un error en una fuente
   public registerSourceError(source: SourceType): void {
     const now = Date.now();
-    
+
     if (this.sources[source]) {
       this.sources[source].errorCount = (this.sources[source].errorCount || 0) + 1;
       this.sources[source].lastError = now;
       this.sources[source].lastAttempt = now;
-      
+
       // Si acumula más de 5 errores, la marcamos como no disponible temporalmente
       if (this.sources[source].errorCount > 5) {
         this.sources[source].available = false;
       }
-      
+
       this.saveState();
     }
   }
@@ -99,16 +99,16 @@ class SourceManager {
     const availableSources = Object.entries(this.sources)
       .filter(([_, status]) => status.available)
       .sort(([_, statusA], [__, statusB]) => statusA.priority - statusB.priority);
-    
+
     if (availableSources.length === 0) {
       // Si ninguna fuente está disponible, reiniciamos todas y devolvemos la de mayor prioridad
       this.resetAllSources();
       const bestSource = Object.entries(this.sources)
         .sort(([_, statusA], [__, statusB]) => statusA.priority - statusB.priority)[0][0] as SourceType;
-      
+
       return bestSource;
     }
-    
+
     const bestSource = availableSources[0][0] as SourceType;
     return bestSource;
   }
@@ -119,7 +119,7 @@ class SourceManager {
       this.sources[source as SourceType].available = true;
       this.sources[source as SourceType].errorCount = 0;
     });
-    
+
     this.saveState();
   }
 
@@ -146,4 +146,4 @@ class SourceManager {
 // Función auxiliar para exportar la instancia singleton
 export function getSourceManager(): SourceManager {
   return SourceManager.getInstance();
-} 
+}

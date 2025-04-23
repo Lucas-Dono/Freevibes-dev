@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Grid, 
-  Card, 
-  CardContent, 
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
   CardMedia,
   Button,
   Divider,
@@ -40,7 +40,7 @@ export default function MoodsPage() {
   const [loading, setLoading] = useState(true);
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const router = useRouter();
   const { playTrack } = usePlayer();
   const { isAuthenticated, isDemo } = useAuth();
@@ -66,12 +66,12 @@ export default function MoodsPage() {
 
   const fetchMoodPlaylists = async (params: string, title: string) => {
     if (params === selectedCategory) return; // Evitar cargar de nuevo los mismos datos
-    
+
     try {
       setLoadingPlaylists(true);
       setSelectedCategory(params);
       setSelectedCategoryTitle(title);
-      
+
       const playlists = await youtubeMusicAPI.getMoodPlaylists(params);
       setMoodPlaylists(playlists?.playlists || []);
       setError(null);
@@ -136,8 +136,8 @@ export default function MoodsPage() {
               <Typography variant="h5" gutterBottom>
                 {t('explore.selectMoodCategory')}
               </Typography>
-              
-              <motion.div 
+
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -150,17 +150,17 @@ export default function MoodsPage() {
                       </Typography>
                       <Grid container spacing={2}>
                         {items.map((item: any) => (
-                          <MotionGrid 
-                            item 
-                            xs={6} 
-                            sm={4} 
-                            md={3} 
-                            lg={2} 
+                          <MotionGrid
+                            item
+                            xs={6}
+                            sm={4}
+                            md={3}
+                            lg={2}
                             key={item.params}
                             variants={itemVariants}
                           >
-                            <MotionCard 
-                              sx={{ 
+                            <MotionCard
+                              sx={{
                                 borderRadius: 2,
                                 cursor: 'pointer',
                                 background: 'linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%)',
@@ -197,13 +197,13 @@ export default function MoodsPage() {
               <Typography variant="h5" gutterBottom>
                 {t('explore.playlistsFor')} {selectedCategoryTitle}
               </Typography>
-              
+
               {moodPlaylists.length > 0 ? (
                 <Grid container spacing={2}>
                   {moodPlaylists.map((playlist) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={playlist.playlistId}>
-                      <Card 
-                        sx={{ 
+                      <Card
+                        sx={{
                           height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
@@ -219,8 +219,8 @@ export default function MoodsPage() {
                       >
                         <CardMedia
                           component="div"
-                          sx={{ 
-                            pt: '56.25%', 
+                          sx={{
+                            pt: '56.25%',
                             position: 'relative',
                             '&:hover .playButton': {
                               opacity: 1
@@ -235,7 +235,7 @@ export default function MoodsPage() {
                               objectFit: 'cover',
                             }}
                           />
-                          <Box 
+                          <Box
                             className="playButton"
                             sx={{
                               position: 'absolute',
@@ -251,8 +251,8 @@ export default function MoodsPage() {
                               transition: 'opacity 0.3s ease'
                             }}
                           >
-                            <IconButton 
-                              sx={{ 
+                            <IconButton
+                              sx={{
                                 backgroundColor: 'primary.main',
                                 color: 'white',
                                 '&:hover': {
@@ -272,9 +272,9 @@ export default function MoodsPage() {
                             {playlist.description || t('common.playlist')}
                           </Typography>
                           {playlist.count && (
-                            <Chip 
-                              label={`${playlist.count} ${t('common.songs')}`} 
-                              size="small" 
+                            <Chip
+                              label={`${playlist.count} ${t('common.songs')}`}
+                              size="small"
                               sx={{ mt: 1 }}
                             />
                           )}
@@ -297,4 +297,4 @@ export default function MoodsPage() {
       )}
     </Container>
   );
-} 
+}

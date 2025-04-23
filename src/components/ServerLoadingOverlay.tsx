@@ -14,7 +14,7 @@ const ServerLoadingOverlay: React.FC = () => {
   const { isServerLoading, serverType, checkServerStatus, setServerLoading, serverStatus, hasBeenActive } = useServerStatus();
   const [showModal, setShowModal] = useState(false);
   const [lastCheckTime, setLastCheckTime] = useState(0);
-  
+
   // Iniciar verificación periódica del estado del servidor al cargar la aplicación
   useEffect(() => {
     // Verificación inicial
@@ -27,7 +27,7 @@ const ServerLoadingOverlay: React.FC = () => {
           setServerLoading(false);
           return;
         }
-        
+
         const isServerActive = await checkServerStatus();
         if (!isServerActive) {
           console.log('[Server Check] Detectado servidor inactivo al inicio');
@@ -37,22 +37,22 @@ const ServerLoadingOverlay: React.FC = () => {
         console.error('[Server Check] Error en verificación inicial:', error);
       }
     };
-    
+
     // Si estamos en un navegador, verificar al cargar
     if (typeof window !== 'undefined') {
       initialCheck();
     }
-    
+
     // Iniciar verificación periódica
     const intervalId = setInterval(async () => {
       // Verificar solo si el modal está visible o si han pasado al menos 30 segundos desde la última verificación
       if (showModal || Date.now() - lastCheckTime > 30000) {
         try {
           const isAnyServerActive = await checkServerStatus();
-          
+
           // Actualizar el tiempo de la última verificación
           setLastCheckTime(Date.now());
-          
+
           // Si algún servidor está activo y el modal está visible, actualizar la UI
           if (isAnyServerActive && showModal) {
             console.log('[Server Check] Al menos un servidor se ha activado');
@@ -64,10 +64,10 @@ const ServerLoadingOverlay: React.FC = () => {
         }
       }
     }, SERVER_CHECK_INTERVAL);
-    
+
     return () => clearInterval(intervalId);
   }, [checkServerStatus, showModal, setServerLoading, hasBeenActive]);
-  
+
   // Si el estado isServerLoading cambia a false, cerrar el modal
   useEffect(() => {
     if (!isServerLoading && showModal) {
@@ -82,7 +82,7 @@ const ServerLoadingOverlay: React.FC = () => {
       console.log('[Server Check] Servidor ya ha estado activo, no configurando interceptores de solicitudes lentas');
       return;
     }
-    
+
     // Configurar interceptores para detectar solicitudes lentas
     const requestInterceptor = axios.interceptors.request.use(async (config) => {
       // Si es una solicitud a la API, monitorear el tiempo de respuesta
@@ -93,14 +93,14 @@ const ServerLoadingOverlay: React.FC = () => {
             console.log(`[Server Check] Solicitud a ${config.url} está tardando demasiado`);
             // Comprobar estado del servidor
             const isActive = await checkServerStatus();
-            
+
             // Si el servidor no está activo, mostrar el modal
             if (!isActive && !hasBeenActive) {
               console.log('[Server Check] Servidor detectado como inactivo');
               setShowModal(true);
             }
           }, LONG_REQUEST_TIMEOUT);
-          
+
           // Guardar el ID del temporizador en el objeto de configuración
           // @ts-ignore
           config._timeoutId = timeoutId;
@@ -120,7 +120,7 @@ const ServerLoadingOverlay: React.FC = () => {
           // @ts-ignore
           clearTimeout(response.config._timeoutId);
         }
-        
+
         return response;
       },
       (error) => {
@@ -130,16 +130,16 @@ const ServerLoadingOverlay: React.FC = () => {
           // @ts-ignore
           clearTimeout(error.config._timeoutId);
         }
-        
+
         // Si el error es por tiempo de espera o no se puede conectar,
         // verificar estado del servidor
         if (
-          axios.isAxiosError(error) && 
-          (error.code === 'ECONNABORTED' || 
-           error.message.includes('timeout') || 
-           error.response?.status === 504 || 
-           error.response?.status === 502 || 
-           error.response?.status === 503 || 
+          axios.isAxiosError(error) &&
+          (error.code === 'ECONNABORTED' ||
+           error.message.includes('timeout') ||
+           error.response?.status === 504 ||
+           error.response?.status === 502 ||
+           error.response?.status === 503 ||
            !error.response) // Sin respuesta también indica posible servidor inactivo
         ) {
           console.log('[Server Check] Error de conexión detectado:', error.message);
@@ -150,7 +150,7 @@ const ServerLoadingOverlay: React.FC = () => {
             }
           });
         }
-        
+
         return Promise.reject(error);
       }
     );
@@ -175,12 +175,12 @@ const ServerLoadingOverlay: React.FC = () => {
   // Verificar si los servidores están activos cuando el modal está visible
   useEffect(() => {
     if (!showModal) return;
-    
+
     // Verificar inmediatamente
     const checkAndUpdate = async () => {
       try {
         await checkServerStatus();
-        
+
         // Si ambos servidores están activos, cerrar el modal
         if (serverStatus.node && serverStatus.python) {
           console.log('[ServerLoadingOverlay] Ambos servidores activos, cerrando modal');
@@ -191,13 +191,13 @@ const ServerLoadingOverlay: React.FC = () => {
         console.error('[ServerLoadingOverlay] Error al verificar estado:', error);
       }
     };
-    
+
     // Verificar inmediatamente
     checkAndUpdate();
-    
+
     // Verificar cada 3 segundos mientras el modal esté visible
     const checkInterval = setInterval(checkAndUpdate, 3000);
-    
+
     return () => clearInterval(checkInterval);
   }, [showModal, serverStatus, checkServerStatus, setServerLoading]);
 
@@ -205,7 +205,7 @@ const ServerLoadingOverlay: React.FC = () => {
   // para evitar bloquear indefinidamente al usuario
   useEffect(() => {
     if (!showModal) return;
-    
+
     // Después de 45 segundos forzar el cierre del modal
     // para evitar bloquear al usuario indefinidamente
     const forceCloseTimer = setTimeout(() => {
@@ -213,12 +213,12 @@ const ServerLoadingOverlay: React.FC = () => {
       setShowModal(false);
       setServerLoading(false);
     }, 45000);
-    
+
     return () => clearTimeout(forceCloseTimer);
   }, [showModal, setServerLoading]);
 
   return (
-    <ServerLoadingModal 
+    <ServerLoadingModal
       isOpen={showModal && !hasBeenActive} // No mostrar si ha estado activo
       serverType={serverType}
       initialSeconds={40}
@@ -226,4 +226,4 @@ const ServerLoadingOverlay: React.FC = () => {
   );
 };
 
-export default ServerLoadingOverlay; 
+export default ServerLoadingOverlay;

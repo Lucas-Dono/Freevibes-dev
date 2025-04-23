@@ -27,21 +27,21 @@ function detectUserLanguage(): string {
   // Intentar obtener desde la cookie del servidor
   const cookieStore = cookies();
   const userLanguage = cookieStore.get('userLanguage')?.value;
-  
+
   // Si existe una cookie, usarla
   if (userLanguage === 'es' || userLanguage === 'en') {
     return userLanguage;
   }
-  
+
   // Si no hay cookie, intentar obtener del header Accept-Language
   const headersList = headers();
   const acceptLanguage = headersList.get('accept-language') || '';
-  
+
   // Detectar si es español como primera preferencia
   if (acceptLanguage.startsWith('es') || acceptLanguage.includes('es-')) {
     return 'es';
   }
-  
+
   // Por defecto, usar inglés para cualquier otro idioma
   return 'en';
 }
@@ -49,13 +49,13 @@ function detectUserLanguage(): string {
 // Obtener claves API para exponerlas al cliente
 function getYouTubeApiKeys() {
   const keys: string[] = [];
-  
+
   // Buscar las claves de YouTube API
   for (let i = 1; i <= 5; i++) {
     const key = process.env[`YOUTUBE_API_KEY_${i}`];
     if (key) keys.push(key);
   }
-  
+
   // Devolver como string JSON
   return JSON.stringify(keys);
 }
@@ -73,7 +73,7 @@ export default function RootLayout({
   // Detectar el idioma del usuario para la etiqueta html
   const userLanguage = detectUserLanguage();
   const youtubeApiKeys = getYouTubeApiKeys();
-  
+
   return (
     <html lang={userLanguage}>
       <head>
@@ -82,7 +82,7 @@ export default function RootLayout({
           {`window.YOUTUBE_API_KEYS = ${youtubeApiKeys};
             console.log('[Environment] Cargadas ' + ${youtubeApiKeys}.length + ' claves API YouTube');`}
         </Script>
-        
+
         {/* No cargar el script de YouTube aquí, ahora lo hace YouTubeInitializer */}
       </head>
       <body className={inter.className}>
@@ -106,7 +106,7 @@ function NavigationDebugger() {
   // Solo ejecutar en el cliente
   if (typeof window !== 'undefined') {
     console.log('[Debug] Ruta actual:', window.location.pathname);
-    
+
     // Modificar los métodos de navegación para registrar cambios
     try {
       const originalPushState = window.history.pushState;
@@ -114,7 +114,7 @@ function NavigationDebugger() {
         console.log('[Debug] Navegación a:', args[2]);
         return originalPushState.apply(window.history, args);
       };
-      
+
       // Escuchar cambios de ruta
       window.addEventListener('popstate', () => {
         console.log('[Debug] Navegación con popstate a:', window.location.pathname);
@@ -123,6 +123,6 @@ function NavigationDebugger() {
       console.error('[Debug] Error al configurar diagnóstico de navegación:', e);
     }
   }
-  
+
   return null;
-} 
+}

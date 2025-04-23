@@ -29,10 +29,10 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
 }) => {
   // Validar el videoId antes de crear la URL
   const validVideoId = videoId && videoId !== 'default' && videoId.length >= 5 ? videoId : null;
-  
+
   // Usar un placeholder si el videoId no es válido
   const initialSrc = validVideoId ? getYoutubeThumbnail(validVideoId, quality) : '/placeholder-album.jpg';
-  
+
   const [imgSrc, setImgSrc] = useState<string>(initialSrc);
   const [hasError, setHasError] = useState<boolean>(!validVideoId);
 
@@ -42,7 +42,7 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
       setHasError(true);
       return;
     }
-    
+
     // Actualizar la fuente si cambia el videoId o la calidad
     const newSrc = getYoutubeThumbnail(validVideoId, quality);
     console.log(`[UI-THUMBNAIL] Actualizando imagen para ID "${validVideoId}": ${newSrc}`);
@@ -55,9 +55,9 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
       setHasError(true);
       return;
     }
-    
+
     console.log(`[UI-THUMBNAIL] Error al cargar imagen para ID "${validVideoId}"`);
-    
+
     // Usar el manejador para probar diferentes formatos
     const newSrc = handleYoutubeThumbnailError(e, validVideoId);
     if (newSrc) {
@@ -81,11 +81,11 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
   if (hasError || !validVideoId) {
     console.log(`[UI-THUMBNAIL] Mostrando placeholder para ID: "${videoId}"`);
     return (
-      <div 
+      <div
         className={`youtube-thumbnail-container ${className}`}
-        style={{ 
+        style={{
           position: 'relative',
-          width: `${width}px`, 
+          width: `${width}px`,
           height: `${calculatedHeight}px`,
           borderRadius,
           overflow: 'hidden',
@@ -110,11 +110,11 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
 
   // Usar el elemento Image de Next.js con manejo de errores
   return (
-    <div 
+    <div
       className={`youtube-thumbnail-container ${className}`}
-      style={{ 
+      style={{
         position: 'relative',
-        width: `${width}px`, 
+        width: `${width}px`,
         height: `${calculatedHeight}px`,
         borderRadius,
         overflow: 'hidden'
@@ -129,7 +129,7 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
         priority={priority}
         unoptimized={true}
       />
-      
+
       {/* Icono de YouTube en la esquina */}
       <div className="youtube-icon" style={{
         position: 'absolute',
@@ -153,4 +153,4 @@ const YouTubeThumbnail: React.FC<YouTubeThumbnailProps> = ({
   );
 };
 
-export default YouTubeThumbnail; 
+export default YouTubeThumbnail;

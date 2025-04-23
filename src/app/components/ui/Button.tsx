@@ -51,18 +51,18 @@ export interface ButtonProps
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
+  ({
+    className,
+    variant,
+    size,
     rounded,
-    glow, 
-    isLoading = false, 
-    leftIcon, 
-    rightIcon, 
-    children, 
+    glow,
+    isLoading = false,
+    leftIcon,
+    rightIcon,
+    children,
     animate = true,
-    ...props 
+    ...props
   }, ref) => {
     const buttonContent = (
       <>
@@ -83,10 +83,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (animate) {
-      const { 
-        onClick, 
-        disabled, 
-        type, 
+      const {
+        onClick,
+        disabled,
+        type,
         form,
         formAction,
         formEncType,
@@ -95,9 +95,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         formTarget,
         name,
         value,
-        ...otherProps 
+        ...otherProps
       } = props;
-      
+
       return (
         <motion.button
           ref={ref}
@@ -135,4 +135,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = "Button";
 
-export { Button, buttonVariants }; 
+export { Button, buttonVariants };

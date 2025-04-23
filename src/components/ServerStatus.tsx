@@ -16,10 +16,10 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
   const [demoAvailable, setDemoAvailable] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(showDetailed);
-  
+
   const checkServers = async () => {
     setLoading(true);
-    
+
     try {
       // Comprobar los servidores en paralelo
       const [nodeResult, pythonResult, demoResult] = await Promise.all([
@@ -27,7 +27,7 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
         isPythonApiAvailable(),
         isDemoAvailable()
       ]);
-      
+
       setNodeAvailable(nodeResult);
       setPythonAvailable(pythonResult);
       setDemoAvailable(demoResult);
@@ -37,15 +37,15 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     checkServers();
   }, []);
-  
+
   const getStatusText = () => {
     if (loading) return 'Comprobando servidores...';
     if (nodeAvailable === null) return 'Estado desconocido';
-    
+
     if (nodeAvailable && pythonAvailable) {
       return 'Todos los servicios disponibles';
     } else if (nodeAvailable) {
@@ -56,14 +56,14 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
       return 'Servidores no disponibles';
     }
   };
-  
+
   const getStatusSeverity = (): 'success' | 'warning' | 'error' | 'info' => {
     if (loading || nodeAvailable === null) return 'info';
     if (nodeAvailable && pythonAvailable) return 'success';
     if (nodeAvailable || demoAvailable) return 'warning';
     return 'error';
   };
-  
+
   const StatusIcon = () => {
     if (loading) return <CircularProgress size={16} />;
     if (nodeAvailable === null) return <ErrorIcon />;
@@ -71,25 +71,25 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
     if (nodeAvailable || demoAvailable) return <ErrorIcon color="warning" />;
     return <Close color="error" />;
   };
-  
+
   return (
     <Box sx={{ mb: 2 }}>
-      <Alert 
+      <Alert
         severity={getStatusSeverity()}
         icon={<StatusIcon />}
         action={
           <Box>
             {!loading && (
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 onClick={() => setExpanded(!expanded)}
                 sx={{ mr: 1 }}
               >
                 {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
               </IconButton>
             )}
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               onClick={checkServers}
               disabled={loading}
             >
@@ -100,49 +100,49 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
       >
         <Typography variant="body2">{getStatusText()}</Typography>
       </Alert>
-      
+
       <Collapse in={expanded}>
         <Box sx={{ mt: 1, p: 1, borderRadius: 1, bgcolor: 'background.paper' }}>
           <Typography variant="subtitle2" gutterBottom>Detalles del servidor:</Typography>
-          
+
           <Box display="flex" alignItems="center" mb={0.5}>
-            <Chip 
+            <Chip
               size="small"
               label="Servidor Node"
               color={nodeAvailable ? "success" : "error"}
               sx={{ mr: 1 }}
             />
             <Typography variant="body2">
-              {nodeAvailable 
-                ? "Disponible" 
+              {nodeAvailable
+                ? "Disponible"
                 : `No disponible (${env.NODE_SERVER_URL || process.env.NEXT_PUBLIC_NODE_SERVER_URL || 'http://localhost:3001'})`}
             </Typography>
           </Box>
-          
+
           <Box display="flex" alignItems="center" mb={0.5}>
-            <Chip 
+            <Chip
               size="small"
               label="API Python"
               color={pythonAvailable ? "success" : "error"}
               sx={{ mr: 1 }}
             />
             <Typography variant="body2">
-              {pythonAvailable 
-                ? "Disponible" 
+              {pythonAvailable
+                ? "Disponible"
                 : `No disponible (${env.PYTHON_API_URL || process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5000'})`}
             </Typography>
           </Box>
-          
+
           <Box display="flex" alignItems="center">
-            <Chip 
+            <Chip
               size="small"
               label="Modo Demo"
               color={demoAvailable ? "success" : "warning"}
               sx={{ mr: 1 }}
             />
             <Typography variant="body2">
-              {demoAvailable 
-                ? "Activo" 
+              {demoAvailable
+                ? "Activo"
                 : "No disponible"}
             </Typography>
           </Box>
@@ -150,4 +150,4 @@ export default function ServerStatus({ showDetailed = false }: ServerStatusProps
       </Collapse>
     </Box>
   );
-} 
+}

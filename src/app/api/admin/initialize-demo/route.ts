@@ -15,33 +15,33 @@ export async function POST(req: NextRequest) {
   try {
     // Verificar autenticación
     const session = await getServerSession(authOptions);
-    
+
     if (!session || !session.accessToken) {
       return NextResponse.json({ error: 'No autorizado. Se requiere sesión de Spotify.' }, { status: 401 });
     }
-    
+
     // Obtener idiomas a procesar desde el cuerpo de la solicitud
     const body = await req.json();
     const languages = body.languages || ['es', 'en', 'fr', 'it'];
-    
+
     if (!Array.isArray(languages) || languages.length === 0) {
       return NextResponse.json({ error: 'Se requiere al menos un idioma' }, { status: 400 });
     }
-    
+
     // Asegurar que los directorios existan
     await ensureDirectories(languages);
-    
+
     // Obtener token de acceso de la sesión
     const accessToken = session.accessToken;
-    
+
     // Registrar el inicio del proceso
     console.log('[DEMO] Iniciando recopilación de datos para modo demo...');
     console.log(`[DEMO] Idiomas a procesar: ${languages.join(', ')}`);
-    
+
     // Recopilar datos de perfil de usuario
     const userProfile = await fetchFromSpotify('/me', {}, accessToken);
     await saveData('user_profile.json', userProfile);
-    
+
     // Mapeo de idiomas a locales y países
     const localeMap: Record<string, { locale: string, country: string }> = {
       'es': { locale: 'es_ES', country: 'ES' },
@@ -49,13 +49,13 @@ export async function POST(req: NextRequest) {
       'fr': { locale: 'fr_FR', country: 'FR' },
       'it': { locale: 'it_IT', country: 'IT' }
     };
-    
+
     // Procesar datos para cada idioma
     for (const lang of languages) {
       const { locale, country } = localeMap[lang] || { locale: 'en_US', country: 'US' };
-      
+
       console.log(`[DEMO] Procesando datos para idioma: ${lang} (${locale}, ${country})`);
-      
+
       // Playlists destacadas
       console.log(`[DEMO] Obteniendo playlists destacadas para ${locale}...`);
       const featuredPlaylists = await fetchFromSpotify('/browse/featured-playlists', {
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
         limit: 30
       }, accessToken);
       await saveData(`${lang}/featured_playlists.json`, featuredPlaylists);
-      
+
       // Nuevos lanzamientos
       console.log(`[DEMO] Obteniendo nuevos lanzamientos para ${country}...`);
       const newReleases = await fetchFromSpotify('/browse/new-releases', {
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
         limit: 30
       }, accessToken);
       await saveData(`${lang}/new_releases.json`, newReleases);
-      
+
       // Top tracks del usuario
       console.log(`[DEMO] Obteniendo top tracks para ${lang}...`);
       const topTracks = await fetchFromSpotify('/me/top/tracks', {
@@ -80,14 +80,14 @@ export async function POST(req: NextRequest) {
         time_range: 'medium_term'
       }, accessToken);
       await saveData(`${lang}/top_tracks.json`, topTracks);
-      
+
       // Tracks guardados
       console.log(`[DEMO] Obteniendo tracks guardados para ${lang}...`);
       const savedTracks = await fetchFromSpotify('/me/tracks', {
         limit: 20
       }, accessToken);
       await saveData(`${lang}/saved_tracks.json`, savedTracks);
-      
+
       // Artistas populares por idioma
       const popularArtists: Record<string, string[]> = {
         'es': ['Rosalía', 'Bad Bunny', 'C. Tangana'],
@@ -95,39 +95,39 @@ export async function POST(req: NextRequest) {
         'fr': ['Stromae', 'Aya Nakamura', 'Indochine'],
         'it': ['Måneskin', 'Laura Pausini', 'Eros Ramazzotti']
       };
-      
+
       // Procesar artistas populares
       for (const artistName of popularArtists[lang] || popularArtists['en']) {
         console.log(`[DEMO] Buscando datos para artista: ${artistName}`);
-        
+
         // Buscar artista
         const searchResults = await fetchFromSpotify('/search', {
           q: artistName,
           type: 'artist',
           limit: 1
         }, accessToken);
-        
+
         if (searchResults.artists?.items?.length > 0) {
           const artist = searchResults.artists.items[0];
           const artistId = artist.id;
           const normalizedName = artistName.toLowerCase().replace(/\s+/g, '_');
-          
+
           // Guardar datos del artista
           await saveData(`${lang}/artist_${normalizedName}.json`, artist);
-          
+
           // Top tracks del artista
           const artistTopTracks = await fetchFromSpotify(`/artists/${artistId}/top-tracks`, {
             country
           }, accessToken);
           await saveData(`${lang}/artist_${normalizedName}_toptracks.json`, artistTopTracks);
-          
+
           // Álbumes del artista
           const artistAlbums = await fetchFromSpotify(`/artists/${artistId}/albums`, {
             limit: 10
           }, accessToken);
           await saveData(`${lang}/artist_${normalizedName}_albums.json`, artistAlbums);
         }
-        
+
         // Búsqueda de tracks
         const trackSearch = await fetchFromSpotify('/search', {
           q: artistName,
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
         }, accessToken);
         await saveData(`${lang}/search_${artistName.toLowerCase().replace(/\s+/g, '_')}_track.json`, trackSearch);
       }
-      
+
       // Búsqueda genérica
       const searchTypes = ['track', 'album', 'artist', 'playlist'];
       for (const type of searchTypes) {
@@ -147,21 +147,21 @@ export async function POST(req: NextRequest) {
           'fr': 'chanson française',
           'it': 'musica italiana'
         };
-        
+
         const searchTerm = searchTerms[lang] || searchTerms['en'];
-        
+
         console.log(`[DEMO] Realizando búsqueda de ${type} con término: ${searchTerm}`);
-        
+
         const searchResult = await fetchFromSpotify('/search', {
           q: searchTerm,
           type,
           limit: 20,
           market: country
         }, accessToken);
-        
+
         await saveData(`${lang}/search_${type}.json`, searchResult);
       }
-      
+
       // Recomendaciones basadas en géneros populares
       const genreMap: Record<string, string[]> = {
         'es': ['latin', 'reggaeton', 'spanish', 'flamenco'],
@@ -169,28 +169,28 @@ export async function POST(req: NextRequest) {
         'fr': ['french', 'chanson', 'disco', 'electronic'],
         'it': ['italian', 'opera', 'indie-pop', 'cantautorato']
       };
-      
+
       // Obtener géneros disponibles
       const availableGenres = await fetchFromSpotify('/recommendations/available-genre-seeds', {}, accessToken);
-      
+
       // Filtrar géneros que existen en la API de Spotify
-      const validGenres = genreMap[lang]?.filter(g => 
+      const validGenres = genreMap[lang]?.filter(g =>
         availableGenres.genres?.includes(g)
       ) || ['pop', 'rock'];
-      
+
       if (validGenres.length > 0) {
         console.log(`[DEMO] Obteniendo recomendaciones para géneros: ${validGenres.join(', ')}`);
-        
+
         const recommendations = await fetchFromSpotify('/recommendations', {
           seed_genres: validGenres.slice(0, 5).join(','),
           limit: 30,
           market: country
         }, accessToken);
-        
+
         await saveData(`${lang}/recommendations.json`, recommendations);
       }
     }
-    
+
     // Recomendaciones generales
     console.log('[DEMO] Obteniendo recomendaciones generales...');
     const generalRecommendations = await fetchFromSpotify('/recommendations', {
@@ -198,17 +198,17 @@ export async function POST(req: NextRequest) {
       limit: 30
     }, accessToken);
     await saveData('recommendations_general.json', generalRecommendations);
-    
+
     // Devolver respuesta exitosa
     return NextResponse.json({
       success: true,
       message: `Datos demo inicializados correctamente para ${languages.length} idiomas`,
       languages
     });
-    
+
   } catch (error) {
     console.error('[DEMO] Error durante la inicialización del modo demo:', error);
-    
+
     return NextResponse.json({
       success: false,
       error: error instanceof Error ? error.message : 'Error desconocido durante la inicialización'
@@ -225,18 +225,18 @@ async function fetchFromSpotify(endpoint: string, params: Record<string, any> = 
   Object.keys(params).forEach(key => {
     url.searchParams.append(key, params[key]);
   });
-  
+
   try {
     // Realizar solicitud
     console.log(`[DEMO] Solicitando: ${url.toString()}`);
-    
+
     const response = await fetch(url.toString(), {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    
+
     if (!response.ok) {
       let errorData;
       try {
@@ -245,23 +245,23 @@ async function fetchFromSpotify(endpoint: string, params: Record<string, any> = 
         console.error(`[DEMO] Error al analizar respuesta de error: ${parseError}`);
         errorData = { error: "No se pudo procesar la respuesta" };
       }
-      
+
       console.error(`[DEMO] Error ${response.status} en solicitud a ${endpoint}:`, errorData);
-      
+
       // Si es cualquier error 4xx, usamos datos mock
       if (response.status >= 400 && response.status < 500) {
         console.log(`[DEMO] Generando datos mock para ${endpoint} por error ${response.status}`);
         return generateMockData(endpoint, params);
       }
-      
+
       throw new Error(`Error en solicitud a Spotify: ${response.status} ${response.statusText}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Log de éxito
     console.log(`[DEMO] ✅ Datos obtenidos con éxito para: ${endpoint}`);
-    
+
     return data;
   } catch (error) {
     console.error(`[DEMO] Error de conexión a ${endpoint}:`, error);
@@ -276,7 +276,7 @@ async function fetchFromSpotify(endpoint: string, params: Record<string, any> = 
 function generateMockData(endpoint: string, params: Record<string, any>) {
   const country = params.country || 'ES';
   const locale = params.locale || 'es_ES';
-  
+
   // Datos mock básicos por tipo de endpoint
   if (endpoint.includes('/browse/featured-playlists')) {
     return {
@@ -306,7 +306,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       }
     };
   }
-  
+
   if (endpoint.includes('/browse/new-releases')) {
     return {
       albums: {
@@ -332,7 +332,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       }
     };
   }
-  
+
   if (endpoint.includes('/me/top/tracks')) {
     return {
       items: Array(10).fill(null).map((_, i) => ({
@@ -358,7 +358,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       total: 10
     };
   }
-  
+
   if (endpoint.includes('/me/tracks')) {
     return {
       items: Array(10).fill(null).map((_, i) => ({
@@ -387,7 +387,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       total: 10
     };
   }
-  
+
   if (endpoint.includes('/search')) {
     const type = params.type || 'track';
     return {
@@ -464,7 +464,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       }
     };
   }
-  
+
   if (endpoint.includes('/recommendations')) {
     return {
       tracks: Array(10).fill(null).map((_, i) => ({
@@ -492,7 +492,7 @@ function generateMockData(endpoint: string, params: Record<string, any>) {
       })) || []
     };
   }
-  
+
   // Default para cualquier otro endpoint
   return {
     message: "Datos mock generados para endpoint no reconocido",
@@ -515,11 +515,11 @@ async function ensureDirectories(languages: string[]) {
       throw error;
     }
   }
-  
+
   // Crear directorios para cada idioma
   for (const lang of languages) {
     const langDir = path.join(DEMO_DATA_DIR, lang);
-    
+
     try {
       await mkdir(langDir, { recursive: true });
       console.log(`[DEMO] Directorio para idioma creado: ${lang}`);
@@ -537,25 +537,25 @@ async function ensureDirectories(languages: string[]) {
  */
 async function saveData(fileName: string, data: any) {
   const filePath = path.join(DEMO_DATA_DIR, fileName);
-  
+
   try {
     // Crear directorio padre si no existe
     const dirPath = path.dirname(filePath);
     await mkdir(dirPath, { recursive: true });
-    
+
     // Para search_artist.json, search_track.json, etc., acumular datos en lugar de reemplazar
-    if (fileName.includes('search_') && !fileName.includes('search_rosalía_') && 
+    if (fileName.includes('search_') && !fileName.includes('search_rosalía_') &&
         !fileName.includes('search_bad_bunny_') && !fileName.includes('search_c._tangana_')) {
-      
+
       let combinedData = data;
-      
+
       // Intentar leer datos existentes si el archivo ya existe
       try {
         if (fs.existsSync(filePath)) {
           console.log(`[DEMO] Archivo existente encontrado: ${fileName}, combinando datos...`);
           const existingContent = fs.readFileSync(filePath, 'utf8');
           const existingData = JSON.parse(existingContent);
-          
+
           // Combinar datos según el tipo
           if (fileName.includes('search_artist')) {
             combinedData = await mergeArtistsData(existingData, data);
@@ -566,14 +566,14 @@ async function saveData(fileName: string, data: any) {
           } else if (fileName.includes('search_playlist')) {
             combinedData = await mergePlaylistsData(existingData, data);
           }
-          
+
           console.log(`[DEMO] Datos combinados para ${fileName}. Nuevos elementos añadidos.`);
         }
       } catch (readError) {
         console.error(`[DEMO] Error al leer/combinar datos existentes para ${fileName}:`, readError);
         // Si hay error, continuamos con los datos originales
       }
-      
+
       // Guardar datos combinados
       await writeFile(filePath, JSON.stringify(combinedData, null, 2), 'utf8');
       console.log(`[DEMO] ✅ Datos acumulados guardados: ${fileName}`);
@@ -595,29 +595,29 @@ async function mergeArtistsData(existingData: any, newData: any): Promise<any> {
   if (!existingData.artists?.items || !newData.artists?.items) {
     return newData; // Si alguno no tiene la estructura esperada, devolver los nuevos datos
   }
-  
+
   const existingArtists = existingData.artists.items;
   const newArtists = newData.artists.items;
-  
+
   // Filtrar artistas sin imágenes en los datos nuevos
-  const newArtistsWithImages = newArtists.filter((artist: any) => 
+  const newArtistsWithImages = newArtists.filter((artist: any) =>
     artist && artist.images && artist.images.length > 0
   );
-  
+
   // Crear un mapa de IDs existentes para comprobar duplicados de forma eficiente
   const existingIds = new Set(existingArtists.map((a: any) => a.id));
-  
+
   // Filtrar artistas nuevos que no existan ya
   const uniqueNewArtists = newArtistsWithImages.filter((a: any) => !existingIds.has(a.id));
-  
+
   console.log(`[DEMO] Artistas existentes: ${existingArtists.length}, Artistas nuevos únicos: ${uniqueNewArtists.length}`);
-  
+
   // Combinar ambos arrays
   const combinedArtists = [...existingArtists, ...uniqueNewArtists];
-  
+
   // Ordenar por popularidad descendente para que los más populares aparezcan primero
   combinedArtists.sort((a: any, b: any) => (b.popularity || 0) - (a.popularity || 0));
-  
+
   // Reconstruir objeto con la misma estructura
   return {
     ...newData,
@@ -636,29 +636,29 @@ async function mergeTracksData(existingData: any, newData: any): Promise<any> {
   if (!existingData.tracks?.items || !newData.tracks?.items) {
     return newData; // Si alguno no tiene la estructura esperada, devolver los nuevos datos
   }
-  
+
   const existingTracks = existingData.tracks.items;
   const newTracks = newData.tracks.items;
-  
+
   // Filtrar tracks sin imágenes en los datos nuevos
-  const newTracksWithImages = newTracks.filter((track: any) => 
+  const newTracksWithImages = newTracks.filter((track: any) =>
     track && track.album && track.album.images && track.album.images.length > 0
   );
-  
+
   // Crear un mapa de IDs existentes para comprobar duplicados de forma eficiente
   const existingIds = new Set(existingTracks.map((t: any) => t.id));
-  
+
   // Filtrar tracks nuevos que no existan ya
   const uniqueNewTracks = newTracksWithImages.filter((t: any) => !existingIds.has(t.id));
-  
+
   console.log(`[DEMO] Tracks existentes: ${existingTracks.length}, Tracks nuevos únicos: ${uniqueNewTracks.length}`);
-  
+
   // Combinar ambos arrays
   const combinedTracks = [...existingTracks, ...uniqueNewTracks];
-  
+
   // Ordenar por popularidad descendente para que los más populares aparezcan primero
   combinedTracks.sort((a: any, b: any) => (b.popularity || 0) - (a.popularity || 0));
-  
+
   // Reconstruir objeto con la misma estructura
   return {
     ...newData,
@@ -677,33 +677,33 @@ async function mergeAlbumsData(existingData: any, newData: any): Promise<any> {
   if (!existingData.albums?.items || !newData.albums?.items) {
     return newData; // Si alguno no tiene la estructura esperada, devolver los nuevos datos
   }
-  
+
   const existingAlbums = existingData.albums.items;
   const newAlbums = newData.albums.items;
-  
+
   // Filtrar álbumes sin imágenes en los datos nuevos
-  const newAlbumsWithImages = newAlbums.filter((album: any) => 
+  const newAlbumsWithImages = newAlbums.filter((album: any) =>
     album && album.images && album.images.length > 0
   );
-  
+
   // Crear un mapa de IDs existentes para comprobar duplicados de forma eficiente
   const existingIds = new Set(existingAlbums.map((a: any) => a.id));
-  
+
   // Filtrar álbumes nuevos que no existan ya
   const uniqueNewAlbums = newAlbumsWithImages.filter((a: any) => !existingIds.has(a.id));
-  
+
   console.log(`[DEMO] Álbumes existentes: ${existingAlbums.length}, Álbumes nuevos únicos: ${uniqueNewAlbums.length}`);
-  
+
   // Combinar ambos arrays
   const combinedAlbums = [...existingAlbums, ...uniqueNewAlbums];
-  
+
   // Ordenar por fecha de lanzamiento descendente (más recientes primero)
   combinedAlbums.sort((a: any, b: any) => {
     if (!a.release_date) return 1;
     if (!b.release_date) return -1;
     return new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
   });
-  
+
   // Reconstruir objeto con la misma estructura
   return {
     ...newData,
@@ -722,26 +722,26 @@ async function mergePlaylistsData(existingData: any, newData: any): Promise<any>
   if (!existingData.playlists?.items || !newData.playlists?.items) {
     return newData; // Si alguno no tiene la estructura esperada, devolver los nuevos datos
   }
-  
+
   const existingPlaylists = existingData.playlists.items;
   const newPlaylists = newData.playlists.items;
-  
+
   // Filtrar playlists sin imágenes en los datos nuevos
-  const newPlaylistsWithImages = newPlaylists.filter((playlist: any) => 
+  const newPlaylistsWithImages = newPlaylists.filter((playlist: any) =>
     playlist && playlist.images && playlist.images.length > 0
   );
-  
+
   // Crear un mapa de IDs existentes para comprobar duplicados de forma eficiente
   const existingIds = new Set(existingPlaylists.map((p: any) => p.id));
-  
+
   // Filtrar playlists nuevas que no existan ya
   const uniqueNewPlaylists = newPlaylistsWithImages.filter((p: any) => !existingIds.has(p.id));
-  
+
   console.log(`[DEMO] Playlists existentes: ${existingPlaylists.length}, Playlists nuevas únicas: ${uniqueNewPlaylists.length}`);
-  
+
   // Combinar ambos arrays
   const combinedPlaylists = [...existingPlaylists, ...uniqueNewPlaylists];
-  
+
   // Reconstruir objeto con la misma estructura
   return {
     ...newData,
@@ -751,4 +751,4 @@ async function mergePlaylistsData(existingData: any, newData: any): Promise<any>
       total: combinedPlaylists.length
     }
   };
-} 
+}

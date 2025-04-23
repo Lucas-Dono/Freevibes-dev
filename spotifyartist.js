@@ -8,7 +8,7 @@ const CLIENT_SECRET = '1e32f0928e7c492785d096beb7e0f9bc';
 // Función para obtener el token de acceso
 async function getAccessToken() {
     const authString = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-    
+
     const response = await axios.post(
         'https://accounts.spotify.com/api/token',
         'grant_type=client_credentials',
@@ -19,7 +19,7 @@ async function getAccessToken() {
             }
         }
     );
-    
+
     return response.data.access_token;
 }
 
@@ -33,7 +33,7 @@ async function getArtistId(artistName, accessToken) {
             limit: 1
         }
     });
-    
+
     return response.data.artists.items[0].id;
 }
 
@@ -41,7 +41,7 @@ async function getArtistId(artistName, accessToken) {
 async function getArtistAlbums(artistId, accessToken) {
     let allAlbums = [];
     let url = `https://api.spotify.com/v1/artists/${artistId}/albums`;
-    
+
     do {
         const response = await axios.get(url, {
             headers: { 'Authorization': `Bearer ${accessToken}` },
@@ -50,10 +50,10 @@ async function getArtistAlbums(artistId, accessToken) {
                 include_groups: 'album,single,compilation'
             }
         });
-        
+
         allAlbums = allAlbums.concat(response.data.items);
         url = response.data.next;
-        
+
     } while (url);
 
     return allAlbums;
@@ -63,13 +63,13 @@ async function getArtistAlbums(artistId, accessToken) {
 async function getAllTracks(albums, accessToken) {
     const seenTracks = new Set();
     const allTracks = [];
-    
+
     for (const album of albums) {
         const response = await axios.get(
             `https://api.spotify.com/v1/albums/${album.id}/tracks`,
             { headers: { 'Authorization': `Bearer ${accessToken}` } }
         );
-        
+
         for (const track of response.data.items) {
             if (!seenTracks.has(track.id)) {
                 seenTracks.add(track.id);
@@ -80,7 +80,7 @@ async function getAllTracks(albums, accessToken) {
             }
         }
     }
-    
+
     return allTracks;
 }
 
@@ -92,18 +92,18 @@ async function main() {
             console.log('Uso: node spotify.js "Nombre del Artista"');
             return;
         }
-        
+
         const accessToken = await getAccessToken();
         const artistId = await getArtistId(artistName, accessToken);
         const albums = await getArtistAlbums(artistId, accessToken);
         const tracks = await getAllTracks(albums, accessToken);
-        
+
         console.log(`\nTotal de canciones para ${artistName}: ${tracks.length}`);
         console.log('\nCanciones:');
         tracks.forEach((track, index) => {
             console.log(`${index + 1}. ${track.name} (Álbum: ${track.album})`);
         });
-        
+
     } catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
     }

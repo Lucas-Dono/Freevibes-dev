@@ -64,36 +64,36 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Función para verificar el estado del servidor con throttling
   const checkServerStatus = async (): Promise<boolean> => {
     const now = Date.now();
-    
+
     // Si alguna vez estuvo activo y no estamos en modo de carga,
     // no es necesario verificar de nuevo
     if (hasBeenActive && !isServerLoading) {
       console.log('[Server Context] Servidores previamente activos, omitiendo verificación');
       return true;
     }
-    
+
     // Implementar throttling para evitar verificaciones excesivas
     if (now - lastCheckTime < MIN_CHECK_INTERVAL) {
       console.log('[Server Context] Verificación reciente, usando estado en caché');
       return serverStatus.node || serverStatus.python;
     }
-    
+
     setLastCheckTime(now);
-    
+
     try {
       console.log('[Server Context] Verificando estado de servidores con server-utils...');
-      
+
       // Usar las funciones de server-utils
       const nodeActive = await isNodeServerAvailable();
       const pythonActive = await isPythonApiAvailable();
-      
+
       console.log('[Server Context] Estado de servidores - Node:', nodeActive, 'Python:', pythonActive);
-      
+
       setServerStatus({
         node: nodeActive,
         python: pythonActive
       });
-      
+
       // Si al menos uno de los servidores está activo, marcarlo como activo permanentemente
       if (nodeActive || pythonActive) {
         setHasBeenActive(true);
@@ -103,7 +103,7 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           console.log('[Server Context] Servidor activo después de inactividad, saltando pantalla de carga');
         }
       }
-      
+
       return nodeActive || pythonActive;
     } catch (error) {
       // Aquí podrías manejar errores generales si las funciones isNodeServerAvailable/isPythonApiAvailable lanzan excepciones
@@ -127,7 +127,7 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsServerLoading(false);
       return;
     }
-    
+
     // Determinar qué servidor está inactivo para establecer el tipo
     if (!serverStatus.node && !serverStatus.python) {
       setServerType('both');
@@ -155,29 +155,29 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const immediateCheck = async () => {
       try {
         const isActive = await checkServerStatus();
-        console.log('[Server Context] Verificación inmediata:', 
+        console.log('[Server Context] Verificación inmediata:',
           isActive ? 'Al menos un servidor activo' : 'Servidores inactivos',
           'Node:', serverStatus.node, 'Python:', serverStatus.python);
       } catch (error) {
         console.error('[Server Context] Error en verificación inmediata:', error);
       }
     };
-    
+
     // Primera verificación inmediata
     immediateCheck();
-    
+
     // Segunda verificación después de 2 segundos (para dar tiempo a los servidores)
     const initialCheckTimeout = setTimeout(async () => {
       try {
         const isActive = await checkServerStatus();
-        console.log('[Server Context] Verificación secundaria:', 
+        console.log('[Server Context] Verificación secundaria:',
           isActive ? 'Al menos un servidor activo' : 'Servidores inactivos',
           'Node:', serverStatus.node, 'Python:', serverStatus.python);
       } catch (error) {
         console.error('[Server Context] Error en verificación secundaria:', error);
       }
     }, 2000);
-    
+
     return () => clearTimeout(initialCheckTimeout);
   }, []);
 
@@ -195,4 +195,4 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 };
 
-export default ServerContext; 
+export default ServerContext;

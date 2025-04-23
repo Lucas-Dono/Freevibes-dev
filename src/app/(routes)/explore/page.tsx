@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getCategories, getCategoryPlaylists } from '@/services/spotify';
-import { 
-  getGeneralRecommendations, 
-  getTrendingTracks, 
+import {
+  getGeneralRecommendations,
+  getTrendingTracks,
   getRecommendationsByGenre,
   getAvailableGenres as getMultiAvailableGenres
 } from '@/services/recommendations';
@@ -78,7 +78,7 @@ export default function ExplorePage() {
   const [error, setError] = useState<string | null>(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [currentGenreSource, setCurrentGenreSource] = useState<SourceType>('spotify');
-  
+
   const { isAuthenticated, isDemo, preferredLanguage, toggleDemoMode } = useAuth();
   const { t, language } = useTranslation();
   const sourceManager = getSourceManager();
@@ -97,13 +97,13 @@ export default function ExplorePage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Verificar si estamos en modo demo (usamos tanto el contexto como las cookies para mayor robustez)
         const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
         const inDemoMode = isDemo || isDemoFromCookie;
-        
+
         console.log('[ExplorePage] Verificación de modo demo:', { isDemo, isDemoFromCookie, inDemoMode });
-        
+
         // Si hay incoherencia entre cookie y estado, actualizar el estado en vez de recargar
         if (isDemoFromCookie && !isDemo) {
           console.log('[ExplorePage] Detectada cookie de demo-mode pero estado no sincronizado');
@@ -113,10 +113,10 @@ export default function ExplorePage() {
             toggleDemoMode(true); // Forzar estado demo = true para que coincida con la cookie
           }
         }
-        
+
         if (inDemoMode) {
           console.log('[ExplorePage] Cargando datos en modo demo (cookie o contexto)');
-          
+
           try {
             // Cargar categorías desde datos demo con manejo de errores robusto
             try {
@@ -140,7 +140,7 @@ export default function ExplorePage() {
               ];
               setCategories(handleDemoError(error, fallbackCategories, 'Error cargando categorías'));
             }
-            
+
             // Cargar recomendaciones desde datos demo (mezclando idiomas)
             // Usamos datos demo pero les asignamos idiomas diferentes para simular diversidad
             const tracksData = await demoDataService.getRecommendations();
@@ -161,7 +161,7 @@ export default function ExplorePage() {
               });
               setRecommendedTracks(demoTracks);
             }
-            
+
             setError(null);
           } catch (demoError) {
             console.error('[ExplorePage] Error global cargando datos demo:', demoError);
@@ -173,13 +173,13 @@ export default function ExplorePage() {
         // Obtener categorías de Spotify
         const categoriesData = await getCategories(30);
         setCategories(categoriesData);
-        
+
           // Búsqueda multi-idioma para recomendaciones
           console.log('[ExploreMúsica] Solicitando música en múltiples idiomas');
-          
+
           // Usar la API de Spotify directamente para mejor calidad
           const spotifyApi = await import('@/services/spotify');
-          
+
           // Términos de búsqueda por idioma
           const searchQueries = [
             { term: 'música latina', language: 'Español' },
@@ -188,18 +188,18 @@ export default function ExplorePage() {
             { term: 'musique française', language: 'Français' },
             { term: 'musica italiana', language: 'Italiano' }
           ];
-          
+
           let allResults: Track[] = [];
-          
+
           // Realizar búsquedas en paralelo para cada idioma
           const searches = await Promise.all(
-            searchQueries.map(query => 
+            searchQueries.map(query =>
               spotifyApi.searchTracks(query.term, 5)
                 .then((results: any) => {
                   // Solo conservar tracks con imágenes de Spotify
                   return results
-                    .filter((item: any) => 
-                      item?.album?.images?.[0]?.url && 
+                    .filter((item: any) =>
+                      item?.album?.images?.[0]?.url &&
                       item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
                     )
                     .map((item: any) => ({
@@ -219,27 +219,27 @@ export default function ExplorePage() {
                 .catch(() => [])
             )
           );
-          
+
           // Combinar todos los resultados
           searches.forEach(result => {
             allResults = [...allResults, ...result];
           });
-          
+
           // Eliminar duplicados por ID de Spotify
           const uniqueResults: Track[] = [];
           const spotifyIds = new Set<string>();
-          
+
           allResults.forEach(track => {
             if (track.spotifyId && !spotifyIds.has(track.spotifyId)) {
               spotifyIds.add(track.spotifyId);
               uniqueResults.push(track);
             }
           });
-          
+
           if (uniqueResults.length > 0) {
             console.log(`[ExploreMúsica] Encontradas ${uniqueResults.length} canciones en múltiples idiomas`);
             setRecommendedTracks(uniqueResults);
-            
+
             // Registrar éxito para Spotify
             sourceManager.registerSourceSuccess('spotify');
           } else {
@@ -247,23 +247,23 @@ export default function ExplorePage() {
         const tracksData = await getGeneralRecommendations(20);
         setRecommendedTracks(tracksData);
           }
-        
+
         setError(null);
         }
       } catch (err) {
         console.error('Error al cargar datos de exploración:', err);
         setError('Error al cargar datos. Por favor, intenta de nuevo más tarde.');
-        
+
         // Registrar error para Spotify
         sourceManager.registerSourceError('spotify');
-        
+
         // Intentar recuperar de un error con datos alternos
         try {
           // Intentar con recomendaciones de Last.fm como fallback
-          const fallbackTracks = await getGeneralRecommendations(20, { 
+          const fallbackTracks = await getGeneralRecommendations(20, {
             preferredSource: 'lastfm'
           });
-          
+
           if (fallbackTracks.length > 0) {
             setRecommendedTracks(fallbackTracks);
             sourceManager.registerSourceSuccess('lastfm');
@@ -284,23 +284,23 @@ export default function ExplorePage() {
     const fetchTrending = async () => {
       try {
         setLoadingTrending(true);
-        
+
         // Verificar si estamos en modo demo (usando contexto y cookies)
         const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
         const inDemoMode = isDemo || isDemoFromCookie;
-        
+
         // Si hay incoherencia entre cookie y estado, actualizar el estado en vez de recargar
         if (isDemoFromCookie && !isDemo && toggleDemoMode) {
           console.log('[ExplorePage] Sincronizando estado de demo en tendencias');
           toggleDemoMode(true);
         }
-        
+
         if (inDemoMode) {
           console.log('[ExplorePage] Cargando tendencias en modo demo');
           try {
             // Usar datos demo para tendencias (podemos usar topTracks o newReleases)
             const demoTopTracks = await demoDataService.getTopTracks();
-            
+
             if (demoTopTracks && demoTopTracks.items && demoTopTracks.items.length > 0) {
               // Convertir al formato Track esperado
               const demoTrendingTracks = demoTopTracks.items.map((item: any) => {
@@ -318,19 +318,19 @@ export default function ExplorePage() {
                   itemType: 'track'
                 };
               });
-              
+
               // Limitar a 15 canciones y mezclarlas aleatoriamente
               const shuffledTracks = demoTrendingTracks
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 15);
-              
+
               setTrendingTracks(shuffledTracks);
             } else {
               throw new Error('No se encontraron canciones en tendencia en los datos demo');
             }
           } catch (demoError) {
             console.error('[ExplorePage] Error cargando tendencias demo:', demoError);
-            
+
             // Usar imágenes predefinidas como fallback
             const popularGenres = ['pop', 'rock', 'hip-hop', 'electronic', 'jazz'];
             const fallbackTracks: Track[] = popularGenres.map((genre, index) => ({
@@ -344,31 +344,31 @@ export default function ExplorePage() {
               source: 'fallback',
               itemType: 'track'
             }));
-            
+
             setTrendingTracks(fallbackTracks);
           }
         } else {
           // Código original para modo no-demo
-        
+
         // NUEVA SOLUCIÓN: Solicitar directamente a Spotify con búsqueda de alta calidad
         console.log('[Tendencias] Solicitando directamente desde Spotify para garantizar imágenes');
-        
+
         // Usar la API de Spotify directamente para obtener mejor calidad
         const spotifyApi = await import('@/services/spotify');
-        
+
         // Combinar varias búsquedas para obtener una variedad de canciones
         const queries = ['top hits', 'new releases', 'popular', 'chart'];
         let allResults: Track[] = [];
-        
+
         // Realizar búsquedas en paralelo para cada término
         const searches = await Promise.all(
-          queries.map(query => 
+          queries.map(query =>
             spotifyApi.searchTracks(query, 10)
               .then((results: any) => {
                 // Solo conservar tracks con imágenes de Spotify
                 return results
-                  .filter((item: any) => 
-                    item?.album?.images?.[0]?.url && 
+                  .filter((item: any) =>
+                    item?.album?.images?.[0]?.url &&
                     item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
                   )
                   .map((item: any) => ({
@@ -387,26 +387,26 @@ export default function ExplorePage() {
               .catch(() => [])
           )
         );
-        
+
         // Combinar todos los resultados
         searches.forEach(result => {
           allResults = [...allResults, ...result];
         });
-        
+
         // Eliminar duplicados por ID de Spotify
         const uniqueResults: Track[] = [];
         const spotifyIds = new Set<string>();
-        
+
         allResults.forEach(track => {
           if (track.spotifyId && !spotifyIds.has(track.spotifyId)) {
             spotifyIds.add(track.spotifyId);
             uniqueResults.push(track);
           }
         });
-        
+
         // Seleccionar 15 canciones aleatorias para variedad
         const shuffledResults = uniqueResults.sort(() => Math.random() - 0.5).slice(0, 15);
-        
+
         if (shuffledResults.length > 0) {
           console.log(`[Tendencias] Encontradas ${shuffledResults.length} canciones con imágenes de Spotify`);
           setTrendingTracks(shuffledResults);
@@ -417,7 +417,7 @@ export default function ExplorePage() {
         }
       } catch (err) {
         console.error('Error al cargar tendencias:', err);
-        
+
         // Último recurso: usar géneros populares con imágenes predefinidas
         try {
           const popularGenres = ['pop', 'rock', 'hip-hop', 'electronic', 'jazz'];
@@ -432,7 +432,7 @@ export default function ExplorePage() {
             source: 'fallback',
             itemType: 'track'
           }));
-          
+
           setTrendingTracks(fallbackTracks);
         } catch (fallbackErr) {
           console.error('Error también en fallback final:', fallbackErr);
@@ -451,23 +451,23 @@ export default function ExplorePage() {
     const fetchPersonalRecommendations = async () => {
       try {
         setLoadingPersonal(true);
-        
+
         // Verificar si estamos en modo demo (usando contexto y cookies)
         const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
         const inDemoMode = isDemo || isDemoFromCookie;
-        
+
         // Si hay incoherencia entre cookie y estado, actualizar el estado
         if (isDemoFromCookie && !isDemo && toggleDemoMode) {
           console.log('[ExplorePage] Sincronizando estado de demo en recomendaciones personales');
           toggleDemoMode(true);
         }
-        
+
         if (inDemoMode) {
           console.log('[ExplorePage] Cargando recomendaciones personales en modo demo');
           try {
             // Usar datos demo para recomendaciones personales
             const demoSavedTracks = await demoDataService.getSavedTracks();
-            
+
             if (demoSavedTracks && demoSavedTracks.items && demoSavedTracks.items.length > 0) {
               // Convertir al formato Track esperado
               const demoPersonalTracks = demoSavedTracks.items.map((item: any) => {
@@ -485,12 +485,12 @@ export default function ExplorePage() {
                   itemType: 'track'
                 };
               });
-              
+
               // Limitar a 12 canciones y mezclarlas aleatoriamente
               const shuffledTracks = demoPersonalTracks
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 12);
-              
+
               setPersonalRecommendations(shuffledTracks);
             } else {
               throw new Error('No se encontraron canciones guardadas en los datos demo');
@@ -503,25 +503,25 @@ export default function ExplorePage() {
           // Código original para modo no-demo
         // NUEVA SOLUCIÓN: Solicitar directamente a Spotify usando géneros populares
         console.log('[Para Ti] Solicitando directamente desde Spotify para garantizar imágenes');
-        
+
         // Usar la API de Spotify directamente
         const spotifyApi = await import('@/services/spotify');
-        
+
         // Lista de géneros populares para solicitar recomendaciones
         const popularGenres = ['pop', 'indie', 'electronic', 'rock', 'hip-hop', 'r&b', 'latin'];
         const selectedGenres = popularGenres.slice(0, 3); // Tomar tres géneros aleatorios
-        
+
         let allResults: Track[] = [];
-        
+
         // Realizar búsquedas en paralelo para cada género
         const searches = await Promise.all(
-          selectedGenres.map(genre => 
+          selectedGenres.map(genre =>
             spotifyApi.searchTracks(`genre:${genre}`, 10)
               .then((results: any) => {
                 // Solo conservar tracks con imágenes de Spotify
                 return results
-                  .filter((item: any) => 
-                    item?.album?.images?.[0]?.url && 
+                  .filter((item: any) =>
+                    item?.album?.images?.[0]?.url &&
                     item.album.images[0].url.includes('i.scdn.co') // Verificar que sea dominio de Spotify
                   )
                   .map((item: any) => ({
@@ -540,26 +540,26 @@ export default function ExplorePage() {
               .catch(() => [])
           )
         );
-        
+
         // Combinar todos los resultados
         searches.forEach(result => {
           allResults = [...allResults, ...result];
         });
-        
+
         // Eliminar duplicados por ID de Spotify
         const uniqueResults: Track[] = [];
         const spotifyIds = new Set<string>();
-        
+
         allResults.forEach(track => {
           if (track.spotifyId && !spotifyIds.has(track.spotifyId)) {
             spotifyIds.add(track.spotifyId);
             uniqueResults.push(track);
           }
         });
-        
+
         // Seleccionar 10 canciones aleatorias para variedad
         const shuffledResults = uniqueResults.sort(() => Math.random() - 0.5).slice(0, 10);
-        
+
         if (shuffledResults.length > 0) {
           console.log(`[Para Ti] Encontradas ${shuffledResults.length} canciones con imágenes de Spotify`);
           setPersonalRecommendations(shuffledResults);
@@ -570,7 +570,7 @@ export default function ExplorePage() {
         }
       } catch (err) {
         console.error('Error al cargar recomendaciones personales:', err);
-        
+
         // Usar fallbacks si es necesario
       } finally {
         setLoadingPersonal(false);
@@ -585,22 +585,22 @@ export default function ExplorePage() {
     const fetchGenres = async () => {
       try {
         setLoadingGenres(true);
-        
+
         // Verificar si estamos en modo demo (usando contexto y cookies)
         const isDemoFromCookie = document.cookie.includes('demo-mode=true') || document.cookie.includes('demoMode=true');
         const inDemoMode = isDemo || isDemoFromCookie;
-        
+
         // Si hay incoherencia entre cookie y estado, actualizar el estado
         if (isDemoFromCookie && !isDemo && toggleDemoMode) {
           console.log('[ExplorePage] Sincronizando estado de demo en carga de géneros');
           toggleDemoMode(true);
         }
-        
+
         if (inDemoMode) {
           console.log('[ExplorePage] Cargando géneros en modo demo');
           // En modo demo, simplemente usar una lista predefinida de géneros
           const demoGenres = [
-            'pop', 'rock', 'hip-hop', 'electronic', 'jazz', 
+            'pop', 'rock', 'hip-hop', 'electronic', 'jazz',
             'r&b', 'latin', 'classical', 'indie', 'metal'
           ];
           setGenres(demoGenres);
@@ -623,7 +623,7 @@ export default function ExplorePage() {
   useEffect(() => {
     const fetchCategoryPlaylists = async () => {
       if (!selectedCategory) return;
-      
+
       try {
         setLoading(true);
         const playlists = await getCategoryPlaylists(selectedCategory, 20);
@@ -651,7 +651,7 @@ export default function ExplorePage() {
   const handlePlayTrack = async (track: Track) => {
     try {
       console.log('[ExplorePage] Intentando reproducir track:', track);
-      
+
       // Asegurarse de que el track tiene todos los campos necesarios
       const enhancedTrack = {
         ...track,
@@ -672,9 +672,9 @@ export default function ExplorePage() {
         // Asegurar fuente
         source: track.source || 'spotify'
       };
-      
+
       console.log('[ExplorePage] Track mejorado para reproducción:', enhancedTrack);
-      
+
       // Usar explícitamente homePlayTrack para evitar confusiones
       await homePlayTrack(enhancedTrack);
     } catch (error) {
@@ -698,7 +698,7 @@ export default function ExplorePage() {
 
   return (
     <div className="container mx-auto p-6 bg-gradient-to-b from-zinc-900 to-black min-h-screen">
-      <motion.h1 
+      <motion.h1
         className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -708,7 +708,7 @@ export default function ExplorePage() {
       </motion.h1>
 
       {error && (
-        <motion.div 
+        <motion.div
           className="bg-red-900/30 border border-red-500/50 text-red-200 px-6 py-4 rounded-xl mb-6 backdrop-blur-sm"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -719,7 +719,7 @@ export default function ExplorePage() {
       )}
 
       {/* Sección de recomendaciones personalizadas */}
-      <motion.section 
+      <motion.section
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -729,11 +729,11 @@ export default function ExplorePage() {
           <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
           <h2 className="text-2xl font-bold text-white">{t('explore.forYou')}</h2>
         </div>
-        
+
         {loadingPersonal ? (
-          <LoadingState 
-            type="card" 
-            count={5} 
+          <LoadingState
+            type="card"
+            count={5}
             message={t('explore.loading.recommendations')}
             aspectRatio="square"
           />
@@ -764,7 +764,7 @@ export default function ExplorePage() {
       </motion.section>
 
       {/* Sección de canciones en tendencia */}
-      <motion.section 
+      <motion.section
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -774,11 +774,11 @@ export default function ExplorePage() {
           <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-teal-600 rounded-full mr-3"></div>
           <h2 className="text-2xl font-bold text-white">{t('explore.trending')}</h2>
         </div>
-        
+
         {loadingTrending ? (
-          <LoadingState 
-            type="card" 
-            count={5} 
+          <LoadingState
+            type="card"
+            count={5}
             message={t('explore.loading.trending')}
             aspectRatio="square"
           />
@@ -809,7 +809,7 @@ export default function ExplorePage() {
       </motion.section>
 
       {/* Sección de géneros usando el validador proactivo */}
-      <motion.section 
+      <motion.section
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -825,7 +825,7 @@ export default function ExplorePage() {
       </motion.section>
 
       {/* Sección de recomendaciones generales */}
-      <motion.section 
+      <motion.section
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -835,11 +835,11 @@ export default function ExplorePage() {
           <div className="w-1 h-6 bg-gradient-to-b from-amber-500 to-orange-600 rounded-full mr-3"></div>
           <h2 className="text-2xl font-bold text-white">{t('explore.worldMusic')}</h2>
         </div>
-        
+
         {loading ? (
-          <LoadingState 
-            type="card" 
-            count={5} 
+          <LoadingState
+            type="card"
+            count={5}
             message={t('explore.loading.worldMusic')}
             aspectRatio="square"
           />
@@ -856,12 +856,12 @@ export default function ExplorePage() {
                 itemType={track.itemType as any}
                 badge={track.language ? {
                   text: track.language,
-                  color: 
-                    track.language === 'Español' ? 'bg-red-500' : 
-                    track.language === 'English' ? 'bg-blue-500' : 
-                    track.language === 'Português' ? 'bg-green-500' : 
-                    track.language === 'Français' ? 'bg-purple-500' : 
-                    track.language === 'Italiano' ? 'bg-amber-500' : 
+                  color:
+                    track.language === 'Español' ? 'bg-red-500' :
+                    track.language === 'English' ? 'bg-blue-500' :
+                    track.language === 'Português' ? 'bg-green-500' :
+                    track.language === 'Français' ? 'bg-purple-500' :
+                    track.language === 'Italiano' ? 'bg-amber-500' :
                     'bg-gray-500'
                 } : undefined}
                 onPlay={() => handlePlayTrack(track)}
@@ -877,7 +877,7 @@ export default function ExplorePage() {
 
       {/* Sección de categorías de Spotify */}
       {!isDemo && (
-      <motion.section 
+      <motion.section
         className="mb-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -887,11 +887,11 @@ export default function ExplorePage() {
           <div className="w-1 h-6 bg-gradient-to-b from-pink-500 to-rose-600 rounded-full mr-3"></div>
           <h2 className="text-2xl font-bold text-white">{t('explore.discover')}</h2>
         </div>
-          
+
           {loadingCategories ? (
-            <LoadingState 
-              type="grid" 
-              count={8} 
+            <LoadingState
+              type="grid"
+              count={8}
               message={t('explore.loading.genres')}
               withText={true}
             />
@@ -911,9 +911,9 @@ export default function ExplorePage() {
               >
                 <div className="aspect-square relative overflow-hidden">
                   {category.icons && category.icons.length > 0 ? (
-                    <img 
-                      src={category.icons[0].url} 
-                      alt={category.name} 
+                    <img
+                      src={category.icons[0].url}
+                      alt={category.name}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -974,4 +974,4 @@ export default function ExplorePage() {
       )}
     </div>
   );
-} 
+}

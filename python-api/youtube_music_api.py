@@ -1084,9 +1084,7 @@ def get_recommendations():
                                             # Buscar información extra sobre el
                                             # video
                                             logger.info(
-                                                f"[RASTREO-PLAYLIST] Buscando información del artista para el video {
-        track.get(
-            'videoId', '')}"
+                                                f"[RASTREO-PLAYLIST] Buscando información del artista para el video {track.get('videoId', '')}"
                                             )
                                             # Obtener información de la canción
                                             # desde el título si es necesario
@@ -1117,9 +1115,7 @@ def get_recommendations():
                                                         if song_info[0].get("artists") and len(song_info[0]["artists"]) > 0:
                                                             track["artists"] = song_info[0]["artists"]
                                                             logger.info(
-                                                                f"[RASTREO-PLAYLIST] Artista encontrado por búsqueda: '{
-        song_info[0]['artists'][0].get(
-            'name', '')}'"
+                                                                f"[RASTREO-PLAYLIST] Artista encontrado por búsqueda: '{song_info[0]['artists'][0].get('name', '')}'"
                                                             )
                                                         elif song_info[0].get("artist"):
                                                             track["artist"] = song_info[0]["artist"]
@@ -1164,11 +1160,7 @@ def get_recommendations():
 
                                 if mood_playlists and "playlists" in mood_playlists:
                                     logger.info(
-                                        f"[RASTREO-PLAYLIST] Categoría '{
-        category.get(
-            'title', '')}': {
-                len(
-                    mood_playlists['playlists'])} playlists"
+                                        f"[RASTREO-PLAYLIST] Categoría '{category.get('title', '')}': {len(mood_playlists['playlists'])} playlists"
                                     )
 
                                     # Tomar la primera playlist de cada
@@ -1278,8 +1270,7 @@ def get_recommendations():
 
         unique_artists = list(artist_counts.keys())
         logger.info(
-            f"[RASTREO-PLAYLIST] Artistas únicos: {
-        len(unique_artists)}, distribución: {artist_counts}"
+            f"[RASTREO-PLAYLIST] Artistas únicos: {len(unique_artists)}, distribución: {artist_counts}"
         )
 
         # Guardar en caché
@@ -1324,8 +1315,7 @@ def get_top_artists():
         for genre in genres[:3]:  # Limitamos a 3 géneros para no hacer muchas llamadas
             search_results = ytm.search(f"{genre} artist", filter="artists", limit=limit // 3)
             logger.info(
-                f"Búsqueda de artistas para género {genre}, resultados: {
-        len(search_results)}"
+                f"Búsqueda de artistas para género {genre}, resultados: {len(search_results)}"
             )
             all_artists.extend(search_results)
 
@@ -1345,8 +1335,7 @@ def get_top_artists():
                 formatted_artists.append(artist_data)
 
         logger.info(
-            f"Artistas populares encontrados: {
-        len(formatted_artists)}"
+            f"Artistas populares encontrados: {len(formatted_artists)}"
         )
 
         # Si no encontramos artistas, crear algunos de ejemplo
@@ -1407,8 +1396,7 @@ def get_recommendations_by_genres():
     logger.info(f"Obteniendo recomendaciones para géneros: {top_genres}")
 
     # Verificar caché
-    cache_key = f"recommendations_by_genres_{
-        '-'.join(top_genres)}_{artists_per_genre}_{playlists_per_genre}_{tracks_per_genre}"
+    cache_key = f"recommendations_by_genres_{'-'.join(top_genres)}_{artists_per_genre}_{playlists_per_genre}_{tracks_per_genre}"
     cached = get_cached(cache_key, ttl_hours=4)  # 4 horas de caché
     if cached:
         logger.info(f"Usando caché para recomendaciones de géneros: {top_genres}")
@@ -1495,13 +1483,7 @@ def get_recommendations_by_genres():
         # Guardar en caché
         save_to_cache(cache_key, result)
         logger.info(
-            f"Recomendaciones generadas: {
-        len(
-            result['artists'])} artistas, {
-                len(
-                    result['playlists'])} playlists, {
-                        len(
-                            result['tracks'])} tracks"
+            f"Recomendaciones generadas: {len(result['artists'])} artistas, {len(result['playlists'])} playlists, {len(result['tracks'])} tracks"
         )
 
         return jsonify(result)
@@ -1601,14 +1583,12 @@ def get_featured_playlists():
                             valid_playlists.append(playlist)
 
                     logger.info(
-                        f"Encontradas {
-        len(valid_playlists)} playlists destacadas para región {region}"
+                        f"Encontradas {len(valid_playlists)} playlists destacadas para región {region}"
                     )
                     return jsonify(valid_playlists)
         except Exception as e:
             logger.error(
-                f"Error al obtener playlists destacadas desde la exploración: {
-        str(e)}"
+                f"Error al obtener playlists destacadas desde la exploración: {str(e)}"
             )
 
         # Si no hay datos de explore o hubo un error, usar playlists
@@ -1772,12 +1752,7 @@ def get_new_releases():
                         if "items" in section:
                             all_releases.extend(section["items"])
                             logger.info(
-                                f"Encontrados {
-        len(
-            section['items'])} nuevos lanzamientos en sección '{
-                section.get(
-                    'title',
-                    '')}'"
+                                f"Encontrados {len(section['items'])} nuevos lanzamientos en sección '{section.get('title', '')}'"
                             )
 
             # 2. Agregar lanzamientos de charts (tendencias)
@@ -1802,8 +1777,7 @@ def get_new_releases():
                             recent_albums.append(album)
 
                 logger.info(
-                    f"Encontrados {
-        len(recent_albums)} álbumes recientes en charts"
+                    f"Encontrados {len(recent_albums)} álbumes recientes en charts"
                 )
                 all_releases.extend(recent_albums)
 
@@ -1821,8 +1795,7 @@ def get_new_releases():
             # Convertir a lista
             filtered_releases = list(unique_releases.values())
             logger.info(
-                f"Total de {
-        len(filtered_releases)} lanzamientos únicos encontrados"
+                f"Total de {len(filtered_releases)} lanzamientos únicos encontrados"
             )
 
             # Limitar al número solicitado
@@ -1858,14 +1831,12 @@ def get_new_releases():
 
             if formatted_releases:
                 logger.info(
-                    f"Devolviendo {
-        len(formatted_releases)} nuevos lanzamientos para región {region}"
+                    f"Devolviendo {len(formatted_releases)} nuevos lanzamientos para región {region}"
                 )
                 return jsonify(formatted_releases)
         except Exception as e:
             logger.error(
-                f"Error al obtener nuevos lanzamientos desde la exploración: {
-        str(e)}"
+                f"Error al obtener nuevos lanzamientos desde la exploración: {str(e)}"
             )
 
         # Si no hay datos de explore o hubo un error, usar álbumes predefinidos
@@ -2163,16 +2134,13 @@ def get_artists_by_genre():
             elapsed_time = time.time() - start_time
 
             logger.info(
-                f"Búsqueda completada en {
-        elapsed_time:.2f}s. Resultados: {
-            len(search_results) if search_results else 0}"
+                f"Búsqueda completada en {elapsed_time:.2f}s. Resultados: {len(search_results) if search_results else 0}"
             )
 
             # Procesar resultados
             if search_results and len(search_results) > 0:
                 logger.info(
-                    f"[DEBUG] Procesando {
-        len(search_results)} resultados de artistas reales para género {genre}"
+                    f"[DEBUG] Procesando {len(search_results)} resultados de artistas reales para género {genre}"
                 )
                 for artist_data in search_results:
                     if not artist_data:
@@ -2195,8 +2163,7 @@ def get_artists_by_genre():
                     artists.append(artist)
 
                 logger.info(
-                    f"[DEBUG] Búsqueda exitosa para género {genre}. {
-        len(artists)} artistas encontrados"
+                    f"[DEBUG] Búsqueda exitosa para género {genre}. {len(artists)} artistas encontrados"
                 )
             else:
                 logger.warning(f"[DEBUG] No se encontraron artistas para el género '{genre}'")
@@ -2206,8 +2173,7 @@ def get_artists_by_genre():
             # Si hay un error en la búsqueda, registrarlo pero continuar usando
             # artistas predefinidos
             logger.error(
-                f"Error al buscar artistas para género '{genre}': {
-        str(search_error)}"
+                f"Error al buscar artistas para género '{genre}': {str(search_error)}"
             )
 
             # Verificar si el error es por idioma no soportado e intentar con
@@ -2222,8 +2188,7 @@ def get_artists_by_genre():
 
                     if search_results and len(search_results) > 0:
                         logger.info(
-                            f"[DEBUG] Búsqueda con inglés exitosa. Procesando {
-        len(search_results)} resultados"
+                            f"[DEBUG] Búsqueda con inglés exitosa. Procesando {len(search_results)} resultados"
                         )
                         for artist_data in search_results:
                             if not artist_data:
@@ -2251,8 +2216,7 @@ def get_artists_by_genre():
                         logger.warning(f"[DEBUG] Segundo intento con inglés no encontró artistas para '{genre}'")
                 except Exception as retry_error:
                     logger.error(
-                        f"Error al reintentar búsqueda con idioma 'en': {
-        str(retry_error)}"
+                        f"Error al reintentar búsqueda con idioma 'en': {str(retry_error)}"
                     )
 
             if len(artists) == 0:
@@ -2263,8 +2227,7 @@ def get_artists_by_genre():
         # añadir predefinidos según el género y región
         if len(artists) < limit:
             logger.info(
-                f"No hay suficientes artistas ({
-        len(artists)}). Usando artistas predefinidos para género '{genre}' en región '{region}'"
+                f"No hay suficientes artistas ({len(artists)}). Usando artistas predefinidos para género '{genre}' en región '{region}'"
             )
             genre_specific_artists = get_predefined_artists_by_genre(genre, limit, region)
 
@@ -2292,8 +2255,7 @@ def get_artists_by_genre():
             logger.info(f"[DEBUG] Resultados guardados en caché con clave: {cache_key}")
 
         logger.info(
-            f"[DEBUG] Devolviendo {
-        len(artists)} artistas para el género '{genre}'"
+            f"[DEBUG] Devolviendo {len(artists)} artistas para el género '{genre}'"
         )
         return jsonify(artists)
     except Exception as e:
@@ -2302,8 +2264,7 @@ def get_artists_by_genre():
         # En caso de error general, devolver directamente artistas predefinidos
         predefined_artists = get_predefined_artists_by_genre(genre, limit, region)
         logger.info(
-            f"[DEBUG] Devolviendo {
-        len(predefined_artists)} artistas predefinidos para el género '{genre}' debido a error"
+            f"[DEBUG] Devolviendo {len(predefined_artists)} artistas predefinidos para el género '{genre}' debido a error"
         )
         return jsonify(predefined_artists)
 
@@ -2529,8 +2490,7 @@ def get_predefined_artists_by_genre(genre, count, region="US"):
     if region in region_genre_artists and matched_genre in region_genre_artists[region]:
         region_specific_artists = region_genre_artists[region][matched_genre]
         logger.info(
-            f"Usando {
-        len(region_specific_artists)} artistas específicos para región {region} y género {matched_genre}"
+            f"Usando {len(region_specific_artists)} artistas específicos para región {region} y género {matched_genre}"
         )
 
     # Si no encontramos un género específico, usar una mezcla de todos

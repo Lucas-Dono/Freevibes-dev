@@ -13,7 +13,7 @@ const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler
 
 const app = express();
 const PORT = process.env.PORT || '3001'; // Asegurar string
-const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5100'; // Nueva variable base
+const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5000'; // Nueva variable base
 // URL base sin el sufijo /api para las rutas que no lo requieren (si es necesario)
 // const PYTHON_BASE_URL = PYTHON_API_BASE_URL.replace(/\/api$/, ''); // Comentado/Eliminado si no se usa
 
@@ -115,7 +115,8 @@ app.get('/api/youtube/status', cors(openCorsOptions), async (req, res) => {
   console.log('[Status] Verificando servidor YouTube Music');
   try {
     // Intentar hacer una solicitud simple al servidor Python (asumiendo ruta /status)
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/status`, { // Usa la nueva variable base
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/status`, { // Usa la nueva variable base
       timeout: 3000 // Timeout reducido para verificación rápida
     });
 
@@ -160,8 +161,10 @@ app.get('/api/youtube/search', async (req, res) => {
   try {
     console.log(`[Proxy] Redirigiendo /api/youtube/search a Python API: ${JSON.stringify(req.query)}`);
 
-    // Realizar la solicitud al servicio Python (asumiendo ruta /search)
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/search`, {
+    // Realizar la solicitud al servicio Python (asumiendo ruta /api/search)
+    // Asegurarse de incluir /api si no está ya en la URL base
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/search`, {
       params: req.query,
       timeout: 5000 // Timeout corto para verificaciones
     });
@@ -192,7 +195,9 @@ app.use('/api/spotify', async (req, res, next) => {
 // Proxy para la API de Python (YouTube Music)
 app.post('/api/youtube/setup', async (req, res) => { // Asumiendo ruta /setup en Python
   try {
-    const response = await axios.post(`${PYTHON_API_BASE_URL}/setup`, req.body);
+    // Asegurarse de incluir /api si no está ya en la URL base
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.post(`${PYTHON_API_BASE_URL}${apiPrefix}/setup`, req.body);
     res.json(response.data);
   } catch (error) {
     // Propagar error de Python si existe
@@ -224,7 +229,9 @@ app.all('/api/youtube/*', async (req, res, next) => {
     const pythonEndpoint = req.path.replace('/api/youtube', ''); // Ej: /lyrics, /get-watch-playlist
 
     // Construir la URL para redirigir al servicio Python
-    const targetUrl = `${PYTHON_API_BASE_URL}${pythonEndpoint}`;
+    // Asegurarse de incluir /api si no está ya en la URL base
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const targetUrl = `${PYTHON_API_BASE_URL}${apiPrefix}${pythonEndpoint}`;
 
     console.log(`[Proxy] Redirigiendo solicitud genérica ${req.method} ${req.path} a: ${targetUrl}`);
 
@@ -344,7 +351,7 @@ app.get('/api/youtube/search', async (req, res) => {
 
     // Intentar obtener datos reales de YouTube
     try {
-      const response = await axios.get(`${PYTHON_API_BASE_URL}/search`, {
+      const response = await axios.get(`${PYTHON_API_BASE_URL}/api/search`, {
         params: {
           query,
           filter,
@@ -471,7 +478,8 @@ app.get('/api/youtube/find-track', async (req, res) => {
   try {
     console.log(`Buscando track específico con parámetros:`, req.query);
 
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/find-track`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/find-track`, {
       params: req.query,
       timeout: 15000,
       validateStatus: () => true // Aceptar cualquier código de estado para manejar manualmente
@@ -547,7 +555,8 @@ app.get('/api/youtube-artist', async (req, res) => {
     const fetchWithRetry = async (retryCount = 0) => {
       try {
         // Hacer la petición al servidor Python - Usar PYTHON_API_BASE_URL porque la ruta en Python incluye /api/
-        const response = await axios.get(`${PYTHON_API_BASE_URL}/youtube-artist`, {
+        const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+        const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/youtube-artist`, {
           params: {
             artistId,
             _t: Date.now() // Parámetro para evitar caché en caso de errores
@@ -642,7 +651,8 @@ app.get('/api/youtube/find-artist-by-name', async (req, res) => {
     console.log(`[API] Buscando artista de YouTube Music por nombre: "${name}"`);
 
     // Hacer la petición al servidor Python para buscar artistas por nombre
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/search`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/api/search`, {
       params: {
         query: `${name} official artist`,
         filter: 'artists',
@@ -730,7 +740,8 @@ app.get('/api/youtube/find-artist-by-name', async (req, res) => {
 // Endpoint para convertir de Spotify a YouTube
 app.get('/api/youtube/spotify-to-youtube', async (req, res) => {
   try {
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/spotify-to-youtube`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/spotify-to-youtube`, {
       params: req.query
     });
     res.json(response.data);
@@ -1088,7 +1099,8 @@ async function enrichTracksWithSpotifyData(tracks) {
 // Modificar el endpoint de recomendaciones para usar el enriquecimiento con Spotify
 app.get('/api/youtube/recommendations', async (req, res) => {
   try {
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/recommendations`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/recommendations`, {
       params: req.query,
       timeout: 20000 // Aumentar a 20 segundos por complejidad
     });
@@ -1113,7 +1125,7 @@ async function checkPythonServiceStatus() {
 
     // Hacer una solicitud de prueba simple
     console.log('[YOUTUBE-RECS] Realizando solicitud de prueba a la API de Python...');
-    const testResponse = await axios.get(`${PYTHON_API_BASE_URL}/search`, {
+    const testResponse = await axios.get(`${PYTHON_API_BASE_URL}/api/search`, {
       params: {
         query: 'test',
         filter: 'songs',
@@ -1223,7 +1235,8 @@ function getFallbackTracks(limit = 25, options = {}) {
 // Nuevo endpoint para obtener recomendaciones por géneros
 app.get('/api/youtube/recommendations-by-genres', async (req, res) => {
   try {
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/recommendations-by-genres`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/recommendations-by-genres`, {
       params: req.query,
       timeout: 20000
     });
@@ -1237,7 +1250,8 @@ app.get('/api/youtube/recommendations-by-genres', async (req, res) => {
 // Nuevo endpoint para obtener artistas populares
 app.get('/api/youtube/top-artists', async (req, res) => {
   try {
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/top-artists`, {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/top-artists`, {
       params: req.query,
       timeout: 15000
     });
@@ -1253,7 +1267,7 @@ app.get('/api/youtube/new-releases', async (req, res) => {
     const limit = req.query.limit || 20;
     const region = req.query.region || 'ES'; // Usar España como región por defecto
     console.log(`Obteniendo nuevos lanzamientos de YouTube Music con límite ${limit} para región ${region}`);
-    const response = await axios.get(`http://localhost:5000/new-releases?limit=${limit}&region=${region}`);
+    const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/new-releases?limit=${limit}&region=${region}`);
     res.json(response.data);
   } catch (error) {
     console.error('Error al obtener nuevos lanzamientos de YouTube Music:', error);
@@ -1287,7 +1301,7 @@ app.get('/api/youtube/artists-by-genre', async (req, res) => {
 
     try {
       // Comprobar primero si el servicio Python está disponible
-      const pythonStatus = await axios.get('http://localhost:5000/search', {
+      const pythonStatus = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/search`, {
         params: {
           query: 'test',
           limit: 1,
@@ -1325,7 +1339,8 @@ app.get('/api/youtube/artists-by-genre', async (req, res) => {
       console.log(`[GENRE-API] Enviando solicitud real a Python - Género: ${genre}, Idioma: ${finalLanguage}`);
 
       // Desactivamos el caché añadiendo un timestamp
-      const response = await axios.get(`http://localhost:5000/artists-by-genre`, {
+      const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+      const response = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/artists-by-genre`, {
         params: {
           genre,
           limit,
@@ -1421,7 +1436,8 @@ app.get('/api/youtube/artists-by-genre', async (req, res) => {
       if (finalLanguage !== 'en' && apiError.message.includes('Language not supported')) {
         console.log('[GENRE-API] Error de idioma. Reintentando con inglés...');
         try {
-          const retryResponse = await axios.get(`http://localhost:5000/artists-by-genre`, {
+          const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+          const retryResponse = await axios.get(`${PYTHON_API_BASE_URL}/artists-by-genre`, {
             params: {
               genre,
               limit,
@@ -1588,7 +1604,7 @@ app.get('/api/youtube/ping', (req, res) => {
   const userLanguage = req.query.language || 'es';
 
   // Intentar con la ruta /search que sabemos que existe en el servicio Python
-  axios.get('http://localhost:5000/search', {
+  axios.get('http://localhost:5000/api/search', {
     params: {
       query: 'test',
       limit: 1,
@@ -1634,7 +1650,8 @@ app.get('/api/status', async (req, res) => {
     const userLanguage = req.query.language || 'es';
 
     // Intentar con la ruta /search que sabemos que existe en el servicio Python
-    const pythonStatus = await axios.get('http://localhost:5000/search', {
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const pythonStatus = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/search`, {
       params: {
         query: 'test',
         limit: 1,
@@ -1685,7 +1702,7 @@ app.get('/api/youtube/test-artists-endpoint', async (req, res) => {
 
     // 1. Verificar que el servicio Python está activo
     console.log('[TEST-API] Paso 1: Verificando servicio Python');
-    const pingResponse = await axios.get('http://localhost:5000/search', {
+    const pingResponse = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/search`, {
       params: {
         query: 'test',
         limit: 1,
@@ -1699,7 +1716,7 @@ app.get('/api/youtube/test-artists-endpoint', async (req, res) => {
     // 2. Hacer llamada directa a Python (sin caché)
     console.log('[TEST-API] Paso 2: Llamando directamente a la API Python para artistas por género');
     const timestamp = Date.now();
-    const pythonResponse = await axios.get(`http://localhost:5000/artists-by-genre`, {
+    const pythonResponse = await axios.get(`${PYTHON_API_BASE_URL}${apiPrefix}/artists-by-genre`, {
       params: {
         genre,
         limit,
@@ -1826,7 +1843,7 @@ app.get('/api/youtube-album', async (req, res) => {
     console.log(`[YouTube Album] Obteniendo álbum: ${albumId}`);
 
     // Verificar si debemos obtener los datos de la API de Python
-    const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5000';
+    const pythonApiUrl = process.env.PYTHON_API_URL || PYTHON_API_BASE_URL;
 
     try {
       // Verificar si el servicio de Python está disponible

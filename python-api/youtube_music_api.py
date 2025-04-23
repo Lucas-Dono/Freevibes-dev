@@ -531,7 +531,7 @@ def setup_auth():
         return jsonify({"success": False, "error": str(e)}), 400
 
 
-@app.route("/search", methods=["GET"])
+@app.route("/api/search", methods=["GET"])
 def search():
     """Busca tracks, albums, artistas, playlists en YouTube Music"""
     try:
@@ -1542,7 +1542,7 @@ def get_recommendations_by_genres():
         return jsonify(fallback_result)
 
 
-@app.route("/featured-playlists", methods=["GET"])
+@app.route("/api/featured-playlists", methods=["GET"])
 @cached("featured_playlists.json")
 def get_featured_playlists():
     """Endpoint para obtener playlists destacadas"""
@@ -1711,7 +1711,7 @@ def get_featured_playlists():
         return jsonify([])
 
 
-@app.route("/new-releases", methods=["GET"])
+@app.route("/api/new-releases", methods=["GET"])
 @cached("new_releases.json")
 def get_new_releases():
     """Endpoint para obtener nuevos lanzamientos"""
@@ -1958,7 +1958,7 @@ def get_new_releases():
         return jsonify([])
 
 
-@app.route("/charts", methods=["GET"])
+@app.route("/api/charts", methods=["GET"])
 @cached("charts.json")
 def get_charts():
     """Endpoint para obtener charts/tendencias musicales"""
@@ -2056,7 +2056,7 @@ def get_charts():
         return jsonify({"singles": []})
 
 
-@app.route("/artists-by-genre", methods=["GET"])
+@app.route("/api/artists-by-genre", methods=["GET"])
 def get_artists_by_genre():
     """Endpoint para obtener artistas por género"""
     genre = request.args.get("genre", "pop")
@@ -2883,10 +2883,10 @@ def get_lyrics():
         return jsonify({"error": f"Error: {str(e)}"}), 500
 
 
-@app.route("/api/get_mood_categories", methods=["GET"])
+@app.route("/api/get-mood-categories", methods=["GET"])
 def get_mood_categories():
     try:
-        ytmusic = YTMusic()
+        ytmusic = get_ytmusic()
         categories = ytmusic.get_mood_categories()
         return jsonify(categories)
     except Exception as e:
@@ -2894,14 +2894,14 @@ def get_mood_categories():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/get_mood_playlists", methods=["GET"])
+@app.route("/api/get-mood-playlists", methods=["GET"])
 def get_mood_playlists():
     try:
         params = request.args.get("params")
         if not params:
             return jsonify({"error": "Params parameter is required"}), 400
 
-        ytmusic = YTMusic()
+        ytmusic = get_ytmusic()
         playlists = ytmusic.get_mood_playlists(params)
         return jsonify(playlists)
     except Exception as e:
@@ -2909,11 +2909,11 @@ def get_mood_playlists():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/get_charts", methods=["GET"])
+@app.route("/api/get-charts", methods=["GET"])
 def get_charts_api():
     try:
         country = request.args.get("country", "ZZ")
-        ytmusic = YTMusic()
+        ytmusic = get_ytmusic()
         charts = ytmusic.get_charts(country)
         return jsonify(charts)
     except Exception as e:

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import { API_TIMEOUTS } from '@/lib/constants';
+import { getAPIConfig } from '@/lib/api-config';
 
 // Configuración para indicar que esta ruta es dinámica
 export const dynamic = 'force-dynamic';
@@ -25,11 +26,11 @@ export async function GET(request: NextRequest) {
   console.log(`[API] Realizando búsqueda de YouTube Music: "${query}" (filtro: ${filter}, límite: ${limit})`);
 
   try {
-    // URL del servidor Python (leída desde la variable de entorno correcta)
-    const pythonServerUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5100';
+    // Obtener la URL del servidor Python desde la configuración centralizada
+    const { pythonApiUrl } = getAPIConfig();
 
     // URL completa para la solicitud
-    let fullUrl = `${pythonServerUrl}/search?query=${encodeURIComponent(query)}&filter=${filter}&limit=${limit}`;
+    let fullUrl = `${pythonApiUrl}/search?query=${encodeURIComponent(query)}&filter=${filter}&limit=${limit}`;
 
     // Incluir la clave API si existe
     if (apiKey) {

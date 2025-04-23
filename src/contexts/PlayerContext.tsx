@@ -1624,11 +1624,11 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
         }
         params.append('limit', String(limit)); // <-- Usar limit definido
 
-        // Construir URL para la API Python
-        const pythonApiUrl = 'http://localhost:5100/api/recommendations'; // <-- URL Python API
-        const apiUrl = `${pythonApiUrl}?${params.toString()}`;
+        // Construir URL para la API usando el servidor Node.js como proxy
+        // En lugar de conectar directamente a la API Python
+        const apiUrl = `/api/recommendations?${params.toString()}`;
 
-        console.log('[RASTREO-PLAYLIST] Solicitud a Python API:', apiUrl); // <-- Log actualizado
+        console.log('[RASTREO-PLAYLIST] Solicitud a API de recomendaciones:', apiUrl); // <-- Log actualizado
 
         // Implementar lógica de reintentos para la solicitud (se mantiene la estructura)
         let response: Response | null = null;

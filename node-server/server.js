@@ -13,7 +13,7 @@ const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler
 
 const app = express();
 const PORT = process.env.PORT || '3001'; // Asegurar string
-const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5000'; // Nueva variable base
+const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5100'; // Nueva variable base
 // URL base sin el sufijo /api para las rutas que no lo requieren (si es necesario)
 // const PYTHON_BASE_URL = PYTHON_API_BASE_URL.replace(/\/api$/, ''); // Comentado/Eliminado si no se usa
 
@@ -160,8 +160,8 @@ app.get('/api/youtube/search', async (req, res) => {
   try {
     console.log(`[Proxy] Redirigiendo /api/youtube/search a Python API: ${JSON.stringify(req.query)}`);
 
-    // Realizar la solicitud al servicio Python (asumiendo ruta /api/search)
-    const response = await axios.get(`${PYTHON_API_BASE_URL}/api/search`, { // Usa nueva base + /api/search
+    // Realizar la solicitud al servicio Python (asumiendo ruta /search)
+    const response = await axios.get(`${PYTHON_API_BASE_URL}/search`, {
       params: req.query,
       timeout: 5000 // Timeout corto para verificaciones
     });
@@ -190,9 +190,9 @@ app.use('/api/spotify', async (req, res, next) => {
 });
 
 // Proxy para la API de Python (YouTube Music)
-app.post('/api/youtube/setup', async (req, res) => { // Asumiendo ruta /api/setup en Python
+app.post('/api/youtube/setup', async (req, res) => { // Asumiendo ruta /setup en Python
   try {
-    const response = await axios.post(`${PYTHON_API_BASE_URL}/api/setup`, req.body); // Usa nueva base + /api/setup
+    const response = await axios.post(`${PYTHON_API_BASE_URL}/setup`, req.body);
     res.json(response.data);
   } catch (error) {
     // Propagar error de Python si existe
@@ -223,8 +223,8 @@ app.all('/api/youtube/*', async (req, res, next) => {
     // Obtener la parte de la ruta después de /api/youtube/ -> esta será la ruta en Python
     const pythonEndpoint = req.path.replace('/api/youtube', ''); // Ej: /lyrics, /get-watch-playlist
 
-    // Construir la URL para redirigir al servicio Python (asumiendo que Python espera /api/ENDPOINT)
-    const targetUrl = `${PYTHON_API_BASE_URL}/api${pythonEndpoint}`; // Ej: http://localhost:5000/api/lyrics
+    // Construir la URL para redirigir al servicio Python
+    const targetUrl = `${PYTHON_API_BASE_URL}${pythonEndpoint}`;
 
     console.log(`[Proxy] Redirigiendo solicitud genérica ${req.method} ${req.path} a: ${targetUrl}`);
 
@@ -2741,7 +2741,7 @@ app.get('/api/youtube/get-watch-playlist', async (req, res) => {
     const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5000';
 
     try {
-      const response = await axios.get(`${pythonApiUrl}/api/watch-playlist`, {
+      const response = await axios.get(`${pythonApiUrl}/watch-playlist`, {
         params: { videoId },
         timeout: 10000 // 10 segundos de timeout
       });
@@ -2798,7 +2798,7 @@ app.get('/api/youtube/get-lyrics', async (req, res) => {
     const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5000';
 
     try {
-      const response = await axios.get(`${pythonApiUrl}/api/lyrics`, {
+      const response = await axios.get(`${pythonApiUrl}/lyrics`, {
         params: {
           browseId,
           timestamps: useTimestamps
@@ -2841,7 +2841,7 @@ app.get('/api/youtube/get-lyrics', async (req, res) => {
 app.get('/api/youtube/get-mood-categories', async (req, res) => {
   try {
     const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5000';
-    const response = await axios.get(`${pythonApiUrl}/api/get_mood_categories`);
+    const response = await axios.get(`${pythonApiUrl}/get_mood_categories`);
     return res.json(response.data);
   } catch (error) {
     console.error('Error obteniendo categorías de YouTube Music:', error.message);
@@ -2860,7 +2860,7 @@ app.get('/api/youtube/get-mood-playlists', async (req, res) => {
       return res.status(400).json({ error: 'El parámetro "params" es requerido' });
     }
 
-    const response = await axios.get(`${pythonApiUrl}/api/get_mood_playlists`, {
+    const response = await axios.get(`${pythonApiUrl}/get_mood_playlists`, {
       params: { params }
     });
     return res.json(response.data);
@@ -2877,7 +2877,7 @@ app.get('/api/youtube/get-charts', async (req, res) => {
   try {
     const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5000';
     const { country } = req.query;
-    const response = await axios.get(`${pythonApiUrl}/api/get_charts`, {
+    const response = await axios.get(`${pythonApiUrl}/get_charts`, {
       params: { country: country || 'ZZ' }
     });
     return res.json(response.data);

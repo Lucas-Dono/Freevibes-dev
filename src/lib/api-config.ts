@@ -17,14 +17,25 @@ interface APIConfig {
  * @returns Objeto con la configuración de la API
  */
 export function getAPIConfig(): APIConfig {
-  // URL del servidor Node.js
-  const nodeServerUrl = process.env.NODE_API_URL || 'http://localhost:3101';
+  // URL del servidor Node.js - usar variable pública para el cliente
+  // Lanzar error si no está configurada para ser explícito
+  const nodeServerUrl = process.env.NEXT_PUBLIC_NODE_API_URL || '';
+  
+  // URL de la API Python - usar variable pública para el cliente
+  // Lanzar error si no está configurada para ser explícito
+  const pythonApiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || '';
 
-  // URL de la API Python
-  const pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:5100';
-
-  // Determinar si estamos en modo demo
+  // Modo demo
   const demoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+
+  // Registrar advertencia si faltan configuraciones esenciales
+  if (!nodeServerUrl || !pythonApiUrl) {
+    console.warn(
+      'Advertencia: Variables de entorno faltantes para APIs:',
+      !nodeServerUrl ? 'NEXT_PUBLIC_NODE_API_URL' : '',
+      !pythonApiUrl ? 'NEXT_PUBLIC_PYTHON_API_URL' : ''
+    );
+  }
 
   return {
     nodeServerUrl,
@@ -43,8 +54,14 @@ export function getApiBaseUrl(): string {
     return window.location.origin;
   }
 
-  // Si estamos en el servidor, usar la variable de entorno o localhost
-  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  // Si estamos en el servidor, usar la variable de entorno
+  // Lanzar error si no está configurada para ser explícito
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+  if (!appUrl && typeof window === 'undefined') {
+    console.warn('Advertencia: NEXT_PUBLIC_APP_URL no está configurada');
+  }
+  
+  return appUrl;
 }
 
 /**

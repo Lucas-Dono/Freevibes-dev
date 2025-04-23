@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3100",
+    "dev": "next dev -p 3200",
     "build": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" next build || echo \"Build completado con advertencias. La aplicación funcionará correctamente.\"",
     "build:win": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" next build || echo \"Build completado con advertencias. La aplicación funcionará correctamente.\"",
     "start": "next start",

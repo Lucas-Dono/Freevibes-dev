@@ -1,10 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { getLyrics, parseSyncedLyrics } from '@/services/lyricsService';
-import { getRecommendedTracks, getArtistTopTracks, searchTracks } from '@/services/spotify';
-// Importar las nuevas funciones del sistema multi-fuente
-import { getSimilarTracks, getArtistTopTracks as getMultiArtistTracks, getGeneralRecommendations } from '@/services/recommendations';
+import { getAPIConfig } from '@/lib/api-config';
 // Importar el tipo Track de types.ts
 import { Track as AppTrack, LyricLine as AppLyricLine } from '@/types/types';
 
@@ -1624,13 +1622,16 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
         }
         params.append('limit', String(limit)); // <-- Usar limit definido
 
-        // Construir URL para la API usando el servidor Node.js como proxy
-        // En lugar de conectar directamente a la API Python
-        const apiUrl = `/api/recommendations?${params.toString()}`;
+        // Obtener URL base de la API Python desde configuración
+        const { pythonApiUrl } = getAPIConfig(); // Importar desde la configuración de API
+        
+        // Construir endpoint completo usando la URL de la API
+        const recommendationsEndpoint = `${pythonApiUrl}/api/recommendations`;
+        const apiUrl = `${recommendationsEndpoint}?${params.toString()}`;
 
-        console.log('[RASTREO-PLAYLIST] Solicitud a API de recomendaciones:', apiUrl); // <-- Log actualizado
+        console.log('[RASTREO-PLAYLIST] Solicitud a Python API:', apiUrl); // <-- Log actualizado
 
-        // Implementar lógica de reintentos para la solicitud (se mantiene la estructura)
+        // Implementar lógica de reintentos para la solicitud
         let response: Response | null = null;
         let retryCount = 0;
         const maxRetries = 3;
@@ -1648,6 +1649,7 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
                 await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount - 1)));
               }
 
+              // Realizar la petición a la API configurada dinámicamente
               response = await fetch(apiUrl, {
                 signal: controller.signal,
                 method: 'GET',

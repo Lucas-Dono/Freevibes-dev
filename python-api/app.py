@@ -7,16 +7,29 @@ from youtube_music_api import app
 import traceback
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 # Cargar variables de entorno
 load_dotenv()
 
-# Comentamos esta configuración CORS porque ya está configurada en youtube_music_api.py
-# if os.environ.get('CORS_ORIGIN'):
-#     from flask_cors import CORS
-#     cors_origin = os.environ.get('CORS_ORIGIN', '*').split(',')
-#     CORS(app, resources={r"/*": {"origins": cors_origin}})
+# Configuración CORS independiente
+cors_origin_string = os.environ.get("CORS_ORIGIN", "")
+allowed_origins = []
 
+# En producción, esta variable debe configurarse explícitamente
+if cors_origin_string == "*":
+    allowed_origins = "*"
+elif cors_origin_string:
+    # Usar la configuración CORS explícita
+    allowed_origins = [origin.strip() for origin in cors_origin_string.split(",") if origin.strip()]
+else:
+    # Si no hay configuración CORS, usar valor por defecto para desarrollo
+    print("ADVERTENCIA: No se ha configurado CORS_ORIGIN. Usando configuración por defecto para desarrollo.")
+    allowed_origins = ["*"]  # En desarrollo permitir todos los orígenes
+
+# Aplicar configuración CORS
+CORS(app, origins=allowed_origins, supports_credentials=True)
+print(f"CORS configurado con orígenes permitidos: {allowed_origins}")
 
 # Agregar una ruta raíz para verificación de disponibilidad
 @app.route("/")
@@ -29,6 +42,7 @@ def root():
                 "message": "YouTube Music Python API running",
                 "service": "Python API",
                 "environment": os.environ.get("FLASK_ENV", "development"),
+                "cors_origins": allowed_origins,
             }
         )
     except Exception as e:
@@ -49,6 +63,7 @@ def api_root():
                 "service": "Python API",
                 "version": "1.0.0",
                 "environment": os.environ.get("FLASK_ENV", "development"),
+                "cors_origins": allowed_origins,
             }
         )
     except Exception as e:
@@ -59,14 +74,36 @@ def api_root():
 
 if __name__ == "__main__":
     try:
-        # Obtener puerto desde variables de entorno (para Render)
-        port = os.environ.get("PORT", 5000)
+        # Configuración del puerto
+        # 1. Primero intentar con variable PORT específica
+        port = os.environ.get("PORT")
+        
+        # 2. Si no hay PORT específico, intentar usar variable PYTHON_API_PORT
+        if not port:
+            port = os.environ.get("PYTHON_API_PORT")
+            
+        # 3. Valor por defecto para desarrollo
+        if not port:
+            port = 5200  # Puerto por defecto para desarrollo
+            print(f"ADVERTENCIA: No se ha configurado PORT o PYTHON_API_PORT. Usando puerto {port} por defecto.")
+        
+        # Convertir a entero
+        try:
+            port = int(port)
+        except (ValueError, TypeError):
+            print(f"Error al convertir puerto '{port}' a entero, usando 5200")
+            port = 5200
+            
+        # Configuración adicional
+        host = os.environ.get("HOST", "0.0.0.0")  # Por defecto escuchar en todas las interfaces
         debug = os.environ.get("FLASK_ENV", "development") == "development"
 
-        print(f"Iniciando servidor YouTube Music API en http://0.0.0.0:{port}")
+        print(f"Iniciando servidor YouTube Music API en http://{host}:{port}")
         print(f"Modo depuración: {debug}")
         print("Presiona Ctrl+C para detener el servidor")
-        app.run(host="0.0.0.0", port=port, debug=debug)
+        
+        # Iniciar servidor
+        app.run(host=host, port=port, debug=debug)
     except KeyboardInterrupt:
         print("\nServidor detenido manualmente.")
     except Exception as e:

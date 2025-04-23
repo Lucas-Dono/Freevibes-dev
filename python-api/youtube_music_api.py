@@ -22,18 +22,18 @@ app = Flask(__name__)
 # Configuración CORS principal (restrictiva)
 cors_origin_string = os.environ.get("CORS_ORIGIN", "")  # Leer variable, default a string vacío
 allowed_origins = []  # Lista para guardar orígenes
+
+# En producción, esta variable debe ser configurada explícitamente con los orígenes permitidos
+# CORS_ORIGIN=https://tu-frontend.com,https://otro-dominio.com
 if cors_origin_string == "*":
     allowed_origins = "*"  # Permitir todo si es '*' explícito
 elif cors_origin_string:
     # Dividir la cadena en una lista de orígenes permitidos
     allowed_origins = [origin.strip() for origin in cors_origin_string.split(",") if origin.strip()]
-    # Añadir localhost para desarrollo si no se especifica '*' ni localhost
-    if "*" not in allowed_origins and "http://localhost:3000" not in allowed_origins:
-        allowed_origins.append("http://localhost:3000")
-        allowed_origins.append("http://localhost:3100")  # Añadir también el puerto del servidor Node local
-elif not allowed_origins:
-    # Si CORS_ORIGIN está vacío o no se define, permitir solo localhost por defecto
-    allowed_origins = ["http://localhost:3000", "http://localhost:3100"]
+else:
+    # Si no hay configuración CORS, mostrar advertencia
+    logger.warning("No se ha configurado CORS_ORIGIN. Usando configuración por defecto para desarrollo.")
+    allowed_origins = ["*"]  # En desarrollo permitir todos los orígenes como fallback
 
 # Aplicar CORS restrictivo globalmente
 # Nota: No usamos resources= aquí para poder usar el decorador @cross_origin más fácil

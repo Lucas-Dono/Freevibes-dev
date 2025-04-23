@@ -594,10 +594,7 @@ def search():
             search_results = music.search(
                 query, filter=filter_type, limit=limit)
             elapsed = time.time() - start_time
-            logger.info(
-                f"Búsqueda completada en {
-                    elapsed:.2f}s, resultados: {
-            len(search_results) if search_results else 0}")
+            logger.info(f"Búsqueda completada en {lapsed:.2f}s, resultados: {len(search_results) if search_results else 0}")
 
             if search_results and len(search_results) > 0:
                 # Transformar los resultados

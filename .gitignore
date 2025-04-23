@@ -63,4 +63,3 @@ next-env.d.ts
 .next
 .venv
 /node-server/node_modules
-/node-server

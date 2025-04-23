@@ -645,9 +645,7 @@ def search():
                 logger.warning(f"No se encontraron resultados para: {query}")
                 return jsonify([])
         except Exception as e:
-            logger.error(
-                f"Error al realizar la búsqueda con idioma {language}: {
-                    str(e)}")
+            logger.error(f"Error al realizar la búsqueda con idioma {language}: {str(e)}")
             # Intentar con inglés como idioma de fallback si no es el que ya
             # estamos usando
             if language != 'en':
@@ -708,9 +706,7 @@ def search():
                             f"No se encontraron resultados en el fallback para: {query}")
                         return jsonify([])
                 except Exception as fallback_error:
-                    logger.error(
-                        f"Error también en la búsqueda con idioma inglés: {
-                            str(fallback_error)}")
+                    logger.error(f"Error también en la búsqueda con idioma inglés: {str(fallback_error)}")
                     return jsonify([])
             else:
                 # Si ya estábamos usando inglés y falló, intentar sin
@@ -772,10 +768,7 @@ def search():
                             f"No se encontraron resultados en el fallback para: {query}")
                         return jsonify([])
                 except Exception as fallback_error:
-                    logger.error(
-                        f"Error también en la búsqueda de fallback: {
-                            str(fallback_error)}")
-                    return jsonify([])
+                    logger.error(f"Error también en la búsqueda de fallback: {str(fallback_error)}")return jsonify([])
     except Exception as e:
         logger.error(f"Error general en endpoint search: {str(e)}")
         return jsonify([])

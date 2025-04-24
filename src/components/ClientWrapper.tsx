@@ -9,6 +9,7 @@ import { suppressConsoleMessages, ErrorBoundary, setDebugMode } from '@/lib/erro
 import LanguageProvider from '@/contexts/LanguageContext';
 import YouTubeInitializer from './YouTubeInitializer';
 import ServerLoadingModal from './ServerLoadingModal';
+import ServerLoadingOverlay from './ServerLoadingOverlay';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -81,6 +82,7 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
                 isOpen={isServerModalOpen}
                 onClose={() => setIsServerModalOpen(false)}
               />
+              <ServerLoadingOverlay />
             </PlayerProvider>
           </AuthProvider>
         </LanguageProvider>

@@ -23,6 +23,8 @@ interface ServerContextType {
 
 // Tiempo mínimo entre verificaciones (5 segundos)
 const MIN_CHECK_INTERVAL = 5000;
+// Tiempo mínimo para mostrar la pantalla de carga (2 segundos)
+const MIN_LOADING_TIME = 2000;
 
 export const ServerContext = createContext<ServerContextType>({
   serverStatus: {
@@ -48,6 +50,7 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [serverType, setServerType] = useState<ServerType>('both');
   const [lastCheckTime, setLastCheckTime] = useState<number>(0);
   const [hasBeenActive, setHasBeenActive] = useState<boolean>(false);
+  const [loadingStartTime, setLoadingStartTime] = useState<number>(Date.now());
 
   // Mostrar información sobre las URLs configuradas
   useEffect(() => {
@@ -97,10 +100,19 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Si al menos uno de los servidores está activo, marcarlo como activo permanentemente
       if (nodeActive || pythonActive) {
         setHasBeenActive(true);
+        
+        // Asegurar tiempo mínimo de carga para evitar parpadeos
+        const loadingElapsed = now - loadingStartTime;
+        if (loadingElapsed < MIN_LOADING_TIME) {
+          console.log(`[Server Context] Esperando ${MIN_LOADING_TIME - loadingElapsed}ms adicionales para completar tiempo mínimo de carga`);
+          await new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME - loadingElapsed));
+        }
+        
         // Si al menos un servidor está activo y el usuario ya pasó por la pantalla de carga,
         // desactivar la pantalla de carga
-        if (!isServerLoading) {
-          console.log('[Server Context] Servidor activo después de inactividad, saltando pantalla de carga');
+        if (isServerLoading) {
+          console.log('[Server Context] Servidor activo, desactivando pantalla de carga');
+          setIsServerLoading(false);
         }
       }
 

@@ -196,7 +196,7 @@ const ServerLoadingOverlay: React.FC = () => {
     checkAndUpdate();
 
     // Verificar cada 3 segundos mientras el modal esté visible
-    const checkInterval = setInterval(checkAndUpdate, 3000);
+    const checkInterval = setInterval(checkAndUpdate, 0);
 
     return () => clearInterval(checkInterval);
   }, [showModal, serverStatus, checkServerStatus, setServerLoading]);
@@ -217,9 +217,17 @@ const ServerLoadingOverlay: React.FC = () => {
     return () => clearTimeout(forceCloseTimer);
   }, [showModal, setServerLoading]);
 
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    console.log('[ServerLoadingOverlay] Cerrando modal por acción del usuario');
+    setShowModal(false);
+    setServerLoading(false);
+  };
+
   return (
     <ServerLoadingModal
       isOpen={showModal && !hasBeenActive} // No mostrar si ha estado activo
+      onClose={handleCloseModal}
       serverType={serverType}
       initialSeconds={40}
     />

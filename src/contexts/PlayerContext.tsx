@@ -1622,10 +1622,7 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
         params.append('limit', String(limit));
 
         // Obtener la configuración de APIs
-        const apiConfig = getAPIConfig();
-        console.log('[RASTREO-PLAYLIST] Configuración API obtenida:', JSON.stringify(apiConfig));
-        
-        const { nodeServerUrl } = apiConfig;
+        const { nodeServerUrl } = getAPIConfig();
         
         // CAMBIO IMPORTANTE: Usar el servidor Node.js como intermediario en vez de Python directamente
         // - Usar un endpoint local que será redirigido por el servidor Node.js
@@ -1634,18 +1631,16 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
         
         if (nodeServerUrl) {
           // Opción 1: URL completa con el servidor Node.js
-          // Asegúrate que la ruta en Node.js sea /recommendations (sin /api)
-          const recommendationsEndpoint = `${nodeServerUrl}/recommendations`; 
+          const recommendationsEndpoint = `${nodeServerUrl}/recommendations`;
           apiUrl = `${recommendationsEndpoint}?${params.toString()}`;
-          console.log('[RASTREO-PLAYLIST] Construyendo URL con nodeServerUrl explícito:', apiUrl);
+          console.log('[RASTREO-PLAYLIST] Usando servidor Node.js explícito:', apiUrl);
         } else {
           // Opción 2: URL relativa (asume que Next.js y Node.js comparten dominio o hay proxy)
-          // Esta URL será interceptada por los rewrites de next.config.js
           apiUrl = `/api/recommendations?${params.toString()}`;
-          console.log('[RASTREO-PLAYLIST] nodeServerUrl NO configurada. Construyendo URL relativa (para rewrites):', apiUrl);
+          console.log('[RASTREO-PLAYLIST] Usando endpoint relativo:', apiUrl);
         }
 
-        console.log(`[RASTREO-PLAYLIST] URL FINAL que se usará para fetch: ${apiUrl}`);
+        console.log('[RASTREO-PLAYLIST] Solicitud a API:', apiUrl);
 
         // Implementar lógica de reintentos para la solicitud
         let response: Response | null = null;

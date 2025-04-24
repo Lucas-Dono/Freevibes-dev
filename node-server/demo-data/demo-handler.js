@@ -11,11 +11,22 @@ const baseDir = path.resolve(__dirname, './spotify');
 
 /**
  * Verifica si una solicitud está en modo demo
- * @param {Object} req - Objeto de solicitud Express
+ * @param {Object} req - Objeto de solicitud Express (opcional)
  * @returns {boolean} - true si está en modo demo
  */
 function isDemoMode(req) {
-  return req.headers['x-demo-mode'] === 'true';
+  // 1. Verificar variable de entorno primero (tiene prioridad)
+  if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+    return true;
+  }
+  
+  // 2. Verificar el encabezado de la solicitud si req está disponible
+  if (req && req.headers && req.headers['x-demo-mode'] === 'true') {
+    return true;
+  }
+  
+  // Por defecto, no estamos en modo demo
+  return false;
 }
 
 /**
@@ -24,6 +35,10 @@ function isDemoMode(req) {
  * @returns {string} - Código de idioma (es, en, fr, it)
  */
 function getDemoLanguage(req) {
+  // Verificar que req esté disponible
+  if (!req || !req.headers) {
+    return 'es'; // Idioma por defecto si no hay solicitud
+  }
   return req.headers['x-demo-lang'] || 'es';
 }
 

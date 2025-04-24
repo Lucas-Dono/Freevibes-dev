@@ -22,7 +22,7 @@ const PYTHON_API_URL = process.env.PYTHON_API_URL || process.env.NEXT_PUBLIC_PYT
 console.log('=============== CONFIGURACIÓN DEL SERVIDOR ===============');
 console.log('Puerto:', PORT);
 console.log('Python API URL:', PYTHON_API_URL);
-console.log('Modo demostración:', isDemoMode() ? 'ACTIVADO' : 'DESACTIVADO');
+console.log('Modo demostración:', process.env.NEXT_PUBLIC_DEMO_MODE === 'true' ? 'ACTIVADO' : 'DESACTIVADO');
 console.log('Ambiente:', process.env.NODE_ENV || 'development');
 console.log('=========================================================');
 
@@ -106,7 +106,7 @@ app.get('/', (req, res) => {
     message: 'FreeVibes Node.js API is running',
     environment: process.env.NODE_ENV || 'development',
     pythonApiBaseUrl: PYTHON_API_BASE_URL, // Actualizado nombre
-    demoMode: isDemoMode(req) ? 'enabled' : 'disabled'
+    demoMode: process.env.NEXT_PUBLIC_DEMO_MODE === 'true' ? 'enabled' : (req ? (isDemoMode(req) ? 'enabled' : 'disabled') : 'disabled')
   });
 });
 

@@ -21,6 +21,50 @@ const nextConfig = {
     instrumentationHook: true,
   },
 
+  // Configuración de redirecciones para intermediar a través del servidor Node.js
+  async rewrites() {
+    // Obtener URL del servidor Node.js
+    const nodeApiUrl = process.env.NEXT_PUBLIC_NODE_API_URL || '';
+    
+    // Si no hay URL configurada, no establecer redirecciones
+    if (!nodeApiUrl) {
+      console.warn('ADVERTENCIA: No se ha configurado NEXT_PUBLIC_NODE_API_URL. Las redirecciones de API no funcionarán.');
+      return [];
+    }
+    
+    console.log('Configurando redirecciones API a:', nodeApiUrl);
+    
+    return [
+      // Recomendaciones: Frontend -> Node.js -> Python
+      {
+        source: '/api/recommendations',
+        destination: `${nodeApiUrl}/recommendations`,
+      },
+      {
+        source: '/api/recommendations/:path*',
+        destination: `${nodeApiUrl}/recommendations/:path*`,
+      },
+      
+      // Búsqueda de YouTube
+      {
+        source: '/api/youtube/search',
+        destination: `${nodeApiUrl}/youtube/search`,
+      },
+      
+      // Búsqueda de pistas
+      {
+        source: '/api/youtube/find-track',
+        destination: `${nodeApiUrl}/youtube/find-track`,
+      },
+      
+      // Otros endpoints que podrían necesitar redirección
+      {
+        source: '/api/search/:path*',
+        destination: `${nodeApiUrl}/search/:path*`,
+      }
+    ];
+  },
+
   images: {
     remotePatterns: [
       // Last.fm

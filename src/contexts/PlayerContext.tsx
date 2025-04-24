@@ -1603,40 +1603,56 @@ export const PlayerProvider = ({ children, youtubeReady = false }: PlayerProvide
       let errors: string[] = [];
 
       // 1. MÉTODO DIRECTO DE YOUTUBE MUSIC: Usar Youtube Music API directamente para recomendaciones
-      // --- CAMBIO PASO 1: Apuntar a Python API y ajustar logs/params ---
+      // --- CAMBIO PASO 1: Apuntar a Node.js API como intermediario ---
       try {
-        console.log('[RASTREO-PLAYLIST] MÉTODO PYTHON: Obteniendo recomendaciones de Python API'); // <-- Log actualizado
+        console.log('[RASTREO-PLAYLIST] MÉTODO NODE-PYTHON: Obteniendo recomendaciones a través del servidor Node.js');
 
-        // Preparar parámetros para la API Python
+        // Preparar parámetros para la API
         let params = new URLSearchParams();
-        const seed_artist = track.artist || 'unknown'; // <-- Definir seed_artist
-        const seed_track = track.title; // <-- Definir seed_track
-        const limit = 25; // <-- Definir limit
+        const seed_artist = track.artist || 'unknown';
+        const seed_track = track.title;
+        const limit = 25;
 
-        // Elegir entre seed_artist o seed_track (o ambos, dependiendo de la API Python)
-        if (seed_artist !== 'unknown') { // <-- Usar seed_artist definido
+        if (seed_artist !== 'unknown') {
           params.append('seed_artist', seed_artist);
         }
-        if (seed_track) { // <-- Usar seed_track definido
+        if (seed_track) {
           params.append('seed_track', seed_track);
         }
-        params.append('limit', String(limit)); // <-- Usar limit definido
+        params.append('limit', String(limit));
 
-        // Obtener URL base de la API Python desde configuración
-        const { pythonApiUrl } = getAPIConfig(); // Importar desde la configuración de API
+        // Obtener la configuración de APIs
+        const apiConfig = getAPIConfig();
+        console.log('[RASTREO-PLAYLIST] Configuración API obtenida:', JSON.stringify(apiConfig));
         
-        // Construir endpoint completo usando la URL de la API
-        const recommendationsEndpoint = `${pythonApiUrl}/api/recommendations`;
-        const apiUrl = `${recommendationsEndpoint}?${params.toString()}`;
+        const { nodeServerUrl } = apiConfig;
+        
+        // CAMBIO IMPORTANTE: Usar el servidor Node.js como intermediario en vez de Python directamente
+        // - Usar un endpoint local que será redirigido por el servidor Node.js
+        // - Si no hay nodeServerUrl configurada, usar un endpoint relativo que funcionará en el mismo dominio
+        let apiUrl = '';
+        
+        if (nodeServerUrl) {
+          // Opción 1: URL completa con el servidor Node.js
+          // Asegúrate que la ruta en Node.js sea /recommendations (sin /api)
+          const recommendationsEndpoint = `${nodeServerUrl}/recommendations`; 
+          apiUrl = `${recommendationsEndpoint}?${params.toString()}`;
+          console.log('[RASTREO-PLAYLIST] Construyendo URL con nodeServerUrl explícito:', apiUrl);
+        } else {
+          // Opción 2: URL relativa (asume que Next.js y Node.js comparten dominio o hay proxy)
+          // Esta URL será interceptada por los rewrites de next.config.js
+          apiUrl = `/api/recommendations?${params.toString()}`;
+          console.log('[RASTREO-PLAYLIST] nodeServerUrl NO configurada. Construyendo URL relativa (para rewrites):', apiUrl);
+        }
 
-        console.log('[RASTREO-PLAYLIST] Solicitud a Python API:', apiUrl); // <-- Log actualizado
+        console.log(`[RASTREO-PLAYLIST] URL FINAL que se usará para fetch: ${apiUrl}`);
 
         // Implementar lógica de reintentos para la solicitud
         let response: Response | null = null;
         let retryCount = 0;
         const maxRetries = 3;
 
-        // Definir controlador y timeout fuera del bucle de reintentos
+        // Definir controlador y timeout
         const controller = new AbortController();
         let timeoutId: NodeJS.Timeout | null = setTimeout(() => controller.abort(), 15000);
 

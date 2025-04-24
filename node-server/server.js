@@ -13,9 +13,21 @@ const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler
 
 const app = express();
 const PORT = process.env.PORT || '3001'; // Asegurar string
-const PYTHON_API_BASE_URL = process.env.YOUTUBE_API_URL || 'http://localhost:5000'; // Nueva variable base
-// URL base sin el sufijo /api para las rutas que no lo requieren (si es necesario)
-// const PYTHON_BASE_URL = PYTHON_API_BASE_URL.replace(/\/api$/, ''); // Comentado/Eliminado si no se usa
+
+// Obtener URL del servidor Python desde variables de entorno
+// Primero verificar PYTHON_API_URL, luego usar cualquier otra variable disponible
+const PYTHON_API_URL = process.env.PYTHON_API_URL || process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5000';
+
+// Mostrar configuración al inicio para depuración
+console.log('=============== CONFIGURACIÓN DEL SERVIDOR ===============');
+console.log('Puerto:', PORT);
+console.log('Python API URL:', PYTHON_API_URL);
+console.log('Modo demostración:', isDemoMode() ? 'ACTIVADO' : 'DESACTIVADO');
+console.log('Ambiente:', process.env.NODE_ENV || 'development');
+console.log('=========================================================');
+
+// Usar PYTHON_API_URL para el resto del código
+const PYTHON_API_BASE_URL = PYTHON_API_URL;
 
 // Configuración CORS
 const corsOptions = {
@@ -2903,6 +2915,51 @@ app.get('/api/youtube/get-charts', async (req, res) => {
     return res.status(error.response?.status || 500).json({
       error: 'Error obteniendo charts',
       message: error.message
+    });
+  }
+});
+
+// Endpoint para recomendaciones que redirecciona al Python API
+app.get('/recommendations', async (req, res) => {
+  try {
+    console.log(`[Proxy] Recibiendo solicitud de recomendaciones: ${JSON.stringify(req.query)}`);
+    
+    // Si está en modo demo, usar datos de demostración
+    if (isDemoMode()) {
+      console.log('[Proxy] Usando modo demo para recomendaciones');
+      const demoResponse = handleDemoRequest('/recommendations', req.query);
+      if (demoResponse) {
+        return res.json(demoResponse);
+      }
+    }
+    
+    // Realizar la solicitud al servicio Python
+    // Asegurarse de incluir /api si no está ya en la URL base
+    const apiPrefix = PYTHON_API_BASE_URL.endsWith('/api') ? '' : '/api';
+    const pythonApiUrl = `${PYTHON_API_BASE_URL}${apiPrefix}/recommendations`;
+    
+    console.log(`[Proxy] Redirigiendo solicitud de recomendaciones a Python API: ${pythonApiUrl}`);
+    
+    const response = await axios.get(pythonApiUrl, {
+      params: req.query,
+      timeout: 15000 // 15 segundos para permitir tiempo suficiente
+    });
+    
+    console.log(`[Proxy] Respuesta recibida del servidor Python`);
+    
+    // Enviar la respuesta al cliente
+    res.json(response.data || []);
+  } catch (error) {
+    console.error(`[Proxy] Error al obtener recomendaciones:`, error.message);
+    
+    // Intentar extraer un mensaje de error más específico
+    const errorMessage = error.response?.data?.error || error.message;
+    const statusCode = error.response?.status || 500;
+    
+    res.status(statusCode).json({
+      error: 'Error al obtener recomendaciones',
+      message: errorMessage,
+      status: statusCode
     });
   }
 });

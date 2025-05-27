@@ -251,9 +251,13 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
     }
   }, [isPlaying, currentTrack, duration]);
 
-  // Limpiar intervalo de tiempo cuando cambia el estado de reproducción
+  // Manejar intervalo de tiempo cuando cambia el estado de reproducción
   useEffect(() => {
-    if (!isPlaying && timeUpdateIntervalRef.current) {
+    if (isPlaying && currentTrack && youtubePlayerRef.current) {
+      // Si está reproduciendo, asegurar que el timer esté activo
+      startTimeUpdates();
+    } else if (!isPlaying && timeUpdateIntervalRef.current) {
+      // Si no está reproduciendo, limpiar el timer
       clearInterval(timeUpdateIntervalRef.current);
       timeUpdateIntervalRef.current = null;
     }
@@ -264,7 +268,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
         timeUpdateIntervalRef.current = null;
       }
     };
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack]); // Agregado currentTrack para reiniciar en canciones nuevas
 
   // Cargar la API de YouTube
   useEffect(() => {

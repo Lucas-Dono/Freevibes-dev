@@ -1505,17 +1505,19 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
 
   // Actualizar posición en Media Session cuando cambie el tiempo
   useEffect(() => {
-    if (duration > 0 && currentTime >= 0) {
-      // Throttle manual: solo actualizar cada 2 segundos
-      const now = Date.now();
-      const lastUpdate = (mediaSession.updatePositionState as any).lastUpdateTime || 0;
-      
-      if (now - lastUpdate > 2000) { // 2 segundos
-        mediaSession.updatePositionState(duration, currentTime);
-        (mediaSession.updatePositionState as any).lastUpdateTime = now;
-      }
+    // Solo actualizar si tenemos datos válidos y la canción está cargada
+    if (duration > 0 && currentTime >= 0 && currentTrack) {
+      mediaSession.updatePositionState(duration, currentTime);
     }
-  }, [currentTime, duration, mediaSession]);
+  }, [currentTime, duration, currentTrack, mediaSession]);
+
+  // Actualizar posición inmediatamente cuando cambie el estado de reproducción
+  useEffect(() => {
+    if (duration > 0 && currentTime >= 0 && currentTrack) {
+      // Forzar actualización cuando cambia el estado de reproducción
+      mediaSession.updatePositionState(duration, currentTime);
+    }
+  }, [isPlaying, mediaSession]);
 
   return (
     <PlayerContext.Provider value={value}>

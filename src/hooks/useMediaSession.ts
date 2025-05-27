@@ -32,6 +32,13 @@ export const useMediaSession = (
   const onNextTrackRef = useRef(onNextTrack);
   const onSeekToRef = useRef(onSeekTo);
 
+  // Referencias para throttling inteligente de posición
+  const lastPositionUpdateRef = useRef<{
+    time: number;
+    duration: number;
+    timestamp: number;
+  } | null>(null);
+
   // Actualizar las referencias cuando cambien las funciones
   useEffect(() => {
     onPlayRef.current = onPlay;
@@ -124,10 +131,24 @@ export const useMediaSession = (
     // Asegurar que currentTime no sea mayor que duration
     const validCurrentTime = Math.min(currentTime, duration);
     
-    // Solo actualizar si hay cambios significativos (evitar spam de actualizaciones)
-    const timeDiff = Math.abs(validCurrentTime - (updatePositionState as any).lastTime || 0);
-    if (timeDiff < 2) return; // Solo actualizar cada 2 segundos
-
+    // Throttling inteligente: solo actualizar si hay cambios significativos
+    const now = Date.now();
+    const lastUpdate = lastPositionUpdateRef.current;
+    
+    if (lastUpdate) {
+      const timeDiff = Math.abs(validCurrentTime - lastUpdate.time);
+      const durationChanged = Math.abs(duration - lastUpdate.duration) > 0.1;
+      const timeSinceLastUpdate = now - lastUpdate.timestamp;
+      
+      // No actualizar si:
+      // - La diferencia de tiempo es menor a 1 segundo Y
+      // - La duración no ha cambiado Y  
+      // - Han pasado menos de 1 segundo desde la última actualización
+      if (timeDiff < 1 && !durationChanged && timeSinceLastUpdate < 1000) {
+        return;
+      }
+    }
+    
     try {
       navigator.mediaSession.setPositionState({
         duration: duration,
@@ -135,8 +156,12 @@ export const useMediaSession = (
         position: validCurrentTime
       });
       
-      // Guardar el último tiempo para evitar actualizaciones innecesarias
-      (updatePositionState as any).lastTime = validCurrentTime;
+      // Actualizar la referencia de la última actualización
+      lastPositionUpdateRef.current = {
+        time: validCurrentTime,
+        duration: duration,
+        timestamp: now
+      };
       
       console.log(`[MediaSession] Posición actualizada: ${Math.floor(validCurrentTime)}s / ${Math.floor(duration)}s`);
     } catch (error) {
@@ -148,6 +173,8 @@ export const useMediaSession = (
   useEffect(() => {
     if (currentTrack) {
       updateMediaMetadata(currentTrack);
+      // Limpiar la referencia de posición cuando cambie la canción
+      lastPositionUpdateRef.current = null;
     }
   }, [currentTrack, updateMediaMetadata]);
 

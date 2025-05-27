@@ -6,6 +6,8 @@ import { getAPIConfig } from '@/lib/api-config';
 // Importar el tipo Track de types.ts
 import { Track as AppTrack, LyricLine as AppLyricLine } from '@/types/types';
 import YouTubePlayer from '@/components/YouTubePlayer';
+import { useBackgroundPlayback } from '@/hooks/useBackgroundPlayback';
+import { useMediaSession } from '@/hooks/useMediaSession';
 
 // Interfaces para la API de YouTube
 declare global {
@@ -1445,6 +1447,92 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
       clearInterval(stateCheckInterval);
     };
   }, [currentTrack, isPlaying, currentTime, duration]);
+
+  // Hook para reproducción en segundo plano
+  const backgroundPlayback = useBackgroundPlayback({
+    onVisibilityChange: (isVisible) => {
+      console.log(`[PlayerContext] Página ${isVisible ? 'visible' : 'oculta'}`);
+      
+      // Si la página se vuelve visible y estaba reproduciendo, asegurar que siga reproduciendo
+      if (isVisible && isPlaying && youtubePlayerRef.current) {
+        setTimeout(() => {
+          try {
+            if (typeof youtubePlayerRef.current.getPlayerState === 'function') {
+              const state = youtubePlayerRef.current.getPlayerState();
+              if (state === 2) { // Si está pausado, reanudar
+                console.log('[PlayerContext] Reanudando reproducción al volver a la página');
+                youtubePlayerRef.current.playVideo();
+              }
+            }
+          } catch (error) {
+            console.warn('[PlayerContext] Error al reanudar reproducción:', error);
+          }
+        }, 300);
+      }
+    },
+    preventPause: true,
+    enableWakeLock: true
+  });
+
+  // Actualizar el estado de reproducción en el hook de background playback
+  useEffect(() => {
+    backgroundPlayback.setIsPlaying(isPlaying);
+  }, [isPlaying, backgroundPlayback]);
+
+  // Actualizar la referencia del player en el hook de background playback
+  useEffect(() => {
+    if (youtubePlayerRef.current) {
+      backgroundPlayback.setPlayerRef(youtubePlayerRef.current);
+    }
+  }, [youtubePlayerRef.current, backgroundPlayback]);
+
+  // Hook para Media Session (controles nativos en móviles)
+  const mediaSession = useMediaSession(currentTrack, isPlaying, {
+    onPlay: () => {
+      console.log('[MediaSession] Comando: Play');
+      if (youtubePlayerRef.current && typeof youtubePlayerRef.current.playVideo === 'function') {
+        youtubePlayerRef.current.playVideo();
+        setIsPlaying(true);
+      }
+    },
+    onPause: () => {
+      console.log('[MediaSession] Comando: Pause');
+      if (youtubePlayerRef.current && typeof youtubePlayerRef.current.pauseVideo === 'function') {
+        youtubePlayerRef.current.pauseVideo();
+        setIsPlaying(false);
+      }
+    },
+    onPreviousTrack: () => {
+      console.log('[MediaSession] Comando: Previous Track');
+      previousTrack();
+    },
+    onNextTrack: () => {
+      console.log('[MediaSession] Comando: Next Track');
+      nextTrack();
+    },
+    onSeekTo: (time: number) => {
+      console.log('[MediaSession] Comando: Seek To', time);
+      if (time < 0) {
+        // Seek backward (tiempo relativo)
+        const newTime = Math.max(0, currentTime + time);
+        seekTo(newTime);
+      } else if (time <= duration) {
+        // Seek to absolute position
+        seekTo(time);
+      } else {
+        // Seek forward (tiempo relativo)
+        const newTime = Math.min(duration, currentTime + time);
+        seekTo(newTime);
+      }
+    }
+  });
+
+  // Actualizar posición en Media Session cuando cambie el tiempo
+  useEffect(() => {
+    if (duration > 0 && currentTime >= 0) {
+      mediaSession.updatePositionState(duration, currentTime);
+    }
+  }, [currentTime, duration, mediaSession]);
 
   return (
     <PlayerContext.Provider value={value}>

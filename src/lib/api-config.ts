@@ -17,9 +17,11 @@ interface APIConfig {
  * @returns Objeto con la configuración de la API
  */
 export function getAPIConfig(): APIConfig {
-  // URL del servidor Node.js - usar variable pública para el cliente
-  // Lanzar error si no está configurada para ser explícito
-  const nodeServerUrl = process.env.NEXT_PUBLIC_NODE_API_URL || '';
+  // URL del servidor Node.js - sólo si ejecutamos en el servidor (SSR), en cliente forzamos ruta relativa
+  let nodeServerUrl = '';
+  if (typeof window === 'undefined') {
+    nodeServerUrl = process.env.NEXT_PUBLIC_NODE_API_URL || '';
+  }
   
   // URL de la API Python - usar variable pública para el cliente
   // Lanzar error si no está configurada para ser explícito

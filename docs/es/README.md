@@ -79,12 +79,23 @@ LASTFM_API_KEY=tu_clave_api_de_lastfm
 ```bash
 # Instalar dependencias
 npm install
+```
+Los siguientes comandos deben ejecutarse en 3 consolas distintas
 
-# Iniciar todos los servicios
-npm run dev:all
+linux:
+
+```bash
+#primer consola
+npm run dev
+
+#segunda consola
+cd node-server && npm run start
+
+#tercera consola
+source linux-env/bin/activate && cd python-api && python app.py
 ```
 
-O si prefieres iniciar cada servicio por separado:
+Windows:
 
 ```bash
 # Servidor Python (API de FreeVibes)

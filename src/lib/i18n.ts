@@ -51,6 +51,9 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       noRecommendedArtists: 'No hay artistas recomendados disponibles',
       selectCategory: 'Selecciona una categoría para explorar más música',
       description: 'Descubre nueva música y disfruta de tus canciones favoritas',
+      exploreGenresAndArtists: 'Explora nuevos géneros y artistas',
+      discover: 'Descubrir',
+      popularGenres: 'Géneros Populares',
     },
     // Reproductor
     player: {
@@ -639,6 +642,9 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       noRecommendedArtists: 'No recommended artists available',
       selectCategory: 'Select a category to explore more music',
       description: 'Discover new music and enjoy your favorite songs',
+      exploreGenresAndArtists: 'Explore new genres and artists',
+      discover: 'Discover',
+      popularGenres: 'Popular Genres',
     },
     // Player
     player: {

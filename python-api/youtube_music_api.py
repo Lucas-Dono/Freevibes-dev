@@ -461,13 +461,37 @@ def normalize_track_data(track, default_artist=""):
         thumbnail = f"https://img.youtube.com/vi/{track_id}/hqdefault.jpg"
         logger.info(f"[DEBUG-NORMALIZE] URL de miniatura corregida: {thumbnail}")
 
+    # Procesar duración de manera consistente
+    duration = track.get("duration", track.get("length", ""))
+    duration_seconds = 0
+    
+    # Primero intentar usar duration_seconds si está disponible (versiones nuevas de ytmusicapi)
+    if "duration_seconds" in track and track["duration_seconds"]:
+        duration_seconds = int(track["duration_seconds"])
+    elif isinstance(duration, str) and ":" in duration:
+        try:
+            parts = duration.split(":")
+            if len(parts) == 2:  # MM:SS
+                duration_seconds = int(parts[0]) * 60 + int(parts[1])
+            elif len(parts) == 3:  # HH:MM:SS
+                duration_seconds = int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+        except ValueError:
+            # Si hay error de conversión, dejar como 0
+            duration_seconds = 0
+    elif isinstance(duration, (int, float)):
+        duration_seconds = int(duration)
+    
+    # Log para debug
+    logger.debug(f"Duración procesada para '{title}': original='{duration}', segundos={duration_seconds}")
+
     # Crear y devolver objeto de datos normalizado
     normalized_track = {
         "id": track_id,
         "title": title,
         "artist": artist,
         "thumbnail": thumbnail,
-        "duration": track.get("duration", track.get("length", "")),
+        "duration": duration_seconds,  # Ahora siempre en segundos
+        "duration_text": duration,  # También incluir el formato original para referencia
         "source": track.get("source", "youtube_music"),
     }
 
@@ -592,6 +616,29 @@ def search():
                 for item in search_results:
                     # Para búsqueda de canciones/videos
                     if filter_type.lower() in ["songs", "videos"] and item.get("resultType", "").lower() in ["song", "video"]:
+                        # Convertir duración a segundos si viene como string (formato MM:SS)
+                        duration = item.get("duration", "")
+                        duration_seconds = 0
+                        
+                        # Primero intentar usar duration_seconds si está disponible (versiones nuevas de ytmusicapi)
+                        if "duration_seconds" in item and item["duration_seconds"]:
+                            duration_seconds = int(item["duration_seconds"])
+                        elif isinstance(duration, str) and ":" in duration:
+                            try:
+                                parts = duration.split(":")
+                                if len(parts) == 2:  # MM:SS
+                                    duration_seconds = int(parts[0]) * 60 + int(parts[1])
+                                elif len(parts) == 3:  # HH:MM:SS
+                                    duration_seconds = int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+                            except ValueError:
+                                # Si hay error de conversión, dejar como 0
+                                duration_seconds = 0
+                        elif isinstance(duration, (int, float)):
+                            duration_seconds = int(duration)
+                        
+                        # Log para debug
+                        logger.debug(f"Duración procesada para '{item.get('title', 'Sin título')}': original='{duration}', segundos={duration_seconds}")
+                        
                         track_data = {
                             "id": item.get("videoId", ""),
                             "title": item.get("title", "Sin título"),
@@ -600,7 +647,8 @@ def search():
                             ),
                             "thumbnail": get_best_thumbnail(item.get("thumbnails", [])),
                             "album": (item.get("album", {}).get("name", "") if item.get("album") else ""),
-                            "duration": item.get("duration", ""),
+                            "duration": duration_seconds,  # Ahora siempre devolvemos un número en segundos
+                            "duration_text": duration,  # También incluir el formato original para referencia
                             "region": region,  # Incluir la región en la respuesta
                             "language": language,  # Incluir el idioma usado
                         }
@@ -659,6 +707,29 @@ def search():
                                 "song",
                                 "video",
                             ]:
+                                # Convertir duración a segundos si viene como string (formato MM:SS)
+                                duration = item.get("duration", "")
+                                duration_seconds = 0
+                                
+                                # Primero intentar usar duration_seconds si está disponible (versiones nuevas de ytmusicapi)
+                                if "duration_seconds" in item and item["duration_seconds"]:
+                                    duration_seconds = int(item["duration_seconds"])
+                                elif isinstance(duration, str) and ":" in duration:
+                                    try:
+                                        parts = duration.split(":")
+                                        if len(parts) == 2:  # MM:SS
+                                            duration_seconds = int(parts[0]) * 60 + int(parts[1])
+                                        elif len(parts) == 3:  # HH:MM:SS
+                                            duration_seconds = int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+                                    except ValueError:
+                                        # Si hay error de conversión, dejar como 0
+                                        duration_seconds = 0
+                                elif isinstance(duration, (int, float)):
+                                    duration_seconds = int(duration)
+                                
+                                # Log para debug
+                                logger.debug(f"Duración procesada para '{item.get('title', 'Sin título')}': original='{duration}', segundos={duration_seconds}")
+                                
                                 track_data = {
                                     "id": item.get("videoId", ""),
                                     "title": item.get("title", "Sin título"),
@@ -667,7 +738,8 @@ def search():
                                     ),
                                     "thumbnail": get_best_thumbnail(item.get("thumbnails", [])),
                                     "album": (item.get("album", {}).get("name", "") if item.get("album") else ""),
-                                    "duration": item.get("duration", ""),
+                                    "duration": duration_seconds,  # Ahora siempre devolvemos un número en segundos
+                                    "duration_text": duration,  # También incluir el formato original para referencia
                                     "region": region,
                                     "language": "en",  # Indicar que se usó inglés como fallback
                                 }
@@ -731,6 +803,29 @@ def search():
                                 "song",
                                 "video",
                             ]:
+                                # Convertir duración a segundos si viene como string (formato MM:SS)
+                                duration = item.get("duration", "")
+                                duration_seconds = 0
+                                
+                                # Primero intentar usar duration_seconds si está disponible (versiones nuevas de ytmusicapi)
+                                if "duration_seconds" in item and item["duration_seconds"]:
+                                    duration_seconds = int(item["duration_seconds"])
+                                elif isinstance(duration, str) and ":" in duration:
+                                    try:
+                                        parts = duration.split(":")
+                                        if len(parts) == 2:  # MM:SS
+                                            duration_seconds = int(parts[0]) * 60 + int(parts[1])
+                                        elif len(parts) == 3:  # HH:MM:SS
+                                            duration_seconds = int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+                                    except ValueError:
+                                        # Si hay error de conversión, dejar como 0
+                                        duration_seconds = 0
+                                elif isinstance(duration, (int, float)):
+                                    duration_seconds = int(duration)
+                                
+                                # Log para debug
+                                logger.debug(f"Duración procesada para '{item.get('title', 'Sin título')}': original='{duration}', segundos={duration_seconds}")
+                                
                                 track_data = {
                                     "id": item.get("videoId", ""),
                                     "title": item.get("title", "Sin título"),
@@ -739,7 +834,8 @@ def search():
                                     ),
                                     "thumbnail": get_best_thumbnail(item.get("thumbnails", [])),
                                     "album": (item.get("album", {}).get("name", "") if item.get("album") else ""),
-                                    "duration": item.get("duration", ""),
+                                    "duration": duration_seconds,  # Ahora siempre devolvemos un número en segundos
+                                    "duration_text": duration,  # También incluir el formato original para referencia
                                     "region": "global",
                                     "language": "default",  # Indicar que se usó la configuración predeterminada
                                 }
@@ -787,6 +883,53 @@ def search():
                     return jsonify([])
     except Exception as e:
         logger.error(f"Error general en endpoint search: {str(e)}")
+        return jsonify([])
+
+
+@app.route("/api/suggestions", methods=["GET"])
+def get_suggestions():
+    try:
+        query = request.args.get("query", "").strip()
+        limit = int(request.args.get("limit", 6))
+
+        if not query:
+            return jsonify([])
+
+        # Intentar obtener sugerencias de YouTube Music
+        try:
+            ytmusic = get_ytmusic()
+            search_results = ytmusic.search(query, filter="songs", limit=limit)
+
+            suggestions = []
+            for result in search_results:
+                if "title" in result and "artists" in result:
+                    suggestion = {
+                        "id": result.get("videoId", f"suggestion_{len(suggestions)}"),
+                        "text": f"{result['title']} - {', '.join(artist['name'] for artist in result['artists'])}",
+                        "type": "track",
+                        "source": "youtube",
+                        "artist": ', '.join(artist['name'] for artist in result['artists']),
+                        "trackName": result['title'],
+                        "imageUrl": get_best_thumbnail(result.get("thumbnails", []))
+                    }
+                    suggestions.append(suggestion)
+
+            return jsonify(suggestions)
+        except Exception as e:
+            logger.error(f"Error al obtener sugerencias de YouTube Music: {str(e)}")
+            # Si falla YouTube Music, devolver sugerencias locales
+            return jsonify([
+                { "id": "local-artist-bad-bunny", "text": "Bad Bunny", "type": "artist", "source": "local" },
+                { "id": "local-artist-taylor-swift", "text": "Taylor Swift", "type": "artist", "source": "local" },
+                { "id": "local-artist-the-weeknd", "text": "The Weeknd", "type": "artist", "source": "local" },
+                { "id": "local-track-blinding-lights", "text": "Blinding Lights - The Weeknd", "type": "track", "artist": "The Weeknd", "trackName": "Blinding Lights", "source": "local" },
+                { "id": "local-track-as-it-was", "text": "As It Was - Harry Styles", "type": "track", "artist": "Harry Styles", "trackName": "As It Was", "source": "local" },
+                { "id": "local-track-flowers", "text": "Flowers - Miley Cyrus", "type": "track", "artist": "Miley Cyrus", "trackName": "Flowers", "source": "local" },
+                { "id": "local-album-un-verano-sin-ti", "text": "Un Verano Sin Ti - Bad Bunny", "type": "album", "artist": "Bad Bunny", "albumName": "Un Verano Sin Ti", "source": "local" },
+                { "id": "local-album-midnights", "text": "Midnights - Taylor Swift", "type": "album", "artist": "Taylor Swift", "albumName": "Midnights", "source": "local" }
+            ])
+    except Exception as e:
+        logger.error(f"Error en endpoint de sugerencias: {str(e)}")
         return jsonify([])
 
 

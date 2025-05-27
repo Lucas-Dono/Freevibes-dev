@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import ClientLayout from '@/components/ClientLayout';
-import { PlayerProvider } from '@/contexts/PlayerContext';
+// import { PlayerProvider } from '@/contexts/PlayerContext';
 import ClientWrapper from '@/components/ClientWrapper';
 import { cookies, headers } from 'next/headers';
 import { APP_NAME } from '@/app/config';
@@ -87,14 +87,12 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <NotificationProvider>
-          <PlayerProvider>
-            {/* Wrap ClientWrapper with ServerProvider */}
+          {/* Estructura: NotificationProvider > ServerProvider > ClientWrapper (con su propio PlayerProvider) */}
             <ServerProvider>
               <ClientWrapper>
                 {children}
               </ClientWrapper>
             </ServerProvider>
-          </PlayerProvider>
         </NotificationProvider>
       </body>
     </html>

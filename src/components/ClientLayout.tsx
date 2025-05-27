@@ -4,10 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, CssBaseline, ThemeProvider, createTheme, useTheme, useMediaQuery, Alert } from '@mui/material';
 import { Navbar } from '@/components/Navbar';
 import { PlayerBar } from '@/components/PlayerBar';
-import { MobilePlayerBar } from '@/components/player/MobilePlayerBar';
+
 import AuthProvider from './providers/AuthProvider';
 import { NotificationProvider } from '@/contexts/NotificationContext';
-import { PlayerProvider } from '@/contexts/PlayerContext';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
 
@@ -51,8 +50,13 @@ const darkTheme = createTheme({
   },
 });
 
+interface ClientLayoutProps {
+  children: React.ReactNode;
+  noNavAndFooter?: boolean;
+}
+
 // Componente Cliente para el Layout
-const ClientLayout = ({ children }: { children: React.ReactNode }) => {
+const ClientLayout = ({ children, noNavAndFooter = false }: ClientLayoutProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -140,7 +144,6 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       <CssBaseline />
       <AuthProvider>
         <NotificationProvider>
-          <PlayerProvider>
             <Box
               sx={{
                 display: 'flex',
@@ -149,7 +152,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                 bgcolor: isPublicRoute ? 'transparent' : 'background.default',
                 color: 'text.primary',
                 position: 'relative',
-                pb: !isPublicRoute ? '90px' : 0,
+                pb: isPublicRoute ? 0 : (noNavAndFooter ? 0 : '90px'),
               }}
             >
               {isDemoMode && !isPublicRoute && (
@@ -191,12 +194,12 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                   </Container>
                 </Box>
               )}
-              {!isPublicRoute && <Navbar />}
+              {!isPublicRoute && !noNavAndFooter && <Navbar />}
               <Box
                 component="main"
                 sx={{
                   flexGrow: 1,
-                  mt: isPublicRoute ? 0 : (isDemoMode ? '100px' : '64px'), // Sin margen en rutas públicas
+                  mt: isPublicRoute ? 0 : (noNavAndFooter ? 0 : (isDemoMode ? '100px' : '64px')),
                   pt: isPublicRoute ? 0 : 2,
                   px: isPublicRoute ? 0 : { xs: 1, sm: 3 },
                 }}
@@ -205,10 +208,9 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                   {children}
                 </Container>
               </Box>
-              {!isPublicRoute && (isMobile ? <MobilePlayerBar /> : <PlayerBar />)}
+              {!isPublicRoute && !noNavAndFooter && !isMobile && <PlayerBar />}
             </Box>
             <Toaster position="bottom-right" />
-          </PlayerProvider>
         </NotificationProvider>
       </AuthProvider>
     </ThemeProvider>

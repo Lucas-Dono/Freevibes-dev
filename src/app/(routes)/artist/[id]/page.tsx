@@ -7,37 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getYouTubeArtistInfo, YTArtistInfo } from '@/services/youtube/artist-service';
 import axios from 'axios';
-import {
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Paper,
-  Button,
-  Tabs,
-  Tab,
-  CircularProgress,
-  Alert,
-  Skeleton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText
-} from '@mui/material';
-import {
-  PlayArrow,
-  Album,
-  MusicNote,
-  VideoLibrary,
-  PeopleAlt,
-  VerifiedUser,
-  Refresh,
-  Info,
-  Search,
-  Explore,
-  Home,
-  ArrowBack
-} from '@mui/icons-material';
+// Imports de Material-UI ya no necesarios - migrado a Tailwind CSS
 import { formatNumber } from '@/lib/utils';
 import UnifiedMusicCard from '@/components/UnifiedMusicCard';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -45,6 +15,7 @@ import { useArtistNavigation } from '@/hooks/useArtistNavigation';
 import { toast } from 'react-hot-toast';
 import { TrackList } from '@/components/TrackList';
 import { Track } from '@/types/types';
+import { playTrack as playTrackService } from '@/services/player/playService';
 
 // Interfaces para los datos
 interface Artist {
@@ -382,168 +353,610 @@ export default function ArtistPage() {
     fetchArtistData(dataSource);
   };
 
+  const formatDuration = (ms: number): string => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const handlePlayTrack = (track: Track) => {
+    if (!track) return;
+
+    console.log('[ArtistPage] Reproduciendo track:', track);
+    
+    // Usar el servicio de reproducción
+    playTrackService(track);
+  };
+
   // Renderizado (Loading inicial)
   if (loading && !artist) {
     return (
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        {/* Skeleton UI */}
-        <Box sx={{ mb: 4 }}><Skeleton variant="rectangular" height={300} /></Box>
-        <Grid container spacing={3}>
-            <Grid item xs={12} md={4}><Skeleton variant="circular" width={160} height={160} sx={{ mx: 'auto' }} /><Skeleton variant="text" height={60} sx={{ mt: 2 }} /><Skeleton variant="text" height={30} width="70%" sx={{ mx: 'auto' }} /></Grid>
-            <Grid item xs={12} md={8}><Skeleton variant="text" height={40} sx={{ mb: 2 }} />{Array.from(new Array(5)).map((_, index) => (<Skeleton key={index} variant="rectangular" height={60} sx={{ mb: 1 }} />))}</Grid>
-        </Grid>
-      </Container>
+      <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+        <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
+          {/* Skeleton UI optimizado para móvil */}
+          <div className="mb-6">
+            <div className="w-full h-48 md:h-72 bg-zinc-800/50 rounded-lg animate-pulse mb-4"></div>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              <div className="flex flex-col items-center md:items-start">
+                <div className="w-32 h-32 md:w-40 md:h-40 bg-zinc-800/50 rounded-full animate-pulse mb-3"></div>
+                <div className="w-32 h-4 bg-zinc-800/50 rounded animate-pulse mb-2"></div>
+                <div className="w-24 h-3 bg-zinc-800/50 rounded animate-pulse"></div>
+              </div>
+              <div className="flex-1 space-y-3">
+                <div className="w-3/4 h-6 bg-zinc-800/50 rounded animate-pulse"></div>
+                {Array.from(new Array(4)).map((_, index) => (
+                  <div key={index} className="w-full h-12 bg-zinc-800/50 rounded animate-pulse"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   // Renderizado (Error principal)
   if (error && !artist) {
     return (
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" size="small" onClick={handleRetry}>Reintentar</Button>}>
-          {error || 'No se encontró información del artista'}
-        </Alert>
-        {/* Podrías añadir aquí el bloque de consejos si es relevante */}
-      </Container>
+      <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+        <div className="container mx-auto px-4 md:px-6 py-8 md:py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="p-4 md:p-6 mb-6 bg-red-900/20 border border-red-800/30 text-red-300 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <h3 className="text-lg md:text-xl font-semibold">Error</h3>
+                    <p className="mt-1 text-sm md:text-base">{error || 'No se encontró información del artista'}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleRetry}
+                  className="px-3 py-1.5 md:px-4 md:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm md:text-base"
+                >
+                  Reintentar
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     );
   }
 
   // Renderizado (Artista no encontrado después de carga)
   if (!artist) {
     return (
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Alert severity="warning">No se pudo cargar la información del artista.</Alert>
-      </Container>
+      <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+        <div className="container mx-auto px-4 md:px-6 py-8 md:py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="p-4 md:p-6 bg-yellow-900/20 border border-yellow-800/30 text-yellow-300 rounded-lg"
+          >
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <div>
+                <h3 className="text-lg md:text-xl font-semibold">Advertencia</h3>
+                <p className="mt-1 text-sm md:text-base">No se pudo cargar la información del artista.</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     );
   }
 
   // Renderizado principal
   return (
-    <Container maxWidth="xl">
-      {/* Cabecera del artista - Sin cambios */}
-      <Paper elevation={0} sx={{ position: 'relative', mb: 4, borderRadius: 4, overflow: 'hidden', bgcolor: 'background.paper', backgroundImage: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4))' }}>
-        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.4, '&::after': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7))' } }}>
+    <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+      {/* Cabecera del artista optimizada */}
+      <div className="relative">
+        {/* Imagen de fondo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-zinc-900 z-0">
           {artist.images && artist.images[0] && (
-            <Image src={artist.images[0].url} alt={`Imagen de fondo de ${artist.name}`} fill style={{ objectFit: 'cover' }} priority />
+            <div className="w-full h-full relative opacity-30">
+              <Image 
+                src={artist.images[0].url} 
+                alt={`Imagen de fondo de ${artist.name}`} 
+                fill 
+                style={{ objectFit: 'cover' }} 
+                priority 
+              />
+            </div>
           )}
-        </Box>
-        <Box sx={{ position: 'relative', zIndex: 1, p: 4 }}>
-          <Grid container spacing={3} alignItems="center">
-            <Grid item xs={12} md={3} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-              <Box sx={{ width: 180, height: 180, borderRadius: '50%', overflow: 'hidden', position: 'relative', mx: { xs: 'auto', md: 0 }, border: '4px solid rgba(255,255,255,0.2)' }}>
-                <Image src={artist.images && artist.images[0] ? artist.images[0].url : '/placeholder-artist.jpg'} alt={`Foto de ${artist.name}`} fill style={{ objectFit: 'cover' }} priority />
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={9}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <Typography variant="h3" fontWeight="bold" color="white">{artist.name}</Typography>
-                {dataSource === 'youtube' && (<Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}><YoutubeIcon sx={{ color: 'red', fontSize: 30 }} /></Box>)}
-                {dataSource === 'spotify' && (<Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}><SpotifyIcon sx={{ color: '#1DB954', fontSize: 26 }} /></Box>)}
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 2 }}>
-                {artist.followers && (<Typography variant="body1" color="white" sx={{ mr: 3, display: 'flex', alignItems: 'center' }}><PeopleAlt fontSize="small" sx={{ mr: 0.5 }} />{formatNumber(artist.followers.total)} seguidores</Typography>)}
-                {youtubeArtist?.views && (<Typography variant="body1" color="white" sx={{ mr: 3 }}>{youtubeArtist.views} visualizaciones</Typography>)}
-                {artist.genres && artist.genres.length > 0 && (<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: { xs: 1, md: 0 } }}>{artist.genres.slice(0, 3).map(genre => (<Chip key={genre} label={genre} size="small" color="primary" variant="outlined" />))}</Box>)}
-              </Box>
-              {youtubeArtist?.description && (<Typography variant="body2" color="rgba(255,255,255,0.8)" sx={{ mt: 2, maxHeight: '80px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>{youtubeArtist.description}</Typography>)}
-            </Grid>
-          </Grid>
-        </Box>
-      </Paper>
+        </div>
 
-      {/* Tabs de contenido */}
-      <Box sx={{ mb: 4 }}>
-        <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" sx={{ borderBottom: 1, borderColor: 'divider', mb: 2, '& .MuiTab-root': { minWidth: 100, py: 2 } }}>
-          <Tab label="Top Tracks" icon={<MusicNote />} iconPosition="start" />
-          <Tab label="Álbumes" icon={<Album />} iconPosition="start" />
-          {dataSource === 'youtube' && <Tab label="Videos" icon={<VideoLibrary />} iconPosition="start" />}
-          <Tab label="Artistas similares" icon={<PeopleAlt />} iconPosition="start" />
-        </Tabs>
+        {/* Información del artista */}
+        <motion.div 
+          className="container mx-auto px-4 md:px-6 py-8 md:py-12 relative z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8">
+            {/* Imagen del artista - más pequeña en móvil */}
+            <motion.div 
+              className="w-32 h-32 md:w-44 md:h-44 relative rounded-full overflow-hidden border-4 border-white/20 shadow-2xl"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Image 
+                src={artist.images && artist.images[0] ? artist.images[0].url : '/placeholder-artist.jpg'} 
+                alt={`Foto de ${artist.name}`} 
+                fill 
+                style={{ objectFit: 'cover' }} 
+                priority 
+              />
+            </motion.div>
+            
+            {/* Información del artista */}
+            <motion.div 
+              className="text-center md:text-left flex-1"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              {/* Nombre y fuente */}
+              <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                  {artist.name}
+                </h1>
+                <div className="flex justify-center md:justify-start">
+                  {dataSource === 'youtube' && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-full">
+                      <YoutubeIcon className="w-4 h-4 text-white" />
+                      <span className="text-white text-xs font-medium">YouTube</span>
+                    </div>
+                  )}
+                  {dataSource === 'spotify' && (
+                    <div className="flex items-center gap-1 px-2 py-1 bg-green-600 rounded-full">
+                      <SpotifyIcon className="w-4 h-4 text-white" />
+                      <span className="text-white text-xs font-medium">Spotify</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-        {/* Contenido de las pestañas */}
-        <Box sx={{ py: 2 }}>
-          {/* Pestaña 1: Top Tracks - Sin cambios */}
-          {activeTab === 0 && (
-            <Box>
-                {/* Loading/Error/Data rendering */}
-                {!loading && !error && originalSpotifyTopTracks.length === 0 && (<Typography>No se encontraron canciones populares.</Typography>)}
-                {!loading && originalSpotifyTopTracks.length > 0 && (<TrackList tracks={originalSpotifyTopTracks} />)}
-            </Box>
-          )}
-          {/* Pestaña 2: Álbumes - Sin cambios */}
-          {activeTab === 1 && (
-            <Box>
-                {albums.length === 0 ? (<Typography>No se encontraron álbumes.</Typography>) : (
-                <Grid container spacing={1.5}>
-                  {albums.map((album) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={album.id || album.browseId}>
-                                <UnifiedMusicCard id={album.id || album.browseId || ''} title={album.name || album.title || ''} subtitle={album.year || (album.release_date ? album.release_date.split('-')[0] : '')} coverUrl={album.images?.[0]?.url || album.thumbnails?.[0]?.url || '/placeholder-album.jpg'} isPlayable={false} itemType="album" linkTo={`/album/${album.id || album.browseId}`} badge={{ text: dataSource === 'youtube' ? 'YouTube' : 'Spotify', color: dataSource === 'youtube' ? 'bg-red-600' : 'bg-green-600' }} />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </Box>
-          )}
-          {/* Pestaña 3: Videos (Solo YouTube) - Sin cambios */}
-          {activeTab === 2 && dataSource === 'youtube' && (
-            <Box>
-              {!youtubeArtist?.videos?.results || youtubeArtist.videos.results.length === 0 ? (<Typography>No se encontraron videos.</Typography>) : (
-                <Grid container spacing={1.5}>
-                  {youtubeArtist?.videos?.results?.map((video) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={video.videoId}>
-                      <UnifiedMusicCard id={video.videoId} title={video.title} subtitle={video.views || ''} coverUrl={video.thumbnails?.[0]?.url || '/placeholder-video.jpg'} isPlayable={true} itemType="video" badge={{ text: 'Video', color: 'bg-red-600' }} />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </Box>
-          )}
-          {/* Pestaña 4: Artistas similares - Actualizada */}
-          {activeTab === (dataSource === 'youtube' ? 3 : 2) && (
-            <Box sx={{ minHeight: 200, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              {relatedArtistsLoading ? (
-                <CircularProgress sx={{mt: 4}}/>
-              ) : relatedArtistsError ? (
-                <Alert severity="error" sx={{width: '100%'}}>{relatedArtistsError}</Alert>
-              ) : !relatedArtistsLoaded && dataSource === 'spotify' ? (
-                 <Typography color="text.secondary" sx={{mt: 4}}>Cargando artistas similares...</Typography> // Mensaje mientras carga diferido
-              ) : relatedArtists.length === 0 ? (
-                <Typography color="text.secondary" sx={{mt: 4}}>
-                  No se encontraron artistas similares.
-                </Typography>
-              ) : (
-                <Grid container spacing={1.5}>
-                  {relatedArtists.map((relArtist) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={relArtist.id}>
-                      <UnifiedMusicCard
-                        id={relArtist.id}
-                        title={relArtist.name}
-                        coverUrl={relArtist.images?.[0]?.url || '/placeholder-artist.jpg'}
-                        isPlayable={false}
-                        itemType="artist"
-                        linkTo={`/artist/${relArtist.id}`}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </Box>
-          )}
-        </Box>
-      </Box>
+              {/* Estadísticas */}
+              <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-3 md:mb-4 text-white text-sm md:text-base">
+                {artist.followers && (
+                  <div className="flex items-center justify-center md:justify-start gap-1">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16c-.8 0-1.54.37-2 1l-3.72 5.6-2.28-6.8A1.5 1.5 0 0 0 6.54 7H4c-.8 0-1.54.37-2 1L.46 15.37A1.5 1.5 0 0 0 1.88 17H4v5h2v-5h2.5l2.5-3.75L13.5 17H16v5h4z"/>
+                    </svg>
+                    <span>{formatNumber(artist.followers.total)} seguidores</span>
+                  </div>
+                )}
+                {youtubeArtist?.views && (
+                  <div className="flex items-center justify-center md:justify-start gap-1">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                    </svg>
+                    <span>{youtubeArtist.views} visualizaciones</span>
+                  </div>
+                )}
+              </div>
 
-      {/* Descripción del artista (solo YouTube) - Sin cambios */}
-      {youtubeArtist?.description && (
-        <Paper elevation={0} sx={{ p: 3, mb: 4, borderRadius: 2, backgroundColor: 'background.paper' }}>
-          <Typography variant="h6" fontWeight="bold" gutterBottom>Acerca del artista</Typography>
-          <Typography variant="body1">{youtubeArtist.description}</Typography>
-        </Paper>
-      )}
-    </Container>
+              {/* Géneros */}
+              {artist.genres && artist.genres.length > 0 && (
+                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-3 md:mb-4">
+                  {artist.genres.slice(0, 3).map(genre => (
+                    <span 
+                      key={genre} 
+                      className="px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm bg-purple-600/30 border border-purple-500/50 text-purple-200 rounded-full"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Descripción (solo YouTube) */}
+              {youtubeArtist?.description && (
+                <p className="text-gray-300 text-sm md:text-base line-clamp-2 md:line-clamp-3 max-w-2xl">
+                  {youtubeArtist.description}
+                </p>
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Tabs de contenido optimizadas */}
+      <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
+        <motion.div 
+          className="mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          {/* Tabs responsivas */}
+          <div className="flex overflow-x-auto scrollbar-hide border-b border-zinc-700 mb-6">
+            <div className="flex space-x-1 md:space-x-2 min-w-max">
+              <button
+                onClick={() => handleTabChange({} as any, 0)}
+                className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base font-medium rounded-t-lg transition-colors whitespace-nowrap ${
+                  activeTab === 0 
+                    ? 'text-purple-400 border-b-2 border-purple-400 bg-purple-900/20' 
+                    : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+                <span>Top Tracks</span>
+              </button>
+              
+              <button
+                onClick={() => handleTabChange({} as any, 1)}
+                className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base font-medium rounded-t-lg transition-colors whitespace-nowrap ${
+                  activeTab === 1 
+                    ? 'text-purple-400 border-b-2 border-purple-400 bg-purple-900/20' 
+                    : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                </svg>
+                <span>Álbumes</span>
+              </button>
+              
+              {dataSource === 'youtube' && (
+                <button
+                  onClick={() => handleTabChange({} as any, 2)}
+                  className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base font-medium rounded-t-lg transition-colors whitespace-nowrap ${
+                    activeTab === 2 
+                      ? 'text-purple-400 border-b-2 border-purple-400 bg-purple-900/20' 
+                      : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
+                  }`}
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                  </svg>
+                  <span>Videos</span>
+                </button>
+              )}
+              
+              <button
+                onClick={() => handleTabChange({} as any, dataSource === 'youtube' ? 3 : 2)}
+                className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 text-sm md:text-base font-medium rounded-t-lg transition-colors whitespace-nowrap ${
+                  activeTab === (dataSource === 'youtube' ? 3 : 2)
+                    ? 'text-purple-400 border-b-2 border-purple-400 bg-purple-900/20' 
+                    : 'text-gray-400 hover:text-white hover:bg-zinc-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16c-.8 0-1.54.37-2 1l-3.72 5.6-2.28-6.8A1.5 1.5 0 0 0 6.54 7H4c-.8 0-1.54.37-2 1L.46 15.37A1.5 1.5 0 0 0 1.88 17H4v5h2v-5h2.5l2.5-3.75L13.5 17H16v5h4z"/>
+                </svg>
+                <span>Similares</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Contenido de las pestañas */}
+          <div className="py-4 md:py-6">
+            {/* Pestaña 1: Top Tracks */}
+            {activeTab === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {!loading && !error && originalSpotifyTopTracks.length === 0 ? (
+                  <div className="text-center py-8 md:py-12">
+                    <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium text-gray-300 mb-2">Sin canciones populares</h3>
+                    <p className="text-gray-400 text-sm md:text-base">No se encontraron canciones populares para este artista.</p>
+                  </div>
+                ) : (
+                  !loading && originalSpotifyTopTracks.length > 0 && (
+                    <div>
+                      {/* Vista móvil: Lista compacta */}
+                      <div className="md:hidden space-y-2">
+                        {originalSpotifyTopTracks.map((track, index) => (
+                          <motion.div
+                            key={track.id || `track-${index}`}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                            className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-lg hover:bg-zinc-700/30 transition-colors duration-200 cursor-pointer"
+                            onClick={() => handlePlayTrack(track)}
+                          >
+                            {/* Número de track */}
+                            <div className="w-6 text-center text-gray-400 text-sm font-medium">
+                              {index + 1}
+                            </div>
+                            
+                            {/* Imagen del álbum */}
+                            <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                              <Image
+                                src={track.cover || track.albumCover || '/img/default-track.jpg'}
+                                alt={track.title}
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                            
+                            {/* Información de la canción */}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-white text-sm truncate">{track.title}</h3>
+                              <p className="text-zinc-400 text-xs truncate">
+                                {track.artist || 'Artista desconocido'}
+                              </p>
+                            </div>
+                            
+                            {/* Duración */}
+                            <div className="text-zinc-400 text-xs font-medium">
+                              {track.duration ? formatDuration(track.duration * 1000) : '--:--'}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Vista desktop: Tabla completa */}
+                      <div className="hidden md:block">
+                                                 {/* Cabecera de la tabla */}
+                         <div className="grid grid-cols-[40px_4fr_3fr_2fr_auto] gap-4 px-4 py-2 border-b border-white/10 text-gray-400 text-sm">
+                           <div className="text-center">#</div>
+                           <div>TÍTULO</div>
+                           <div>ÁLBUM</div>
+                           <div>RANKING</div>
+                           <div className="flex justify-end">
+                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                             </svg>
+                           </div>
+                         </div>
+
+                        {/* Lista de canciones */}
+                        <div className="mt-2">
+                          {originalSpotifyTopTracks.map((track, index) => (
+                            <motion.div
+                              key={track.id || `track-${index}`}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.2, delay: index * 0.03 }}
+                              className="grid grid-cols-[40px_4fr_3fr_2fr_auto] gap-4 px-4 py-2 rounded-md hover:bg-white/5 group items-center cursor-pointer"
+                              onClick={() => handlePlayTrack(track)}
+                            >
+                              <div className="flex items-center justify-center text-gray-400">
+                                <span>{index + 1}</span>
+                              </div>
+
+                                                             <div className="flex items-center min-w-0">
+                                 <div className="relative w-10 h-10 mr-3 flex-shrink-0">
+                                   <Image
+                                     src={track.cover || track.albumCover || '/img/default-track.jpg'}
+                                     alt={track.title}
+                                     fill
+                                     className="object-cover rounded"
+                                   />
+                                 </div>
+                                 <div className="min-w-0">
+                                   <p className="text-white truncate font-medium group-hover:text-purple-400">{track.title}</p>
+                                   <div className="text-gray-400 text-sm truncate">
+                                     {track.artist || 'Artista desconocido'}
+                                   </div>
+                                 </div>
+                               </div>
+ 
+                               <div className="flex items-center min-w-0">
+                                 <span className="text-gray-300 truncate">
+                                   {track.album || 'Álbum desconocido'}
+                                 </span>
+                               </div>
+
+                                                             <div className="flex items-center text-gray-400 text-sm">
+                                 <div className="flex items-center gap-1">
+                                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                   </svg>
+                                   <span>{index + 1}º</span>
+                                 </div>
+                               </div>
+
+                              <div className="flex items-center justify-end text-gray-400 text-sm">
+                                {track.duration ? formatDuration(track.duration * 1000) : '--:--'}
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </motion.div>
+            )}
+
+            {/* Pestaña 2: Álbumes */}
+            {activeTab === 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {albums.length === 0 ? (
+                  <div className="text-center py-8 md:py-12">
+                    <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium text-gray-300 mb-2">Sin álbumes</h3>
+                    <p className="text-gray-400 text-sm md:text-base">No se encontraron álbumes para este artista.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    {albums.map((album, index) => (
+                      <motion.div
+                        key={album.id || album.browseId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                      >
+                        <UnifiedMusicCard 
+                          id={album.id || album.browseId || ''} 
+                          title={album.name || album.title || ''} 
+                          subtitle={album.year || (album.release_date ? album.release_date.split('-')[0] : '')} 
+                          coverUrl={album.images?.[0]?.url || album.thumbnails?.[0]?.url || '/placeholder-album.jpg'} 
+                          isPlayable={false} 
+                          itemType="album" 
+                          linkTo={`/album/${album.id || album.browseId}`} 
+                          badge={{ text: dataSource === 'youtube' ? 'YouTube' : 'Spotify', color: dataSource === 'youtube' ? 'bg-red-600' : 'bg-green-600' }} 
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Pestaña 3: Videos (Solo YouTube) */}
+            {activeTab === 2 && dataSource === 'youtube' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {!youtubeArtist?.videos?.results || youtubeArtist.videos.results.length === 0 ? (
+                  <div className="text-center py-8 md:py-12">
+                    <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium text-gray-300 mb-2">Sin videos</h3>
+                    <p className="text-gray-400 text-sm md:text-base">No se encontraron videos para este artista.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    {youtubeArtist?.videos?.results?.map((video, index) => (
+                      <motion.div
+                        key={video.videoId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                      >
+                        <UnifiedMusicCard 
+                          id={video.videoId} 
+                          title={video.title} 
+                          subtitle={video.views || ''} 
+                          coverUrl={video.thumbnails?.[0]?.url || '/placeholder-video.jpg'} 
+                          isPlayable={true} 
+                          itemType="video" 
+                          badge={{ text: 'Video', color: 'bg-red-600' }} 
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Pestaña 4: Artistas similares */}
+            {activeTab === (dataSource === 'youtube' ? 3 : 2) && (
+              <motion.div
+                className="min-h-48 md:min-h-64"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {relatedArtistsLoading ? (
+                  <div className="flex justify-center items-center py-12 md:py-16">
+                    <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-t-2 border-b-2 border-purple-500"></div>
+                  </div>
+                ) : relatedArtistsError ? (
+                  <div className="p-4 md:p-6 bg-red-900/20 border border-red-800/30 text-red-300 rounded-lg">
+                    <div className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-sm md:text-base">{relatedArtistsError}</p>
+                    </div>
+                  </div>
+                ) : !relatedArtistsLoaded && dataSource === 'spotify' ? (
+                  <div className="text-center py-8 md:py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                    <p className="text-gray-400 text-sm md:text-base">Cargando artistas similares...</p>
+                  </div>
+                ) : relatedArtists.length === 0 ? (
+                  <div className="text-center py-8 md:py-12">
+                    <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16c-.8 0-1.54.37-2 1l-3.72 5.6-2.28-6.8A1.5 1.5 0 0 0 6.54 7H4c-.8 0-1.54.37-2 1L.46 15.37A1.5 1.5 0 0 0 1.88 17H4v5h2v-5h2.5l2.5-3.75L13.5 17H16v5h4z"/>
+                      </svg>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-medium text-gray-300 mb-2">Sin artistas similares</h3>
+                    <p className="text-gray-400 text-sm md:text-base">No se encontraron artistas similares.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    {relatedArtists.map((relArtist, index) => (
+                      <motion.div
+                        key={relArtist.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                      >
+                        <UnifiedMusicCard
+                          id={relArtist.id}
+                          title={relArtist.name}
+                          coverUrl={relArtist.images?.[0]?.url || '/placeholder-artist.jpg'}
+                          isPlayable={false}
+                          itemType="artist"
+                          linkTo={`/artist/${relArtist.id}`}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Descripción del artista (solo YouTube) */}
+        {youtubeArtist?.description && (
+          <motion.div 
+            className="p-4 md:p-6 mb-6 md:mb-8 bg-zinc-800/50 rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4">Acerca del artista</h3>
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed">{youtubeArtist.description}</p>
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 }
 
-// Componentes auxiliares - Sin cambios
-const Chip = ({ label, size, color, variant }: any) => (<Box sx={{ display: 'inline-flex', borderRadius: '16px', px: 1.5, py: 0.5, backgroundColor: variant === 'outlined' ? 'transparent' : 'primary.main', border: variant === 'outlined' ? '1px solid' : 'none', borderColor: 'primary.main', color: variant === 'outlined' ? 'primary.main' : 'white', fontSize: size === 'small' ? '0.75rem' : '0.875rem', fontWeight: 'medium' }}>{label}</Box>);
-const YoutubeIcon = (props: any) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>);
-const SpotifyIcon = (props: any) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>);
+// Componentes auxiliares optimizados
+const YoutubeIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </svg>
+);
+
+const SpotifyIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+  </svg>
+);

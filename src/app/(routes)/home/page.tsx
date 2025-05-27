@@ -47,6 +47,8 @@ import { getApiBaseUrl } from '@/lib/api-config';
 import { useTranslation } from '@/hooks/useTranslation';
 import FeaturedPlaylists from '@/components/FeaturedPlaylists';
 import { useCustomNotifications } from '@/hooks/useCustomNotifications';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import MobileHomePage from '@/components/mobile/MobileHomePage';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.background.paper, 0.5),
@@ -313,6 +315,7 @@ export default function HomePage() {
   const router = useRouter();
   const theme = useTheme();
   const userId = spotifySession?.user?.id || '';
+  const isMobile = useIsMobile();
 
   const [activeTab, setActiveTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -1045,8 +1048,10 @@ export default function HomePage() {
 
   // Función para manejar la reproducción de canciones y registrarlas en el historial
   const handlePlayTrack = async (uri: string | undefined, e: React.MouseEvent, trackInfo?: any) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (!uri) {
       console.error('URI de canción no disponible');
@@ -1080,7 +1085,7 @@ export default function HomePage() {
         } else {
           // Intentar extraer del evento a partir del DOM (para casos donde no se pasa trackInfo)
           // Buscar información del track en el DOM cercano al botón de reproducción
-          const card = (e.currentTarget as HTMLElement).closest('.MuiCard-root');
+          const card = e?.currentTarget ? (e.currentTarget as HTMLElement).closest('.MuiCard-root') : null;
 
           if (card) {
             const nameElement = card.querySelector('[data-track-name]');
@@ -1574,6 +1579,24 @@ export default function HomePage() {
     }
   };
 
+  // Si es mobile, usar el componente mobile específico
+  if (isMobile) {
+    return (
+      <MobileHomePage 
+        personalContent={personalContent}
+        recentlyPlayed={filteredRecentTracks}
+        featuredPlaylists={featuredPlaylists}
+        newReleases={newReleases}
+        recommendedArtists={recommendedArtists}
+        loading={loading}
+        error={error}
+        onPlayTrack={handlePlayTrack}
+        onArtistClick={(artistId) => router.push(`/artist/${artistId}`)}
+        onPlaylistClick={(playlistId) => router.push(`/playlist/${playlistId}`)}
+      />
+    );
+  }
+
   return (
     <Container maxWidth="xl">
       {/* Mostrar alerta de autenticación si es necesario */}
@@ -1582,102 +1605,145 @@ export default function HomePage() {
       <Grid container spacing={3}>
       {/* Primera sección - Banner y rotación personal */}
         <Grid item xs={12}>
-      <Box sx={{ mb: 6 }}>
-        {/* Banner principal */}
-        <Box
-          sx={{
-            position: 'relative',
-            height: '250px',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            mb: 4,
-                background: 'rgba(0,0,0,0.1)',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-                  opacity: 1,
-                  background: 'url(https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)',
-              backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  '&::after': {
-                    content: '""',
+          {!isMobile ? (
+            <Box sx={{ mb: 6 }}>
+              {/* Banner principal */}
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '250px',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  mb: 4,
+                  background: 'rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                <Box
+                  sx={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    background: 'linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2))'
-                  }
-            }}
-          />
-
-          <Box sx={{ position: 'relative', zIndex: 1, px: 4 }}>
-            <Typography variant="h3" fontWeight="bold" color="white">
-              {t('home.welcome')}
-            </Typography>
-            <Typography variant="h6" color="rgba(255,255,255,0.8)" sx={{ mb: 2 }}>
-              {t('home.description')}
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (searchTerm && searchTerm.trim()) {
-                  router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-                }
-              }}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                borderRadius: '30px',
-                p: 1,
-                pl: 2,
-                width: '400px',
-                maxWidth: '100%',
-                position: 'relative'
-              }}
-            >
-              <Search sx={{ color: 'rgba(255,255,255,0.7)', mr: 1 }} />
-              <input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('search.searchPlaceholder')}
-                style={{
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  color: 'white',
-                  outline: 'none',
-                  width: '100%',
-                  fontSize: '1rem'
-                }}
-              />
-              {searchTerm && (
-                <IconButton
-                  type="submit"
-                  size="small"
-                  sx={{
-                    color: 'white',
-                    position: 'absolute',
-                    right: '8px',
-                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                    zIndex: 0,
+                    opacity: 1,
+                    background: 'url(https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2))'
+                    }
                   }}
-                >
-                  <Search fontSize="small" />
-                </IconButton>
-              )}
+                />
+
+                <Box sx={{ position: 'relative', zIndex: 1, px: 4 }}>
+                  <Typography variant="h3" fontWeight="bold" color="white">
+                    {t('home.welcome')}
+                  </Typography>
+                  <Typography variant="h6" color="rgba(255,255,255,0.8)" sx={{ mb: 2 }}>
+                    {t('home.description')}
+                  </Typography>
+                  {/* Formulario de búsqueda para escritorio */}
+                  <Box
+                    component="form"
+                    onSubmit={(e) => { e.preventDefault(); if (searchTerm?.trim()) { router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`); } }}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      borderRadius: '30px',
+                      p: 1,
+                      pl: 2,
+                      width: '400px',
+                      maxWidth: '100%',
+                      position: 'relative'
+                    }}
+                  >
+                    <Search sx={{ color: 'rgba(255,255,255,0.7)', mr: 1 }} />
+                    <input
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder={t('search.searchPlaceholder')}
+                      style={{
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        color: 'white',
+                        outline: 'none',
+                        width: '100%',
+                        fontSize: '1rem'
+                      }}
+                    />
+                    {searchTerm && (
+                      <IconButton
+                        type="submit"
+                        size="small"
+                        sx={{ color: 'white', position: 'absolute', right: '8px', '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' } }}
+                      >
+                        <Search fontSize="small" />
+                      </IconButton>
+                    )}
+                  </Box>
+                </Box>
+              </Box>
             </Box>
-          </Box>
-        </Box>
+          ) : (
+            <Box sx={{ px: 2, py: 1, mb: 4 }}>
+              <Box
+                component="form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (searchTerm?.trim()) {
+                    router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+                  }
+                }}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  borderRadius: '30px',
+                  p: 1,
+                  pl: 2
+                }}
+              >
+                <Search sx={{ color: 'rgba(255,255,255,0.7)', mr: 1 }} />
+                <input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={t('search.searchPlaceholder')}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    color: 'white',
+                    outline: 'none',
+                    width: '100%',
+                    fontSize: '1rem'
+                  }}
+                />
+                {searchTerm && (
+                  <IconButton
+                    type="submit"
+                    size="small"
+                    sx={{
+                      color: 'white',
+                      position: 'absolute',
+                      right: '8px',
+                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                    }}
+                  >
+                    <Search fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+          )}
 
             {/* Sección rotación personal */}
             {showPersonalSection && (
@@ -1749,7 +1815,6 @@ export default function HomePage() {
           )}
         </Paper>
       )}
-    </Box>
         </Grid>
 
       {/* Segunda sección - Explora Música */}

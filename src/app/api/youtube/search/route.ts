@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     const pythonServerUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:5100';
 
     // URL completa para la solicitud
-    let fullUrl = `${pythonServerUrl}/search?query=${encodeURIComponent(query)}&filter=${filter}&limit=${limit}`;
+    let fullUrl = `${pythonServerUrl}/api/search?query=${encodeURIComponent(query)}&filter=${filter}&limit=${limit}`;
 
     // Incluir la clave API si existe
     if (apiKey) {

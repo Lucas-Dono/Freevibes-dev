@@ -12,6 +12,7 @@ import { usePlayer, Track } from '@/contexts/PlayerContext';
 // import { YouTubeMusicAPI } from '@/services/youtube/youtube-music-api';
 import { useTranslation } from '@/hooks/useTranslation';
 import { playTrack as universalPlayTrack } from '@/services/player/playService';
+import { motion } from 'framer-motion';
 
 // Esta configuración asegura que la página se renderice dinámicamente
 // evitando problemas de "Unexpected end of JSON" en build time
@@ -438,207 +439,268 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6 text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        {t('search.searchMusic')}
-      </h1>
+    <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+      {/* Container responsive: padding reducido en móvil */}
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-8 max-w-4xl">
+        <motion.h1 
+          className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {t('search.searchMusic')}
+        </motion.h1>
 
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            value={query}
-            onChange={handleInputChange}
-            placeholder={t('search.searchPlaceholder')}
-            className="w-full bg-gray-800/50 border border-gray-700 rounded-full py-3 px-4 pl-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
-            autoFocus
-            ref={searchInputRef}
-            onFocus={handleInputFocus}
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => {
-                setQuery('');
-                setTracks([]);
-                setSuggestions([]);
-                setShowSuggestions(false);
-                setHasSearched(false);
-                updateSearchParam('');
-              }}
-              className="absolute right-14 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-          >
-            {isLoading ? (
-              <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <motion.form 
+          onSubmit={handleSubmit} 
+          className="mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
+            </div>
+            <input
+              type="text"
+              value={query}
+              onChange={handleInputChange}
+              placeholder={t('search.searchPlaceholder')}
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-full py-2.5 md:py-3 px-3 md:px-4 pl-10 md:pl-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm md:text-base"
+              autoFocus
+              ref={searchInputRef}
+              onFocus={handleInputFocus}
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('');
+                  setTracks([]);
+                  setSuggestions([]);
+                  setShowSuggestions(false);
+                  setHasSearched(false);
+                  updateSearchParam('');
+                }}
+                className="absolute right-12 md:right-14 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             )}
-          </button>
-
-          {/* Lista de sugerencias */}
-          {showSuggestions && suggestions.length > 0 && (
-            <div
-              ref={suggestionContainerRef}
-              className="absolute z-10 left-0 right-0 mt-2 py-2 bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
             >
-              {isLoadingSuggestions ? (
-                <div className="flex justify-center py-3">
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
-                </div>
+              {isLoading ? (
+                <svg className="w-4 h-4 md:w-5 md:h-5 animate-spin" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
               ) : (
-                <ul>
-                  {suggestions.map((suggestion) => (
-                    <li
-                      key={suggestion.id}
-                      className="px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors text-white flex items-center"
-                      onClick={() => handleSuggestionClick(suggestion)}
-                    >
-                      {/* Icono según el tipo de sugerencia */}
-                      {suggestion.type === 'track' ? (
-                        <svg className="w-4 h-4 mr-2 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M9 17H5a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm12-2h-4a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2z" />
-                          <path d="M9 17V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v8" />
-                        </svg>
-                      ) : suggestion.type === 'artist' ? (
-                        <svg className="w-4 h-4 mr-2 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="8" r="5" />
-                          <path d="M20 21v-2a7 7 0 0 0-14 0v2" />
-                        </svg>
-                      ) : suggestion.type === 'album' ? (
-                        <svg className="w-4 h-4 mr-2 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="10" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      ) : suggestion.source === 'lastfm' ? (
-                        <svg className="w-4 h-4 mr-2 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                        </svg>
-                      ) : suggestion.isHistory ? (
-                        <svg className="w-4 h-4 mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                      )}
-                      <span className="flex-grow">{suggestion.text}</span>
+                <svg className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              )}
+            </button>
 
-                      {/* Etiquetas según la fuente y tipo */}
-                      <div className="flex flex-shrink-0 ml-2 space-x-1">
-                        {suggestion.source === 'lastfm' && (
-                          <span className="text-xs px-2 py-0.5 bg-red-900/30 text-red-400 rounded">Last.fm</span>
+            {/* Lista de sugerencias */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div
+                ref={suggestionContainerRef}
+                className="absolute z-10 left-0 right-0 mt-2 py-2 bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg backdrop-blur-sm"
+              >
+                {isLoadingSuggestions ? (
+                  <div className="flex justify-center py-3">
+                    <div className="animate-spin rounded-full h-4 w-4 md:h-5 md:w-5 border-t-2 border-b-2 border-purple-500"></div>
+                  </div>
+                ) : (
+                  <ul>
+                    {suggestions.map((suggestion) => (
+                      <li
+                        key={suggestion.id}
+                        className="px-3 md:px-4 py-2 md:py-2.5 hover:bg-zinc-700 cursor-pointer transition-colors text-white flex items-center text-sm md:text-base"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        {/* Icono según el tipo de sugerencia */}
+                        {suggestion.type === 'track' ? (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-purple-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 17H5a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm12-2h-4a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2z" />
+                            <path d="M9 17V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v8" />
+                          </svg>
+                        ) : suggestion.type === 'artist' ? (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-green-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="8" r="5" />
+                            <path d="M20 21v-2a7 7 0 0 0-14 0v2" />
+                          </svg>
+                        ) : suggestion.type === 'album' ? (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-pink-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        ) : suggestion.source === 'lastfm' ? (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-red-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                          </svg>
+                        ) : suggestion.isHistory ? (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-blue-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-3 h-3 md:w-4 md:h-4 mr-2 text-gray-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
                         )}
-                        {suggestion.isHistory && (
-                          <span className="text-xs px-2 py-0.5 bg-blue-900/30 text-blue-400 rounded">{t('search.history')}</span>
-                        )}
-                        {suggestion.type && !suggestion.isHistory && (
-                          <span className={`text-xs px-2 py-0.5 rounded ${
-                            suggestion.type === 'track' ? 'bg-purple-900/30 text-purple-400' :
-                            suggestion.type === 'artist' ? 'bg-green-900/30 text-green-400' :
-                            suggestion.type === 'album' ? 'bg-pink-900/30 text-pink-400' :
-                            suggestion.type === 'genre' ? 'bg-yellow-900/30 text-yellow-400' :
-                            'bg-gray-900/30 text-gray-400'
-                          }`}>
-                            {suggestion.type === 'track' ? t('search.types.track') :
-                             suggestion.type === 'artist' ? t('search.types.artist') :
-                             suggestion.type === 'album' ? t('search.types.album') :
-                             suggestion.type === 'genre' ? t('search.types.genre') :
-                             t('search.types.search')}
-                          </span>
-                        )}
-                      </div>
+                        <span className="flex-grow truncate">{suggestion.text}</span>
+
+                        {/* Etiquetas según la fuente y tipo */}
+                        <div className="flex flex-shrink-0 ml-2 space-x-1">
+                          {suggestion.source === 'lastfm' && (
+                            <span className="text-xs px-1.5 md:px-2 py-0.5 bg-red-900/30 text-red-400 rounded hidden md:inline">Last.fm</span>
+                          )}
+                          {suggestion.isHistory && (
+                            <span className="text-xs px-1.5 md:px-2 py-0.5 bg-blue-900/30 text-blue-400 rounded hidden md:inline">{t('search.history')}</span>
+                          )}
+                          {suggestion.type && !suggestion.isHistory && (
+                            <span className={`text-xs px-1.5 md:px-2 py-0.5 rounded hidden md:inline ${
+                              suggestion.type === 'track' ? 'bg-purple-900/30 text-purple-400' :
+                              suggestion.type === 'artist' ? 'bg-green-900/30 text-green-400' :
+                              suggestion.type === 'album' ? 'bg-pink-900/30 text-pink-400' :
+                              suggestion.type === 'genre' ? 'bg-yellow-900/30 text-yellow-400' :
+                              'bg-gray-900/30 text-gray-400'
+                            }`}>
+                              {suggestion.type === 'track' ? t('search.types.track') :
+                               suggestion.type === 'artist' ? t('search.types.artist') :
+                               suggestion.type === 'album' ? t('search.types.album') :
+                               suggestion.type === 'genre' ? t('search.types.genre') :
+                               t('search.types.search')}
+                            </span>
+                          )}
+                        </div>
                     </li>
                   ))}
                 </ul>
               )}
             </div>
+                      )}
+          </div>
+        </motion.form>
+
+                {/* Mensaje de búsqueda vacía */}
+          {query.length === 0 && !isLoading && (
+            <motion.div 
+              className="text-center py-8 md:py-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h2 className="text-lg md:text-xl font-medium text-gray-300 mb-2">{t('search.startTyping')}</h2>
+              <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base px-4">{t('search.searchDescription')}</p>
+            </motion.div>
           )}
-        </div>
-      </form>
 
-      {/* Mensaje de búsqueda vacía */}
-      {query.length === 0 && !isLoading && (
-        <div className="text-center py-10">
-          <div className="inline-block p-4 rounded-full bg-gray-800/50 mb-4">
-            <svg className="w-10 h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-medium text-gray-300 mb-2">{t('search.startTyping')}</h2>
-          <p className="text-gray-400 max-w-md mx-auto">{t('search.searchDescription')}</p>
-        </div>
-      )}
+                {/* Loader durante la búsqueda */}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-8 md:py-10">
+              <div className="w-12 h-12 md:w-16 md:h-16 border-t-2 border-b-2 border-purple-500 rounded-full animate-spin mb-3 md:mb-4"></div>
+              <h2 className="text-lg md:text-xl font-medium text-gray-300">{t('search.searching')}</h2>
+            </div>
+          )}
 
-      {/* Loader durante la búsqueda */}
-      {isLoading && (
-        <div className="flex flex-col items-center justify-center py-10">
-          <div className="w-16 h-16 border-t-2 border-b-2 border-primary rounded-full animate-spin mb-4"></div>
-          <h2 className="text-xl font-medium text-gray-300">{t('search.searching')}</h2>
-        </div>
-      )}
+                {/* Mensaje de error */}
+          {error && !isLoading && (
+            <div className="bg-red-900/20 border border-red-800/30 rounded-lg p-3 md:p-4 text-center my-4 md:my-6 mx-2 md:mx-0">
+              <p className="text-red-300 text-sm md:text-base">{error}</p>
+            </div>
+          )}
 
-      {/* Mensaje de error */}
-      {error && !isLoading && (
-        <div className="bg-red-900/20 border border-red-800/30 rounded-lg p-4 text-center my-6">
-          <p className="text-red-300">{error}</p>
-        </div>
-      )}
+                {/* Resultados de búsqueda - Ahora solo se muestra si hasSearched es true */}
+          {query.length > 0 && !isLoading && tracks.length === 0 && !error && hasSearched && (
+            <motion.div 
+              className="text-center py-8 md:py-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="inline-block p-3 md:p-4 rounded-full bg-zinc-800/50 mb-3 md:mb-4">
+                <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2 className="text-lg md:text-xl font-medium text-gray-300 mb-2">{t('search.noResults')}</h2>
+              <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base px-4">{t('search.tryAgain')}</p>
+            </motion.div>
+          )}
 
-      {/* Resultados de búsqueda - Ahora solo se muestra si hasSearched es true */}
-      {query.length > 0 && !isLoading && tracks.length === 0 && !error && hasSearched && (
-        <div className="text-center py-10">
-          <div className="inline-block p-4 rounded-full bg-gray-800/50 mb-4">
-            <svg className="w-10 h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-medium text-gray-300 mb-2">{t('search.noResults')}</h2>
-          <p className="text-gray-400 max-w-md mx-auto">{t('search.tryAgain')}</p>
-        </div>
-      )}
+                {/* Resultados de búsqueda */}
+          {!isLoading && tracks.length > 0 && (
+            <div>
+              <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">{t('search.results')}</h2>
+              
+              {/* Vista móvil: Lista vertical compacta */}
+              <div className="md:hidden space-y-3">
+                {tracks.map((track, index) => (
+                  <motion.div
+                    key={track.id}
+                    className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-lg hover:bg-zinc-700/30 transition-colors duration-200"
+                    onClick={() => handlePlayTrack(track)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                      <img
+                        src={track.cover || '/placeholder-album.jpg'}
+                        alt={track.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-white text-sm truncate">{track.title}</h3>
+                      <p className="text-zinc-400 text-xs truncate">{track.artist}</p>
+                    </div>
+                    <div className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+                      YT
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
 
-      {/* Grid de resultados */}
-      {!isLoading && tracks.length > 0 && (
-        <div>
-          <h2 className="text-xl font-bold mb-6">{t('search.results')}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {tracks.map((track) => (
-              <UnifiedMusicCard
-                key={track.id}
-                id={track.id}
-                title={track.title}
-                subtitle={track.artist}
-                coverUrl={track.cover}
-                duration={track.duration}
-                isPlayable={true}
-                badge={{ text: 'YouTube', color: 'bg-red-600' }}
-                onClick={() => handlePlayTrack(track)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+              {/* Vista desktop: Grid de tarjetas */}
+              <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {tracks.map((track, index) => (
+                  <motion.div
+                    key={track.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <UnifiedMusicCard
+                      id={track.id}
+                      title={track.title}
+                      subtitle={track.artist}
+                      coverUrl={track.cover}
+                      duration={track.duration}
+                      isPlayable={true}
+                      badge={{ text: 'YouTube', color: 'bg-red-600' }}
+                      onClick={() => handlePlayTrack(track)}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+      </div>
     </div>
   );
 }

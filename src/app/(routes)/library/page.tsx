@@ -1,65 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  IconButton,
-  CircularProgress,
-  Divider,
-  styled,
-  useTheme,
-  alpha
-} from '@mui/material';
-import { PlayArrow, ArrowBack, FavoriteRounded } from '@mui/icons-material';
 import { getUserPersonalRotation } from '@/services/spotify';
 import Link from 'next/link';
-import { AutoSizer, WindowScroller, List, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import UnifiedMusicCard from '@/components/UnifiedMusicCard';
 import { usePlayer, Track as PlayerTrack } from '@/contexts/PlayerContext';
 import type { Track } from '@/types/types';
-import Image from 'next/image';
-import { Tab } from '@headlessui/react';
 import { motion } from 'framer-motion';
-import { FaMusic, FaRandom } from 'react-icons/fa';
+import { FaMusic, FaRandom, FaArrowLeft, FaArrowUp } from 'react-icons/fa';
 import { MdPlaylistAdd } from 'react-icons/md';
 import { useTranslation } from '@/hooks/useTranslation';
 import { homePlayTrack } from '@/services/player/homePlayService';
-
-// Estilo para las tarjetas de música
-const MusicCard = styled(Card)(({ theme }) => ({
-  backgroundColor: 'rgba(255,255,255,0.03)',
-  borderRadius: '8px',
-  overflow: 'hidden',
-  transition: 'all 0.3s',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-  },
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const CoverImage = styled(CardMedia)(({ theme }) => ({
-  height: 180,
-  borderRadius: '4px',
-}));
-
-// Estilo para las tarjetas de música
-const StyledMusicCard = styled('div')(() => ({
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
-  },
-  borderRadius: '4px',
-}));
 
 // Definir una interfaz para las pistas de Spotify
 interface SpotifyTrack {
@@ -75,7 +26,6 @@ interface SpotifyTrack {
 }
 
 export default function LibraryPage() {
-  const theme = useTheme();
   const { t, language } = useTranslation();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [playlists, setPlaylists] = useState<any[]>([]);
@@ -231,148 +181,219 @@ export default function LibraryPage() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Cabecera */}
-      <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
-        <Link href="/home" passHref>
-          <IconButton color="primary" sx={{ mr: 2 }} aria-label={t('library.backToHome')}>
-            <ArrowBack />
-          </IconButton>
-        </Link>
-        <Typography variant="h4" fontWeight="bold">
-          {t('library.personalLibrary')}
-        </Typography>
-      </Box>
+    <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+      {/* Container responsive: padding reducido en móvil */}
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-6">
+        {/* Cabecera */}
+        <motion.div 
+          className="flex items-center mb-6 md:mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Link href="/home" className="mr-3 md:mr-4">
+            <button className="p-2 md:p-3 rounded-full bg-zinc-800/50 hover:bg-zinc-700/50 transition-colors duration-200 text-purple-400 hover:text-purple-300">
+              <FaArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+          </Link>
+          <h1 className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+            {t('library.personalLibrary')}
+          </h1>
+        </motion.div>
 
-      <Divider sx={{ mb: 4, opacity: 0.1 }} />
+        {/* Descripción */}
+        <motion.div 
+          className="mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <p className="text-zinc-300 text-sm md:text-base">
+            {t('library.libraryDescription')}
+          </p>
+        </motion.div>
 
-      {/* Descripción */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="body1" color="text.secondary">
-          {t('library.libraryDescription')}
-        </Typography>
-      </Box>
-
-      {/* Interfaz de pestañas */}
-      <div className="mb-8">
-        <div className="flex space-x-4 border-b border-gray-700">
-          <button
-            className={`py-2 px-4 font-medium ${activeTab === 0 ? 'text-primary border-b-2 border-primary' : 'text-gray-400'}`}
-            onClick={() => handleTabClick(0)}
-          >
-            {t('library.songs')}
-          </button>
-          <button
-            className={`py-2 px-4 font-medium ${activeTab === 1 ? 'text-primary border-b-2 border-primary' : 'text-gray-400'}`}
-            onClick={() => handleTabClick(1)}
-          >
-            {t('library.playlists')}
-          </button>
-        </div>
-      </div>
-
-      {/* Loading inicial */}
-      {initialLoading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
-          <CircularProgress color="secondary" size={60} thickness={4} />
-        </Box>
-      ) : error ? (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography color="error" variant="h6">{error}</Typography>
-        </Box>
-      ) : (
-        <>
-          {/* Pestaña de Canciones */}
-          {activeTab === 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-              {tracks.map((track, index) => (
-                <div
-                  key={track.id}
-                  className="mb-6"
-                  // Referencia al último elemento para detección de scroll
-                  ref={tracks.length === index + 1 ? lastTrackElementRef : undefined}
-                >
-                  <UnifiedMusicCard
-                    key={track.id}
-                    id={track.id}
-                    title={track.name}
-                    subtitle={track.artists?.map((a) => a.name).join(', ')}
-                    coverUrl={track.album?.images[0]?.url || '/placeholder-album.jpg'}
-                    duration={track.duration_ms ? track.duration_ms / 1000 : undefined}
-                    badge={track.isTopTrack ? { text: t('library.favorite'), color: 'bg-pink-600' } : undefined}
-                    isPlayable={true}
-                    onPlay={() => handlePlayTrack(track)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Pestaña de Playlists */}
-          {activeTab === 1 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {playlists.map((playlist) => (
-                <StyledMusicCard key={playlist.id} className="bg-gray-800 rounded-lg overflow-hidden">
-                  <div className="relative aspect-square">
-                    <img
-                      src={playlist.images[0]?.url || '/placeholder-playlist.jpg'}
-                      alt={playlist.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-semibold text-white truncate">{playlist.name}</h3>
-                    <p className="text-sm text-gray-400 truncate">{playlist.tracks.total} {t('library.tracksCount')}</p>
-                  </div>
-                </StyledMusicCard>
-              ))}
-            </div>
-          )}
-
-          {/* Indicador de carga para más elementos */}
-          {loading && !initialLoading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-              <CircularProgress color="secondary" />
-            </Box>
-          )}
-
-          {/* Mensaje de fin de lista */}
-          {!hasMore && !loading && (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography color="text.secondary">
-                {t('library.endOfLibrary')}
-              </Typography>
-            </Box>
-          )}
-
-          {/* Botón para volver arriba */}
-          {showScrollTop && (
-            <Box
-              sx={{
-                position: 'fixed',
-                bottom: 20,
-                right: 20,
-                zIndex: 1000,
-              }}
+        {/* Interfaz de pestañas */}
+        <motion.div 
+          className="mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="flex space-x-1 md:space-x-4 border-b border-zinc-700/50">
+            <button
+              className={`py-2 md:py-3 px-3 md:px-6 font-medium text-sm md:text-base transition-colors duration-200 ${
+                activeTab === 0 
+                  ? 'text-purple-400 border-b-2 border-purple-400' 
+                  : 'text-zinc-400 hover:text-zinc-300'
+              }`}
+              onClick={() => handleTabClick(0)}
             >
-              <IconButton
-                onClick={scrollToTop}
-                sx={{
-                  backgroundColor: theme.palette.secondary.main,
-                  color: 'white',
-                  boxShadow: 3,
-                  '&:hover': {
-                    backgroundColor: theme.palette.secondary.dark,
-                  },
-                }}
-                size="large"
+              <div className="flex items-center gap-2">
+                <FaMusic className="w-3 h-3 md:w-4 md:h-4" />
+                {t('library.songs')}
+              </div>
+            </button>
+            <button
+              className={`py-2 md:py-3 px-3 md:px-6 font-medium text-sm md:text-base transition-colors duration-200 ${
+                activeTab === 1 
+                  ? 'text-purple-400 border-b-2 border-purple-400' 
+                  : 'text-zinc-400 hover:text-zinc-300'
+              }`}
+              onClick={() => handleTabClick(1)}
+            >
+              <div className="flex items-center gap-2">
+                <MdPlaylistAdd className="w-4 h-4 md:w-5 md:h-5" />
+                {t('library.playlists')}
+              </div>
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Loading inicial */}
+        {initialLoading ? (
+          <div className="flex flex-col items-center justify-center py-16 md:py-20">
+            <div className="w-12 h-12 md:w-16 md:h-16 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin mb-4 md:mb-6"></div>
+            <p className="text-zinc-300 text-sm md:text-base">{t('library.loading')}</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12 md:py-16">
+            <div className="bg-red-900/30 border border-red-500/50 text-red-200 px-4 md:px-6 py-3 md:py-4 rounded-xl backdrop-blur-sm inline-block">
+              <p className="font-medium text-sm md:text-base">{error}</p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Pestaña de Canciones */}
+            {activeTab === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <ArrowBack sx={{ transform: 'rotate(90deg)' }} />
-              </IconButton>
-            </Box>
-          )}
-        </>
-      )}
-    </Container>
+                {/* Vista móvil: Lista vertical compacta */}
+                <div className="md:hidden space-y-3">
+                  {tracks.map((track, index) => (
+                    <div
+                      key={track.id}
+                      className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-lg hover:bg-zinc-700/30 transition-colors duration-200"
+                      ref={tracks.length === index + 1 ? lastTrackElementRef : undefined}
+                      onClick={() => handlePlayTrack(track)}
+                    >
+                      <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                        <img
+                          src={track.album?.images[0]?.url || '/placeholder-album.jpg'}
+                          alt={track.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-white text-sm truncate">{track.name}</h3>
+                        <p className="text-zinc-400 text-xs truncate">
+                          {track.artists?.map((a) => a.name).join(', ')}
+                        </p>
+                      </div>
+                      {track.isTopTrack && (
+                        <div className="bg-pink-600 text-white text-xs px-2 py-1 rounded-full">
+                          ♥
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Vista desktop: Grid de tarjetas */}
+                <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                  {tracks.map((track, index) => (
+                    <div
+                      key={track.id}
+                      ref={tracks.length === index + 1 ? lastTrackElementRef : undefined}
+                    >
+                      <UnifiedMusicCard
+                        id={track.id}
+                        title={track.name}
+                        subtitle={track.artists?.map((a) => a.name).join(', ')}
+                        coverUrl={track.album?.images[0]?.url || '/placeholder-album.jpg'}
+                        duration={track.duration_ms ? track.duration_ms / 1000 : undefined}
+                        badge={track.isTopTrack ? { text: t('library.favorite'), color: 'bg-pink-600' } : undefined}
+                        isPlayable={true}
+                        onPlay={() => handlePlayTrack(track)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Pestaña de Playlists */}
+            {activeTab === 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                {playlists.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                    {playlists.map((playlist) => (
+                      <div 
+                        key={playlist.id} 
+                        className="bg-zinc-800/50 rounded-xl overflow-hidden hover:bg-zinc-700/50 transition-all duration-300 hover:scale-105"
+                      >
+                        <div className="aspect-square relative">
+                          <img
+                            src={playlist.images[0]?.url || '/placeholder-playlist.jpg'}
+                            alt={playlist.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="p-3 md:p-4">
+                          <h3 className="font-semibold text-white text-sm md:text-base truncate">{playlist.name}</h3>
+                          <p className="text-xs md:text-sm text-zinc-400 truncate">
+                            {playlist.tracks.total} {t('library.tracksCount')}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 md:py-16">
+                    <div className="bg-zinc-800/30 rounded-xl p-6 md:p-8 backdrop-blur-sm inline-block">
+                      <MdPlaylistAdd className="w-12 h-12 md:w-16 md:h-16 text-zinc-500 mx-auto mb-4" />
+                      <p className="text-zinc-300 text-sm md:text-base">{t('library.noPlaylists')}</p>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Indicador de carga para más elementos */}
+            {loading && !initialLoading && (
+              <div className="flex justify-center py-6 md:py-8">
+                <div className="w-8 h-8 md:w-10 md:h-10 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin"></div>
+              </div>
+            )}
+
+            {/* Mensaje de fin de lista */}
+            {!hasMore && !loading && tracks.length > 0 && (
+              <div className="text-center py-6 md:py-8">
+                <p className="text-zinc-400 text-sm md:text-base">
+                  {t('library.endOfLibrary')}
+                </p>
+              </div>
+            )}
+
+            {/* Botón para volver arriba */}
+            {showScrollTop && (
+              <button
+                onClick={scrollToTop}
+                className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-3 md:p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+              >
+                <FaArrowUp className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 }

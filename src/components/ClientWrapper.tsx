@@ -10,6 +10,9 @@ import LanguageProvider from '@/contexts/LanguageContext';
 import YouTubeInitializer from './YouTubeInitializer';
 import ServerLoadingModal from './ServerLoadingModal';
 import ServerLoadingOverlay from './ServerLoadingOverlay';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { DesktopLayout } from '@/components/layouts/DesktopLayout';
+import { MobileLayout } from '@/components/layouts/MobileLayout';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -32,6 +35,7 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
   const [youtubeError, setYoutubeError] = useState<string | null>(null);
   // Estado para controlar la visibilidad del modal
   const [isServerModalOpen, setIsServerModalOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Activar modo debug si es necesario (ej. localhost)
@@ -77,7 +81,11 @@ const ClientWrapper: React.FC<ClientWrapperProps> = ({ children }) => {
         <LanguageProvider>
           <AuthProvider>
             <PlayerProvider youtubeReady={youtubeReady}>
-              <ClientLayout>{children}</ClientLayout>
+              {isMobile ? (
+                <MobileLayout>{children}</MobileLayout>
+              ) : (
+                <DesktopLayout>{children}</DesktopLayout>
+              )}
               <ServerLoadingModal
                 isOpen={isServerModalOpen}
                 onClose={() => setIsServerModalOpen(false)}

@@ -54,9 +54,34 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
   };
 
   // Formatear duración
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
+  const formatDuration = (seconds: number | string) => {
+    // Si es undefined, null o NaN
+    if (!seconds || (typeof seconds === 'number' && isNaN(seconds))) {
+      return '0:00';
+    }
+    
+    // Si es string en formato MM:SS
+    if (typeof seconds === 'string') {
+      if (seconds.includes(':')) {
+        // Ya está formateado, devolverlo tal cual
+        return seconds;
+      }
+      
+      // Intentar convertir a número
+      const parsed = parseInt(seconds);
+      if (isNaN(parsed)) {
+        return '0:00';
+      }
+      seconds = parsed;
+    }
+    
+    // Si es un número muy grande, probablemente esté en milisegundos
+    if (seconds > 10000) {
+      seconds = Math.floor(seconds / 1000);
+    }
+    
+    const minutes = Math.floor(seconds as number / 60);
+    const remainingSeconds = Math.floor((seconds as number) % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 

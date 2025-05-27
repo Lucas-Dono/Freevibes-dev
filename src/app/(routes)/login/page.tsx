@@ -10,12 +10,16 @@ import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const [authError, setAuthError] = useState<string | null>(null);
+  const [spotifyError, setSpotifyError] = useState<string | null>(null);
   const router = useRouter();
   const { isAuthenticated, isDemo, isLoading, toggleDemoMode } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
   const [demoLang, setDemoLang] = useState<string>('es');
   const [isDemoReady, setIsDemoReady] = useState<boolean>(false);
+
+  // Estado para controlar si Spotify está disponible (por ahora siempre false)
+  const [isSpotifyAvailable, setIsSpotifyAvailable] = useState<boolean>(false);
 
   useEffect(() => {
     // Marcar que el componente está montado
@@ -57,6 +61,12 @@ export default function LoginPage() {
   }, []);
 
   const handleSpotifyLogin = () => {
+    if (!isSpotifyAvailable) {
+      setSpotifyError('El modo Spotify aún no está disponible. Por favor, usa el modo demo.');
+      // Limpiar el mensaje después de 5 segundos
+      setTimeout(() => setSpotifyError(null), 5000);
+      return;
+    }
     signIn('spotify', { callbackUrl: '/home' });
   };
 
@@ -112,10 +122,25 @@ export default function LoginPage() {
         </p>
       </div>
 
+      {/* Mensaje de aviso sobre Spotify */}
+      <div className="mb-6 max-w-md w-full">
+        <Alert severity="warning" className="mb-4">
+          <AlertTitle>Aviso importante</AlertTitle>
+          Momentáneamente el modo Spotify no está disponible. Por favor, usa el modo demo para explorar todas las funcionalidades.
+        </Alert>
+      </div>
+
       {authError && (
         <Alert severity="error" className="mb-6 max-w-md w-full">
           <AlertTitle>Error de autenticación</AlertTitle>
           {authError}
+        </Alert>
+      )}
+
+      {spotifyError && (
+        <Alert severity="error" className="mb-6 max-w-md w-full">
+          <AlertTitle>Spotify no disponible</AlertTitle>
+          {spotifyError}
         </Alert>
       )}
 
@@ -129,10 +154,22 @@ export default function LoginPage() {
       <div className="grid gap-4 w-full max-w-md">
         <button
           onClick={handleSpotifyLogin}
-          className="flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-full transition-colors font-medium text-lg"
+          disabled={!isSpotifyAvailable}
+          className={`flex items-center justify-center gap-3 py-3 px-6 rounded-full transition-colors font-medium text-lg relative ${
+            isSpotifyAvailable 
+              ? 'bg-green-600 hover:bg-green-700 text-white cursor-pointer' 
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-60'
+          }`}
         >
-          <SpotifyIcon className="w-6 h-6" />
-          Iniciar sesión con Spotify
+          <SpotifyIcon className={`w-6 h-6 ${!isSpotifyAvailable ? 'opacity-50' : ''}`} />
+          <span className={!isSpotifyAvailable ? 'line-through' : ''}>
+            Iniciar sesión con Spotify
+          </span>
+          {!isSpotifyAvailable && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+              No disponible
+            </span>
+          )}
         </button>
 
         <div className="relative my-4 text-center">
@@ -166,7 +203,7 @@ export default function LoginPage() {
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
               <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
             </svg>
-            Probar Demo
+            Probar Demo (Recomendado)
           </button>
           {!isDemoReady && (
             <p className="text-xs text-red-400 mt-1">El servicio demo no está disponible</p>
@@ -198,6 +235,9 @@ export default function LoginPage() {
                 demo: {
                   ready: isDemoReady,
                   language: demoLang
+                },
+                spotify: {
+                  available: isSpotifyAvailable
                 }
               }, null, 2)}
             </pre>

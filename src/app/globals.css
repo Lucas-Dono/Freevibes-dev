@@ -109,6 +109,10 @@
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
+
+  .mobile-layout {
+    @apply bg-background text-text-primary min-h-screen p-4;
+  }
 }
 
 @layer utilities {
@@ -318,4 +322,28 @@
 .placeholder-genre::before {
   content: "🎸";
   font-size: 2rem;
+}
+
+/* Estilos para el BottomSheet */
+.custom-bottom-sheet {
+  --rsbs-backdrop-bg: rgba(0, 0, 0, 0.5);
+  --rsbs-handle-bg: rgba(255, 255, 255, 0.3);
+}
+
+.custom-bottom-sheet [data-rsbs-header] {
+  background-color: rgba(15, 15, 24, 0.98);
+}
+
+.custom-bottom-sheet [data-rsbs-content] {
+  background-color: rgba(15, 15, 24, 0.98);
+}
+
+/* Utilidad para ocultar scrollbar en scroll horizontal móvil */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
 }

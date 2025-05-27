@@ -687,9 +687,9 @@ export default function ExplorePage() {
   // Loading spinner con mejora visual
   if (loading && categories.length === 0) {
     return (
-      <div className="container mx-auto p-6 min-h-screen flex flex-col items-center justify-center">
-        <div className="w-20 h-20 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin mb-6"></div>
-        <h2 className="text-xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-600">
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-6 min-h-screen flex flex-col items-center justify-center">
+        <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin mb-4 md:mb-6"></div>
+        <h2 className="text-lg md:text-xl font-semibold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-600">
           {t('explore.loading.discovering')}
         </h2>
       </div>
@@ -697,281 +697,368 @@ export default function ExplorePage() {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-gradient-to-b from-zinc-900 to-black min-h-screen">
-      <motion.h1
-        className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {t('explore.title')}
-      </motion.h1>
-
-      {error && (
-        <motion.div
-          className="bg-red-900/30 border border-red-500/50 text-red-200 px-6 py-4 rounded-xl mb-6 backdrop-blur-sm"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
+    <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen">
+      {/* Container responsive: padding reducido en móvil */}
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-6">
+        <motion.h1
+          className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <p className="font-medium">{error}</p>
-        </motion.div>
-      )}
+          {t('explore.title')}
+        </motion.h1>
 
-      {/* Sección de recomendaciones personalizadas */}
-      <motion.section
-        className="mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <div className="flex items-center mb-6">
-          <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">{t('explore.forYou')}</h2>
-        </div>
-
-        {loadingPersonal ? (
-          <LoadingState
-            type="card"
-            count={5}
-            message={t('explore.loading.recommendations')}
-            aspectRatio="square"
-          />
-        ) : personalRecommendations.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {personalRecommendations.map((track, index) => (
-              <UnifiedMusicCard
-                key={track.id}
-                id={track.id}
-                title={track.title}
-                subtitle={track.artist}
-                coverUrl={track.cover}
-                isPlayable={true}
-                itemType={track.itemType as any}
-                badge={track.source ? {
-                  text: track.source === 'spotify' ? 'Spotify' : 'Last.fm',
-                  color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-green-500'
-                } : undefined}
-                onPlay={() => handlePlayTrack(track)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">{t('explore.noRecommendations')}</p>
-          </div>
+              {error && (
+          <motion.div
+            className="bg-red-900/30 border border-red-500/50 text-red-200 px-4 md:px-6 py-3 md:py-4 rounded-xl mb-4 md:mb-6 backdrop-blur-sm"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <p className="font-medium text-sm md:text-base">{error}</p>
+          </motion.div>
         )}
-      </motion.section>
 
-      {/* Sección de canciones en tendencia */}
-      <motion.section
-        className="mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="flex items-center mb-6">
-          <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-teal-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">{t('explore.trending')}</h2>
-        </div>
-
-        {loadingTrending ? (
-          <LoadingState
-            type="card"
-            count={5}
-            message={t('explore.loading.trending')}
-            aspectRatio="square"
-          />
-        ) : trendingTracks.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {trendingTracks.map((track, index) => (
-              <UnifiedMusicCard
-                key={track.id}
-                id={track.id}
-                title={track.title}
-                subtitle={track.artist}
-                coverUrl={track.cover}
-                isPlayable={true}
-                itemType={track.itemType as any}
-                badge={track.source ? {
-                  text: track.source === 'spotify' ? 'Spotify' : 'Fallback',
-                  color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-zinc-700'
-                } : undefined}
-                onPlay={() => handlePlayTrack(track)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">{t('explore.noTrends')}</p>
-          </div>
-        )}
-      </motion.section>
-
-      {/* Sección de géneros usando el validador proactivo */}
-      <motion.section
-        className="mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <div className="flex items-center mb-6">
-          <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">{t('explore.genres')}</h2>
-        </div>
-        <div className="bg-zinc-800/40 backdrop-blur-sm p-6 rounded-xl">
-          <GenreSelector onGenreSelect={handleGenreSelect} />
-        </div>
-      </motion.section>
-
-      {/* Sección de recomendaciones generales */}
-      <motion.section
-        className="mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        <div className="flex items-center mb-6">
-          <div className="w-1 h-6 bg-gradient-to-b from-amber-500 to-orange-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">{t('explore.worldMusic')}</h2>
-        </div>
-
-        {loading ? (
-          <LoadingState
-            type="card"
-            count={5}
-            message={t('explore.loading.worldMusic')}
-            aspectRatio="square"
-          />
-        ) : recommendedTracks.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {recommendedTracks.map((track, index) => (
-              <UnifiedMusicCard
-                key={track.id}
-                id={track.id}
-                title={track.title}
-                subtitle={track.artist}
-                coverUrl={track.cover}
-                isPlayable={true}
-                itemType={track.itemType as any}
-                badge={track.language ? {
-                  text: track.language,
-                  color:
-                    track.language === 'Español' ? 'bg-red-500' :
-                    track.language === 'English' ? 'bg-blue-500' :
-                    track.language === 'Português' ? 'bg-green-500' :
-                    track.language === 'Français' ? 'bg-purple-500' :
-                    track.language === 'Italiano' ? 'bg-amber-500' :
-                    'bg-gray-500'
-                } : undefined}
-                onPlay={() => handlePlayTrack(track)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-            <p className="text-zinc-300">{t('explore.noRecommendations')}</p>
-          </div>
-        )}
-      </motion.section>
-
-      {/* Sección de categorías de Spotify */}
-      {!isDemo && (
-      <motion.section
-        className="mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <div className="flex items-center mb-6">
-          <div className="w-1 h-6 bg-gradient-to-b from-pink-500 to-rose-600 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-white">{t('explore.discover')}</h2>
-        </div>
-
-          {loadingCategories ? (
-            <LoadingState
-              type="grid"
-              count={8}
-              message={t('explore.loading.genres')}
-              withText={true}
-            />
-          ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {categories.map((category, index) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              whileHover={{ y: -5 }}
-            >
-              <Link
-                href={`/explore/category/${category.id}`}
-                className="block h-full bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl group"
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  {category.icons && category.icons.length > 0 ? (
-                    <img
-                      src={category.icons[0].url}
-                      alt={category.name}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-zinc-700 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
-                      <span className="text-white text-5xl font-bold">{category.name.charAt(0)}</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-white">{category.name}</h3>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-          )}
-      </motion.section>
-      )}
-
-      {/* Sección de playlists de categoría */}
-      {selectedCategory && (
+        {/* Sección de recomendaciones personalizadas */}
         <motion.section
+          className="mb-8 md:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <div className="flex items-center mb-6">
-            <div className="w-1 h-6 bg-gradient-to-b from-teal-500 to-emerald-600 rounded-full mr-3"></div>
-            <h2 className="text-2xl font-bold text-white">
-              {t('explore.playlistsOf').replace('{category}', categories.find(c => c.id === selectedCategory)?.name || selectedCategory)}
-            </h2>
+          <div className="flex items-center mb-4 md:mb-6">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
+            <h2 className="text-xl md:text-2xl font-bold text-white">{t('explore.forYou')}</h2>
           </div>
-          {loading ? (
-            <div className="flex justify-center items-center h-60 bg-zinc-800/30 rounded-xl backdrop-blur-sm">
-              <div className="w-10 h-10 border-4 border-teal-300 border-t-teal-600 rounded-full animate-spin"></div>
-            </div>
-          ) : categoryPlaylists.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {categoryPlaylists.map((playlist, index) => (
-                <UnifiedMusicCard
-                  key={playlist.id}
-                  id={playlist.id}
-                  title={playlist.name}
-                  subtitle={playlist.owner.display_name}
-                  coverUrl={playlist.images[0]?.url || ''}
-                  isPlayable={false}
-                  linkTo={`/playlist/${playlist.id}`}
-                />
-              ))}
-            </div>
+
+          {loadingPersonal ? (
+            <LoadingState
+              type="card"
+              count={5}
+              message={t('explore.loading.recommendations')}
+              aspectRatio="square"
+            />
+          ) : personalRecommendations.length > 0 ? (
+            <>
+              {/* Vista móvil: scroll horizontal */}
+              <div className="md:hidden">
+                <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                  {personalRecommendations.slice(0, 8).map((track, index) => (
+                    <div key={track.id} className="flex-shrink-0 w-32">
+                      <UnifiedMusicCard
+                        id={track.id}
+                        title={track.title}
+                        subtitle={track.artist}
+                        coverUrl={track.cover}
+                        isPlayable={true}
+                        itemType={track.itemType as any}
+                        badge={track.source ? {
+                          text: track.source === 'spotify' ? 'Spotify' : 'Last.fm',
+                          color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-green-500'
+                        } : undefined}
+                        onPlay={() => handlePlayTrack(track)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Vista desktop: grid */}
+              <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {personalRecommendations.map((track, index) => (
+                  <UnifiedMusicCard
+                    key={track.id}
+                    id={track.id}
+                    title={track.title}
+                    subtitle={track.artist}
+                    coverUrl={track.cover}
+                    isPlayable={true}
+                    itemType={track.itemType as any}
+                    badge={track.source ? {
+                      text: track.source === 'spotify' ? 'Spotify' : 'Last.fm',
+                      color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-green-500'
+                    } : undefined}
+                    onPlay={() => handlePlayTrack(track)}
+                  />
+                ))}
+              </div>
+            </>
           ) : (
-            <div className="text-center p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
-              <p className="text-zinc-300">{t('explore.noPlaylists')}</p>
+            <div className="text-center p-6 md:p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
+              <p className="text-zinc-300 text-sm md:text-base">{t('explore.noRecommendations')}</p>
             </div>
           )}
         </motion.section>
-      )}
+
+        {/* Sección de canciones en tendencia */}
+        <motion.section
+          className="mb-8 md:mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="flex items-center mb-4 md:mb-6">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-green-500 to-teal-600 rounded-full mr-3"></div>
+            <h2 className="text-xl md:text-2xl font-bold text-white">{t('explore.trending')}</h2>
+          </div>
+
+          {loadingTrending ? (
+            <LoadingState
+              type="card"
+              count={5}
+              message={t('explore.loading.trending')}
+              aspectRatio="square"
+            />
+          ) : trendingTracks.length > 0 ? (
+            <>
+              {/* Vista móvil: scroll horizontal */}
+              <div className="md:hidden">
+                <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                  {trendingTracks.slice(0, 8).map((track, index) => (
+                    <div key={track.id} className="flex-shrink-0 w-32">
+                      <UnifiedMusicCard
+                        id={track.id}
+                        title={track.title}
+                        subtitle={track.artist}
+                        coverUrl={track.cover}
+                        isPlayable={true}
+                        itemType={track.itemType as any}
+                        badge={track.source ? {
+                          text: track.source === 'spotify' ? 'Spotify' : 'Fallback',
+                          color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-zinc-700'
+                        } : undefined}
+                        onPlay={() => handlePlayTrack(track)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Vista desktop: grid */}
+              <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {trendingTracks.map((track, index) => (
+                  <UnifiedMusicCard
+                    key={track.id}
+                    id={track.id}
+                    title={track.title}
+                    subtitle={track.artist}
+                    coverUrl={track.cover}
+                    isPlayable={true}
+                    itemType={track.itemType as any}
+                    badge={track.source ? {
+                      text: track.source === 'spotify' ? 'Spotify' : 'Fallback',
+                      color: track.source === 'spotify' ? 'bg-purple-500' : 'bg-zinc-700'
+                    } : undefined}
+                    onPlay={() => handlePlayTrack(track)}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="text-center p-6 md:p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
+              <p className="text-zinc-300 text-sm md:text-base">{t('explore.noTrends')}</p>
+            </div>
+          )}
+        </motion.section>
+
+        {/* Sección de géneros usando el validador proactivo */}
+        <motion.section
+          className="mb-8 md:mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="flex items-center mb-4 md:mb-6">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full mr-3"></div>
+            <h2 className="text-xl md:text-2xl font-bold text-white">{t('explore.genres')}</h2>
+          </div>
+          <div className="bg-zinc-800/40 backdrop-blur-sm p-4 md:p-6 rounded-xl">
+            <GenreSelector onGenreSelect={handleGenreSelect} />
+          </div>
+        </motion.section>
+
+        {/* Sección de recomendaciones generales */}
+        <motion.section
+          className="mb-8 md:mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <div className="flex items-center mb-4 md:mb-6">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-amber-500 to-orange-600 rounded-full mr-3"></div>
+            <h2 className="text-xl md:text-2xl font-bold text-white">{t('explore.worldMusic')}</h2>
+          </div>
+
+          {loading ? (
+            <LoadingState
+              type="card"
+              count={5}
+              message={t('explore.loading.worldMusic')}
+              aspectRatio="square"
+            />
+          ) : recommendedTracks.length > 0 ? (
+            <>
+              {/* Vista móvil: scroll horizontal */}
+              <div className="md:hidden">
+                <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                  {recommendedTracks.slice(0, 8).map((track, index) => (
+                    <div key={track.id} className="flex-shrink-0 w-32">
+                      <UnifiedMusicCard
+                        id={track.id}
+                        title={track.title}
+                        subtitle={track.artist}
+                        coverUrl={track.cover}
+                        isPlayable={true}
+                        itemType={track.itemType as any}
+                        badge={track.language ? {
+                          text: track.language,
+                          color:
+                            track.language === 'Español' ? 'bg-red-500' :
+                            track.language === 'English' ? 'bg-blue-500' :
+                            track.language === 'Português' ? 'bg-green-500' :
+                            track.language === 'Français' ? 'bg-purple-500' :
+                            track.language === 'Italiano' ? 'bg-amber-500' :
+                            'bg-gray-500'
+                        } : undefined}
+                        onPlay={() => handlePlayTrack(track)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Vista desktop: grid */}
+              <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {recommendedTracks.map((track, index) => (
+                  <UnifiedMusicCard
+                    key={track.id}
+                    id={track.id}
+                    title={track.title}
+                    subtitle={track.artist}
+                    coverUrl={track.cover}
+                    isPlayable={true}
+                    itemType={track.itemType as any}
+                    badge={track.language ? {
+                      text: track.language,
+                      color:
+                        track.language === 'Español' ? 'bg-red-500' :
+                        track.language === 'English' ? 'bg-blue-500' :
+                        track.language === 'Português' ? 'bg-green-500' :
+                        track.language === 'Français' ? 'bg-purple-500' :
+                        track.language === 'Italiano' ? 'bg-amber-500' :
+                        'bg-gray-500'
+                    } : undefined}
+                    onPlay={() => handlePlayTrack(track)}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="text-center p-6 md:p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
+              <p className="text-zinc-300 text-sm md:text-base">{t('explore.noRecommendations')}</p>
+            </div>
+          )}
+        </motion.section>
+
+        {/* Sección de categorías de Spotify */}
+        {!isDemo && (
+        <motion.section
+          className="mb-8 md:mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <div className="flex items-center mb-4 md:mb-6">
+            <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-pink-500 to-rose-600 rounded-full mr-3"></div>
+            <h2 className="text-xl md:text-2xl font-bold text-white">{t('explore.discover')}</h2>
+          </div>
+
+            {loadingCategories ? (
+              <LoadingState
+                type="grid"
+                count={8}
+                message={t('explore.loading.genres')}
+                withText={true}
+              />
+            ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+            {categories.map((category, index) => (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                whileHover={{ y: -5 }}
+              >
+                <Link
+                  href={`/explore/category/${category.id}`}
+                  className="block h-full bg-zinc-800/70 hover:bg-zinc-700/70 transition-all duration-300 rounded-xl overflow-hidden shadow-xl group"
+                >
+                  <div className="aspect-square relative overflow-hidden">
+                    {category.icons && category.icons.length > 0 ? (
+                      <img
+                        src={category.icons[0].url}
+                        alt={category.name}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-zinc-700 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
+                        <span className="text-white text-3xl md:text-5xl font-bold">{category.name.charAt(0)}</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                  </div>
+                  <div className="p-3 md:p-4">
+                    <h3 className="font-bold text-white text-sm md:text-base">{category.name}</h3>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+            )}
+        </motion.section>
+        )}
+
+        {/* Sección de playlists de categoría */}
+        {selectedCategory && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <div className="flex items-center mb-4 md:mb-6">
+              <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-teal-500 to-emerald-600 rounded-full mr-3"></div>
+              <h2 className="text-xl md:text-2xl font-bold text-white">
+                {t('explore.playlistsOf').replace('{category}', categories.find(c => c.id === selectedCategory)?.name || selectedCategory)}
+              </h2>
+            </div>
+            {loading ? (
+              <div className="flex justify-center items-center h-40 md:h-60 bg-zinc-800/30 rounded-xl backdrop-blur-sm">
+                <div className="w-8 h-8 md:w-10 md:h-10 border-4 border-teal-300 border-t-teal-600 rounded-full animate-spin"></div>
+              </div>
+            ) : categoryPlaylists.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                {categoryPlaylists.map((playlist, index) => (
+                  <UnifiedMusicCard
+                    key={playlist.id}
+                    id={playlist.id}
+                    title={playlist.name}
+                    subtitle={playlist.owner.display_name}
+                    coverUrl={playlist.images[0]?.url || ''}
+                    isPlayable={false}
+                    linkTo={`/playlist/${playlist.id}`}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center p-6 md:p-8 rounded-xl bg-zinc-800/30 backdrop-blur-sm">
+                <p className="text-zinc-300 text-sm md:text-base">{t('explore.noPlaylists')}</p>
+              </div>
+            )}
+          </motion.section>
+        )}
+      </div>
     </div>
   );
 }

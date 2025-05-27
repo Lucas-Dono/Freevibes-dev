@@ -70,21 +70,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     seekTo(newTime);
   };
 
-  // Detector simple del último segundo de la canción
-  useEffect(() => {
-    // Solo activar si hay reproducción en curso y tenemos duración válida
-    if (!isPlaying || !currentTrack || duration <= 0) return;
-
-    // Calcular tiempo restante en segundos
-    const timeRemaining = Math.max(0, duration - currentTime);
-
-    // Si estamos en el último segundo de la canción
-    if (timeRemaining <= 1 && timeRemaining > 0) {
-      console.log('[YouTubePlayer] Último segundo de reproducción, avanzando a siguiente canción');
-      nextTrack();
-    }
-  }, [currentTime, duration, isPlaying, currentTrack, nextTrack]);
-
   if (!currentTrack) {
     return (
       <Box

@@ -215,32 +215,8 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
           } catch {};
       }
 
-      // Detectar final de la canción y avanzar automáticamente
-      if (duration > 0 && currentSeconds > 0) {
-        const progressRatio = currentSeconds / duration;
-        const timeRemaining = Math.max(0, duration - currentSeconds);
-
-        // Si estamos muy cerca del final (98% o menos de 1 segundo restante)
-        if (progressRatio >= 0.98 || timeRemaining < 1) {
-          // Verificar el estado del player para confirmar
-          if (typeof youtubePlayerRef.current.getPlayerState === 'function') {
-            const playerState = youtubePlayerRef.current.getPlayerState();
-            
-            // Estado 0 = terminado, o si estamos muy cerca del final y no está reproduciendo
-            if (playerState === 0 || (progressRatio >= 0.995 && playerState !== 1)) {
-              console.log('[PlayerContext] Canción terminada, avanzando a la siguiente');
-              // Limpiar el timer antes de cambiar de canción para evitar conflictos
-              if (timeUpdateIntervalRef.current) {
-                clearInterval(timeUpdateIntervalRef.current);
-                timeUpdateIntervalRef.current = null;
-              }
-              // Avanzar a la siguiente canción
-              setTimeout(() => nextTrack(), 100);
-              return;
-            }
-          }
-        }
-      }
+      // ELIMINADO: Detección compleja del final de canción
+      // La detección del final se maneja ahora solo en el evento 'onStateChange' del reproductor
       } catch {};
     }, 50);
   };
@@ -1545,6 +1521,14 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
             setYoutubePlayer(player);
             setIsPlaying(true);
             startTimeUpdates();
+          }}
+          onEnd={() => {
+            console.log('[PlayerContext] Canción terminada, avanzando a la siguiente');
+            setIsPlaying(false);
+            // Pequeño delay para asegurar que el estado se actualice
+            setTimeout(() => {
+              nextTrack();
+            }, 100);
           }}
         />
       )}

@@ -54,20 +54,26 @@ export const useBackgroundPlayback = (options: BackgroundPlaybackOptions = {}) =
 
     // Si la página se oculta y estamos reproduciendo, intentar mantener la reproducción
     if (!isVisible && isPlayingRef.current && preventPause && playerRef.current) {
-      setTimeout(() => {
-        try {
-          // Verificar si el player se pausó automáticamente y reanudar
-          if (typeof playerRef.current.getPlayerState === 'function') {
-            const state = playerRef.current.getPlayerState();
-            if (state === 2) { // Estado pausado
-              console.log('[BackgroundPlayback] Reanudando reproducción en segundo plano');
-              playerRef.current.playVideo();
+      // Múltiples intentos de reanudar con diferentes delays
+      const retryIntervals = [100, 300, 500, 1000, 2000];
+      
+      retryIntervals.forEach((delay, index) => {
+        setTimeout(() => {
+          try {
+            if (!isPlayingRef.current) return; // Si ya no está reproduciendo, no hacer nada
+            
+            if (typeof playerRef.current.getPlayerState === 'function') {
+              const state = playerRef.current.getPlayerState();
+              if (state === 2) { // Estado pausado
+                console.log(`[BackgroundPlayback] Intento ${index + 1}: Reanudando reproducción en segundo plano`);
+                playerRef.current.playVideo();
+              }
             }
+          } catch (error) {
+            console.warn(`[BackgroundPlayback] Error en intento ${index + 1}:`, error);
           }
-        } catch (error) {
-          console.warn('[BackgroundPlayback] Error al reanudar reproducción:', error);
-        }
-      }, 100);
+        }, delay);
+      });
     }
 
     // Manejar Wake Lock según visibilidad
@@ -83,21 +89,27 @@ export const useBackgroundPlayback = (options: BackgroundPlaybackOptions = {}) =
   const handleWindowBlur = useCallback(() => {
     console.log('[BackgroundPlayback] Ventana perdió el foco');
     
-    // Intentar mantener la reproducción activa
+    // Intentar mantener la reproducción activa con múltiples intentos
     if (isPlayingRef.current && preventPause && playerRef.current) {
-      setTimeout(() => {
-        try {
-          if (typeof playerRef.current.getPlayerState === 'function') {
-            const state = playerRef.current.getPlayerState();
-            if (state === 2) { // Estado pausado
-              console.log('[BackgroundPlayback] Reanudando tras pérdida de foco');
-              playerRef.current.playVideo();
+      const retryIntervals = [200, 500, 1000, 1500, 3000];
+      
+      retryIntervals.forEach((delay, index) => {
+        setTimeout(() => {
+          try {
+            if (!isPlayingRef.current) return; // Si ya no está reproduciendo, no hacer nada
+            
+            if (typeof playerRef.current.getPlayerState === 'function') {
+              const state = playerRef.current.getPlayerState();
+              if (state === 2) { // Estado pausado
+                console.log(`[BackgroundPlayback] Blur - Intento ${index + 1}: Reanudando tras pérdida de foco`);
+                playerRef.current.playVideo();
+              }
             }
+          } catch (error) {
+            console.warn(`[BackgroundPlayback] Blur - Error en intento ${index + 1}:`, error);
           }
-        } catch (error) {
-          console.warn('[BackgroundPlayback] Error al reanudar tras blur:', error);
-        }
-      }, 200);
+        }, delay);
+      });
     }
   }, [preventPause]);
 

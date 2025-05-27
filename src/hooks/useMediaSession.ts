@@ -152,12 +152,35 @@ export const useMediaSession = (
   ) => {
     if (!('mediaSession' in navigator) || !('setPositionState' in navigator.mediaSession)) return;
 
+    // Validar que los datos sean válidos antes de enviarlos
+    if (!duration || duration <= 0 || !isFinite(duration)) {
+      console.warn('[MediaSession] Duración inválida:', duration);
+      return;
+    }
+
+    if (!isFinite(currentTime) || currentTime < 0) {
+      console.warn('[MediaSession] Tiempo actual inválido:', currentTime);
+      return;
+    }
+
+    // Asegurar que currentTime no sea mayor que duration
+    const validCurrentTime = Math.min(currentTime, duration);
+    
+    // Solo actualizar si hay cambios significativos (evitar spam de actualizaciones)
+    const timeDiff = Math.abs(validCurrentTime - (updatePositionState as any).lastTime || 0);
+    if (timeDiff < 0.5) return; // Solo actualizar cada 0.5 segundos
+
     try {
       navigator.mediaSession.setPositionState({
         duration: duration,
         playbackRate: playbackRate,
-        position: currentTime
+        position: validCurrentTime
       });
+      
+      // Guardar el último tiempo para evitar actualizaciones innecesarias
+      (updatePositionState as any).lastTime = validCurrentTime;
+      
+      console.log(`[MediaSession] Posición actualizada: ${Math.floor(validCurrentTime)}s / ${Math.floor(duration)}s`);
     } catch (error) {
       console.warn('[MediaSession] Error al actualizar posición:', error);
     }

@@ -4,9 +4,10 @@ import YouTube, { YouTubeProps } from 'react-youtube';
 interface YouTubePlayerProps {
   videoId: string;
   onReady: (player: any) => void;
+  onEnd?: () => void;
 }
 
-const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReady }) => {
+const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReady, onEnd }) => {
   const opts: YouTubeProps['opts'] = {
     height: '1',
     width: '1',
@@ -28,6 +29,13 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReady }) => {
     onReady(event.target);
   };
 
+  const handleEnd: YouTubeProps['onEnd'] = () => {
+    console.log('[YouTubePlayer] Canción terminada, ejecutando callback');
+    if (onEnd) {
+      onEnd();
+    }
+  };
+
   return (
     <div style={{
       position: 'fixed',
@@ -39,7 +47,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onReady }) => {
       pointerEvents: 'none',
       zIndex: -1
     }}>
-      <YouTube videoId={videoId} opts={opts} onReady={handleReady} />
+      <YouTube 
+        videoId={videoId} 
+        opts={opts} 
+        onReady={handleReady}
+        onEnd={handleEnd}
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { Track } from '@/types/types';
 
 interface MediaSessionOptions {
@@ -21,6 +21,25 @@ export const useMediaSession = (
     onNextTrack,
     onSeekTo
   } = options;
+
+  // Referencia para evitar configurar los handlers múltiples veces
+  const handlersConfiguredRef = useRef(false);
+  
+  // Referencias para las funciones callback para evitar closures stale
+  const onPlayRef = useRef(onPlay);
+  const onPauseRef = useRef(onPause);
+  const onPreviousTrackRef = useRef(onPreviousTrack);
+  const onNextTrackRef = useRef(onNextTrack);
+  const onSeekToRef = useRef(onSeekTo);
+
+  // Actualizar las referencias cuando cambien las funciones
+  useEffect(() => {
+    onPlayRef.current = onPlay;
+    onPauseRef.current = onPause;
+    onPreviousTrackRef.current = onPreviousTrack;
+    onNextTrackRef.current = onNextTrack;
+    onSeekToRef.current = onSeekTo;
+  }, [onPlay, onPause, onPreviousTrack, onNextTrack, onSeekTo]);
 
   // Función para actualizar los metadatos de la Media Session
   const updateMediaMetadata = useCallback((track: Track) => {
@@ -71,67 +90,6 @@ export const useMediaSession = (
     }
   }, []);
 
-  // Función para configurar los action handlers
-  const setupActionHandlers = useCallback(() => {
-    if (!('mediaSession' in navigator)) return;
-
-    try {
-      // Play
-      navigator.mediaSession.setActionHandler('play', () => {
-        console.log('[MediaSession] Acción: Play');
-        if (onPlay) onPlay();
-      });
-
-      // Pause
-      navigator.mediaSession.setActionHandler('pause', () => {
-        console.log('[MediaSession] Acción: Pause');
-        if (onPause) onPause();
-      });
-
-      // Previous Track
-      navigator.mediaSession.setActionHandler('previoustrack', () => {
-        console.log('[MediaSession] Acción: Previous Track');
-        if (onPreviousTrack) onPreviousTrack();
-      });
-
-      // Next Track
-      navigator.mediaSession.setActionHandler('nexttrack', () => {
-        console.log('[MediaSession] Acción: Next Track');
-        if (onNextTrack) onNextTrack();
-      });
-
-      // Seek Backward
-      navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-        console.log('[MediaSession] Acción: Seek Backward');
-        if (onSeekTo) {
-          const seekTime = (details.seekOffset || 10) * -1;
-          onSeekTo(seekTime);
-        }
-      });
-
-      // Seek Forward
-      navigator.mediaSession.setActionHandler('seekforward', (details) => {
-        console.log('[MediaSession] Acción: Seek Forward');
-        if (onSeekTo) {
-          const seekTime = details.seekOffset || 10;
-          onSeekTo(seekTime);
-        }
-      });
-
-      // Seek To (para barras de progreso)
-      navigator.mediaSession.setActionHandler('seekto', (details) => {
-        console.log('[MediaSession] Acción: Seek To');
-        if (onSeekTo && details.seekTime !== undefined) {
-          onSeekTo(details.seekTime);
-        }
-      });
-
-      console.log('[MediaSession] Action handlers configurados');
-    } catch (error) {
-      console.warn('[MediaSession] Error al configurar action handlers:', error);
-    }
-  }, [onPlay, onPause, onPreviousTrack, onNextTrack, onSeekTo]);
-
   // Función para actualizar el estado de reproducción
   const updatePlaybackState = useCallback((playing: boolean) => {
     if (!('mediaSession' in navigator)) return;
@@ -168,7 +126,7 @@ export const useMediaSession = (
     
     // Solo actualizar si hay cambios significativos (evitar spam de actualizaciones)
     const timeDiff = Math.abs(validCurrentTime - (updatePositionState as any).lastTime || 0);
-    if (timeDiff < 0.5) return; // Solo actualizar cada 0.5 segundos
+    if (timeDiff < 2) return; // Solo actualizar cada 2 segundos
 
     try {
       navigator.mediaSession.setPositionState({
@@ -195,8 +153,65 @@ export const useMediaSession = (
 
   // Configurar action handlers una vez
   useEffect(() => {
-    setupActionHandlers();
-  }, [setupActionHandlers]);
+    if (!handlersConfiguredRef.current && 'mediaSession' in navigator) {
+      try {
+        // Play
+        navigator.mediaSession.setActionHandler('play', () => {
+          console.log('[MediaSession] Acción: Play');
+          if (onPlayRef.current) onPlayRef.current();
+        });
+
+        // Pause
+        navigator.mediaSession.setActionHandler('pause', () => {
+          console.log('[MediaSession] Acción: Pause');
+          if (onPauseRef.current) onPauseRef.current();
+        });
+
+        // Previous Track
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+          console.log('[MediaSession] Acción: Previous Track');
+          if (onPreviousTrackRef.current) onPreviousTrackRef.current();
+        });
+
+        // Next Track
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+          console.log('[MediaSession] Acción: Next Track');
+          if (onNextTrackRef.current) onNextTrackRef.current();
+        });
+
+        // Seek Backward
+        navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+          console.log('[MediaSession] Acción: Seek Backward');
+          if (onSeekToRef.current) {
+            const seekTime = (details.seekOffset || 10) * -1;
+            onSeekToRef.current(seekTime);
+          }
+        });
+
+        // Seek Forward
+        navigator.mediaSession.setActionHandler('seekforward', (details) => {
+          console.log('[MediaSession] Acción: Seek Forward');
+          if (onSeekToRef.current) {
+            const seekTime = details.seekOffset || 10;
+            onSeekToRef.current(seekTime);
+          }
+        });
+
+        // Seek To (para barras de progreso)
+        navigator.mediaSession.setActionHandler('seekto', (details) => {
+          console.log('[MediaSession] Acción: Seek To');
+          if (onSeekToRef.current && details.seekTime !== undefined) {
+            onSeekToRef.current(details.seekTime);
+          }
+        });
+
+        handlersConfiguredRef.current = true;
+        console.log('[MediaSession] Action handlers configurados una sola vez');
+      } catch (error) {
+        console.warn('[MediaSession] Error al configurar action handlers:', error);
+      }
+    }
+  }, []); // Sin dependencias para que solo se ejecute una vez
 
   // Actualizar estado de reproducción
   useEffect(() => {

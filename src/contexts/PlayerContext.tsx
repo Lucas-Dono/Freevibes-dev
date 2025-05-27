@@ -1506,7 +1506,14 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtub
   // Actualizar posición en Media Session cuando cambie el tiempo
   useEffect(() => {
     if (duration > 0 && currentTime >= 0) {
-      mediaSession.updatePositionState(duration, currentTime);
+      // Throttle manual: solo actualizar cada 2 segundos
+      const now = Date.now();
+      const lastUpdate = (mediaSession.updatePositionState as any).lastUpdateTime || 0;
+      
+      if (now - lastUpdate > 2000) { // 2 segundos
+        mediaSession.updatePositionState(duration, currentTime);
+        (mediaSession.updatePositionState as any).lastUpdateTime = now;
+      }
     }
   }, [currentTime, duration, mediaSession]);
 

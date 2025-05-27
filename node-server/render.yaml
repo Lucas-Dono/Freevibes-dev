@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: musicverse-node-api
+    name: freevibes-node-api
     env: node
     buildCommand: npm install
     startCommand: npm start
@@ -13,4 +13,4 @@ services:
       - key: CORS_ORIGIN
         value: https://tu-frontend-vercel.vercel.app
       - key: YOUTUBE_API_URL
-        sync: false # Se configurará manualmente 
+        sync: false # Se configurará manualmente

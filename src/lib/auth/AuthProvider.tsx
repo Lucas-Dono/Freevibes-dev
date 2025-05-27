@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       setError(null);
-      
+
       // En una app real, aquí haríamos una llamada a la API
       // Por ahora, simulamos un login exitoso con datos de ejemplo
       const mockUser: User = {
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         name: 'Usuario de Prueba',
         email: email,
       };
-      
+
       // Guardar en localStorage para persistencia
       localStorage.setItem('user', JSON.stringify(mockUser));
       setUser(mockUser);
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       // En una app real, aquí haríamos una llamada a la API para logout
-      
+
       // Limpiar datos locales
       localStorage.removeItem('user');
       localStorage.removeItem('spotify_token');
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       setError(null);
-      
+
       // En una app real, aquí haríamos una llamada a la API para registro
       // Por ahora, simulamos un registro exitoso
       const mockUser: User = {
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         name: name,
         email: email,
       };
-      
+
       // Guardar en localStorage para persistencia
       localStorage.setItem('user', JSON.stringify(mockUser));
       setUser(mockUser);
@@ -115,4 +115,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
-}; 
+};

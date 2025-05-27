@@ -1,19 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  CircularProgress, 
-  Paper, 
-  Chip, 
-  Grid, 
-  FormControl, 
-  Select, 
-  MenuItem, 
-  InputLabel, 
-  Card, 
-  CardMedia, 
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Paper,
+  Chip,
+  Grid,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  Card,
+  CardMedia,
   CardContent,
   Divider,
   Button,
@@ -68,13 +68,13 @@ const popularGenresForSelection = [
 function PercentageBar({ percentage, color = '#1DB954' }: { percentage: number, color?: string }) {
   return (
     <Box sx={{ width: '100%', bgcolor: 'rgba(255,255,255,0.1)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-      <Box 
-        sx={{ 
-          width: `${percentage}%`, 
-          bgcolor: color, 
+      <Box
+        sx={{
+          width: `${percentage}%`,
+          bgcolor: color,
           height: '100%',
           transition: 'width 1s ease-in-out'
-        }} 
+        }}
       />
     </Box>
   );
@@ -105,28 +105,28 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
 
   const handleCustomGenreAdd = () => {
     if (!customGenre.trim()) return;
-    
+
     // Verificar si ya existe
     if (selectedGenres.some(g => g.name.toLowerCase() === customGenre.toLowerCase())) {
       setError('Este género ya ha sido seleccionado');
       setShowSnackbar(true);
       return;
     }
-    
+
     // Verificar límite
     if (selectedGenres.length >= 10) {
       setError('Puedes seleccionar un máximo de 10 géneros');
       setShowSnackbar(true);
       return;
     }
-    
+
     // Generar un color aleatorio para el género personalizado
     const randomColorIndex = Math.floor(Math.random() * popularGenresForSelection.length);
     const newGenre = {
       name: customGenre.trim(),
       color: popularGenresForSelection[randomColorIndex].color
     };
-    
+
     setSelectedGenres([...selectedGenres, newGenre]);
     setCustomGenre('');
   };
@@ -137,14 +137,14 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
       setShowSnackbar(true);
       return;
     }
-    
+
     // Convertir los géneros seleccionados al formato esperado
     const formattedGenres = selectedGenres.map(genre => ({
       name: genre.name,
       count: Math.floor(Math.random() * 30) + 70, // Valor aleatorio entre 70-100
       percentage: Math.floor(Math.random() * 30) + 70 // Porcentaje aleatorio entre 70-100%
     }));
-    
+
     onSelectionComplete(formattedGenres);
   };
 
@@ -156,7 +156,7 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Por favor, selecciona entre 3 y 10 géneros musicales que te gusten. Esto nos ayudará a personalizar tus recomendaciones.
       </Typography>
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="body2" fontWeight="medium" gutterBottom>
           Géneros seleccionados: {selectedGenres.length}/10
@@ -182,7 +182,7 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
           )}
         </Box>
       </Box>
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="body2" fontWeight="medium" gutterBottom>
           Añadir género personalizado:
@@ -196,15 +196,15 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
             fullWidth
             onKeyPress={(e) => e.key === 'Enter' && handleCustomGenreAdd()}
           />
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleCustomGenreAdd}
           >
             Añadir
           </Button>
         </Box>
       </Box>
-      
+
       <Box sx={{ mb: 3 }}>
         <Typography variant="body2" fontWeight="medium" gutterBottom>
           Géneros populares:
@@ -230,11 +230,11 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
           })}
         </Box>
       </Box>
-      
+
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4 }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           size="large"
           onClick={handleSubmit}
           disabled={selectedGenres.length < 3}
@@ -243,16 +243,16 @@ function ManualGenreSelector({ onSelectionComplete }: { onSelectionComplete: (ge
           Confirmar
         </Button>
       </Box>
-      
+
       <Snackbar
         open={showSnackbar}
         autoHideDuration={4000}
         onClose={() => setShowSnackbar(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={() => setShowSnackbar(false)} 
-          severity="warning" 
+        <Alert
+          onClose={() => setShowSnackbar(false)}
+          severity="warning"
           variant="filled"
         >
           {error}
@@ -275,11 +275,9 @@ export default function UserGenresPage() {
     const fetchGenres = async () => {
       setLoading(true);
       try {
-        console.log(`Obteniendo géneros para timeRange: ${timeRange}`);
         const data = await getUserGenres(timeRange);
         setGenresData(data);
-        console.log('Géneros obtenidos:', data);
-        
+
         // Verificar si necesitamos selección manual
         if (data.hasUserInput) {
           setNeedManualSelection(true);
@@ -301,7 +299,7 @@ export default function UserGenresPage() {
   const handleTimeRangeChange = (event: any) => {
     setTimeRange(event.target.value);
   };
-  
+
   // Manejar selección manual de géneros
   const handleManualGenreSelection = (selectedGenres: any[]) => {
     // Construir un objeto con el formato esperado para mostrar
@@ -317,7 +315,7 @@ export default function UserGenresPage() {
       source: "selección manual",
       hasUserInput: false
     };
-    
+
     setGenresData(manualGenresData);
     setNeedManualSelection(false);
   };
@@ -341,9 +339,9 @@ export default function UserGenresPage() {
         <Typography color="text.secondary">
           {error}
         </Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           sx={{ mt: 3 }}
           onClick={() => window.location.reload()}
         >
@@ -352,7 +350,7 @@ export default function UserGenresPage() {
       </Box>
     );
   }
-  
+
   // Mostrar selector manual de géneros
   if (needManualSelection) {
     return (
@@ -370,7 +368,7 @@ export default function UserGenresPage() {
               No pudimos determinar automáticamente tus géneros favoritos. Ayúdanos a conocer tus gustos.
             </Typography>
           </motion.div>
-          
+
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
             <ManualGenreSelector onSelectionComplete={handleManualGenreSelection} />
           </Paper>
@@ -448,7 +446,7 @@ export default function UserGenresPage() {
                 Distribución de géneros
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              
+
               <Box sx={{ mb: 4 }}>
                 {genresData.topGenres.slice(0, 10).map((genre: any, index: number) => (
                   <Box key={genre.name} sx={{ mb: 2 }}>
@@ -460,9 +458,9 @@ export default function UserGenresPage() {
                         {genre.percentage}%
                       </Typography>
                     </Box>
-                    <PercentageBar 
-                      percentage={genre.percentage} 
-                      color={genreColors[index % genreColors.length]} 
+                    <PercentageBar
+                      percentage={genre.percentage}
+                      color={genreColors[index % genreColors.length]}
                     />
                   </Box>
                 ))}
@@ -477,7 +475,7 @@ export default function UserGenresPage() {
                 Todos tus géneros
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              
+
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {genresData.topGenres.map((genre: any, index: number) => (
                   <Chip
@@ -499,28 +497,28 @@ export default function UserGenresPage() {
           <Grid item xs={12} md={6}>
             <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', height: '100%' }}>
               <Typography variant="h6" gutterBottom fontWeight="medium">
-                {genresData.topArtists && genresData.topArtists.length > 0 
-                  ? 'Artistas que definen tus géneros' 
+                {genresData.topArtists && genresData.topArtists.length > 0
+                  ? 'Artistas que definen tus géneros'
                   : 'Tu perfil musical'}
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              
+
               {genresData.topArtists && genresData.topArtists.length > 0 ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {genresData.topArtists.slice(0, 5).map((artist: any) => (
                     <Box key={artist.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       {artist.images && artist.images.length > 0 ? (
-                        <img 
-                          src={artist.images[0].url} 
+                        <img
+                          src={artist.images[0].url}
                           alt={artist.name}
                           style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'cover' }}
                         />
                       ) : (
-                        <Box 
-                          sx={{ 
-                            width: 50, 
-                            height: 50, 
-                            borderRadius: '50%', 
+                        <Box
+                          sx={{
+                            width: 50,
+                            height: 50,
+                            borderRadius: '50%',
                             bgcolor: 'rgba(255,255,255,0.1)',
                             display: 'flex',
                             alignItems: 'center',
@@ -547,28 +545,28 @@ export default function UserGenresPage() {
                     Tus géneros favoritos indican que podrías disfrutar de artistas como {' '}
                     {genresData.topGenres.slice(0, 3).map((g: any) => g.name).join(', ')} y más.
                   </Typography>
-                  
-                  <Button 
-                    variant="outlined" 
-                    color="primary" 
+
+                  <Button
+                    variant="outlined"
+                    color="primary"
                     sx={{ mt: 2 }}
                     onClick={() => window.open('/explore', '_self')}
                   >
                     Explorar artistas similares
                   </Button>
-                </Box>  
+                </Box>
               )}
             </Paper>
           </Grid>
         </Grid>
 
         {/* Información contextual */}
-        <Paper 
-          elevation={0} 
-          sx={{ 
-            p: 3, 
-            borderRadius: 2, 
-            bgcolor: 'background.paper', 
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            borderRadius: 2,
+            bgcolor: 'background.paper',
             mt: 3,
             border: '1px solid',
             borderColor: 'divider'
@@ -576,7 +574,7 @@ export default function UserGenresPage() {
         >
           <Typography variant="body2" color="text.secondary">
             <strong>Nota:</strong> {' '}
-            {genresData.source === "selección manual" 
+            {genresData.source === "selección manual"
               ? "Esta información está basada en los géneros que seleccionaste manualmente. Puedes actualizarlos en cualquier momento."
               : "Esta información se basa en los artistas que escuchas con frecuencia. Los géneros son asignados por Spotify a los artistas. Algunos artistas pueden tener múltiples géneros asignados. Cambia el periodo de tiempo para ver cómo evolucionan tus gustos musicales."}
           </Typography>
@@ -584,4 +582,4 @@ export default function UserGenresPage() {
       </div>
     </div>
   );
-} 
+}

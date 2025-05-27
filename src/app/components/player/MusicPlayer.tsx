@@ -37,7 +37,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
   const [visualizerMode, setVisualizerMode] = useState<'wave' | 'bars' | 'circle'>('wave');
-  
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -102,12 +102,12 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   // Set up audio visualization
   useEffect(() => {
     if (!minimized) return;
-    
+
     // Initialize audio context
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
-    
+
     if (audioRef.current && audioContextRef.current && !analyserRef.current) {
       const source = audioContextRef.current.createMediaElementSource(audioRef.current);
       analyserRef.current = audioContextRef.current.createAnalyser();
@@ -115,7 +115,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
       source.connect(analyserRef.current);
       analyserRef.current.connect(audioContextRef.current.destination);
     }
-    
+
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -182,34 +182,34 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
       const rect = progressBarRef.current.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       const newTime = pos * currentSong.duration;
-      
+
       audioRef.current.currentTime = newTime;
       setCurrentTime(newTime);
     }
   };
 
   const progressPercentage = (currentTime / currentSong.duration) * 100;
-  
+
   // Variantes para animaciones
   const playerVariants = {
-    minimized: { 
+    minimized: {
       height: "72px",
       transition: { duration: 0.3, ease: "easeInOut" }
     },
-    expanded: { 
-      height: "auto", 
+    expanded: {
+      height: "auto",
       transition: { duration: 0.3, ease: "easeInOut" }
     },
   };
 
   const coverVariants = {
-    minimized: { 
-      width: "56px", 
+    minimized: {
+      width: "56px",
       height: "56px",
       transition: { duration: 0.3 }
     },
-    expanded: { 
-      width: "300px", 
+    expanded: {
+      width: "300px",
       height: "300px",
       transition: { duration: 0.3 }
     }
@@ -218,26 +218,26 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   // Start audio visualizer
   const startVisualizer = () => {
     if (!canvasRef.current || !analyserRef.current) return;
-    
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     // Set canvas dimensions
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    
+
     const analyser = analyserRef.current;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
-    
+
     const draw = () => {
       animationFrameRef.current = requestAnimationFrame(draw);
-      
+
       analyser.getByteFrequencyData(dataArray);
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       if (visualizerMode === 'bars') {
         drawBars(ctx, canvas, dataArray, bufferLength);
       } else if (visualizerMode === 'wave') {
@@ -246,105 +246,105 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
         drawCircle(ctx, canvas, dataArray, bufferLength);
       }
     };
-    
+
     draw();
   };
-  
+
   const drawBars = (
-    ctx: CanvasRenderingContext2D, 
-    canvas: HTMLCanvasElement, 
-    dataArray: Uint8Array, 
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    dataArray: Uint8Array,
     bufferLength: number
   ) => {
     const barWidth = (canvas.width / bufferLength) * 2.5;
     let x = 0;
-    
+
     for (let i = 0; i < bufferLength; i++) {
       const barHeight = (dataArray[i] / 255) * canvas.height;
-      
+
       const r = 149 + (dataArray[i] / 10);
       const g = 76 + (dataArray[i] / 20);
       const b = 233;
-      
+
       ctx.fillStyle = `rgb(${r},${g},${b})`;
       ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-      
+
       x += barWidth + 1;
     }
   };
-  
+
   const drawWave = (
-    ctx: CanvasRenderingContext2D, 
-    canvas: HTMLCanvasElement, 
-    dataArray: Uint8Array, 
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    dataArray: Uint8Array,
     bufferLength: number
   ) => {
     ctx.lineWidth = 2;
     ctx.strokeStyle = 'rgb(124, 58, 237)';
-    
+
     ctx.beginPath();
-    
+
     const sliceWidth = canvas.width / bufferLength;
     let x = 0;
-    
+
     for (let i = 0; i < bufferLength; i++) {
       const v = dataArray[i] / 128.0;
       const y = v * canvas.height / 2;
-      
+
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
         ctx.lineTo(x, y);
       }
-      
+
       x += sliceWidth;
     }
-    
+
     ctx.lineTo(canvas.width, canvas.height / 2);
     ctx.stroke();
-    
+
     // Add gradient under the line
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
     gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)');
     gradient.addColorStop(1, 'rgba(124, 58, 237, 0)');
-    
+
     ctx.fillStyle = gradient;
     ctx.fill();
   };
-  
+
   const drawCircle = (
-    ctx: CanvasRenderingContext2D, 
-    canvas: HTMLCanvasElement, 
-    dataArray: Uint8Array, 
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    dataArray: Uint8Array,
     bufferLength: number
   ) => {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = Math.min(centerX, centerY) - 20;
-    
+
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1;
     ctx.stroke();
-    
+
     for (let i = 0; i < bufferLength; i++) {
       const value = dataArray[i];
       const percent = value / 255;
-      
+
       const angle = (i * 2 * Math.PI) / bufferLength;
       const length = radius * percent;
-      
+
       const x1 = centerX + radius * Math.cos(angle);
       const y1 = centerY + radius * Math.sin(angle);
-      
+
       const x2 = centerX + (radius + length / 2) * Math.cos(angle);
       const y2 = centerY + (radius + length / 2) * Math.sin(angle);
-      
+
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
-      
+
       const hue = 270 + (i * 60 / bufferLength); // Purple to blue
       ctx.strokeStyle = `hsla(${hue}, 80%, 60%, 0.8)`;
       ctx.lineWidth = 2;
@@ -358,7 +358,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
       .slice()
       .reverse()
       .find(lyric => currentTime >= lyric.time);
-    
+
     return currentLyric ? currentLyric.text : "";
   };
 
@@ -376,25 +376,25 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   ];
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-lg shadow-xl overflow-hidden"
       initial="minimized"
       animate={minimized ? "minimized" : "expanded"}
       variants={playerVariants}
     >
-      <audio 
-        ref={audioRef} 
-        src={currentSong.audioSrc} 
+      <audio
+        ref={audioRef}
+        src={currentSong.audioSrc}
         preload="metadata"
       />
 
       {/* Barra de progreso superior */}
-      <div 
+      <div
         className="h-1 bg-gray-700 cursor-pointer"
         onClick={handleProgressClick}
         ref={progressBarRef}
       >
-        <div 
+        <div
           className="h-full bg-gradient-to-r from-primary to-accent"
           style={{ width: `${progressPercentage}%` }}
         />
@@ -403,19 +403,19 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
       <div className="p-4">
         <div className="flex items-center">
           {/* Portada del álbum */}
-          <motion.div 
+          <motion.div
             className="relative rounded-md overflow-hidden shadow-lg mr-4"
             variants={coverVariants}
           >
-            <img 
-              src={currentSong.cover} 
-              alt={`${currentSong.title} cover`} 
+            <img
+              src={currentSong.cover}
+              alt={`${currentSong.title} cover`}
               className="w-full h-full object-cover"
             />
-            
+
             {!minimized && (
               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <button 
+                <button
                   className="bg-white rounded-full p-4"
                   onClick={handlePlayPause}
                 >
@@ -436,7 +436,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
             <h3 className="font-bold text-lg truncate">{currentSong.title}</h3>
             <p className="text-gray-300 truncate">{currentSong.artist}</p>
             <p className="text-gray-400 text-sm truncate">{currentSong.album}</p>
-            
+
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(currentSong.duration)}</span>
@@ -446,7 +446,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
           {/* Botones de control para vista minimizada */}
           {minimized && (
             <div className="flex items-center space-x-2">
-              <button 
+              <button
                 className="p-2 text-white/80 hover:text-white focus:outline-none"
                 onClick={handlePlayPause}
               >
@@ -458,8 +458,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
                   )}
                 </svg>
               </button>
-              
-              <button 
+
+              <button
                 className="p-2 text-white/80 hover:text-white focus:outline-none"
                 onClick={onToggleMinimize}
               >
@@ -481,7 +481,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
               transition={{ duration: 0.3 }}
               className="mt-6"
             >
-              <PlayerControls 
+              <PlayerControls
                 isPlaying={isPlaying}
                 volume={volume}
                 onPlay={() => setIsPlaying(true)}
@@ -492,10 +492,10 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
                 onToggleMute={handleToggleMute}
                 isMuted={isMuted}
               />
-              
+
               {/* Botón minimizar */}
               <div className="mt-6 flex justify-center">
-                <button 
+                <button
                   className="text-white/60 hover:text-white focus:outline-none"
                   onClick={onToggleMinimize}
                 >
@@ -510,4 +510,4 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
       </div>
     </motion.div>
   );
-}; 
+};

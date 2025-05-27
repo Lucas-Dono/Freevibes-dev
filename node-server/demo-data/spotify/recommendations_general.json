@@ -1,0 +1,251 @@
+{
+  "tracks": [
+    {
+      "id": "mock_recommendation_0",
+      "name": "Recomendación 1",
+      "artists": [
+        {
+          "id": "mock_artist_0",
+          "name": "Artista Recomendado 1"
+        }
+      ],
+      "album": {
+        "id": "mock_album_0",
+        "name": "Álbum Recomendado 1",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+1",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 210000
+    },
+    {
+      "id": "mock_recommendation_1",
+      "name": "Recomendación 2",
+      "artists": [
+        {
+          "id": "mock_artist_1",
+          "name": "Artista Recomendado 2"
+        }
+      ],
+      "album": {
+        "id": "mock_album_1",
+        "name": "Álbum Recomendado 2",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+2",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 220000
+    },
+    {
+      "id": "mock_recommendation_2",
+      "name": "Recomendación 3",
+      "artists": [
+        {
+          "id": "mock_artist_2",
+          "name": "Artista Recomendado 3"
+        }
+      ],
+      "album": {
+        "id": "mock_album_2",
+        "name": "Álbum Recomendado 3",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+3",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 230000
+    },
+    {
+      "id": "mock_recommendation_3",
+      "name": "Recomendación 4",
+      "artists": [
+        {
+          "id": "mock_artist_3",
+          "name": "Artista Recomendado 4"
+        }
+      ],
+      "album": {
+        "id": "mock_album_3",
+        "name": "Álbum Recomendado 4",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+4",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 240000
+    },
+    {
+      "id": "mock_recommendation_4",
+      "name": "Recomendación 5",
+      "artists": [
+        {
+          "id": "mock_artist_4",
+          "name": "Artista Recomendado 5"
+        }
+      ],
+      "album": {
+        "id": "mock_album_4",
+        "name": "Álbum Recomendado 5",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+5",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 250000
+    },
+    {
+      "id": "mock_recommendation_5",
+      "name": "Recomendación 6",
+      "artists": [
+        {
+          "id": "mock_artist_5",
+          "name": "Artista Recomendado 6"
+        }
+      ],
+      "album": {
+        "id": "mock_album_5",
+        "name": "Álbum Recomendado 6",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+6",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 260000
+    },
+    {
+      "id": "mock_recommendation_6",
+      "name": "Recomendación 7",
+      "artists": [
+        {
+          "id": "mock_artist_6",
+          "name": "Artista Recomendado 7"
+        }
+      ],
+      "album": {
+        "id": "mock_album_6",
+        "name": "Álbum Recomendado 7",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+7",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 270000
+    },
+    {
+      "id": "mock_recommendation_7",
+      "name": "Recomendación 8",
+      "artists": [
+        {
+          "id": "mock_artist_7",
+          "name": "Artista Recomendado 8"
+        }
+      ],
+      "album": {
+        "id": "mock_album_7",
+        "name": "Álbum Recomendado 8",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+8",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 280000
+    },
+    {
+      "id": "mock_recommendation_8",
+      "name": "Recomendación 9",
+      "artists": [
+        {
+          "id": "mock_artist_8",
+          "name": "Artista Recomendado 9"
+        }
+      ],
+      "album": {
+        "id": "mock_album_8",
+        "name": "Álbum Recomendado 9",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+9",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 290000
+    },
+    {
+      "id": "mock_recommendation_9",
+      "name": "Recomendación 10",
+      "artists": [
+        {
+          "id": "mock_artist_9",
+          "name": "Artista Recomendado 10"
+        }
+      ],
+      "album": {
+        "id": "mock_album_9",
+        "name": "Álbum Recomendado 10",
+        "images": [
+          {
+            "url": "https://placehold.co/600x600/1DB954/FFFFFF?text=Recommendation+10",
+            "height": 600,
+            "width": 600
+          }
+        ]
+      },
+      "duration_ms": 300000
+    }
+  ],
+  "seeds": [
+    {
+      "id": "pop",
+      "type": "GENRE",
+      "initialPoolSize": 500
+    },
+    {
+      "id": "rock",
+      "type": "GENRE",
+      "initialPoolSize": 500
+    },
+    {
+      "id": "hip-hop",
+      "type": "GENRE",
+      "initialPoolSize": 500
+    },
+    {
+      "id": "electronic",
+      "type": "GENRE",
+      "initialPoolSize": 500
+    },
+    {
+      "id": "latin",
+      "type": "GENRE",
+      "initialPoolSize": 500
+    }
+  ]
+}

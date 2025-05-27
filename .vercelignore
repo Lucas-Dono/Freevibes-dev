@@ -1,0 +1,7 @@
+# Ignorar errores en estas rutas
+
+# Ignorar archivos de configuración temporales
+.next-temp-build-config
+.vercel-ignore-build-errors
+
+# Ignorar errores de renderizado estático

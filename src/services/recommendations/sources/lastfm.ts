@@ -14,15 +14,15 @@ const TIMEOUT = 5000;
 
 // Géneros válidos conocidos (para fallback si la API falla)
 export const VALID_GENRES = [
-  'rock', 'pop', 'alternative', 'indie', 'electronic', 
-  'hip-hop', 'rap', 'metal', 'jazz', 'blues', 'folk', 
-  'country', 'r&b', 'soul', 'reggae', 'punk', 
+  'rock', 'pop', 'alternative', 'indie', 'electronic',
+  'hip-hop', 'rap', 'metal', 'jazz', 'blues', 'folk',
+  'country', 'r&b', 'soul', 'reggae', 'punk',
   'classical', 'ambient', 'dance', 'latin', 'world'
 ];
 
 /**
  * Obtiene recomendaciones de Last.fm para un género específico
- * 
+ *
  * @param genre Género musical para buscar
  * @param limit Límite de canciones a devolver
  * @returns Lista de canciones recomendadas
@@ -34,12 +34,12 @@ export async function getRecommendationsByGenre(
   // Limpiamos y formateamos el género para que sea válido para Last.fm
   const normalizedGenre = normalizeGenre(genre.toLowerCase());
   console.log(`[Last.fm] Buscando recomendaciones para género: ${normalizedGenre} (original: ${genre})`);
-  
+
   try {
     // Intentar obtener de caché primero
     const cacheKey = `lastfm:genre:${normalizedGenre}:${limit}`;
     const cachedData = await recommendationsCache.get(cacheKey);
-    
+
     if (cachedData) {
       try {
         const parsedData = JSON.parse(cachedData);
@@ -50,90 +50,89 @@ export async function getRecommendationsByGenre(
         // Continuar con la petición a la API si hay error al parsear la caché
       }
     }
-    
+
     // Si no hay en caché, obtener de la API
     const apiBaseUrl = getApiBaseUrl();
     const maxToFetch = Math.max(limit * 1.5, 30); // Solicitamos más para tener variedad
-    
+
     console.log(`[Last.fm] Solicitando a API: ${normalizedGenre} (limit=${maxToFetch})`);
-    
+
     // Verificar si hay término principal y términos relacionados para buscar
     const searchTerms = [normalizedGenre, ...getRelatedTerms(normalizedGenre)];
-    
+
     // Limitar términos de búsqueda para no saturar la API
     const limitedTerms = searchTerms.slice(0, 5);
     console.log(`[Last.fm] Términos de búsqueda: ${limitedTerms.join(', ')}`);
-    
+
     // Array para almacenar todas las canciones encontradas
     let allTracks: Track[] = [];
-    
+
     // Realizar búsquedas secuenciales para cada término
     for (const term of limitedTerms) {
       if (allTracks.length >= maxToFetch) {
         break; // Ya tenemos suficientes canciones
       }
-      
+
       try {
         const response = await fetch(
           `${apiBaseUrl}/proxy/lastfm?method=tag.gettoptracks&tag=${encodeURIComponent(term)}&limit=${maxToFetch}`
         );
-    
+
     if (!response.ok) {
           console.error(`[Last.fm] Error en respuesta para "${term}": ${response.status}`);
           continue; // Continuar con el siguiente término
         }
-        
+
         // Convertir respuesta a JSON
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
           console.error(`[Last.fm] La respuesta no es JSON válido para "${term}"`);
           continue; // Continuar con el siguiente término
     }
-    
+
     const data = await response.json();
-    
+
         if (!data.tracks || !data.tracks.track || !Array.isArray(data.tracks.track)) {
           console.warn(`[Last.fm] No se encontraron tracks para "${term}"`);
           continue; // Continuar con el siguiente término
         }
-        
+
         console.log(`[Last.fm] Obtenidos ${data.tracks.track.length} tracks para "${term}"`);
-        
+
         // Convertir resultados de Last.fm a nuestro formato Track
         const tracks = data.tracks.track.map((track: any) => ({
           id: `lastfm_${track.mbid || track.name.replace(/\s+/g, '_').toLowerCase()}`,
           title: track.name,
           artist: track.artist.name,
           album: track.name, // Last.fm no proporciona nombre de álbum en esta API
-          albumCover: 
+          albumCover:
             track.image && track.image.length > 2 && track.image[2]['#text']
               ? track.image[2]['#text']
               : selectGenreImage(normalizedGenre),
-          cover: 
+          cover:
             track.image && track.image.length > 2 && track.image[2]['#text']
               ? track.image[2]['#text']
               : selectGenreImage(normalizedGenre),
           duration: 210000, // Last.fm no proporciona duración, aproximamos 3:30
-          source: 'lastfm',
           sourceUrl: track.url,
           spotifyId: undefined,
           youtubeId: undefined
         }));
-        
+
         // Combinar con resultados previos, evitando duplicados
         for (const track of tracks) {
           const isDuplicate = allTracks.some(
-            t => t.title.toLowerCase() === track.title.toLowerCase() && 
+            t => t.title.toLowerCase() === track.title.toLowerCase() &&
                  t.artist.toLowerCase() === track.artist.toLowerCase()
           );
-          
+
           if (!isDuplicate) {
             allTracks.push(track);
           }
         }
-        
+
         console.log(`[Last.fm] Total acumulado: ${allTracks.length} canciones únicas`);
-        
+
         // Si ya tenemos suficientes canciones, parar
         if (allTracks.length >= maxToFetch) {
           break;
@@ -143,53 +142,53 @@ export async function getRecommendationsByGenre(
         // Continuar con el siguiente término
       }
     }
-    
+
     // Si tenemos resultados, aleatorizar y limitar
     if (allTracks.length > 0) {
       // Aleatorizar para más variedad
       allTracks = allTracks.sort(() => Math.random() - 0.5);
-      
+
       // Limitar al número solicitado
       const limitedTracks = allTracks.slice(0, limit);
       console.log(`[Last.fm] Devolviendo ${limitedTracks.length} canciones para género ${normalizedGenre}`);
-      
+
       // Guardar en caché para futuras solicitudes
       await recommendationsCache.set(
         cacheKey,
         JSON.stringify(limitedTracks),
         DEFAULT_CACHE_TTL * 3 // Triple de tiempo para géneros (cambian poco)
       );
-      
+
       return limitedTracks;
     }
-    
+
     console.warn(`[Last.fm] No se encontraron canciones para ningún término relacionado con "${normalizedGenre}"`);
-    
+
     // Si no hay resultados, intentar con géneros predefinidos
     if (VALID_GENRES.includes(normalizedGenre)) {
       console.log(`[Last.fm] Generando tracks fallback para género válido: ${normalizedGenre}`);
       return getFallbackTracks(normalizedGenre, limit);
     }
-    
+
     // Si llegamos aquí, intentar encontrar un género relacionado dentro de los válidos
     const closeGenre = findClosestGenre(normalizedGenre);
-    
+
     if (closeGenre && closeGenre !== normalizedGenre) {
       console.log(`[Last.fm] Reintentando con género similar: ${closeGenre}`);
       return getRecommendationsByGenre(closeGenre, limit);
     }
-    
+
     // Si todo falla, devolver canciones fallback
     console.log(`[Last.fm] Usando fallback final para: ${normalizedGenre}`);
     return getFallbackTracks(normalizedGenre, limit);
   } catch (error) {
     console.error(`[Last.fm] Error general obteniendo recomendaciones:`, error);
-    
+
     // En caso de error, intentar devolver datos de caché aún si están expirados
     try {
       const cacheKey = `lastfm:genre:${normalizedGenre}:${limit}`;
       const cachedData = await recommendationsCache.get(cacheKey, true);
-      
+
       if (cachedData) {
         console.log(`[Last.fm] Usando caché expirada como recuperación`);
         return JSON.parse(cachedData);
@@ -197,7 +196,7 @@ export async function getRecommendationsByGenre(
     } catch (cacheError) {
       console.error(`[Last.fm] Error accediendo a caché expirada:`, cacheError);
     }
-    
+
     // Como último recurso, devolver tracks fallback
     return getFallbackTracks(normalizedGenre, limit);
   }
@@ -214,13 +213,13 @@ function normalizeGenre(genre: string): string {
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
-  
+
   // Convertir géneros compuestos al formato de Last.fm
   if (normalized.includes(' ')) {
     // Last.fm usa guión para géneros compuestos: hip-hop, drum-and-bass
     normalized = normalized.replace(/\s+/g, '-');
   }
-  
+
   // Normalizaciones específicas comunes
   const genreMap: Record<string, string> = {
     'hiphop': 'hip-hop',
@@ -233,7 +232,7 @@ function normalizeGenre(genre: string): string {
     'alt rock': 'alternative',
     'alt': 'alternative'
   };
-  
+
   return genreMap[normalized] || normalized;
 }
 
@@ -245,7 +244,7 @@ function normalizeGenre(genre: string): string {
 function extractSearchTerms(input: string): string[] {
   // Palabras que no aportan valor semántico musical
   const stopWords = ['the', 'and', 'for', 'with', 'feat', 'ft', 'by', 'from', 'mix'];
-  
+
   // Obtener palabras y filtrar
   let words = input.toLowerCase()
     .replace(/\(.*?\)/g, '') // Eliminar contenido entre paréntesis
@@ -254,13 +253,13 @@ function extractSearchTerms(input: string): string[] {
     .trim()
     .split(' ')
     .filter(w => w.length > 2 && !stopWords.includes(w)); // Filtrar palabras cortas y stopwords
-  
+
   // Si hay más de 3 palabras, priorizar las más largas (posiblemente más descriptivas)
   if (words.length > 3) {
     words = words
       .sort((a, b) => b.length - a.length) // Ordenar por longitud descendente
       .slice(0, 3); // Tomar las 3 más largas
-    
+
     // Reordenar las palabras según su orden original en el texto para mantener la semántica
     words = words.sort((a, b) => {
       const indexA = input.toLowerCase().indexOf(a);
@@ -268,7 +267,7 @@ function extractSearchTerms(input: string): string[] {
       return indexA - indexB;
     });
   }
-  
+
   return words;
 }
 
@@ -280,15 +279,15 @@ function extractSearchTerms(input: string): string[] {
 function getRelatedTerms(input: string): string[] {
   // Palabras clave extraídas del input
   const words = input.toLowerCase().split(' ').filter(w => w.length > 2);
-  
+
   // Términos generales populares si no podemos usar el input
   const generalTerms = ['pop', 'rock', 'indie', 'alternative', 'electronic', 'hiphop', 'dance', 'jazz'];
-  
+
   // Si no hay palabras útiles, devolver términos generales
   if (words.length === 0) {
     return generalTerms;
   }
-  
+
   // Intentar mapear palabras a géneros conocidos
   const genreMap: Record<string, string[]> = {
     // Géneros principales con mapeos más extensos
@@ -333,13 +332,13 @@ function getRelatedTerms(input: string): string[] {
     'synthwave': ['electronic', 'retro', '80s', 'outrun', 'retrowave', 'synthpop', 'cyberpunk', 'vaporwave'],
     'vaporwave': ['electronic', 'ambient', 'experimental', 'chillwave', 'future funk', 'synthwave', 'lo-fi']
   };
-  
+
   // Construir lista de términos relacionados
   const relatedTerms: string[] = [];
-  
+
   // Añadir el término original primero
   relatedTerms.push(input);
-  
+
   // Añadir mapeos conocidos
   for (const word of words) {
     if (genreMap[word]) {
@@ -349,7 +348,7 @@ function getRelatedTerms(input: string): string[] {
       relatedTerms.push(...genreMap['indie_alt']);
     }
   }
-  
+
   // Añadir combinaciones (primer palabra + cada término)
   if (words.length > 1) {
     relatedTerms.push(words[0]);
@@ -360,12 +359,12 @@ function getRelatedTerms(input: string): string[] {
       }
     });
   }
-  
+
   // Añadir algunos términos generales como fallback solo si no hay muchos términos ya
   if (relatedTerms.length < 5) {
     relatedTerms.push(...generalTerms.slice(0, 5));
   }
-  
+
   // Eliminar duplicados
   const uniqueTerms: string[] = [];
   for (const term of relatedTerms) {
@@ -373,7 +372,7 @@ function getRelatedTerms(input: string): string[] {
       uniqueTerms.push(term);
     }
   }
-  
+
   // Limitar la cantidad de términos para evitar demasiadas peticiones innecesarias
   return uniqueTerms.slice(0, 15);
 }
@@ -387,29 +386,29 @@ function findClosestGenre(genre: string): string | null {
   if (VALID_GENRES.includes(genre)) {
     return genre;
   }
-  
+
   // Buscar en términos relacionados si alguno es un género válido
   const relatedTerms = getRelatedTerms(genre);
-  
+
   for (const term of relatedTerms) {
     if (VALID_GENRES.includes(term)) {
       return term;
     }
   }
-  
+
   // Si ningún término relacionado es válido, buscar coincidencias parciales
   for (const validGenre of VALID_GENRES) {
     if (
-      genre.includes(validGenre) || 
+      genre.includes(validGenre) ||
       validGenre.includes(genre) ||
       // Comprobar si hay similitud por distancia Levenshtein (simplificada)
-      genre.length > 3 && validGenre.length > 3 && 
+      genre.length > 3 && validGenre.length > 3 &&
       (genre.startsWith(validGenre.substring(0, 3)) || validGenre.startsWith(genre.substring(0, 3)))
     ) {
       return validGenre;
     }
   }
-  
+
   // Si no hay coincidencias, devolver un género por defecto general
   return 'rock';
 }
@@ -435,14 +434,14 @@ function selectGenreImage(genre: string): string {
     'blues': 'https://images.unsplash.com/photo-1601312378427-822b2b41da35',
     'default': 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa'
   };
-  
+
   // Buscar coincidencia exacta o parcial
   for (const [key, url] of Object.entries(genreImages)) {
     if (genre === key || genre.includes(key) || key.includes(genre)) {
       return url;
     }
   }
-  
+
   return genreImages['default'];
 }
 
@@ -454,9 +453,9 @@ function selectGenreImage(genre: string): string {
  */
 function getFallbackTracks(genre: string, limit: number): Track[] {
   console.log(`[Last.fm] Generando tracks fallback para: ${genre}`);
-  
+
   const fallbackTracks: Track[] = [];
-  
+
   // Artistas ficticios por género
   const artists = {
     'rock': ['Imagine Dragons', 'The Killers', 'Foo Fighters', 'Arctic Monkeys'],
@@ -465,17 +464,17 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
     'electronic': ['Calvin Harris', 'David Guetta', 'Daft Punk', 'Avicii'],
     'default': ['The Artist', 'Music Band', 'Top Performer', 'Famous Singer']
   };
-  
+
   // Seleccionar artistas apropiados para este género
   const genreArtists = artists[genre as keyof typeof artists] || artists['default'];
-  
+
   // Imagen por defecto basada en género
   const coverImage = selectGenreImage(genre);
-  
+
   // Crear tracks simulados
   for (let i = 0; i < Math.min(limit, 10); i++) {
     const artistIndex = i % genreArtists.length;
-    
+
     fallbackTracks.push({
       id: `lastfm_fallback_${genre}_${i}`,
       title: `${genre.charAt(0).toUpperCase() + genre.slice(1)} Song ${i + 1}`,
@@ -484,12 +483,11 @@ function getFallbackTracks(genre: string, limit: number): Track[] {
       albumCover: coverImage,
       cover: coverImage,
       duration: 180000 + (i * 15000), // Entre 3 y 5 minutos
-      source: 'lastfm',
       sourceUrl: 'https://www.last.fm',
       spotifyId: undefined,
       youtubeId: undefined
     });
   }
-  
+
   return fallbackTracks;
-} 
+}

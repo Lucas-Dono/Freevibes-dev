@@ -1,0 +1,770 @@
+{
+  "artists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20hits&type=artist&market=US&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20hits&type=artist&market=US&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 22,
+    "items": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6M2wZ9GZgrQXHCFfjv46we"
+        },
+        "followers": {
+          "href": null,
+          "total": 45797467
+        },
+        "genres": [
+          "pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/6M2wZ9GZgrQXHCFfjv46we",
+        "id": "6M2wZ9GZgrQXHCFfjv46we",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb0c68f6c95232e716f0abee8d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051740c68f6c95232e716f0abee8d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1780c68f6c95232e716f0abee8d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Dua Lipa",
+        "popularity": 89,
+        "type": "artist",
+        "uri": "spotify:artist:6M2wZ9GZgrQXHCFfjv46we"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1bAftSH8umNcGZ0uyV7LMg"
+        },
+        "followers": {
+          "href": null,
+          "total": 12403843
+        },
+        "genres": [
+          "argentine trap",
+          "trap",
+          "trap latino"
+        ],
+        "href": "https://api.spotify.com/v1/artists/1bAftSH8umNcGZ0uyV7LMg",
+        "id": "1bAftSH8umNcGZ0uyV7LMg",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb0f682e8d99b232d621a25c3b",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051740f682e8d99b232d621a25c3b",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1780f682e8d99b232d621a25c3b",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Duki",
+        "popularity": 83,
+        "type": "artist",
+        "uri": "spotify:artist:1bAftSH8umNcGZ0uyV7LMg"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5C4PDR4LnhZTbVnKWXuDKD"
+        },
+        "followers": {
+          "href": null,
+          "total": 13083603
+        },
+        "genres": [
+          "colombian pop",
+          "latin pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/5C4PDR4LnhZTbVnKWXuDKD",
+        "id": "5C4PDR4LnhZTbVnKWXuDKD",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb300488e7d301023f9d92d6cc",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174300488e7d301023f9d92d6cc",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178300488e7d301023f9d92d6cc",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Morat",
+        "popularity": 83,
+        "type": "artist",
+        "uri": "spotify:artist:5C4PDR4LnhZTbVnKWXuDKD"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1yxSLGMDHlW21z4YXirZDS"
+        },
+        "followers": {
+          "href": null,
+          "total": 8888714
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/1yxSLGMDHlW21z4YXirZDS",
+        "id": "1yxSLGMDHlW21z4YXirZDS",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebb3037310c07b99cbefbd2c6d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174b3037310c07b99cbefbd2c6d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178b3037310c07b99cbefbd2c6d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Black Eyed Peas",
+        "popularity": 82,
+        "type": "artist",
+        "uri": "spotify:artist:1yxSLGMDHlW21z4YXirZDS"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+        },
+        "followers": {
+          "href": null,
+          "total": 8833558
+        },
+        "genres": [
+          "latin pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+        "id": "7vXDAI8JwjW531ouMGbfcp",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb43f8f52ac55da2d54fc8fdca",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000517443f8f52ac55da2d54fc8fdca",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f17843f8f52ac55da2d54fc8fdca",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "TINI",
+        "popularity": 78,
+        "type": "artist",
+        "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4kcQWQDK0u9AftVSpdrAgk"
+        },
+        "followers": {
+          "href": null,
+          "total": 2416457
+        },
+        "genres": [
+          "cuarteto",
+          "cumbia",
+          "argentine trap"
+        ],
+        "href": "https://api.spotify.com/v1/artists/4kcQWQDK0u9AftVSpdrAgk",
+        "id": "4kcQWQDK0u9AftVSpdrAgk",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebcd4b159bfb2f02962a110b6d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174cd4b159bfb2f02962a110b6d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178cd4b159bfb2f02962a110b6d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Luck Ra",
+        "popularity": 76,
+        "type": "artist",
+        "uri": "spotify:artist:4kcQWQDK0u9AftVSpdrAgk"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2qWK8K2Jfh67UqtwY8tCW6"
+        },
+        "followers": {
+          "href": null,
+          "total": 3611859
+        },
+        "genres": [
+          "argentine trap",
+          "trap"
+        ],
+        "href": "https://api.spotify.com/v1/artists/2qWK8K2Jfh67UqtwY8tCW6",
+        "id": "2qWK8K2Jfh67UqtwY8tCW6",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebf106fd69df15739b15b5ea47",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174f106fd69df15739b15b5ea47",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178f106fd69df15739b15b5ea47",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "YSY A",
+        "popularity": 74,
+        "type": "artist",
+        "uri": "spotify:artist:2qWK8K2Jfh67UqtwY8tCW6"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/7dlkBH23ERFXxuNoMHq94Y"
+        },
+        "followers": {
+          "href": null,
+          "total": 1621179
+        },
+        "genres": [
+          "cuarteto",
+          "cumbia"
+        ],
+        "href": "https://api.spotify.com/v1/artists/7dlkBH23ERFXxuNoMHq94Y",
+        "id": "7dlkBH23ERFXxuNoMHq94Y",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb47bf8f02b36d11bcf5a88374",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000517447bf8f02b36d11bcf5a88374",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f17847bf8f02b36d11bcf5a88374",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Q' Lokura",
+        "popularity": 74,
+        "type": "artist",
+        "uri": "spotify:artist:7dlkBH23ERFXxuNoMHq94Y"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2F9pvj94b52wGKs0OqiNi2"
+        },
+        "followers": {
+          "href": null,
+          "total": 1638910
+        },
+        "genres": [
+          "argentine rock",
+          "rock en español",
+          "latin rock",
+          "latin alternative"
+        ],
+        "href": "https://api.spotify.com/v1/artists/2F9pvj94b52wGKs0OqiNi2",
+        "id": "2F9pvj94b52wGKs0OqiNi2",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb6bd5c7e510258def393a0b5c",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051746bd5c7e510258def393a0b5c",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1786bd5c7e510258def393a0b5c",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Babasonicos",
+        "popularity": 71,
+        "type": "artist",
+        "uri": "spotify:artist:2F9pvj94b52wGKs0OqiNi2"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+        },
+        "followers": {
+          "href": null,
+          "total": 1989665
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+        "id": "22P1OY4TRFRwhP0q29loQ8",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb9966b17b3ded0c94986f891f",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051749966b17b3ded0c94986f891f",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1789966b17b3ded0c94986f891f",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Lali",
+        "popularity": 63,
+        "type": "artist",
+        "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1nfZymRKMfE3Ui4VEMzFI9"
+        },
+        "followers": {
+          "href": null,
+          "total": 2421
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/1nfZymRKMfE3Ui4VEMzFI9",
+        "id": "1nfZymRKMfE3Ui4VEMzFI9",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb0980ccef0bb22d512025eb05",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051740980ccef0bb22d512025eb05",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1780980ccef0bb22d512025eb05",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Ultimate Pop Hits",
+        "popularity": 27,
+        "type": "artist",
+        "uri": "spotify:artist:1nfZymRKMfE3Ui4VEMzFI9"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4NMFoR87GVqFZYoim2ylnv"
+        },
+        "followers": {
+          "href": null,
+          "total": 2601
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/4NMFoR87GVqFZYoim2ylnv",
+        "id": "4NMFoR87GVqFZYoim2ylnv",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2734b1764eab1a6194529d5d192",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e024b1764eab1a6194529d5d192",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048514b1764eab1a6194529d5d192",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "popularity": 27,
+        "type": "artist",
+        "uri": "spotify:artist:4NMFoR87GVqFZYoim2ylnv"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6jTIk05EQVStnWXaIHhByj"
+        },
+        "followers": {
+          "href": null,
+          "total": 758
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/6jTIk05EQVStnWXaIHhByj",
+        "id": "6jTIk05EQVStnWXaIHhByj",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2737405c562e61723c258012729",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e027405c562e61723c258012729",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048517405c562e61723c258012729",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Top Pop Hits From '98",
+        "popularity": 25,
+        "type": "artist",
+        "uri": "spotify:artist:6jTIk05EQVStnWXaIHhByj"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/79PylhWE1zTiXkKI3Op7Ld"
+        },
+        "followers": {
+          "href": null,
+          "total": 10583
+        },
+        "genres": [
+          "italo disco"
+        ],
+        "href": "https://api.spotify.com/v1/artists/79PylhWE1zTiXkKI3Op7Ld",
+        "id": "79PylhWE1zTiXkKI3Op7Ld",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2732d605536bc14fcb21ca0bd3c",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e022d605536bc14fcb21ca0bd3c",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048512d605536bc14fcb21ca0bd3c",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "90's 80's Pop Hits",
+        "popularity": 23,
+        "type": "artist",
+        "uri": "spotify:artist:79PylhWE1zTiXkKI3Op7Ld"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/129lFoVq0oKkwiAW0nIRZA"
+        },
+        "followers": {
+          "href": null,
+          "total": 4409
+        },
+        "genres": [
+          "italo disco"
+        ],
+        "href": "https://api.spotify.com/v1/artists/129lFoVq0oKkwiAW0nIRZA",
+        "id": "129lFoVq0oKkwiAW0nIRZA",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2732d605536bc14fcb21ca0bd3c",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e022d605536bc14fcb21ca0bd3c",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048512d605536bc14fcb21ca0bd3c",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "80-90's Top Pop Hits",
+        "popularity": 23,
+        "type": "artist",
+        "uri": "spotify:artist:129lFoVq0oKkwiAW0nIRZA"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2Rtd76SsCt1HtDItvLIOs1"
+        },
+        "followers": {
+          "href": null,
+          "total": 1391
+        },
+        "genres": [
+          "italo disco"
+        ],
+        "href": "https://api.spotify.com/v1/artists/2Rtd76SsCt1HtDItvLIOs1",
+        "id": "2Rtd76SsCt1HtDItvLIOs1",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2732d605536bc14fcb21ca0bd3c",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e022d605536bc14fcb21ca0bd3c",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048512d605536bc14fcb21ca0bd3c",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "80's-90's MTV Pop Hits",
+        "popularity": 23,
+        "type": "artist",
+        "uri": "spotify:artist:2Rtd76SsCt1HtDItvLIOs1"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/60vOqyvwQeubYTBl0VzcKu"
+        },
+        "followers": {
+          "href": null,
+          "total": 1053
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/60vOqyvwQeubYTBl0VzcKu",
+        "id": "60vOqyvwQeubYTBl0VzcKu",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273c2b37eee92f78e05dced81ee",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02c2b37eee92f78e05dced81ee",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851c2b37eee92f78e05dced81ee",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Hits Variété Pop",
+        "popularity": 12,
+        "type": "artist",
+        "uri": "spotify:artist:60vOqyvwQeubYTBl0VzcKu"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2QGjAbasCj6xRnC51ay5rI"
+        },
+        "followers": {
+          "href": null,
+          "total": 5602
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/2QGjAbasCj6xRnC51ay5rI",
+        "id": "2QGjAbasCj6xRnC51ay5rI",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebb760b1946a6217454970995d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174b760b1946a6217454970995d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178b760b1946a6217454970995d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "80's Pop Super Hits",
+        "popularity": 12,
+        "type": "artist",
+        "uri": "spotify:artist:2QGjAbasCj6xRnC51ay5rI"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6F9fY19QXTY4j6I2i1jhgE"
+        },
+        "followers": {
+          "href": null,
+          "total": 1174
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/6F9fY19QXTY4j6I2i1jhgE",
+        "id": "6F9fY19QXTY4j6I2i1jhgE",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273f228eafbe069f869e1c0d8f8",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02f228eafbe069f869e1c0d8f8",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851f228eafbe069f869e1c0d8f8",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "popularity": 8,
+        "type": "artist",
+        "uri": "spotify:artist:6F9fY19QXTY4j6I2i1jhgE"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4or9RxfWjngaVR8KKqv7L1"
+        },
+        "followers": {
+          "href": null,
+          "total": 653
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/4or9RxfWjngaVR8KKqv7L1",
+        "id": "4or9RxfWjngaVR8KKqv7L1",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273119e86d7d249f271ed424121",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02119e86d7d249f271ed424121",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851119e86d7d249f271ed424121",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "popularity": 3,
+        "type": "artist",
+        "uri": "spotify:artist:4or9RxfWjngaVR8KKqv7L1"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2KQRztb9Ct88oOnd1ZqTUU"
+        },
+        "followers": {
+          "href": null,
+          "total": 1227
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/2KQRztb9Ct88oOnd1ZqTUU",
+        "id": "2KQRztb9Ct88oOnd1ZqTUU",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2738f8cd0208b456f13bd5e06e3",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e028f8cd0208b456f13bd5e06e3",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048518f8cd0208b456f13bd5e06e3",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits",
+        "popularity": 1,
+        "type": "artist",
+        "uri": "spotify:artist:2KQRztb9Ct88oOnd1ZqTUU"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5WTv0mOBnduxn1UTjGRpdv"
+        },
+        "followers": {
+          "href": null,
+          "total": 228
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/5WTv0mOBnduxn1UTjGRpdv",
+        "id": "5WTv0mOBnduxn1UTjGRpdv",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2737174ae30610bc38fc24856c8",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e027174ae30610bc38fc24856c8",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048517174ae30610bc38fc24856c8",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Hits Dance Party",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:5WTv0mOBnduxn1UTjGRpdv"
+      }
+    ]
+  }
+}

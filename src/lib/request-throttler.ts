@@ -1,6 +1,6 @@
 /**
  * Sistema global de throttling para limitar solicitudes API
- * 
+ *
  * Este módulo implementa un sistema de control de tasa para limitar
  * el número de solicitudes que pueden hacerse a APIs externas desde
  * el cliente, ayudando a prevenir errores 429 (Too Many Requests).
@@ -70,12 +70,12 @@ const apiConfig: Record<string, ThrottleConfig> = {
 function processQueue(api: string) {
   const tracker = apiTrackers[api] || apiTrackers.default;
   const config = apiConfig[api] || apiConfig.default;
-  
+
   // Si hay elementos en la cola y espacio para más solicitudes
   if (tracker.waitQueue.length > 0 && tracker.pendingRequests.size < config.maxParallel) {
     const now = Date.now();
     const timeSinceLastRequest = now - tracker.lastRequest;
-    
+
     // Si ha pasado suficiente tiempo desde la última solicitud
     if (timeSinceLastRequest >= config.minInterval) {
       const next = tracker.waitQueue.shift();
@@ -103,12 +103,12 @@ export async function waitForTurn(api: string = 'default', requestId: string = `
   const apiKey = api in apiTrackers ? api : 'default';
   const tracker = apiTrackers[apiKey];
   const config = apiConfig[apiKey];
-  
+
   // Si no hay muchas solicitudes paralelas actualmente, proceder inmediatamente
   if (tracker.pendingRequests.size < config.maxParallel) {
     const now = Date.now();
     const timeSinceLastRequest = now - tracker.lastRequest;
-    
+
     if (timeSinceLastRequest >= config.minInterval) {
       // Actualizar el timestamp y registrar esta solicitud
       tracker.lastRequest = now;
@@ -116,7 +116,7 @@ export async function waitForTurn(api: string = 'default', requestId: string = `
       return;
     }
   }
-  
+
   // Si necesitamos esperar, agregar a la cola
   return new Promise((resolve, reject) => {
     // Crear una referencia para poder cancelar la solicitud después
@@ -127,10 +127,10 @@ export async function waitForTurn(api: string = 'default', requestId: string = `
         resolve();
       }
     };
-    
+
     // Agregar a la cola
     tracker.waitQueue.push(queuedRequest);
-    
+
     // Configurar un timeout para evitar esperas demasiado largas
     const timeout = setTimeout(() => {
       // Eliminar de la cola si aún está esperando
@@ -140,7 +140,7 @@ export async function waitForTurn(api: string = 'default', requestId: string = `
         reject(new Error(`La solicitud ${requestId} ha excedido el tiempo máximo de espera`));
       }
     }, config.queueTime);
-    
+
     // Iniciar procesamiento de la cola
     processQueue(apiKey);
   });
@@ -154,10 +154,10 @@ export async function waitForTurn(api: string = 'default', requestId: string = `
 export function releaseRequest(api: string = 'default', requestId: string): void {
   const apiKey = api in apiTrackers ? api : 'default';
   const tracker = apiTrackers[apiKey];
-  
+
   // Eliminar del conjunto de solicitudes pendientes
   tracker.pendingRequests.delete(requestId);
-  
+
   // Procesar la siguiente solicitud en la cola
   processQueue(apiKey);
 }
@@ -166,11 +166,13 @@ export function releaseRequest(api: string = 'default', requestId: string): void
  * Envuelve una función para aplicar throttling
  * @param fn Función a envolver
  * @param api Nombre de la API
+ * @param options Opciones adicionales de throttling (opcional)
  * @returns Función con throttling aplicado
  */
 export function withThrottle<T extends (...args: any[]) => Promise<any>>(
   fn: T,
-  api: string = 'default'
+  api: string = 'default',
+  options?: any
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
     const requestId = `req_${Date.now()}_${Math.random()}`;
@@ -182,4 +184,4 @@ export function withThrottle<T extends (...args: any[]) => Promise<any>>(
       releaseRequest(api, requestId);
     }
   };
-} 
+}

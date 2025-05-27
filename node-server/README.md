@@ -1,6 +1,6 @@
-# MusicVerse Node.js API
+# freevibes Node.js API
 
-Este servidor Node.js funciona como proxy entre el frontend de MusicVerse y la API de Python de YouTube Music.
+Este servidor Node.js funciona como proxy entre el frontend de freevibes y la API de Python de FreeVibes.
 
 ## Despliegue en Render
 
@@ -11,7 +11,7 @@ Este servidor Node.js funciona como proxy entre el frontend de MusicVerse y la A
    - Conecta tu repositorio de GitHub/GitLab/Bitbucket
 
 2. **Configuración del servicio**:
-   - **Nombre**: `musicverse-node-api` (o el que prefieras)
+   - **Nombre**: `freevibes-node-api` (o el que prefieras)
    - **Ambiente**: `Node`
    - **Región**: Selecciona la más cercana a tus usuarios
    - **Rama**: `main` (o la que uses)
@@ -24,8 +24,8 @@ Este servidor Node.js funciona como proxy entre el frontend de MusicVerse y la A
    Configura las siguientes variables en la sección "Environment":
    - `PORT`: 10000 (Render asigna este puerto automáticamente)
    - `NODE_ENV`: production
-   - `CORS_ORIGIN`: URL de tu frontend en Vercel (ej: https://musicverse.vercel.app)
-   - `YOUTUBE_API_URL`: URL de tu API Python en Render (ej: https://musicverse-python-api.onrender.com/api)
+   - `CORS_ORIGIN`: URL de tu frontend en Vercel (ej: https://freevibes.vercel.app)
+   - `YOUTUBE_API_URL`: URL de tu API Python en Render (ej: https://freevibes-python-api.onrender.com/api)
 
 4. **Crear servicio**:
    - Haz clic en "Create Web Service"
@@ -47,4 +47,4 @@ Asegúrate de tener un archivo `.env` con las variables necesarias para desarrol
 - PORT=3001
 - NODE_ENV=development
 - CORS_ORIGIN=http://localhost:3000
-- YOUTUBE_API_URL=http://localhost:5000/api 
+- YOUTUBE_API_URL=http://localhost:5000/api

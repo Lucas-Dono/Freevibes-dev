@@ -42,7 +42,7 @@ export async function connectToDatabase(): Promise<mongoose.Connection> {
       return mongoose.connection;
     });
   }
-  
+
   global.mongoose.connection = await global.mongoose.promise;
   return global.mongoose.connection;
-} 
+}

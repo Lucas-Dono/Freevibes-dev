@@ -25,39 +25,38 @@ export default function UserProfilePage(): JSX.Element {
   const [mounted, setMounted] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  const { userNotifications } = useCustomNotifications();
+  const { showNotification, addSystemNotification } = useCustomNotifications();
   const { profile, loading, error } = useProfile();
-  
+
   // En una aplicación real, usaríamos el ID para obtener los datos del usuario
-  console.log(`Mostrando el perfil de usuario con ID: ${userId}`);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const handleFollowToggle = (): void => {
     setIsFollowing(prev => !prev);
-    
+
     if (!isFollowing) {
       // Si vamos a seguir al usuario
-      userNotifications.onUserFollowed(profile?.name || 'Usuario');
+      showNotification(`Ahora sigues a ${profile?.name || 'Usuario'}`, 'success');
     } else {
       // Si dejamos de seguir al usuario
-      userNotifications.onUserUnfollowed(profile?.name || 'Usuario');
+      showNotification(`Has dejado de seguir a ${profile?.name || 'Usuario'}`, 'info');
     }
-    
+
     // Aquí iría la llamada a la API para seguir/dejar de seguir al usuario
   };
 
   if (!mounted) return <></>;
-  
+
   if (loading) {
     return (
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
       }}>
         <CircularProgress color="secondary" />
       </Box>
@@ -126,12 +125,12 @@ export default function UserProfilePage(): JSX.Element {
       averageDailyTime: 145
     }
   };
-  
+
   const userData = profile || fallbackUser;
   const userPlaylists = userData.playlists || fallbackPlaylists;
   const userRecentlyPlayed = userData.recentlyPlayed || fallbackTracks;
   const userTopArtists = userData.topArtists || fallbackArtists;
-  
+
   // Función para renderizar el contenido según la tab activa
   const renderContent = (): JSX.Element => {
     switch (activeTab) {
@@ -149,7 +148,7 @@ export default function UserProfilePage(): JSX.Element {
                     </Link>
                   )}
                 </div>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {userPlaylists.map((playlist: Playlist, index: number) => (
                     <motion.div
@@ -161,8 +160,8 @@ export default function UserProfilePage(): JSX.Element {
                       <Link href={`/playlist/${playlist.id}`}>
                         <div className="bg-card-bg rounded-lg p-3 hover:bg-card-bg/80 transition-colors h-full flex flex-col group">
                           <div className="relative aspect-square rounded-md overflow-hidden mb-2">
-                            <img 
-                              src={playlist.imageUrl} 
+                            <img
+                              src={playlist.imageUrl}
                               alt={playlist.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
@@ -182,7 +181,7 @@ export default function UserProfilePage(): JSX.Element {
                   ))}
                 </div>
               </div>
-              
+
               {/* Reproducidos recientemente */}
               <div className="mb-10">
                 <div className="flex justify-between items-center mb-4">
@@ -193,7 +192,7 @@ export default function UserProfilePage(): JSX.Element {
                     </Link>
                   )}
                 </div>
-                
+
                 <div className="bg-card-bg rounded-xl overflow-hidden">
                   {userRecentlyPlayed.map((track: Track, index: number) => (
                     <motion.div
@@ -206,8 +205,8 @@ export default function UserProfilePage(): JSX.Element {
                       }`}
                     >
                       <div className="w-10 h-10 rounded overflow-hidden">
-                        <img 
-                          src={track.albumCover} 
+                        <img
+                          src={track.albumCover}
                           alt={track.title}
                           className="w-full h-full object-cover"
                         />
@@ -230,13 +229,13 @@ export default function UserProfilePage(): JSX.Element {
                 </div>
               </div>
             </div>
-            
+
             {/* Top artistas */}
             <div>
               <div className="mb-4">
                 <h3 className="text-xl font-semibold">Artistas favoritos</h3>
               </div>
-              
+
               <div className="bg-card-bg rounded-xl p-4">
                 {userTopArtists.map((artist: Artist, index: number) => (
                   <motion.div
@@ -249,8 +248,8 @@ export default function UserProfilePage(): JSX.Element {
                     }`}
                   >
                     <div className="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-                      <img 
-                        src={artist.imageUrl} 
+                      <img
+                        src={artist.imageUrl}
                         alt={artist.name}
                         className="w-full h-full object-cover"
                       />
@@ -268,7 +267,7 @@ export default function UserProfilePage(): JSX.Element {
                   </motion.div>
                 ))}
               </div>
-              
+
               {/* Estadísticas del usuario */}
               {userData.statistics && (
                 <motion.div
@@ -301,7 +300,7 @@ export default function UserProfilePage(): JSX.Element {
             </div>
           </div>
         );
-        
+
       case 'playlists':
         return (
           <div>
@@ -317,8 +316,8 @@ export default function UserProfilePage(): JSX.Element {
                   <Link href={`/playlist/${playlist.id}`}>
                     <div className="bg-card-bg rounded-lg p-3 hover:bg-card-bg/80 transition-colors h-full flex flex-col group">
                       <div className="relative aspect-square rounded-md overflow-hidden mb-2">
-                        <img 
-                          src={playlist.imageUrl} 
+                        <img
+                          src={playlist.imageUrl}
                           alt={playlist.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -339,7 +338,7 @@ export default function UserProfilePage(): JSX.Element {
             </div>
           </div>
         );
-        
+
       case 'artists':
         return (
           <div>
@@ -355,8 +354,8 @@ export default function UserProfilePage(): JSX.Element {
                   <Link href={`/artist/${artist.id}`}>
                     <div className="bg-card-bg rounded-lg p-3 hover:bg-card-bg/80 transition-colors h-full flex flex-col group">
                       <div className="relative aspect-square rounded-full overflow-hidden mb-3">
-                        <img 
-                          src={artist.imageUrl} 
+                        <img
+                          src={artist.imageUrl}
                           alt={artist.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -374,7 +373,7 @@ export default function UserProfilePage(): JSX.Element {
             </div>
           </div>
         );
-        
+
       case 'recent':
         return (
           <div>
@@ -389,8 +388,8 @@ export default function UserProfilePage(): JSX.Element {
                   className="flex items-center p-4 hover:bg-white/5 transition-colors group border-b border-gray-800"
                 >
                   <div className="w-12 h-12 rounded overflow-hidden">
-                    <img 
-                      src={track.albumCover} 
+                    <img
+                      src={track.albumCover}
                       alt={track.title}
                       className="w-full h-full object-cover"
                     />
@@ -414,34 +413,34 @@ export default function UserProfilePage(): JSX.Element {
             </div>
           </div>
         );
-        
+
       default:
         return <div>Selecciona una pestaña</div>;
     }
   };
-  
+
   return (
     <div className="min-h-screen pt-6 pb-20">
       {/* Banner y perfil */}
       <div className="relative mb-10">
         <div className="h-60 md:h-80 relative overflow-hidden rounded-xl">
-          <div 
-            className="absolute inset-0 bg-center bg-cover" 
-            style={{ 
+          <div
+            className="absolute inset-0 bg-center bg-cover"
+            style={{
               backgroundImage: `url(${profile?.coverImage || userData.coverImage})`,
               filter: 'brightness(0.7)'
             }}>
           </div>
-          
+
           {/* Gradiente de overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-start md:items-end -mt-20 md:-mt-24 relative z-10">
             <div className="w-36 h-36 rounded-full border-4 border-background overflow-hidden flex-shrink-0 mb-4 md:mb-0">
-              <img 
-                src={profile?.profileImage || userData.profileImage} 
+              <img
+                src={profile?.profileImage || userData.profileImage}
                 alt={profile?.name || userData.name}
                 className="w-full h-full object-cover"
               />
@@ -453,7 +452,7 @@ export default function UserProfilePage(): JSX.Element {
                   <p className="text-gray-400 mt-1">@{profile?.username || userData.username}</p>
                 </div>
                 <div className="flex mt-4 md:mt-0">
-                  <button 
+                  <button
                     className={`${isFollowing ? 'bg-card-bg text-white' : 'bg-primary hover:bg-primary-dark text-white'} py-2 px-6 rounded-full font-medium transition-colors focus:outline-none`}
                     onClick={handleFollowToggle}
                   >
@@ -461,7 +460,7 @@ export default function UserProfilePage(): JSX.Element {
                   </button>
                 </div>
               </div>
-              
+
               <div className="flex items-center mt-4 space-x-4">
                 <div>
                   <span className="font-semibold">{formatNumber(userData.followers)}</span>
@@ -478,7 +477,7 @@ export default function UserProfilePage(): JSX.Element {
                   </div>
                 )}
               </div>
-              
+
               {userData.bio && (
                 <p className="text-gray-300 mt-4 max-w-3xl">
                   {userData.bio}
@@ -488,7 +487,7 @@ export default function UserProfilePage(): JSX.Element {
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Tabs de navegación */}
         <div className="border-b border-gray-800 mb-6 overflow-x-auto flex space-x-8">
@@ -506,7 +505,7 @@ export default function UserProfilePage(): JSX.Element {
               />
             )}
           </button>
-          
+
           <button
             onClick={() => setActiveTab('playlists')}
             className={`pb-3 px-1 font-medium transition-colors relative ${
@@ -521,7 +520,7 @@ export default function UserProfilePage(): JSX.Element {
               />
             )}
           </button>
-          
+
           <button
             onClick={() => setActiveTab('artists')}
             className={`pb-3 px-1 font-medium transition-colors relative ${
@@ -536,7 +535,7 @@ export default function UserProfilePage(): JSX.Element {
               />
             )}
           </button>
-          
+
           <button
             onClick={() => setActiveTab('recent')}
             className={`pb-3 px-1 font-medium transition-colors relative ${
@@ -552,7 +551,7 @@ export default function UserProfilePage(): JSX.Element {
             )}
           </button>
         </div>
-        
+
         {/* Contenido principal */}
         <motion.div
           key={activeTab}

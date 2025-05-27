@@ -1,6 +1,6 @@
 /**
  * Sistema de recomendaciones de música
- * 
+ *
  * Este módulo exporta todas las funciones para obtener recomendaciones musicales
  * desde el sistema multi-fuente, simplificando el acceso desde otras partes de la aplicación.
  */
@@ -69,4 +69,4 @@ export interface RecommendationOptions {
   preferredSource?: string;    // Fuente preferida ('spotify', 'deezer', 'lastfm')
   combineResults?: boolean;    // Si es true, combinar resultados de múltiples fuentes
   minResults?: number;         // Número mínimo de resultados requeridos
-} 
+}

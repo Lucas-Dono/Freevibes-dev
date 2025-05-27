@@ -33,10 +33,10 @@ const RecentTrackSchema = new Schema<IRecentTrackDocument>(
     albumName: { type: String },
     albumCover: { type: String },
     playedAt: { type: Date, default: Date.now, index: true },
-    source: { 
-      type: String, 
+    source: {
+      type: String,
       required: true,
-      enum: ['spotify', 'deezer', 'lastfm', 'youtube', 'local'] 
+      enum: ['spotify', 'deezer', 'lastfm', 'youtube', 'local']
     },
     sourceData: {
       uri: { type: String },
@@ -55,16 +55,16 @@ RecentTrackSchema.index({ userId: 1, trackId: 1, playedAt: -1 });
 RecentTrackSchema.statics.addToHistory = async function(trackData: IRecentTrack) {
   // Primero añadimos la nueva entrada
   await this.create(trackData);
-  
+
   // Luego limitamos el historial a 50 canciones por usuario
   const tracksCount = await this.countDocuments({ userId: trackData.userId });
-  
+
   if (tracksCount > 50) {
     // Obtenemos las canciones más antiguas que excedan el límite
     const oldestTracks = await this.find({ userId: trackData.userId })
       .sort({ playedAt: 1 })
       .limit(tracksCount - 50);
-      
+
     // Eliminamos las canciones más antiguas
     if (oldestTracks.length > 0) {
       await this.deleteMany({
@@ -72,12 +72,12 @@ RecentTrackSchema.statics.addToHistory = async function(trackData: IRecentTrack)
       });
     }
   }
-  
+
   return true;
 };
 
 // Exportamos el modelo o lo creamos si no existe
-export const RecentTrack = (mongoose.models.RecentTrack as IRecentTrackModel) || 
+export const RecentTrack = (mongoose.models.RecentTrack as IRecentTrackModel) ||
   mongoose.model<IRecentTrackDocument, IRecentTrackModel>('RecentTrack', RecentTrackSchema);
 
-export type { IRecentTrack }; 
+export type { IRecentTrack };

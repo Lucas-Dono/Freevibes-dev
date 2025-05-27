@@ -1,0 +1,22 @@
+{
+  "country": "AR",
+  "display_name": "lucasdono391",
+  "email": "lucasdono391@gmail.com",
+  "explicit_content": {
+    "filter_enabled": false,
+    "filter_locked": false
+  },
+  "external_urls": {
+    "spotify": "https://open.spotify.com/user/lucasdono391"
+  },
+  "followers": {
+    "href": null,
+    "total": 0
+  },
+  "href": "https://api.spotify.com/v1/users/lucasdono391",
+  "id": "lucasdono391",
+  "images": [],
+  "product": "premium",
+  "type": "user",
+  "uri": "spotify:user:lucasdono391"
+}

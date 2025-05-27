@@ -1,0 +1,991 @@
+{
+  "albums": {
+    "browseId": "MPADUCzV_r1c79OsEDCb6iFngI-w",
+    "params": "ggMIegYIARoCAQI%3D",
+    "results": [
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_n3NqtbUbdarSYoScvXVg9gtvbq7PlzUxA",
+        "browseId": "MPREb_w1Y22W4i7hD",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/tbusRCv6j1nZEaFtLlhzIa2KsEx9mA4yoCU9dG9BV_Koz8s6Ypj3vKG9NYLc4hmSuGOZ_s07jgdLmMv_=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/tbusRCv6j1nZEaFtLlhzIa2KsEx9mA4yoCU9dG9BV_Koz8s6Ypj3vKG9NYLc4hmSuGOZ_s07jgdLmMv_=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Deseo",
+        "type": "2018"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_l3D6VbJV30hxcV8ElIdsZQOdiGLrkFQE8",
+        "browseId": "MPREb_HbXIXBSz6s4",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/bo64f6t2ahKuzkZN8doSgSR9ta62ss2rmiiAbpLUWqXJ4KchHaZ-5M4ZDf8gjrOIx2pf3lCgzExP8IA=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/bo64f6t2ahKuzkZN8doSgSR9ta62ss2rmiiAbpLUWqXJ4KchHaZ-5M4ZDf8gjrOIx2pf3lCgzExP8IA=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Brava!",
+        "type": "2011"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_nMyoRDBLk77L9Y8oNjTL3omDVKiFwDsR0",
+        "browseId": "MPREb_GyVczQ8d0fD",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/5fj3wyl_I01Dd_pYZATDJZnJVpm1PHDhTVsJ5PVdI16ewuvHg9j3E29eCjfnq4MZ0Tn6LvXQMTnuAOs=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/5fj3wyl_I01Dd_pYZATDJZnJVpm1PHDhTVsJ5PVdI16ewuvHg9j3E29eCjfnq4MZ0Tn6LvXQMTnuAOs=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Gran City Pop",
+        "type": "2009"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_kkuYLJXhpA7wbxDNdT12xCGfeFQKmvEL8",
+        "browseId": "MPREb_IONlQe68USF",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/UkBGhfA0OoKwGhGQ8AHVtc_1tcpqDdzotPKXDBqA_IIVxmk5uFNOd2nwUGbwBHHUgyuB2bmhUkjeAGsO=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/UkBGhfA0OoKwGhGQ8AHVtc_1tcpqDdzotPKXDBqA_IIVxmk5uFNOd2nwUGbwBHHUgyuB2bmhUkjeAGsO=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Ananda",
+        "type": "2006"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_m_braCcs084PUNxyZO0BAINeY3iIdSKpk",
+        "browseId": "MPREb_emtcd9DK5Uc",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/Xvwk4GVrnieCLBjAcNUpcpyyTzOseU3IY166XYDzkJQ1saIjtwfTiJXA-6xjsiOI6RFX8qIkNcSQyr5wkQ=w226-h226-s-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/Xvwk4GVrnieCLBjAcNUpcpyyTzOseU3IY166XYDzkJQ1saIjtwfTiJXA-6xjsiOI6RFX8qIkNcSQyr5wkQ=w544-h544-s-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Pau-Latina",
+        "type": "2004"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_mTGl7zhkrKudBEJ9HSYVvagQhySDOB4jY",
+        "browseId": "MPREb_n3NQNHghvLS",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/qZBsBsl5mp_ct9iWtmf3izp3p1_xaFz_akkS4khV6OjT0mS131RH-Y39A8zQ_gWNXAO8cga2XAteEO97=w226-h226-s-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/qZBsBsl5mp_ct9iWtmf3izp3p1_xaFz_akkS4khV6OjT0mS131RH-Y39A8zQ_gWNXAO8cga2XAteEO97=w544-h544-s-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Border Girl",
+        "type": "2002"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_ntQ55mPEr-Cl7C8B9hYX3FNHOCDs-sWu0",
+        "browseId": "MPREb_5vnmVeZpc2N",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w226-h226-s-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w544-h544-s-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Paulina",
+        "type": "2000"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_mJBfPtB-ZQDg0hwb6W7jKMkb7zvoyqusw",
+        "browseId": "MPREb_dD6zXOTqqJH",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/0ccD-J7n1_1v-VLTG_4_IjjLC-oekXlMwm2ohvScellteW-ufcH7L8Ug9iWeJx879gcT9JmMBL4t61GZ=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/0ccD-J7n1_1v-VLTG_4_IjjLC-oekXlMwm2ohvScellteW-ufcH7L8Ug9iWeJx879gcT9JmMBL4t61GZ=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Planeta Paulina",
+        "type": "1996"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_nTCqg_7NXcwhV0h2TtdyXu_NAqT7L12N0",
+        "browseId": "MPREb_UBiyLGcz5G1",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/LSa_pOVm0TIaxOK4tFORfB4BE3-w0-17pnw9QAHzIo7alKnuLUS3b6aS2nNWmGj70n9YOQCxxzlDThDS=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/LSa_pOVm0TIaxOK4tFORfB4BE3-w0-17pnw9QAHzIo7alKnuLUS3b6aS2nNWmGj70n9YOQCxxzlDThDS=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "El Tiempo Es Oro",
+        "type": "1995"
+      },
+      {
+        "artists": [],
+        "audioPlaylistId": "OLAK5uy_kAZBwzd2U7aAkcT90h9dxESs6Ar0vE1hU",
+        "browseId": "MPREb_Svjl1AX9JHH",
+        "isExplicit": false,
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/FBsBRsfnXJRsZ8teOawGrJuwnt4pnI_KXt1RdFsTsa3bRAwpVXJhOqFQjtSvWqZ1FqYI70vV6K_e-AvC=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/FBsBRsfnXJRsZ8teOawGrJuwnt4pnI_KXt1RdFsTsa3bRAwpVXJhOqFQjtSvWqZ1FqYI70vV6K_e-AvC=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "24 Kilates",
+        "type": "1993"
+      }
+    ]
+  },
+  "description": "Paulina Susana Rubio Dosamantes is a Mexican singer, songwriter and television personality. Referred to as \"The Golden Girl\", she first achieved recognition as a member of the successful pop group Timbiriche from 1982 through 1991. After leaving Timbiriche, she embarked on a solo career. Rubio has sold over 15 million records, making her one of the best-selling Latin music artists of all time.\nRubio's first two studio albums, La Chica Dorada and 24 Kilates, were commercial successes and made her EMI Latin's best-selling Mexican female artist. In the mid-1990s, she adopted a more dance and electronic style for her next two albums, El Tiempo Es Oro and Planeta Paulina, and made her feature film debut with a starring role in Bésame en la Boca.\nFollowing a series of concerts with Timbiriche and ending her contract with EMI Latin, Rubio's career was interrupted before the release of her fifth studio album—and her first with Universal Latino—the homonym Paulina, which is critically referred to as one of her best albums to date. Paulina was an international success and Rubio became the best-selling Latin music artist of the Billboard Year-End in 2001.\n\nFrom Wikipedia (https://en.wikipedia.org/wiki/Paulina_Rubio) under Creative Commons Attribution CC-BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/legalcode)",
+  "id": "UCuxn1zFiLGD-T43TSk9YqSg",
+  "name": "Paulina Rubio",
+  "related": {
+    "browseId": null,
+    "results": [
+      {
+        "browseId": "UCWwlelNu5JkcERFUT8VIOew",
+        "subscribers": "7.89M",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/KOQ711XQm0Xqg4w8gtG0ioPRrIswf2U_qX8C7HvGzu3fVk8LDJ1l0IYUkv7jk6JbWs_APbhp8LJ23g=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/KOQ711XQm0Xqg4w8gtG0ioPRrIswf2U_qX8C7HvGzu3fVk8LDJ1l0IYUkv7jk6JbWs_APbhp8LJ23g=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Thalia"
+      },
+      {
+        "browseId": "UCWwNkmxGiAUC_5T7QU3hoUw",
+        "subscribers": "372K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/a-/ALV-UjXngDwcAFVKNl8gWta48UfGJrLS3s-fHQQCcaa8F72AhYTYQwVF=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/a-/ALV-UjXngDwcAFVKNl8gWta48UfGJrLS3s-fHQQCcaa8F72AhYTYQwVF=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Fey"
+      },
+      {
+        "browseId": "UCd8U1XJFHFryqYu8FmTSBnw",
+        "subscribers": "2.29M",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/20JNMNf2ohzodZMMAu8mtQq85e2T61zCkWYqKl1mSG-jZHzBmECql-A-KDYef3FfqWuTUDyqE57TlVer=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/20JNMNf2ohzodZMMAu8mtQq85e2T61zCkWYqKl1mSG-jZHzBmECql-A-KDYef3FfqWuTUDyqE57TlVer=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Alejandra Guzmán"
+      },
+      {
+        "browseId": "UCq-od9X7el6x_LWT72e9HLQ",
+        "subscribers": "3.86M",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/7Iq5yFzmsw5gPP1iM3059wlK-2-q70rzKQ1ZfHEDuwNJezvlX-mrq-2T5bjiGeAEpB8JCmpNGHJdAkI=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/7Iq5yFzmsw5gPP1iM3059wlK-2-q70rzKQ1ZfHEDuwNJezvlX-mrq-2T5bjiGeAEpB8JCmpNGHJdAkI=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Gloria Trevi"
+      },
+      {
+        "browseId": "UCYeqfUosyWQjWwfZ5bWd6Uw",
+        "subscribers": "845K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/-1D_8DYZLnfuOe5yqBg38kxBBAO8XUN8r-aGzIuXOdZ74rWm9yp6mscNjKE-bOyRj2QmqMctTQF8XAQ=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/-1D_8DYZLnfuOe5yqBg38kxBBAO8XUN8r-aGzIuXOdZ74rWm9yp6mscNjKE-bOyRj2QmqMctTQF8XAQ=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "La Quinta Estación"
+      },
+      {
+        "browseId": "UCl8y2cW9hJGmHRl2LpXCOHQ",
+        "subscribers": "479K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/ieFMAbIaS7haMj4A-uRV_wqkmQmS5C-xWQZS3ucTYoqzNLlxQff89oCDDzFpJcW_9idReqb6sUVEgz0P=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/ieFMAbIaS7haMj4A-uRV_wqkmQmS5C-xWQZS3ucTYoqzNLlxQff89oCDDzFpJcW_9idReqb6sUVEgz0P=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "OV7"
+      },
+      {
+        "browseId": "UCEHLfyhxqHOcjP7zf2U9oWA",
+        "subscribers": "86.7K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/4mq9tsKseVD4EDllssuF571PdMrmzlDGmbiLWn28xzpl3GKYVa8rtZDWrozxQOVoJEDW3t4bp1MO2ew=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/4mq9tsKseVD4EDllssuF571PdMrmzlDGmbiLWn28xzpl3GKYVa8rtZDWrozxQOVoJEDW3t4bp1MO2ew=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Sentidos Opuestos"
+      },
+      {
+        "browseId": "UCNn-ru794fWmtSavzP0x6-w",
+        "subscribers": "88.8K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/N247djjAvTJAcpLgp3axc1CcieZFKtF1WJi43UoBuCvZM_xZFWST2DmCCIXklMQspML_zEtKwKZ_Yg=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/N247djjAvTJAcpLgp3axc1CcieZFKtF1WJi43UoBuCvZM_xZFWST2DmCCIXklMQspML_zEtKwKZ_Yg=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Kabah"
+      },
+      {
+        "browseId": "UC8tw8d2POmc3Lt8t1bmgl9Q",
+        "subscribers": "1.22M",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/uLf-R7Cwyxp1i1Dyuwd8Gp7MLG0H_Z4aqMXvJnbKq5wxFawrwiKYVPqUe2q8Mp5x6TJwZNN654jZwc1R=w226-h226-p-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/uLf-R7Cwyxp1i1Dyuwd8Gp7MLG0H_Z4aqMXvJnbKq5wxFawrwiKYVPqUe2q8Mp5x6TJwZNN654jZwc1R=w544-h544-p-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Belinda"
+      },
+      {
+        "browseId": "UCaDilTTIAbUY10Puh0Wn6gQ",
+        "subscribers": "297K",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/a-/ALV-UjUet9p1guSCN7abeKZlTQfooRSXbIZJMBxCT_bZKMEqmKmXlar-=w226-h226-l90-rj-dcGUWc6p0J",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/a-/ALV-UjUet9p1guSCN7abeKZlTQfooRSXbIZJMBxCT_bZKMEqmKmXlar-=w544-h544-l90-rj-dcGUWc6p0J",
+            "width": 544
+          }
+        ],
+        "title": "Marta Sánchez"
+      }
+    ]
+  },
+  "singles": {
+    "browseId": "MPADUCzV_r1c79OsEDCb6iFngI-w",
+    "params": "ggMIegYIAhoCAQI%3D",
+    "results": [
+      {
+        "browseId": "MPREb_fa3x2sDkjkS",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/A6GHZyuuWfS5pTuNdomYxtqrOMAzHhjzu7fSRkP17lw5YbgciAmi__Uc3p4u9CAUsyKB68Ki9PV1T3HH=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/A6GHZyuuWfS5pTuNdomYxtqrOMAzHhjzu7fSRkP17lw5YbgciAmi__Uc3p4u9CAUsyKB68Ki9PV1T3HH=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Balada Pop",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_BcL0MraNhDz",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/d20AJtf4vUS8-7UUnujEBIskXXwi5P87jJ7ntKbfLcl7W0c0IeZnPque1zzDocROrT6sElcKLUotsrsG=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/d20AJtf4vUS8-7UUnujEBIskXXwi5P87jJ7ntKbfLcl7W0c0IeZnPque1zzDocROrT6sElcKLUotsrsG=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Propiedad Privada",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_kLcWQ3n3XaN",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/HaYgKwpWZK5eZDJ9V-yRIrXrabNVUGq-2FMWnSJUGMjeP8WdhwDWwsahAwcyqiCVK-5ung4I0yI_RJrYfQ=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/HaYgKwpWZK5eZDJ9V-yRIrXrabNVUGq-2FMWnSJUGMjeP8WdhwDWwsahAwcyqiCVK-5ung4I0yI_RJrYfQ=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Mi decisión (Canción original de la película “La novia de América”)",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_IIGn5ysradu",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/9aGkTHh2fX3euCPkBWLBhvMyRQO0UHG3-eXl6Of4fhoup3ex2szQ31TooP3RPXQ7eF8p8FQCueIffsTNXA=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/9aGkTHh2fX3euCPkBWLBhvMyRQO0UHG3-eXl6Of4fhoup3ex2szQ31TooP3RPXQ7eF8p8FQCueIffsTNXA=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "No Es Mi Culpa",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_geCXrHmtHF2",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/CTzczOiEdMEfMvRQoZOccPN7p5LZGnH-HrxGXnuaTMQ9Qc8hea7ncs2hvnKh88BIry3B3vEF0czmzA-lOA=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/CTzczOiEdMEfMvRQoZOccPN7p5LZGnH-HrxGXnuaTMQ9Qc8hea7ncs2hvnKh88BIry3B3vEF0czmzA-lOA=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Me Gusta",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_K39PvnjgBV6",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/sM15fecQHeMrimmaDpr6EAt78MA4iyXYMODP-0VyMuK5zfpIyo1GxRpicqLO-HaCD2hOisPO7GeQwvOl=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/sM15fecQHeMrimmaDpr6EAt78MA4iyXYMODP-0VyMuK5zfpIyo1GxRpicqLO-HaCD2hOisPO7GeQwvOl=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Yo Soy",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_E9CUy22eNRH",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/zMBUN8q4TbCn51uwIvf-Z9H4KepOmIxCYwQ2YCgcaYOb4hYAgDCOEioDrCVx7MhdkhB8Gq6VZ7S4B1Na=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/zMBUN8q4TbCn51uwIvf-Z9H4KepOmIxCYwQ2YCgcaYOb4hYAgDCOEioDrCVx7MhdkhB8Gq6VZ7S4B1Na=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Xico: Semilla de Paz",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_SDNyf7EEu4A",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/VLnFXwvAp75YlX3BRwuHK43q0Vkam3zZRlut__qSH08dtVkYw49la0OXgCGL2YJXIs6U6EwTaLNy27Yl=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/VLnFXwvAp75YlX3BRwuHK43q0Vkam3zZRlut__qSH08dtVkYw49la0OXgCGL2YJXIs6U6EwTaLNy27Yl=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Tú Y Yo",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_kVMcjHIltIa",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/krEiAHRDkyGhpufrX0wN0aWOho275piMyNvMCtG0nmIz4CQZs_5tb6VVfZ9ourUzLF8H9tTPvTZr5CKYVQ=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/krEiAHRDkyGhpufrX0wN0aWOho275piMyNvMCtG0nmIz4CQZs_5tb6VVfZ9ourUzLF8H9tTPvTZr5CKYVQ=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "De Qué Sirve",
+        "year": "Single"
+      },
+      {
+        "browseId": "MPREb_V6GOusxIWRI",
+        "thumbnails": [
+          {
+            "height": 226,
+            "url": "https://lh3.googleusercontent.com/nYI2g5zEzC1EGnemVv6TV9kUyUCgiNwe64N-X0dojKPBpYX4cPcVHN89qz3gVOGkDm_fHAGrdz7-fwk=w226-h226-l90-rj",
+            "width": 226
+          },
+          {
+            "height": 544,
+            "url": "https://lh3.googleusercontent.com/nYI2g5zEzC1EGnemVv6TV9kUyUCgiNwe64N-X0dojKPBpYX4cPcVHN89qz3gVOGkDm_fHAGrdz7-fwk=w544-h544-l90-rj",
+            "width": 544
+          }
+        ],
+        "title": "Si Supieran",
+        "year": "Single"
+      }
+    ]
+  },
+  "songs": {
+    "browseId": "VLOLAK5uy_ne4f9IeD_rWakcVMJP515JxUjmA3lRRFM",
+    "results": [
+      {
+        "album": {
+          "id": "MPREb_Pzvm3FCX8UZ",
+          "name": "Esta Mañana Y Otros Cuentos"
+        },
+        "artists": [
+          {
+            "id": "UCF241eZJchVOFdfg8i5NBSQ",
+            "name": "Coti"
+          },
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          },
+          {
+            "id": "UCvXTgH2KhTPYSgiKQ5JL70g",
+            "name": "Julieta Venegas"
+          }
+        ],
+        "inLibrary": null,
+        "isAvailable": true,
+        "isExplicit": false,
+        "likeStatus": "INDIFFERENT",
+        "thumbnails": [
+          {
+            "height": 60,
+            "url": "https://lh3.googleusercontent.com/Wl6wEwqnmGh1qIANgHW2kPLal1mKLYOL8X3wHCLO9PuIjRJVycktLZuKikZ7tJhKefo90hQQJ_AuRVDa=w60-h60-l90-rj",
+            "width": 60
+          },
+          {
+            "height": 120,
+            "url": "https://lh3.googleusercontent.com/Wl6wEwqnmGh1qIANgHW2kPLal1mKLYOL8X3wHCLO9PuIjRJVycktLZuKikZ7tJhKefo90hQQJ_AuRVDa=w120-h120-l90-rj",
+            "width": 120
+          }
+        ],
+        "title": "Nada Fue Un Error (Live In Spain / 2005)",
+        "videoId": "5wnzSkfR2Ec",
+        "videoType": "MUSIC_VIDEO_TYPE_ATV",
+        "views": null
+      },
+      {
+        "album": {
+          "id": "MPREb_IONlQe68USF",
+          "name": "Ananda"
+        },
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "inLibrary": null,
+        "isAvailable": true,
+        "isExplicit": false,
+        "likeStatus": "INDIFFERENT",
+        "thumbnails": [
+          {
+            "height": 60,
+            "url": "https://lh3.googleusercontent.com/UkBGhfA0OoKwGhGQ8AHVtc_1tcpqDdzotPKXDBqA_IIVxmk5uFNOd2nwUGbwBHHUgyuB2bmhUkjeAGsO=w60-h60-l90-rj",
+            "width": 60
+          },
+          {
+            "height": 120,
+            "url": "https://lh3.googleusercontent.com/UkBGhfA0OoKwGhGQ8AHVtc_1tcpqDdzotPKXDBqA_IIVxmk5uFNOd2nwUGbwBHHUgyuB2bmhUkjeAGsO=w120-h120-l90-rj",
+            "width": 120
+          }
+        ],
+        "title": "Ni Una Sola Palabra",
+        "videoId": "232hzSwaTRc",
+        "videoType": "MUSIC_VIDEO_TYPE_ATV",
+        "views": null
+      },
+      {
+        "album": {
+          "id": "MPREb_5vnmVeZpc2N",
+          "name": "Paulina"
+        },
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "inLibrary": null,
+        "isAvailable": true,
+        "isExplicit": false,
+        "likeStatus": "INDIFFERENT",
+        "thumbnails": [
+          {
+            "height": 60,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w60-h60-s-l90-rj",
+            "width": 60
+          },
+          {
+            "height": 120,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w120-h120-s-l90-rj",
+            "width": 120
+          }
+        ],
+        "title": "El Ultimo Adios",
+        "videoId": "LAqym0ynbHg",
+        "videoType": "MUSIC_VIDEO_TYPE_ATV",
+        "views": null
+      },
+      {
+        "album": {
+          "id": "MPREb_5vnmVeZpc2N",
+          "name": "Paulina"
+        },
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "inLibrary": null,
+        "isAvailable": true,
+        "isExplicit": false,
+        "likeStatus": "INDIFFERENT",
+        "thumbnails": [
+          {
+            "height": 60,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w60-h60-s-l90-rj",
+            "width": 60
+          },
+          {
+            "height": 120,
+            "url": "https://lh3.googleusercontent.com/_okaY-fkjPBNifbcFFdRGL357ZDzVOoHim85lNrQStcsdfObrfnoABqb5kv2vPtsI0y2sueI0JR4d9qi=w120-h120-s-l90-rj",
+            "width": 120
+          }
+        ],
+        "title": "Yo No Soy Esa Mujer",
+        "videoId": "LIgftnwJFtc",
+        "videoType": "MUSIC_VIDEO_TYPE_ATV",
+        "views": null
+      },
+      {
+        "album": {
+          "id": "MPREb_7Y5rCJt5XfT",
+          "name": "La Chica Dorada"
+        },
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "inLibrary": null,
+        "isAvailable": true,
+        "isExplicit": false,
+        "likeStatus": "INDIFFERENT",
+        "thumbnails": [
+          {
+            "height": 60,
+            "url": "https://lh3.googleusercontent.com/CTlHg7MxN7sb9I_AOs8uaxoYsfj1SW7C-TnlKAeCCNuyW_LdJdcy_xGnHjB8bMyS6s56lgv047wN6TEH=w60-h60-l90-rj",
+            "width": 60
+          },
+          {
+            "height": 120,
+            "url": "https://lh3.googleusercontent.com/CTlHg7MxN7sb9I_AOs8uaxoYsfj1SW7C-TnlKAeCCNuyW_LdJdcy_xGnHjB8bMyS6s56lgv047wN6TEH=w120-h120-l90-rj",
+            "width": 120
+          }
+        ],
+        "title": "Mío",
+        "videoId": "_ldqo_OYyCo",
+        "videoType": "MUSIC_VIDEO_TYPE_ATV",
+        "views": null
+      }
+    ]
+  },
+  "source": "youtube_music",
+  "subscribers": "901K",
+  "thumbnails": [
+    {
+      "height": 225,
+      "url": "https://lh3.googleusercontent.com/K22G--vbD844HDQoMKMR8WJ66C12MUHO7mBf9q-GM8If1nxUzU3_ZYvOOqpQbJDCeER7_YMCbm0-xw=w540-h225-p-l90-rj",
+      "width": 540
+    },
+    {
+      "height": 340,
+      "url": "https://lh3.googleusercontent.com/K22G--vbD844HDQoMKMR8WJ66C12MUHO7mBf9q-GM8If1nxUzU3_ZYvOOqpQbJDCeER7_YMCbm0-xw=w816-h340-p-l90-rj",
+      "width": 816
+    },
+    {
+      "height": 450,
+      "url": "https://lh3.googleusercontent.com/K22G--vbD844HDQoMKMR8WJ66C12MUHO7mBf9q-GM8If1nxUzU3_ZYvOOqpQbJDCeER7_YMCbm0-xw=w1080-h450-p-l90-rj",
+      "width": 1080
+    }
+  ],
+  "videos": {
+    "browseId": "VLOLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+    "params": "ggMCCAI%3D",
+    "results": [
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/Kkdhtb9DVWQ/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3l-ZJW7WCPK6JmxkbsTbSyXpwD4dQ",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/Kkdhtb9DVWQ/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3lkj8DDG7kld-asw0AV0m1gkKHbZg",
+            "width": 800
+          }
+        ],
+        "title": "Ni Una Sola Palabra",
+        "videoId": "Kkdhtb9DVWQ",
+        "views": "147M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 180,
+            "url": "https://i.ytimg.com/vi/jNLU_A1d_60/hqdefault.jpg?sqp=-oaymwEWCMACELQBIAQqCghQEJADGFogjgJIWg&rs=AMzJL3lYLDR6nSMUZxQGECS5Fn3iiY1njg",
+            "width": 320
+          }
+        ],
+        "title": "El Último Adiós",
+        "videoId": "jNLU_A1d_60",
+        "views": "72M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/qb0tSy30PQo/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3lOEcXWOknP6FT0Orzl9iySUkE1Cg",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/qb0tSy30PQo/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3mCm8EUQ5ukT1NYGodFrDrFNjG2bg",
+            "width": 800
+          }
+        ],
+        "title": "Yo No Soy Esa Mujer",
+        "videoId": "qb0tSy30PQo",
+        "views": "24M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/i64yXSPqxJw/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3k7T3_EHu5NMx5pB1vhjaRKNs8gIg",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/i64yXSPqxJw/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3lWrkv7TrRnbNz9Dsj8MTdqBkVpzQ",
+            "width": 800
+          }
+        ],
+        "title": "Paulina Rubio - MÃ­o",
+        "videoId": "i64yXSPqxJw",
+        "views": "7.4M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 180,
+            "url": "https://i.ytimg.com/vi/hdxvqnkFv9o/hqdefault.jpg?sqp=-oaymwEWCMACELQBIAQqCghQEJADGFogjgJIWg&rs=AMzJL3k-9b_KpJ5EtQY3b7MxlJPj5DKjLA",
+            "width": 320
+          }
+        ],
+        "title": "Tal Vez, Quiza",
+        "videoId": "hdxvqnkFv9o",
+        "views": "31M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/iX7VQkCj9hI/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3mxxr0u1l2JMqJoL9qv5f6ACJCpSQ",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/iX7VQkCj9hI/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3kHn7AiG6ikq6PBpA9fVOVBefe5kg",
+            "width": 800
+          }
+        ],
+        "title": "Lo Haré Por Ti",
+        "videoId": "iX7VQkCj9hI",
+        "views": "50M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/R9g-mZNuA4s/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3mkbNaZcjdVeyPa_XJCRjRBNCV6Gg",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/R9g-mZNuA4s/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3kHkiwJstTWmFLVqdnpMZpU5HA_1g",
+            "width": 800
+          }
+        ],
+        "title": "Causa y Efecto",
+        "videoId": "R9g-mZNuA4s",
+        "views": "44M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/dfNWfnzUl4U/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3kZY8vr68s0ufhNG8FmYpNDnJEClA",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/dfNWfnzUl4U/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3nm5oE2bK4JH6e09u4ZDeqv_YsnsA",
+            "width": 800
+          }
+        ],
+        "title": "Y yo sigo aquí",
+        "videoId": "dfNWfnzUl4U",
+        "views": "55M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/6GTudBYbuj4/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3nB7tjNO06YeMHj_MrqJN8ToKzckQ",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/6GTudBYbuj4/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3mqQkNlXEObf3kL5I4gi0BRSy-vMA",
+            "width": 800
+          }
+        ],
+        "title": "Ni Rosas, Ni Juguetes (Mr 305 Remix - Extended Version) (feat. Pitbull)",
+        "videoId": "6GTudBYbuj4",
+        "views": "76M"
+      },
+      {
+        "artists": [
+          {
+            "id": "UCzV_r1c79OsEDCb6iFngI-w",
+            "name": "Paulina Rubio"
+          }
+        ],
+        "playlistId": "OLAK5uy_lgBn3y2FHq2Hu9OAlmTlnGKC3af2ZaMtA",
+        "thumbnails": [
+          {
+            "height": 225,
+            "url": "https://i.ytimg.com/vi/oHN02XrX-oI/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3kM2ENOOv69aonlC78HOHj05ERVpA",
+            "width": 400
+          },
+          {
+            "height": 450,
+            "url": "https://i.ytimg.com/vi/oHN02XrX-oI/hq720.jpg?sqp=-oaymwEXCKAGEMIDIAQqCwjVARCqCBh4INgESFo&rs=AMzJL3ljE4ZIu1i2qpW5wXcjjAGBHHgNrw",
+            "width": 800
+          }
+        ],
+        "title": "Te Quise Tanto",
+        "videoId": "oHN02XrX-oI",
+        "views": "41M"
+      }
+    ]
+  },
+  "views": "1,040,958,760 views"
+}

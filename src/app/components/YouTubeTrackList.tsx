@@ -25,27 +25,26 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
   // Comprobar si una canción está reproduciéndose, verificando también el youtubeId
   const isTrackPlaying = (track: Track) => {
     if (!currentTrack || !isPlaying) return false;
-    
+
     // Si ambos tienen youtubeId, comparar por ese ID (más preciso)
     if (track.youtubeId && currentTrack.youtubeId) {
       return track.youtubeId === currentTrack.youtubeId;
     }
-    
+
     // De lo contrario, usar el ID normal
     return currentTrack.id === track.id;
   };
 
   // Manejar clic en una canción
   const handleTrackClick = (track: Track, index: number) => {
-    console.log("Clic en canción:", track.title, "youtubeId:", track.youtubeId || "no disponible");
-    
+
     if (onTrackClick) {
       onTrackClick(track, index);
       return;
     }
 
     // Si es la misma canción, alternamos reproducción/pausa
-    if ((track.youtubeId && currentTrack?.youtubeId === track.youtubeId) || 
+    if ((track.youtubeId && currentTrack?.youtubeId === track.youtubeId) ||
         (!track.youtubeId && currentTrack?.id === track.id)) {
       togglePlay();
     } else {
@@ -55,9 +54,34 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
   };
 
   // Formatear duración
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
+  const formatDuration = (seconds: number | string) => {
+    // Si es undefined, null o NaN
+    if (!seconds || (typeof seconds === 'number' && isNaN(seconds))) {
+      return '0:00';
+    }
+    
+    // Si es string en formato MM:SS
+    if (typeof seconds === 'string') {
+      if (seconds.includes(':')) {
+        // Ya está formateado, devolverlo tal cual
+        return seconds;
+      }
+      
+      // Intentar convertir a número
+      const parsed = parseInt(seconds);
+      if (isNaN(parsed)) {
+        return '0:00';
+      }
+      seconds = parsed;
+    }
+    
+    // Si es un número muy grande, probablemente esté en milisegundos
+    if (seconds > 10000) {
+      seconds = Math.floor(seconds / 1000);
+    }
+    
+    const minutes = Math.floor(seconds as number / 60);
+    const remainingSeconds = Math.floor((seconds as number) % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
@@ -78,15 +102,15 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
           {title}
         </Typography>
       )}
-      
+
       <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 1 }}>
         {tracks.map((track, index) => (
           <ListItem
             key={track.id}
             alignItems="center"
             secondaryAction={
-              <IconButton 
-                edge="end" 
+              <IconButton
+                edge="end"
                 aria-label="play"
                 onClick={() => handleTrackClick(track, index)}
                 color={isTrackPlaying(track) ? 'primary' : 'default'}
@@ -108,12 +132,12 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
             onClick={() => handleTrackClick(track, index)}
           >
             <ListItemAvatar>
-              <Avatar 
-                alt={track.title} 
-                src={track.cover} 
+              <Avatar
+                alt={track.title}
+                src={track.cover}
                 variant="rounded"
-                sx={{ 
-                  width: 48, 
+                sx={{
+                  width: 48,
                   height: 48,
                   boxShadow: 1,
                   borderRadius: 1
@@ -122,7 +146,7 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Box component="span" sx={{ 
+                <Box component="span" sx={{
                   fontWeight: isTrackPlaying(track) ? 'bold' : 'normal',
                   color: isTrackPlaying(track) ? 'primary.main' : 'text.primary',
                 }}>
@@ -156,4 +180,4 @@ const YouTubeTrackList: React.FC<YouTubeTrackListProps> = ({
   );
 };
 
-export default YouTubeTrackList; 
+export default YouTubeTrackList;

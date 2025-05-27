@@ -1,51 +1,46 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/lib/auth/useAuth';
 
 // Rutas públicas que no requieren autenticación
 const publicRoutes = ['/login', '/register'];
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading) {
-      const isPublicRoute = publicRoutes.includes(pathname);
-      
-      // Si no está autenticado y no es una ruta pública, redirigir a login
-      if (!isAuthenticated && !isPublicRoute) {
-        router.push('/login');
-      }
-      
-      // Si está autenticado y está en una ruta pública, redirigir a home
-      if (isAuthenticated && isPublicRoute) {
-        router.push('/home');
-      }
+    // Si la autenticación está cargando, no hacer nada todavía
+    if (isLoading) return;
+
+    // Si la ruta es pública, permitir el acceso sin verificar autenticación
+    if (pathname && publicRoutes.includes(pathname)) return;
+
+    // Si no está autenticado y no es una ruta pública, redirigir al login
+    if (!isAuthenticated) {
+      router.push('/login');
     }
-  }, [isAuthenticated, isLoading, pathname, router]);
+  }, [router, isAuthenticated, isLoading, pathname]);
 
-  // Si está cargando, muestra un spinner
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-900 to-black">
-        <div className="h-16 w-16 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  // Si es una ruta pública o está autenticado, muestra el contenido
-  if (publicRoutes.includes(pathname) || isAuthenticated) {
+  // Si la ruta es pública, mostrar el contenido independientemente del estado de autenticación
+  if (pathname && publicRoutes.includes(pathname)) {
     return <>{children}</>;
   }
 
-  // En cualquier otro caso, no muestra nada mientras se redirige
-  return null;
-} 
+  // Si está cargando, mostrar un indicador de carga
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
+
+  // Si está autenticado o la ruta es pública, mostrar el contenido
+  if (isAuthenticated) {
+    return <>{children}</>;
+  }
+
+  // Por defecto, mostrar un mensaje mientras se redirige
+  return <div>Redirigiendo al login...</div>;
+}

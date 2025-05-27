@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { API_CONFIG } from '@/config/api-config';
 
 export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json();
-    
+
     // Validar que se proporcionen todos los campos requeridos
     if (!username || !email || !password) {
       return NextResponse.json(
@@ -12,8 +13,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hacer petición al backend para registrar al usuario
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/register`, {
+    // Hacer petición al backend para registrar al usuario - usando NODE_API_URL en lugar de BACKEND_URL
+    const response = await fetch(`${API_CONFIG.NODE_API_URL}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // Devolver la respuesta exitosa
     return NextResponse.json(data, { status: 201 });
-    
+
   } catch (error) {
     console.error('Error en registro:', error);
     return NextResponse.json(
@@ -41,4 +42,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

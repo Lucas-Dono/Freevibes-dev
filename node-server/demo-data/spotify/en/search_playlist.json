@@ -1,0 +1,562 @@
+{
+  "playlists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20hits&type=playlist&market=US&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20hits&type=playlist&market=US&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 40,
+    "items": [
+      {
+        "collaborative": false,
+        "description": "old but gold, all the best throwback songs to new hits, pop, rnb, edm, rap, workout music and more! :)",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6mtYuOxzl58vSGnEDtZ9uB"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6mtYuOxzl58vSGnEDtZ9uB",
+        "id": "6mtYuOxzl58vSGnEDtZ9uB",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da84a730bed7741fc8b1cc36b3f9",
+            "width": null
+          }
+        ],
+        "name": "Pop Hits 2000s – 2025",
+        "owner": {
+          "display_name": "maka_97",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/maka_97"
+          },
+          "href": "https://api.spotify.com/v1/users/maka_97",
+          "id": "maka_97",
+          "type": "user",
+          "uri": "spotify:user:maka_97"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAA4ZCMZadeF/6Ib6+E9abDpqIIyzRvy",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6mtYuOxzl58vSGnEDtZ9uB/tracks",
+          "total": 275
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6mtYuOxzl58vSGnEDtZ9uB"
+      },
+      {
+        "collaborative": false,
+        "description": "Los mejores Hits en Inglés!! ✨✨✨",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/3Fg3EtEkHdRRIl076cObYr"
+        },
+        "href": "https://api.spotify.com/v1/playlists/3Fg3EtEkHdRRIl076cObYr",
+        "id": "3Fg3EtEkHdRRIl076cObYr",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e025c9890c0456a3719eeecd8aaab67616d00001e029164bafe9aaa168d93f4816aab67616d00001e02bef074de9ca825bddaeb9f46ab67616d00001e02efc6988972cb04105f002cd4",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e025c9890c0456a3719eeecd8aaab67616d00001e029164bafe9aaa168d93f4816aab67616d00001e02bef074de9ca825bddaeb9f46ab67616d00001e02efc6988972cb04105f002cd4",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e025c9890c0456a3719eeecd8aaab67616d00001e029164bafe9aaa168d93f4816aab67616d00001e02bef074de9ca825bddaeb9f46ab67616d00001e02efc6988972cb04105f002cd4",
+            "width": 60
+          }
+        ],
+        "name": "POP Hits 2000s #TBT 00s 2010s 2020s",
+        "owner": {
+          "display_name": "Adrian Garcia",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/adriiangarcia"
+          },
+          "href": "https://api.spotify.com/v1/users/adriiangarcia",
+          "id": "adriiangarcia",
+          "type": "user",
+          "uri": "spotify:user:adriiangarcia"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAOo2R9hy4lVk4MkJ/c7lzXnEjNWooL",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/3Fg3EtEkHdRRIl076cObYr/tracks",
+          "total": 288
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:3Fg3EtEkHdRRIl076cObYr"
+      },
+      {
+        "collaborative": false,
+        "description": "Best Pop Hits",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/34NbomaTu7YuOYnky8nLXL"
+        },
+        "href": "https://api.spotify.com/v1/playlists/34NbomaTu7YuOYnky8nLXL",
+        "id": "34NbomaTu7YuOYnky8nLXL",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0236032cb4acd9df050bc2e197ab67616d00001e02659cd4673230913b3918e0d5ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e028b58d20f1b77295730db15b4",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0236032cb4acd9df050bc2e197ab67616d00001e02659cd4673230913b3918e0d5ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e028b58d20f1b77295730db15b4",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0236032cb4acd9df050bc2e197ab67616d00001e02659cd4673230913b3918e0d5ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e028b58d20f1b77295730db15b4",
+            "width": 60
+          }
+        ],
+        "name": "Pop Hits 2025 (Top 50)",
+        "owner": {
+          "display_name": "TylerLife",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/313odiyd72vqxinsh4grr4wqqfpa"
+          },
+          "href": "https://api.spotify.com/v1/users/313odiyd72vqxinsh4grr4wqqfpa",
+          "id": "313odiyd72vqxinsh4grr4wqqfpa",
+          "type": "user",
+          "uri": "spotify:user:313odiyd72vqxinsh4grr4wqqfpa"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAfZIjnYQfVGmoRv9MbeSLtsMHyniA",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/34NbomaTu7YuOYnky8nLXL/tracks",
+          "total": 52
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:34NbomaTu7YuOYnky8nLXL"
+      },
+      {
+        "collaborative": false,
+        "description": "Throwback Hits 1980s, 1990s &amp; 2000s. Best pop songs 2000s, 90s and 80s in one playlist. ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1z9nITIlc0tEaCwHaaeD66"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1z9nITIlc0tEaCwHaaeD66",
+        "id": "1z9nITIlc0tEaCwHaaeD66",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84d297aa3a17182149122ed2df",
+            "width": null
+          }
+        ],
+        "name": "POP 80s & 90s & 00s Hits",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAD8J1k4Ieo0UiFt+RHUtDOoY8Z51if",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1z9nITIlc0tEaCwHaaeD66/tracks",
+          "total": 264
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1z9nITIlc0tEaCwHaaeD66"
+      },
+      {
+        "collaborative": false,
+        "description": "Anos 2000 Internacionais, Pop 2000, Hip Hop 2000, RnB 2000&#x27;s Throwbacks, R&amp;B 2000&#x27;s Hits, Hip Hop Old School 90&#x27;s 00&#x27;s, Britney Spears, Nelly Furtado, Rihanna, Beyoncé, Shakira, Timbaland, 50 Cent, Black Eyed Peas, Lady Gaga, Fergie &#x2F; Toxic, Promiscuous, Umbrella, Crazy In Love, Poker Face, Circus",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/008G1BbvK1NQvbAV8MHvDz"
+        },
+        "href": "https://api.spotify.com/v1/playlists/008G1BbvK1NQvbAV8MHvDz",
+        "id": "008G1BbvK1NQvbAV8MHvDz",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84eabf1dd7769b98ecfd70b8e7",
+            "width": null
+          }
+        ],
+        "name": "Pop Hits 2000s - Throwback Vibes",
+        "owner": {
+          "display_name": "Stormy Chocada",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/biels09"
+          },
+          "href": "https://api.spotify.com/v1/users/biels09",
+          "id": "biels09",
+          "type": "user",
+          "uri": "spotify:user:biels09"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAjmJID2BRL/JWf88aB7GMyy35HAhVK",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/008G1BbvK1NQvbAV8MHvDz/tracks",
+          "total": 190
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:008G1BbvK1NQvbAV8MHvDz"
+      },
+      null,
+      {
+        "collaborative": false,
+        "description": "best top radio pop hits",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1WH6WVBwPBz35ZbWsgCpgr"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1WH6WVBwPBz35ZbWsgCpgr",
+        "id": "1WH6WVBwPBz35ZbWsgCpgr",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0220e08c8cc23f404d723b5647ab67616d00001e024718e2b124f79258be7bc452ab67616d00001e029478c87599550dd73bfa7e02ab67616d00001e02f14aa81116510d3a6df8432b",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0220e08c8cc23f404d723b5647ab67616d00001e024718e2b124f79258be7bc452ab67616d00001e029478c87599550dd73bfa7e02ab67616d00001e02f14aa81116510d3a6df8432b",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0220e08c8cc23f404d723b5647ab67616d00001e024718e2b124f79258be7bc452ab67616d00001e029478c87599550dd73bfa7e02ab67616d00001e02f14aa81116510d3a6df8432b",
+            "width": 60
+          }
+        ],
+        "name": "Top Pop Hits 2015-2025",
+        "owner": {
+          "display_name": "desmondd_",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/namelesszr"
+          },
+          "href": "https://api.spotify.com/v1/users/namelesszr",
+          "id": "namelesszr",
+          "type": "user",
+          "uri": "spotify:user:namelesszr"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAADT+9iCvcyeNRCiGSwF1yuxmuTwngL",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1WH6WVBwPBz35ZbWsgCpgr/tracks",
+          "total": 650
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1WH6WVBwPBz35ZbWsgCpgr"
+      },
+      {
+        "collaborative": false,
+        "description": "La mejor selección de música pop en inglés ✨✨✨",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0evO3baKNG9RTzMwtHmHp0"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0evO3baKNG9RTzMwtHmHp0",
+        "id": "0evO3baKNG9RTzMwtHmHp0",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0225304f6dc9dea023ce4b985cab67616d00001e024545d0b1ca149d97eb22bfe0ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e02de84adf0e48248ea2d769c3e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0225304f6dc9dea023ce4b985cab67616d00001e024545d0b1ca149d97eb22bfe0ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e02de84adf0e48248ea2d769c3e",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0225304f6dc9dea023ce4b985cab67616d00001e024545d0b1ca149d97eb22bfe0ab67616d00001e0282ea2e9e1858aa012c57cd45ab67616d00001e02de84adf0e48248ea2d769c3e",
+            "width": 60
+          }
+        ],
+        "name": "POP en Ingles 2025 HITS Exitos",
+        "owner": {
+          "display_name": "Adrian Garcia",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/adriiangarcia"
+          },
+          "href": "https://api.spotify.com/v1/users/adriiangarcia",
+          "id": "adriiangarcia",
+          "type": "user",
+          "uri": "spotify:user:adriiangarcia"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AABV4zF3GiBlNWbx2DQ/z/0/eLpvpoIB",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0evO3baKNG9RTzMwtHmHp0/tracks",
+          "total": 124
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0evO3baKNG9RTzMwtHmHp0"
+      },
+      {
+        "collaborative": false,
+        "description": "Las mejores canciones pop latinas de los 90s, 2000s &amp; 2010s Hits. Las canciones latinas de siempre que activan tu nostalgia y te animan el día.  Latinos RETRO Éxitos del Pop Latino. ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1lvD3XTXCHx0VjXNbl49XF"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1lvD3XTXCHx0VjXNbl49XF",
+        "id": "1lvD3XTXCHx0VjXNbl49XF",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d3e6e99c5fc7f006c66232c",
+            "width": null
+          }
+        ],
+        "name": "POP LATINO : 90s, 2000s & 2010s Hits",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAF/ZsAI+juudhTW3UgSW/jIHKUeLKX",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1lvD3XTXCHx0VjXNbl49XF/tracks",
+          "total": 194
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1lvD3XTXCHx0VjXNbl49XF"
+      },
+      {
+        "collaborative": false,
+        "description": "Los mejores HITS en ingles de los últimos 10 años están en esta playlist.  El mejor pop en inglés de la última década. Feat. Flowers - Miley Cyrus",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/72FdsweCiOlp4BXdRrUq58"
+        },
+        "href": "https://api.spotify.com/v1/playlists/72FdsweCiOlp4BXdRrUq58",
+        "id": "72FdsweCiOlp4BXdRrUq58",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72cabb63f8229cb1d6b89501adb",
+            "width": null
+          }
+        ],
+        "name": "Pop Inglés 🌼 (2025 & 2020s & 2010s) Música En Inglés 2010s Hits ",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAP8GTXyyfZcsapIyhaLyQAicnozSgX",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/72FdsweCiOlp4BXdRrUq58/tracks",
+          "total": 287
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:72FdsweCiOlp4BXdRrUq58"
+      },
+      null,
+      null,
+      null,
+      {
+        "collaborative": false,
+        "description": "HEY POP! Latin Hits. Pop latino. Lo mejor del 2025. Hits Latinos!  Foto: Lali y Miranda!",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/53gsoDSMuaYKyEBa2izvOV"
+        },
+        "href": "https://api.spotify.com/v1/playlists/53gsoDSMuaYKyEBa2izvOV",
+        "id": "53gsoDSMuaYKyEBa2izvOV",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da84dd15cb94a492fee0ee0fd5d2",
+            "width": null
+          }
+        ],
+        "name": "POP HITS 2025🎈",
+        "owner": {
+          "display_name": "Filtr Sur",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/sonymusicargentina"
+          },
+          "href": "https://api.spotify.com/v1/users/sonymusicargentina",
+          "id": "sonymusicargentina",
+          "type": "user",
+          "uri": "spotify:user:sonymusicargentina"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAxZRvpuv5cyOMl+t8knKkwJS2V6Pcs",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/53gsoDSMuaYKyEBa2izvOV/tracks",
+          "total": 168
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:53gsoDSMuaYKyEBa2izvOV"
+      },
+      null,
+      null,
+      {
+        "collaborative": false,
+        "description": "Hits Internacionales. Hits en Inglés. Música en inglés. Pop en inglés. Exitos 2025. Foto: Miley Cyrus &quot;End of the world&quot;",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1HgxqToc34CYvlMta6C0Zt"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1HgxqToc34CYvlMta6C0Zt",
+        "id": "1HgxqToc34CYvlMta6C0Zt",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c91d081c19aa92d7f07353ba2",
+            "width": null
+          }
+        ],
+        "name": "HITS EN INGLÉS 2025 -Hits Para NO Parar -",
+        "owner": {
+          "display_name": "Filtr Sur",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/sonymusicargentina"
+          },
+          "href": "https://api.spotify.com/v1/users/sonymusicargentina",
+          "id": "sonymusicargentina",
+          "type": "user",
+          "uri": "spotify:user:sonymusicargentina"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAA2+kS2xasDc+NyI829rr2Bv6KbvxKJ",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1HgxqToc34CYvlMta6C0Zt/tracks",
+          "total": 151
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1HgxqToc34CYvlMta6C0Zt"
+      },
+      {
+        "collaborative": false,
+        "description": "Pop Latino retro! 90 - 2000 - 2010 Hits latinos para no parar de cantar y bailar! Flashback 🔙 Modo Radio Latinos Retro 📻",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/03EGtPIAt7wGuAV3CYPzrp"
+        },
+        "href": "https://api.spotify.com/v1/playlists/03EGtPIAt7wGuAV3CYPzrp",
+        "id": "03EGtPIAt7wGuAV3CYPzrp",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c269ea5db71452ca840647d67",
+            "width": null
+          }
+        ],
+        "name": "LATINOS RETRO 🔙 Hits Latinos 90s-2000 📻",
+        "owner": {
+          "display_name": "rodneysson",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/22wehhn2rnhvvtqv7evgkjy5q"
+          },
+          "href": "https://api.spotify.com/v1/users/22wehhn2rnhvvtqv7evgkjy5q",
+          "id": "22wehhn2rnhvvtqv7evgkjy5q",
+          "type": "user",
+          "uri": "spotify:user:22wehhn2rnhvvtqv7evgkjy5q"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAGPvFPA1i3QY3vRxzGA86uYmpQ3SoY",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/03EGtPIAt7wGuAV3CYPzrp/tracks",
+          "total": 139
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:03EGtPIAt7wGuAV3CYPzrp"
+      },
+      {
+        "collaborative": false,
+        "description": "¡Lo + escuchado del momento! Los éxitos 2025 de reggaeton hits, trap (latino, español y argentino), música latina, pop latino y pop inglés y éxitos en general. Son los hits más destacados. Musica actual y éxitos 2020s.  Canciones 2025 más escuchadas ft. Blackout Emilia, Tini Nicki Nicole",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1sAVKbeZfl9IjAST4MNnYb"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1sAVKbeZfl9IjAST4MNnYb",
+        "id": "1sAVKbeZfl9IjAST4MNnYb",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84bf3a2c432c8193a75518be1f",
+            "width": null
+          }
+        ],
+        "name": " Lo Mas Escuchado 2025 : Éxitos Abril 2025",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAUQN6lyzQeMXYNj3rZmhuJRbcwD5Qj",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1sAVKbeZfl9IjAST4MNnYb/tracks",
+          "total": 245
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1sAVKbeZfl9IjAST4MNnYb"
+      },
+      {
+        "collaborative": false,
+        "description": "LOS EXITOS TOP DE 2025 EN LA MEJOR LISTA | Playlist 2025 Hits | New Latin Pop Hits 2025| Latino Pop Playlist | Lista Pop En Español 2025 | Pop En Ingles 2025 | K-Pop Hits 2025",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0qSZmCG0ZKBWdhZwvPYxV0"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0qSZmCG0ZKBWdhZwvPYxV0",
+        "id": "0qSZmCG0ZKBWdhZwvPYxV0",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84c10896aa4e773e1459318c7b",
+            "width": null
+          }
+        ],
+        "name": "MUSICA 2025 😍 Abril Mayo 2025🔥TEMAZOS 2025 😍VERANO 2025 🕺POP LATINO 2025🔥TOP EXITOS 2025",
+        "owner": {
+          "display_name": "Pacific Spain",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/pacificspain"
+          },
+          "href": "https://api.spotify.com/v1/users/pacificspain",
+          "id": "pacificspain",
+          "type": "user",
+          "uri": "spotify:user:pacificspain"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAVDykeW1Kqt51IjWWaQAFfVCOolVGM",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0qSZmCG0ZKBWdhZwvPYxV0/tracks",
+          "total": 88
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0qSZmCG0ZKBWdhZwvPYxV0"
+      }
+    ]
+  }
+}

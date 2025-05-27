@@ -97,4 +97,4 @@ export interface GetRecommendationsOptions {
   combine?: boolean;
   preferredSource?: string;
   timeout?: number;
-} 
+}

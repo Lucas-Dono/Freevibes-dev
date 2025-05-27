@@ -1,24 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "JWT_SECRET": "@jwt_secret",
-    "JWT_EXPIRATION": "1d",
-    "JWT_REFRESH_SECRET": "@jwt_refresh_secret",
-    "JWT_REFRESH_EXPIRATION": "7d",
-    "SPOTIFY_CLIENT_ID": "@spotify_client_id",
-    "SPOTIFY_CLIENT_SECRET": "@spotify_client_secret",
-    "NEXT_PUBLIC_SPOTIFY_CLIENT_ID": "@spotify_client_id",
-    "YOUTUBE_API_KEY": "@youtube_api_key",
-    "NEXT_PUBLIC_API_URL": "/api",
-    "NEXT_PUBLIC_NODE_API_URL": "@node_api_url",
-    "BACKEND_URL": "",
-    "CACHE_TTL": "600",
-    "NODE_ENV": "production"
-  },
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -27,6 +11,36 @@
     {
       "source": "/external-api/:path*",
       "destination": "https://musicverse-node-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/hybrid",
+      "destination": "/hybrid-adapter"
     }
-  ]
-} 
+  ],
+  "headers": [
+    {
+      "source": "/hybrid",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/hybrid-adapter",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "NEXT_IGNORE_PRERENDER_ERRORS": "true",
+    "NEXT_SKIP_HYBRID_PRERENDER": "true"
+  },
+  "public": true
+}

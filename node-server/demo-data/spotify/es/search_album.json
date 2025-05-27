@@ -1,0 +1,1132 @@
+{
+  "albums": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20latino&type=album&market=ES&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20latino&type=album&market=ES&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 25,
+    "items": [
+      {
+        "album_type": "compilation",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0i3ke4rFyksnvHEWtQKL8o"
+        },
+        "href": "https://api.spotify.com/v1/albums/0i3ke4rFyksnvHEWtQKL8o",
+        "id": "0i3ke4rFyksnvHEWtQKL8o",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27317fc531583b2dc8af5de1759",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0217fc531583b2dc8af5de1759",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485117fc531583b2dc8af5de1759",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino 2025",
+        "release_date": "2025-02-27",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0i3ke4rFyksnvHEWtQKL8o",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "single",
+        "total_tracks": 1,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7rd2Pb6dBQvrzgbJU3ihpC"
+        },
+        "href": "https://api.spotify.com/v1/albums/7rd2Pb6dBQvrzgbJU3ihpC",
+        "id": "7rd2Pb6dBQvrzgbJU3ihpC",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2736a1452f9a83c490a4d18ef5a",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e026a1452f9a83c490a4d18ef5a",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048516a1452f9a83c490a4d18ef5a",
+            "width": 64
+          }
+        ],
+        "name": "Princesa",
+        "release_date": "2024-09-12",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7rd2Pb6dBQvrzgbJU3ihpC",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3vQ0GE3mI0dAaxIMYe5g7z"
+            },
+            "href": "https://api.spotify.com/v1/artists/3vQ0GE3mI0dAaxIMYe5g7z",
+            "id": "3vQ0GE3mI0dAaxIMYe5g7z",
+            "name": "Paulo Londra",
+            "type": "artist",
+            "uri": "spotify:artist:3vQ0GE3mI0dAaxIMYe5g7z"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4kcQWQDK0u9AftVSpdrAgk"
+            },
+            "href": "https://api.spotify.com/v1/artists/4kcQWQDK0u9AftVSpdrAgk",
+            "id": "4kcQWQDK0u9AftVSpdrAgk",
+            "name": "Luck Ra",
+            "type": "artist",
+            "uri": "spotify:artist:4kcQWQDK0u9AftVSpdrAgk"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/55ru5B05MMBunM1tvH7Di6"
+            },
+            "href": "https://api.spotify.com/v1/artists/55ru5B05MMBunM1tvH7Di6",
+            "id": "55ru5B05MMBunM1tvH7Di6",
+            "name": "Valentino Merlo",
+            "type": "artist",
+            "uri": "spotify:artist:55ru5B05MMBunM1tvH7Di6"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 34,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0ah9Y5a9afdLC6tMTbo4oF"
+        },
+        "href": "https://api.spotify.com/v1/albums/0ah9Y5a9afdLC6tMTbo4oF",
+        "id": "0ah9Y5a9afdLC6tMTbo4oF",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ea368903754b9e314023093e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ea368903754b9e314023093e",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ea368903754b9e314023093e",
+            "width": 64
+          }
+        ],
+        "name": "Despidiendo El Verano con Pop Latino",
+        "release_date": "2024-07-26",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0ah9Y5a9afdLC6tMTbo4oF",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 50,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5Nlo8g8sRMfDcjY2ytgEej"
+        },
+        "href": "https://api.spotify.com/v1/albums/5Nlo8g8sRMfDcjY2ytgEej",
+        "id": "5Nlo8g8sRMfDcjY2ytgEej",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2733ec066af4d33ea367f22cbee",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e023ec066af4d33ea367f22cbee",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048513ec066af4d33ea367f22cbee",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino 2024",
+        "release_date": "2024-07-12",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5Nlo8g8sRMfDcjY2ytgEej",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 29,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6fIp9x7IKpvy2pu4twptCb"
+        },
+        "href": "https://api.spotify.com/v1/albums/6fIp9x7IKpvy2pu4twptCb",
+        "id": "6fIp9x7IKpvy2pu4twptCb",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2731c615f4ea0c374a52e74a221",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e021c615f4ea0c374a52e74a221",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048511c615f4ea0c374a52e74a221",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino Para Enamorarse",
+        "release_date": "2024-02-11",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6fIp9x7IKpvy2pu4twptCb",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 57,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/35sBkEPKe5GooLslN4ag2v"
+        },
+        "href": "https://api.spotify.com/v1/albums/35sBkEPKe5GooLslN4ag2v",
+        "id": "35sBkEPKe5GooLslN4ag2v",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273c9dc79a2ae3cf084af73bc7f",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02c9dc79a2ae3cf084af73bc7f",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851c9dc79a2ae3cf084af73bc7f",
+            "width": 64
+          }
+        ],
+        "name": "Pop lento tranquilo",
+        "release_date": "2024-02-11",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:35sBkEPKe5GooLslN4ag2v",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3X0T1blaMiY2aev0wrbK1G"
+        },
+        "href": "https://api.spotify.com/v1/albums/3X0T1blaMiY2aev0wrbK1G",
+        "id": "3X0T1blaMiY2aev0wrbK1G",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273546d66125577fdca616ec73c",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02546d66125577fdca616ec73c",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851546d66125577fdca616ec73c",
+            "width": 64
+          }
+        ],
+        "name": "QUE NOS FALTE TODO",
+        "release_date": "2024-02-02",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3X0T1blaMiY2aev0wrbK1G",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4kcQWQDK0u9AftVSpdrAgk"
+            },
+            "href": "https://api.spotify.com/v1/artists/4kcQWQDK0u9AftVSpdrAgk",
+            "id": "4kcQWQDK0u9AftVSpdrAgk",
+            "name": "Luck Ra",
+            "type": "artist",
+            "uri": "spotify:artist:4kcQWQDK0u9AftVSpdrAgk"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 22,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3TSB5RNXAhREIEM2Bwz5Zf"
+        },
+        "href": "https://api.spotify.com/v1/albums/3TSB5RNXAhREIEM2Bwz5Zf",
+        "id": "3TSB5RNXAhREIEM2Bwz5Zf",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ccf031a63e063ed517c5a2e5",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ccf031a63e063ed517c5a2e5",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ccf031a63e063ed517c5a2e5",
+            "width": 64
+          }
+        ],
+        "name": "¡Abriendo Pista Con Pop Latino Vol. 5",
+        "release_date": "2023-08-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3TSB5RNXAhREIEM2Bwz5Zf",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 30,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5jTDfu1hRJJOvJqzeuUHqW"
+        },
+        "href": "https://api.spotify.com/v1/albums/5jTDfu1hRJJOvJqzeuUHqW",
+        "id": "5jTDfu1hRJJOvJqzeuUHqW",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2734ea350bf12cbbc25c69fb9fa",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e024ea350bf12cbbc25c69fb9fa",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048514ea350bf12cbbc25c69fb9fa",
+            "width": 64
+          }
+        ],
+        "name": "Éxitos del Pop Latino (90s -00s)",
+        "release_date": "2023-08-18",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5jTDfu1hRJJOvJqzeuUHqW",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5QL33hpDp6XBWdNsc0VGUO"
+        },
+        "href": "https://api.spotify.com/v1/albums/5QL33hpDp6XBWdNsc0VGUO",
+        "id": "5QL33hpDp6XBWdNsc0VGUO",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2730040ea3fe369688ad9757cf2",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e020040ea3fe369688ad9757cf2",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048510040ea3fe369688ad9757cf2",
+            "width": 64
+          }
+        ],
+        "name": "Hotel Miranda!",
+        "release_date": "2023-04-19",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5QL33hpDp6XBWdNsc0VGUO",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2eEmsgWmUFMbtU7agJpnjY"
+            },
+            "href": "https://api.spotify.com/v1/artists/2eEmsgWmUFMbtU7agJpnjY",
+            "id": "2eEmsgWmUFMbtU7agJpnjY",
+            "name": "Miranda!",
+            "type": "artist",
+            "uri": "spotify:artist:2eEmsgWmUFMbtU7agJpnjY"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2nc62Mll62aIDw3wUiAHW3"
+        },
+        "href": "https://api.spotify.com/v1/albums/2nc62Mll62aIDw3wUiAHW3",
+        "id": "2nc62Mll62aIDw3wUiAHW3",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27333a20faf53f2eefcd6b4a7c3",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0233a20faf53f2eefcd6b4a7c3",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485133a20faf53f2eefcd6b4a7c3",
+            "width": 64
+          }
+        ],
+        "name": "LALI",
+        "release_date": "2023-04-13",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2nc62Mll62aIDw3wUiAHW3",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+            },
+            "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+            "id": "22P1OY4TRFRwhP0q29loQ8",
+            "name": "Lali",
+            "type": "artist",
+            "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 25,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6jasgsRD3e81Clc0xOCi7B"
+        },
+        "href": "https://api.spotify.com/v1/albums/6jasgsRD3e81Clc0xOCi7B",
+        "id": "6jasgsRD3e81Clc0xOCi7B",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2738adfa9487ca13b1dd89eb997",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e028adfa9487ca13b1dd89eb997",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048518adfa9487ca13b1dd89eb997",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "release_date": "2023-03-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6jasgsRD3e81Clc0xOCi7B",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "single",
+        "total_tracks": 4,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0pvgqcgBdQHA0ICT8cR0RU"
+        },
+        "href": "https://api.spotify.com/v1/albums/0pvgqcgBdQHA0ICT8cR0RU",
+        "id": "0pvgqcgBdQHA0ICT8cR0RU",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273b1b067d92345afdc6061a975",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02b1b067d92345afdc6061a975",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851b1b067d92345afdc6061a975",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "release_date": "2023-03-03",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0pvgqcgBdQHA0ICT8cR0RU",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/56t1x0Jm7IiTEqpKvtY6Q7"
+            },
+            "href": "https://api.spotify.com/v1/artists/56t1x0Jm7IiTEqpKvtY6Q7",
+            "id": "56t1x0Jm7IiTEqpKvtY6Q7",
+            "name": "Anthony Catacoli",
+            "type": "artist",
+            "uri": "spotify:artist:56t1x0Jm7IiTEqpKvtY6Q7"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3KMjWwBMRyFRuhtS7oEVKc"
+        },
+        "href": "https://api.spotify.com/v1/albums/3KMjWwBMRyFRuhtS7oEVKc",
+        "id": "3KMjWwBMRyFRuhtS7oEVKc",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273a0a3ecf06b0b25a64fba1e93",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02a0a3ecf06b0b25a64fba1e93",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851a0a3ecf06b0b25a64fba1e93",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "release_date": "2023-02-10",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3KMjWwBMRyFRuhtS7oEVKc",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 28,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3GNyPboomLoar37P3WdJoD"
+        },
+        "href": "https://api.spotify.com/v1/albums/3GNyPboomLoar37P3WdJoD",
+        "id": "3GNyPboomLoar37P3WdJoD",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2730f9ad84033466d35da9d31c1",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e020f9ad84033466d35da9d31c1",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048510f9ad84033466d35da9d31c1",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino Exitos",
+        "release_date": "2020-08-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3GNyPboomLoar37P3WdJoD",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 32,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7vZpvq3ceLNUJ7i4HmR27z"
+        },
+        "href": "https://api.spotify.com/v1/albums/7vZpvq3ceLNUJ7i4HmR27z",
+        "id": "7vZpvq3ceLNUJ7i4HmR27z",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e5b5ce1c9cef05f50bc91e6b",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e5b5ce1c9cef05f50bc91e6b",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e5b5ce1c9cef05f50bc91e6b",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino 00´s",
+        "release_date": "2020-08-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7vZpvq3ceLNUJ7i4HmR27z",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2P2u3Dc7qx6UCTh7RE9HbJ"
+        },
+        "href": "https://api.spotify.com/v1/albums/2P2u3Dc7qx6UCTh7RE9HbJ",
+        "id": "2P2u3Dc7qx6UCTh7RE9HbJ",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273bbacad70545a48dac46a6899",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02bbacad70545a48dac46a6899",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851bbacad70545a48dac46a6899",
+            "width": 64
+          }
+        ],
+        "name": "Angela",
+        "release_date": "2019-02-02",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2P2u3Dc7qx6UCTh7RE9HbJ",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6Y4g5zwJI7jcRzGLXh0H5d"
+            },
+            "href": "https://api.spotify.com/v1/artists/6Y4g5zwJI7jcRzGLXh0H5d",
+            "id": "6Y4g5zwJI7jcRzGLXh0H5d",
+            "name": "Angela Leiva",
+            "type": "artist",
+            "uri": "spotify:artist:6Y4g5zwJI7jcRzGLXh0H5d"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 25,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/79dBrKtmk8bWdKbgYimwlp"
+        },
+        "href": "https://api.spotify.com/v1/albums/79dBrKtmk8bWdKbgYimwlp",
+        "id": "79dBrKtmk8bWdKbgYimwlp",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27313f4e0d0b91719eec6d2a450",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0213f4e0d0b91719eec6d2a450",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485113f4e0d0b91719eec6d2a450",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "release_date": "2017-08-10",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:79dBrKtmk8bWdKbgYimwlp",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3xZOsYi4w4NWEM99Ln2YCW"
+        },
+        "href": "https://api.spotify.com/v1/albums/3xZOsYi4w4NWEM99Ln2YCW",
+        "id": "3xZOsYi4w4NWEM99Ln2YCW",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273894841122fc1cd92268a0448",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02894841122fc1cd92268a0448",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851894841122fc1cd92268a0448",
+            "width": 64
+          }
+        ],
+        "name": "Abel",
+        "release_date": "2013-10-08",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3xZOsYi4w4NWEM99Ln2YCW",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6HTUcOExehqydqa7C3usAa"
+            },
+            "href": "https://api.spotify.com/v1/artists/6HTUcOExehqydqa7C3usAa",
+            "id": "6HTUcOExehqydqa7C3usAa",
+            "name": "Abel Pintos",
+            "type": "artist",
+            "uri": "spotify:artist:6HTUcOExehqydqa7C3usAa"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/64R3tRaDrsBL3DvBrHSx8C"
+        },
+        "href": "https://api.spotify.com/v1/albums/64R3tRaDrsBL3DvBrHSx8C",
+        "id": "64R3tRaDrsBL3DvBrHSx8C",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2732fcde1db3c2aa997158936c0",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e022fcde1db3c2aa997158936c0",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048512fcde1db3c2aa997158936c0",
+            "width": 64
+          }
+        ],
+        "name": "Destinologia",
+        "release_date": "2013-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:64R3tRaDrsBL3DvBrHSx8C",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/37MCoi4pcUf9EKsPXeuCqU"
+            },
+            "href": "https://api.spotify.com/v1/artists/37MCoi4pcUf9EKsPXeuCqU",
+            "id": "37MCoi4pcUf9EKsPXeuCqU",
+            "name": "Tan Bionica",
+            "type": "artist",
+            "uri": "spotify:artist:37MCoi4pcUf9EKsPXeuCqU"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/64SEFHPGyIeKf5bljVmRPx"
+        },
+        "href": "https://api.spotify.com/v1/albums/64SEFHPGyIeKf5bljVmRPx",
+        "id": "64SEFHPGyIeKf5bljVmRPx",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273c78d068ec99694e1a8caff0e",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02c78d068ec99694e1a8caff0e",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851c78d068ec99694e1a8caff0e",
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "release_date": "2011-12-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:64SEFHPGyIeKf5bljVmRPx",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7fRL2rvlBfkN4vAFekEYTZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/7fRL2rvlBfkN4vAFekEYTZ",
+            "id": "7fRL2rvlBfkN4vAFekEYTZ",
+            "name": "Indigo",
+            "type": "artist",
+            "uri": "spotify:artist:7fRL2rvlBfkN4vAFekEYTZ"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2WuEroV8xhS8VXN8xjArIT"
+        },
+        "href": "https://api.spotify.com/v1/albums/2WuEroV8xhS8VXN8xjArIT",
+        "id": "2WuEroV8xhS8VXN8xjArIT",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2732adbc3da3444a0f52009d30c",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e022adbc3da3444a0f52009d30c",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048512adbc3da3444a0f52009d30c",
+            "width": 64
+          }
+        ],
+        "name": "Sin Vergüenza",
+        "release_date": "2009-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2WuEroV8xhS8VXN8xjArIT",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1QZuAtDYNrk2QMogJulsyq"
+            },
+            "href": "https://api.spotify.com/v1/artists/1QZuAtDYNrk2QMogJulsyq",
+            "id": "1QZuAtDYNrk2QMogJulsyq",
+            "name": "Karina",
+            "type": "artist",
+            "uri": "spotify:artist:1QZuAtDYNrk2QMogJulsyq"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 20,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0KzE84u9io1eWxWSs9SmSY"
+        },
+        "href": "https://api.spotify.com/v1/albums/0KzE84u9io1eWxWSs9SmSY",
+        "id": "0KzE84u9io1eWxWSs9SmSY",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27341ca8a8fdfcce2d6ff7f2d05",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0241ca8a8fdfcce2d6ff7f2d05",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485141ca8a8fdfcce2d6ff7f2d05",
+            "width": 64
+          }
+        ],
+        "name": "El Templo del Pop",
+        "release_date": "2008-04-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0KzE84u9io1eWxWSs9SmSY",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2eEmsgWmUFMbtU7agJpnjY"
+            },
+            "href": "https://api.spotify.com/v1/artists/2eEmsgWmUFMbtU7agJpnjY",
+            "id": "2eEmsgWmUFMbtU7agJpnjY",
+            "name": "Miranda!",
+            "type": "artist",
+            "uri": "spotify:artist:2eEmsgWmUFMbtU7agJpnjY"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2bM009J81OBNisrMbFwBJj"
+        },
+        "href": "https://api.spotify.com/v1/albums/2bM009J81OBNisrMbFwBJj",
+        "id": "2bM009J81OBNisrMbFwBJj",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e1f4c211ce1ef95454bbbcc4",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e1f4c211ce1ef95454bbbcc4",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e1f4c211ce1ef95454bbbcc4",
+            "width": 64
+          }
+        ],
+        "name": "Caraluna",
+        "release_date": "2002-06-25",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:2bM009J81OBNisrMbFwBJj",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1mux8L6xg2Cmrc7k0wQczl"
+            },
+            "href": "https://api.spotify.com/v1/artists/1mux8L6xg2Cmrc7k0wQczl",
+            "id": "1mux8L6xg2Cmrc7k0wQczl",
+            "name": "Bacilos",
+            "type": "artist",
+            "uri": "spotify:artist:1mux8L6xg2Cmrc7k0wQczl"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3HLngzP9wVd8p3SMDQgyd9"
+        },
+        "href": "https://api.spotify.com/v1/albums/3HLngzP9wVd8p3SMDQgyd9",
+        "id": "3HLngzP9wVd8p3SMDQgyd9",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273021b9779a9dbaa6a976edb2d",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02021b9779a9dbaa6a976edb2d",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851021b9779a9dbaa6a976edb2d",
+            "width": 64
+          }
+        ],
+        "name": "Pies Descalzos",
+        "release_date": "1995-10-06",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3HLngzP9wVd8p3SMDQgyd9",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp"
+            },
+            "href": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp",
+            "id": "0EmeFodog0BfCgMzAIvKQp",
+            "name": "Shakira",
+            "type": "artist",
+            "uri": "spotify:artist:0EmeFodog0BfCgMzAIvKQp"
+          }
+        ]
+      }
+    ]
+  }
+}

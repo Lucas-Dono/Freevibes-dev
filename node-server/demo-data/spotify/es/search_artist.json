@@ -1,0 +1,609 @@
+{
+  "artists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20latino&type=artist&market=ES&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20latino&type=artist&market=ES&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 18,
+    "items": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5C4PDR4LnhZTbVnKWXuDKD"
+        },
+        "followers": {
+          "href": null,
+          "total": 13083603
+        },
+        "genres": [
+          "colombian pop",
+          "latin pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/5C4PDR4LnhZTbVnKWXuDKD",
+        "id": "5C4PDR4LnhZTbVnKWXuDKD",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb300488e7d301023f9d92d6cc",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174300488e7d301023f9d92d6cc",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178300488e7d301023f9d92d6cc",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Morat",
+        "popularity": 83,
+        "type": "artist",
+        "uri": "spotify:artist:5C4PDR4LnhZTbVnKWXuDKD"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/7vXDAI8JwjW531ouMGbfcp"
+        },
+        "followers": {
+          "href": null,
+          "total": 8833558
+        },
+        "genres": [
+          "latin pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/7vXDAI8JwjW531ouMGbfcp",
+        "id": "7vXDAI8JwjW531ouMGbfcp",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb43f8f52ac55da2d54fc8fdca",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000517443f8f52ac55da2d54fc8fdca",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f17843f8f52ac55da2d54fc8fdca",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "TINI",
+        "popularity": 78,
+        "type": "artist",
+        "uri": "spotify:artist:7vXDAI8JwjW531ouMGbfcp"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4kcQWQDK0u9AftVSpdrAgk"
+        },
+        "followers": {
+          "href": null,
+          "total": 2416457
+        },
+        "genres": [
+          "cuarteto",
+          "cumbia",
+          "argentine trap"
+        ],
+        "href": "https://api.spotify.com/v1/artists/4kcQWQDK0u9AftVSpdrAgk",
+        "id": "4kcQWQDK0u9AftVSpdrAgk",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebcd4b159bfb2f02962a110b6d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174cd4b159bfb2f02962a110b6d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178cd4b159bfb2f02962a110b6d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Luck Ra",
+        "popularity": 76,
+        "type": "artist",
+        "uri": "spotify:artist:4kcQWQDK0u9AftVSpdrAgk"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/7dlkBH23ERFXxuNoMHq94Y"
+        },
+        "followers": {
+          "href": null,
+          "total": 1621179
+        },
+        "genres": [
+          "cuarteto",
+          "cumbia"
+        ],
+        "href": "https://api.spotify.com/v1/artists/7dlkBH23ERFXxuNoMHq94Y",
+        "id": "7dlkBH23ERFXxuNoMHq94Y",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb257320b68bc4bede7ffb4d2d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174257320b68bc4bede7ffb4d2d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178257320b68bc4bede7ffb4d2d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Q' Lokura",
+        "popularity": 74,
+        "type": "artist",
+        "uri": "spotify:artist:7dlkBH23ERFXxuNoMHq94Y"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1wKDGglKV4FsFS85r2Dmpr"
+        },
+        "followers": {
+          "href": null,
+          "total": 1132714
+        },
+        "genres": [
+          "argentine rock"
+        ],
+        "href": "https://api.spotify.com/v1/artists/1wKDGglKV4FsFS85r2Dmpr",
+        "id": "1wKDGglKV4FsFS85r2Dmpr",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb7e7ce771bde5235afd45cb43",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051747e7ce771bde5235afd45cb43",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1787e7ce771bde5235afd45cb43",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Airbag",
+        "popularity": 72,
+        "type": "artist",
+        "uri": "spotify:artist:1wKDGglKV4FsFS85r2Dmpr"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1d6dwipPrsFSJVmFTTdFSS"
+        },
+        "followers": {
+          "href": null,
+          "total": 2993457
+        },
+        "genres": [
+          "latin pop"
+        ],
+        "href": "https://api.spotify.com/v1/artists/1d6dwipPrsFSJVmFTTdFSS",
+        "id": "1d6dwipPrsFSJVmFTTdFSS",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb9321984db5a56253269add04",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051749321984db5a56253269add04",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1789321984db5a56253269add04",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Paulina Rubio",
+        "popularity": 69,
+        "type": "artist",
+        "uri": "spotify:artist:1d6dwipPrsFSJVmFTTdFSS"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6HTUcOExehqydqa7C3usAa"
+        },
+        "followers": {
+          "href": null,
+          "total": 3577971
+        },
+        "genres": [
+          "folklore argentino",
+          "cuarteto"
+        ],
+        "href": "https://api.spotify.com/v1/artists/6HTUcOExehqydqa7C3usAa",
+        "id": "6HTUcOExehqydqa7C3usAa",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb0f871be86271a89620b27f93",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051740f871be86271a89620b27f93",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1780f871be86271a89620b27f93",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Abel Pintos",
+        "popularity": 68,
+        "type": "artist",
+        "uri": "spotify:artist:6HTUcOExehqydqa7C3usAa"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3ghRXw2nUEH2THaL82hw8R"
+        },
+        "followers": {
+          "href": null,
+          "total": 3019607
+        },
+        "genres": [
+          "cuarteto",
+          "cumbia"
+        ],
+        "href": "https://api.spotify.com/v1/artists/3ghRXw2nUEH2THaL82hw8R",
+        "id": "3ghRXw2nUEH2THaL82hw8R",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb124a6a41568f43401994f4c8",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174124a6a41568f43401994f4c8",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178124a6a41568f43401994f4c8",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "La K'onga",
+        "popularity": 68,
+        "type": "artist",
+        "uri": "spotify:artist:3ghRXw2nUEH2THaL82hw8R"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/37MCoi4pcUf9EKsPXeuCqU"
+        },
+        "followers": {
+          "href": null,
+          "total": 1179365
+        },
+        "genres": [
+          "argentine rock"
+        ],
+        "href": "https://api.spotify.com/v1/artists/37MCoi4pcUf9EKsPXeuCqU",
+        "id": "37MCoi4pcUf9EKsPXeuCqU",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebb4063d372f85c22f4468ca24",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174b4063d372f85c22f4468ca24",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178b4063d372f85c22f4468ca24",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Tan Bionica",
+        "popularity": 67,
+        "type": "artist",
+        "uri": "spotify:artist:37MCoi4pcUf9EKsPXeuCqU"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/22P1OY4TRFRwhP0q29loQ8"
+        },
+        "followers": {
+          "href": null,
+          "total": 1989665
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/22P1OY4TRFRwhP0q29loQ8",
+        "id": "22P1OY4TRFRwhP0q29loQ8",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb9966b17b3ded0c94986f891f",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab676161000051749966b17b3ded0c94986f891f",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f1789966b17b3ded0c94986f891f",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Lali",
+        "popularity": 63,
+        "type": "artist",
+        "uri": "spotify:artist:22P1OY4TRFRwhP0q29loQ8"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6PPO5rGb8UVDvR1XjHEWZd"
+        },
+        "followers": {
+          "href": null,
+          "total": 4577
+        },
+        "genres": [
+          "krautrock",
+          "psychedelic rock"
+        ],
+        "href": "https://api.spotify.com/v1/artists/6PPO5rGb8UVDvR1XjHEWZd",
+        "id": "6PPO5rGb8UVDvR1XjHEWZd",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5ebeaf83a05e9e269ab0911efa2",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174eaf83a05e9e269ab0911efa2",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178eaf83a05e9e269ab0911efa2",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Population II",
+        "popularity": 28,
+        "type": "artist",
+        "uri": "spotify:artist:6PPO5rGb8UVDvR1XjHEWZd"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6wftLrWtQV26UPuCSAFZTB"
+        },
+        "followers": {
+          "href": null,
+          "total": 4167
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/6wftLrWtQV26UPuCSAFZTB",
+        "id": "6wftLrWtQV26UPuCSAFZTB",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2735153105c40383abd72f96991",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e025153105c40383abd72f96991",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048518573df57903fe4ed29da1eea",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Population 1",
+        "popularity": 12,
+        "type": "artist",
+        "uri": "spotify:artist:6wftLrWtQV26UPuCSAFZTB"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4i4C8bIyjfrdNwBdNIj2Aw"
+        },
+        "followers": {
+          "href": null,
+          "total": 35
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/4i4C8bIyjfrdNwBdNIj2Aw",
+        "id": "4i4C8bIyjfrdNwBdNIj2Aw",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273833a953485667c2ea34f9022",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02833a953485667c2ea34f9022",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851833a953485667c2ea34f9022",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Nation",
+        "popularity": 9,
+        "type": "artist",
+        "uri": "spotify:artist:4i4C8bIyjfrdNwBdNIj2Aw"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/1gW2Wupy9sET7YDDijN2Z3"
+        },
+        "followers": {
+          "href": null,
+          "total": 4207
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/1gW2Wupy9sET7YDDijN2Z3",
+        "id": "1gW2Wupy9sET7YDDijN2Z3",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb284d1c2a8d39895ed923a13d",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174284d1c2a8d39895ed923a13d",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178284d1c2a8d39895ed923a13d",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Pop Latino Crew",
+        "popularity": 6,
+        "type": "artist",
+        "uri": "spotify:artist:1gW2Wupy9sET7YDDijN2Z3"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4dr5HqJd3ohrRFZEM6TXRZ"
+        },
+        "followers": {
+          "href": null,
+          "total": 6469
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/4dr5HqJd3ohrRFZEM6TXRZ",
+        "id": "4dr5HqJd3ohrRFZEM6TXRZ",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273516076dee95ac612198abf7b",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02516076dee95ac612198abf7b",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851516076dee95ac612198abf7b",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Pop Latino",
+        "popularity": 2,
+        "type": "artist",
+        "uri": "spotify:artist:4dr5HqJd3ohrRFZEM6TXRZ"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6jwOlgs9hh2YJBognRUjH7"
+        },
+        "followers": {
+          "href": null,
+          "total": 5
+        }
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2E5PzX0C6GgBZi5vFpPrCO"
+        },
+        "followers": {
+          "href": null,
+          "total": 385
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/2E5PzX0C6GgBZi5vFpPrCO",
+        "id": "2E5PzX0C6GgBZi5vFpPrCO",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2732b3b440f6a44a9fdadeb7627",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e022b3b440f6a44a9fdadeb7627",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048512b3b440f6a44a9fdadeb7627",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Grupo de música popular latinoamericana de la UC",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:2E5PzX0C6GgBZi5vFpPrCO"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/14R35t8QZxwUhiXXS6ekNg"
+        },
+        "followers": {
+          "href": null,
+          "total": 3
+        },
+        "genres": [],
+        "href": "https://api.spotify.com/v1/artists/14R35t8QZxwUhiXXS6ekNg",
+        "id": "14R35t8QZxwUhiXXS6ekNg",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273a4a2dc9460f9b1ef0a60c762",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02a4a2dc9460f9b1ef0a60c762",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851a4a2dc9460f9b1ef0a60c762",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Ensamble de Música Popular Argentina y Latinoamericana",
+        "popularity": 0,
+        "type": "artist",
+        "uri": "spotify:artist:14R35t8QZxwUhiXXS6ekNg"
+      }
+    ]
+  }
+}

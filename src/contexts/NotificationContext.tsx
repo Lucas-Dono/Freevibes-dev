@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { toast, ToastContainer, ToastOptions } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// Ya no necesitamos react-toastify
+import type { ToastOptions } from 'react-toastify';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warning';
 
@@ -24,6 +24,7 @@ interface NotificationContextType {
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearNotifications: () => void;
+  removeNotification: (id: string) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -40,18 +41,13 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<SystemNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
-  // Toast notifications
+  // Ya no necesitamos limpiar toasts porque no los usaremos
+
+  // Esta función quedará como no-op (sin operación) para mantener compatibilidad
+  // con el código existente, pero no mostrará toasts
   const showNotification = (message: string, type: NotificationType, options?: ToastOptions) => {
-    toast[type](message, {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      ...options,
-    });
+    // No hacer nada - ya no mostramos toasts
+    console.log("Toast deshabilitado:", message);
   };
 
   // Actualiza el contador de no leídos cuando cambian las notificaciones
@@ -60,8 +56,21 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     setUnreadCount(newUnreadCount);
   }, [notifications]);
 
-  // Sistema de notificaciones persistentes
+  // Sistema de notificaciones persistentes - ahora es el único que usamos
   const addSystemNotification = (message: string, type: NotificationType) => {
+    // Verificar si ya existe una notificación con el mismo mensaje para evitar duplicados
+    const isDuplicate = notifications.some(existingNotification =>
+      existingNotification.message === message &&
+      // Opcional: también verificar que no sea muy antigua (menos de 5 minutos)
+      (new Date().getTime() - existingNotification.timestamp.getTime() < 5 * 60 * 1000)
+    );
+
+    // Si es un duplicado, no agregar
+    if (isDuplicate) {
+      console.log(`Notificación duplicada evitada: ${message}`);
+      return;
+    }
+
     const newNotification: SystemNotification = {
       id: Date.now().toString(),
       message,
@@ -70,19 +79,18 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       read: false
     };
 
+    // Solo guardar en el panel de notificaciones persistente
     setNotifications(prev => [newNotification, ...prev]);
-    // También mostrar un toast para alertar al usuario
-    showNotification(message, type);
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => ({ ...n, read: true }))
     );
   };
@@ -91,21 +99,24 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     setNotifications([]);
   };
 
+  // Función para eliminar una notificación específica por ID
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  };
+
   return (
-    <NotificationContext.Provider value={{ 
-      showNotification, 
-      notifications, 
-      unreadCount, 
+    <NotificationContext.Provider value={{
+      showNotification,
+      notifications,
+      unreadCount,
       addSystemNotification,
       markAsRead,
       markAllAsRead,
-      clearNotifications
+      clearNotifications,
+      removeNotification
     }}>
       {children}
-      <ToastContainer 
-        theme="dark"
-        style={{ zIndex: 9999 }}
-      />
+      {/* Eliminamos el ToastContainer completamente */}
     </NotificationContext.Provider>
   );
-}; 
+};

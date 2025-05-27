@@ -6,13 +6,12 @@ import { useCustomNotifications } from '@/hooks/useCustomNotifications';
 import { motion } from 'framer-motion';
 
 export default function NotificationsDemo() {
-  const { 
-    profileNotifications, 
-    playlistNotifications, 
-    libraryNotifications, 
-    userNotifications, 
+  const {
+    systemNotifications,
+    libraryNotifications,
     errorNotifications,
-    showNotification 
+    showNotification,
+    addSystemNotification
   } = useCustomNotifications();
 
   return (
@@ -31,62 +30,62 @@ export default function NotificationsDemo() {
       </motion.div>
 
       <Grid container spacing={3}>
-        {/* Notificaciones de perfil */}
+        {/* Notificaciones del sistema */}
         <Grid item xs={12} md={6}>
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', height: '100%' }}>
-            <Typography variant="h6" gutterBottom>Notificaciones de perfil</Typography>
+            <Typography variant="h6" gutterBottom>Notificaciones del sistema</Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Button 
-                variant="outlined" 
-                onClick={() => profileNotifications.onProfileUpdated()}
+              <Button
+                variant="outlined"
+                onClick={() => systemNotifications.onNewUpdate()}
                 sx={{ justifyContent: 'flex-start' }}
               >
-                Perfil actualizado
+                Nueva actualización
               </Button>
-              <Button 
-                variant="outlined" 
-                onClick={() => profileNotifications.onProfileUpdateError('Campo inválido')}
+              <Button
+                variant="outlined"
+                onClick={() => systemNotifications.onRecommendation('Descubre nuevos artistas similares')}
                 sx={{ justifyContent: 'flex-start' }}
               >
-                Error al actualizar perfil
+                Recomendación
               </Button>
-              <Button 
-                variant="outlined" 
-                onClick={() => profileNotifications.onFormErrors()}
+              <Button
+                variant="outlined"
+                onClick={() => systemNotifications.onNewRelease('Bad Bunny', 'Nuevo Álbum')}
                 sx={{ justifyContent: 'flex-start' }}
               >
-                Errores en formulario
+                Nuevo lanzamiento
               </Button>
             </Box>
           </Paper>
         </Grid>
 
-        {/* Notificaciones de playlist */}
+        {/* Notificaciones personalizadas */}
         <Grid item xs={12} md={6}>
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', height: '100%' }}>
-            <Typography variant="h6" gutterBottom>Notificaciones de playlists</Typography>
+            <Typography variant="h6" gutterBottom>Notificaciones personalizadas</Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Button 
-                variant="outlined" 
-                onClick={() => playlistNotifications.onPlaylistCreated('Mi nueva playlist')}
+              <Button
+                variant="outlined"
+                onClick={() => addSystemNotification('Se creó tu playlist', 'success')}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Playlist creada
               </Button>
-              <Button 
-                variant="outlined" 
-                onClick={() => playlistNotifications.onPlaylistUpdated('Favoritos 2023')}
+              <Button
+                variant="outlined"
+                onClick={() => addSystemNotification('Se actualizó tu playlist', 'info')}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Playlist actualizada
               </Button>
-              <Button 
-                variant="outlined" 
-                onClick={() => playlistNotifications.onTrackAdded('Bohemian Rhapsody', 'Rock Clásico')}
+              <Button
+                variant="outlined"
+                onClick={() => addSystemNotification('Canción añadida a playlist', 'success')}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Canción añadida a playlist
@@ -100,24 +99,24 @@ export default function NotificationsDemo() {
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', height: '100%' }}>
             <Typography variant="h6" gutterBottom>Notificaciones de biblioteca</Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => libraryNotifications.onTrackLiked('Imagine - John Lennon')}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Canción añadida a favoritos
               </Button>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => libraryNotifications.onArtistFollowed('Queen')}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Artista seguido
               </Button>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => libraryNotifications.onArtistUnfollowed('Michael Jackson')}
                 sx={{ justifyContent: 'flex-start' }}
               >
@@ -132,24 +131,24 @@ export default function NotificationsDemo() {
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper', height: '100%' }}>
             <Typography variant="h6" gutterBottom>Notificaciones de error</Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => errorNotifications.onNetworkError()}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Error de conexión
               </Button>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => errorNotifications.onServerError()}
                 sx={{ justifyContent: 'flex-start' }}
               >
                 Error del servidor
               </Button>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => errorNotifications.onUnexpectedError('Algo salió mal')}
                 sx={{ justifyContent: 'flex-start' }}
               >
@@ -159,36 +158,36 @@ export default function NotificationsDemo() {
           </Paper>
         </Grid>
 
-        {/* Notificaciones personalizadas */}
+        {/* Tipos de notificación */}
         <Grid item xs={12}>
           <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
             <Typography variant="h6" gutterBottom>Tipos de notificación</Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 color="success"
                 onClick={() => showNotification('Esta es una notificación de éxito', 'success')}
               >
                 Éxito
               </Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 color="error"
                 onClick={() => showNotification('Esta es una notificación de error', 'error')}
               >
                 Error
               </Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 color="info"
                 onClick={() => showNotification('Esta es una notificación informativa', 'info')}
               >
                 Info
               </Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 color="warning"
                 onClick={() => showNotification('Esta es una notificación de advertencia', 'warning')}
               >
@@ -200,4 +199,4 @@ export default function NotificationsDemo() {
       </Grid>
     </Container>
   );
-} 
+}

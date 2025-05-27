@@ -1,0 +1,301 @@
+{
+  "newReleases": [
+    {
+      "id": "album1",
+      "name": "Future Nostalgia",
+      "artists": [{"id": "artist1", "name": "Dua Lipa"}],
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67616d0000b273bd26ede1ae69327010d49946", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616d00001e02bd26ede1ae69327010d49946", "width": 300, "height": 300}
+      ],
+      "type": "album",
+      "release_date": "2020-03-27"
+    },
+    {
+      "id": "album2",
+      "name": "Un Verano Sin Ti",
+      "artists": [{"id": "artist2", "name": "Bad Bunny"}],
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67616d0000b273a9105453f33dd06b72c8a412", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616d00001e02a9105453f33dd06b72c8a412", "width": 300, "height": 300}
+      ],
+      "type": "album",
+      "release_date": "2022-05-06"
+    },
+    {
+      "id": "album3",
+      "name": "Bzrp Music Sessions, Vol. 53",
+      "artists": [{"id": "artist3", "name": "Bizarrap"}, {"id": "artist4", "name": "Shakira"}],
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67616d0000b273aefdfe0a3d3cb736ab8094e1", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616d00001e02aefdfe0a3d3cb736ab8094e1", "width": 300, "height": 300}
+      ],
+      "type": "album",
+      "release_date": "2023-01-11"
+    },
+    {
+      "id": "album4",
+      "name": "After Hours",
+      "artists": [{"id": "artist5", "name": "The Weeknd"}],
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616d00001e028863bc11d2aa12b54f5aeb36", "width": 300, "height": 300}
+      ],
+      "type": "album",
+      "release_date": "2020-03-20"
+    },
+    {
+      "id": "album5",
+      "name": "Midnights",
+      "artists": [{"id": "artist6", "name": "Taylor Swift"}],
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616d00001e02bb54dde68cd23e2a268ae0f5", "width": 300, "height": 300}
+      ],
+      "type": "album",
+      "release_date": "2022-10-21"
+    }
+  ],
+  "recentlyPlayed": [
+    {
+      "id": "track1",
+      "name": "Blinding Lights",
+      "artists": [{"id": "artist5", "name": "The Weeknd"}],
+      "album": {
+        "id": "album4",
+        "name": "After Hours",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e028863bc11d2aa12b54f5aeb36", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 200040,
+      "cover": "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36",
+      "played_at": "2023-06-30T21:00:00Z"
+    },
+    {
+      "id": "track2",
+      "name": "Tití Me Preguntó",
+      "artists": [{"id": "artist2", "name": "Bad Bunny"}],
+      "album": {
+        "id": "album2",
+        "name": "Un Verano Sin Ti",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273a9105453f33dd06b72c8a412", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02a9105453f33dd06b72c8a412", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 244400,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273a9105453f33dd06b72c8a412",
+      "played_at": "2023-06-30T20:45:00Z"
+    },
+    {
+      "id": "track3",
+      "name": "As It Was",
+      "artists": [{"id": "artist7", "name": "Harry Styles"}],
+      "album": {
+        "id": "album6",
+        "name": "Harry's House",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273b46f74097655d7f353caab14", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02b46f74097655d7f353caab14", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 167303,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273b46f74097655d7f353caab14",
+      "played_at": "2023-06-30T20:30:00Z"
+    },
+    {
+      "id": "track4",
+      "name": "Levitating",
+      "artists": [{"id": "artist1", "name": "Dua Lipa"}],
+      "album": {
+        "id": "album1",
+        "name": "Future Nostalgia",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273bd26ede1ae69327010d49946", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02bd26ede1ae69327010d49946", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 203807,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273bd26ede1ae69327010d49946",
+      "played_at": "2023-06-30T20:15:00Z"
+    },
+    {
+      "id": "track5",
+      "name": "Anti-Hero",
+      "artists": [{"id": "artist6", "name": "Taylor Swift"}],
+      "album": {
+        "id": "album5",
+        "name": "Midnights",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02bb54dde68cd23e2a268ae0f5", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 200690,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5",
+      "played_at": "2023-06-30T20:00:00Z"
+    }
+  ],
+  "recommendedArtists": [
+    {
+      "id": "artist1",
+      "name": "Dua Lipa",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab6761610000e5ebcdce7620dc940db079bf4952", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616100005174cdce7620dc940db079bf4952", "width": 320, "height": 320}
+      ],
+      "popularity": 90,
+      "genres": ["dance pop", "pop"]
+    },
+    {
+      "id": "artist5",
+      "name": "The Weeknd",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616100005174214f3cf1cbe7139c1e26ffbb", "width": 320, "height": 320}
+      ],
+      "popularity": 95,
+      "genres": ["canadian contemporary r&b", "pop"]
+    },
+    {
+      "id": "artist6",
+      "name": "Taylor Swift",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab6761610000e5eb859e4c14fa59296c8649e31e", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616100005174859e4c14fa59296c8649e31e", "width": 320, "height": 320}
+      ],
+      "popularity": 100,
+      "genres": ["pop", "singer-songwriter pop"]
+    },
+    {
+      "id": "artist2",
+      "name": "Bad Bunny",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab6761610000e5eb808616d11b81627fe2616636", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616100005174808616d11b81627fe2616636", "width": 320, "height": 320}
+      ],
+      "popularity": 97,
+      "genres": ["reggaeton", "trap latino", "latin"]
+    },
+    {
+      "id": "artist8",
+      "name": "Olivia Rodrigo",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab6761610000e5ebe03a98785f3658f0b6461ec4", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67616100005174e03a98785f3658f0b6461ec4", "width": 320, "height": 320}
+      ],
+      "popularity": 88,
+      "genres": ["pop", "teen pop"]
+    }
+  ],
+  "featuredPlaylists": [
+    {
+      "id": "playlist1",
+      "name": "Today's Top Hits",
+      "description": "Los éxitos más grandes de hoy",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67706f00000003ec1fd27d9d7afe4b956723e8", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67706f000000035af1070c80cd50cbbb4baa2a", "width": 300, "height": 300}
+      ],
+      "tracks": {"total": 50}
+    },
+    {
+      "id": "playlist2",
+      "name": "Viva Latino",
+      "description": "La playlist con la mejor música latina del momento",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67706f00000003da4aef6a5f34996a607fe976", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67706f000000035d87659c5d38988dfe62a163", "width": 300, "height": 300}
+      ],
+      "tracks": {"total": 50}
+    },
+    {
+      "id": "playlist3",
+      "name": "Pop Mix",
+      "description": "Una mezcla personalizada de pop para ti",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67706f00000003b60db5d3cf2b0602c4f522e6", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67706f000000036fcdf5e7f3bd9fe4725f26d6", "width": 300, "height": 300}
+      ],
+      "tracks": {"total": 50}
+    },
+    {
+      "id": "playlist4",
+      "name": "Hits Internacionales",
+      "description": "Los éxitos más grandes en el mundo",
+      "images": [
+        {"url": "https://i.scdn.co/image/ab67706f00000003a01d5757e7c3766e9089f7a6", "width": 640, "height": 640},
+        {"url": "https://i.scdn.co/image/ab67706f00000002a01d5757e7c3766e9089f7a6", "width": 300, "height": 300}
+      ],
+      "tracks": {"total": 50}
+    }
+  ],
+  "personalRotation": [
+    {
+      "id": "track4",
+      "name": "Levitating",
+      "artists": [{"id": "artist1", "name": "Dua Lipa"}],
+      "album": {
+        "id": "album1",
+        "name": "Future Nostalgia",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273bd26ede1ae69327010d49946", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02bd26ede1ae69327010d49946", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 203807,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273bd26ede1ae69327010d49946",
+      "source": "Recently Played"
+    },
+    {
+      "id": "track6",
+      "name": "Flowers",
+      "artists": [{"id": "artist9", "name": "Miley Cyrus"}],
+      "album": {
+        "id": "album7",
+        "name": "Endless Summer Vacation",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b27385868b0339f658f4cce78143", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e0285868b0339f658f4cce78143", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 200000,
+      "cover": "https://i.scdn.co/image/ab67616d0000b27385868b0339f658f4cce78143",
+      "source": "Recommended"
+    },
+    {
+      "id": "track7",
+      "name": "Cruel Summer",
+      "artists": [{"id": "artist6", "name": "Taylor Swift"}],
+      "album": {
+        "id": "album8",
+        "name": "Lover",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02e787cffec20aa2a396a61647", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 178426,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
+      "source": "Top Songs"
+    },
+    {
+      "id": "track8",
+      "name": "Die For You",
+      "artists": [{"id": "artist5", "name": "The Weeknd"}],
+      "album": {
+        "id": "album9",
+        "name": "Starboy",
+        "images": [
+          {"url": "https://i.scdn.co/image/ab67616d0000b273a048415db06a5b6fa7ec4e1a", "width": 640, "height": 640},
+          {"url": "https://i.scdn.co/image/ab67616d00001e02a048415db06a5b6fa7ec4e1a", "width": 300, "height": 300}
+        ]
+      },
+      "duration_ms": 260253,
+      "cover": "https://i.scdn.co/image/ab67616d0000b273a048415db06a5b6fa7ec4e1a",
+      "source": "For You"
+    }
+  ]
+}

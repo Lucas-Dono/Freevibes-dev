@@ -1,18 +1,18 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { getLyrics, parseSyncedLyrics } from '@/services/lyricsService';
-import { getRecommendedTracks, getArtistTopTracks, searchTracks } from '@/services/spotify';
-// Importar las nuevas funciones del sistema multi-fuente
-import { getSimilarTracks, getArtistTopTracks as getMultiArtistTracks, getGeneralRecommendations } from '@/services/recommendations';
+import { getAPIConfig } from '@/lib/api-config';
 // Importar el tipo Track de types.ts
 import { Track as AppTrack, LyricLine as AppLyricLine } from '@/types/types';
+import YouTubePlayer from '@/components/YouTubePlayer';
 
 // Interfaces para la API de YouTube
 declare global {
   interface Window {
     YT: any;
     onYouTubeIframeAPIReady: (() => void) | null;
+    _debugYTPlayer?: any;
   }
 }
 
@@ -20,7 +20,13 @@ declare global {
 export type Track = AppTrack;
 export type LyricLine = AppLyricLine;
 
+// Extender la interfaz Track para incluir campos adicionales necesarios
+export interface ExtendedTrack extends Track {
+  audioUrl?: string; // URL directa al archivo de audio para reproductor de fallback
+}
+
 interface PlayerContextType {
+  player: any;
   currentTrack: Track | null;
   playlist: Track[];
   isPlaying: boolean;
@@ -32,6 +38,10 @@ interface PlayerContextType {
     synced: LyricLine[];
     isLoading: boolean;
   };
+  isLoading: boolean;
+  error: string;
+  isShuffleEnabled: boolean;
+  isRepeatEnabled: boolean;
   playTrack: (track: Track) => void;
   playPlaylist: (tracks: Track[], startIndex?: number) => void;
   togglePlay: () => void;
@@ -41,10 +51,13 @@ interface PlayerContextType {
   seekTo: (time: number) => void;
   addToQueue: (track: Track) => void;
   createAutoPlaylist: (track: Track) => Promise<void>; // Nueva función para generar lista automática
+  toggleShuffle: () => void;
+  toggleRepeat: () => void;
 }
 
 // Valor por defecto del contexto
 const defaultContextValue: PlayerContextType = {
+  player: null,
   currentTrack: null,
   playlist: [],
   isPlaying: false,
@@ -56,6 +69,10 @@ const defaultContextValue: PlayerContextType = {
     synced: [],
     isLoading: true,
   },
+  isLoading: false,
+  error: "",
+  isShuffleEnabled: false,
+  isRepeatEnabled: false,
   playTrack: () => {},
   playPlaylist: () => {},
   togglePlay: () => {},
@@ -65,28 +82,50 @@ const defaultContextValue: PlayerContextType = {
   seekTo: () => {},
   addToQueue: () => {},
   createAutoPlaylist: async () => {}, // Función vacía por defecto
+  toggleShuffle: () => {},
+  toggleRepeat: () => {},
 };
 
 // Crear el contexto
 const PlayerContext = createContext<PlayerContextType>(defaultContextValue);
 
 // Hook personalizado para usar el contexto
-export const usePlayer = () => useContext(PlayerContext);
+export const usePlayer = () => {
+  const context = useContext(PlayerContext);
+  if (context === undefined) {
+    throw new Error('usePlayer must be used within a PlayerProvider');
+  }
+  return context;
+};
 
 interface PlayerProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
+  youtubeReady?: boolean;
 }
 
 // Proveedor del contexto
-export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
-  // Estado del reproductor
+export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children, youtubeReady = false }) => {
+  // Referencias y estados para el reproductor de YouTube
+  const youtubePlayerRef = useRef<any>(null);
+
+  // Referencia para controlar el temporizador de siguiente canción
+  const nextTrackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Estados principales del reproductor
+  const [player, setPlayer] = useState<any>(null);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playlist, setPlaylist] = useState<Track[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(-1);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [volume, setVolumeState] = useState<number>(0.7);
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [originalPlaylist, setOriginalPlaylist] = useState<Track[]>([]); // Almacena la lista original sin mezclar
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolumeState] = useState(0.7);
   const [duration, setDuration] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [isShuffleEnabled, setIsShuffleEnabled] = useState<boolean>(false);
+  const [isRepeatEnabled, setIsRepeatEnabled] = useState<boolean>(false);
+
+  // Agregar estado para lyrics
   const [lyrics, setLyrics] = useState<{
     plain: string | null;
     synced: LyricLine[];
@@ -96,238 +135,218 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     synced: [],
     isLoading: false
   });
-  
+
+  // Estado adicional para rastrear cambios
+  const [lastPlaylistUpdate, setLastPlaylistUpdate] = useState<number>(Date.now());
+  const [lastPlaylistLength, setLastPlaylistLength] = useState<number>(0);
+
+  // Referencias para evitar "stale closures"
+  const playlistRef = useRef<Track[]>([]);
+  const currentIndexRef = useRef<number>(-1);
+
+  // Estado para el índice actual
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
+
+  // Actualizar referencias cuando cambian los estados
+  useEffect(() => {
+    playlistRef.current = playlist;
+    setLastPlaylistLength(playlist.length);
+  }, [playlist, lastPlaylistLength]);
+
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
   // Referencia al reproductor de YouTube
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
   const [isYoutubeReady, setIsYoutubeReady] = useState<boolean>(false);
-  const youtubePlayerRef = useRef<any>(null);
 
-  // Cargar la API de YouTube
+  // Referencia para isPlaying para evitar "stale closure"
+  const isPlayingRef = useRef<boolean>(isPlaying);
+
+  // Actualizar la referencia cuando cambie isPlaying
   useEffect(() => {
-    // Cargar la API de YouTube cuando se monta el componente
-    if (!window.YT) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      
-      window.onYouTubeIframeAPIReady = () => {
-        setIsYoutubeReady(true);
-      };
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-    } else {
-      setIsYoutubeReady(true);
+  // Referencia para el intervalo de tiempo
+  const timeUpdateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Función para iniciar actualizaciones periódicas del tiempo
+  const startTimeUpdates = () => {
+    if (youtubePlayerRef.current && typeof youtubePlayerRef.current.getCurrentTime === 'function') {
+      try {
+        setCurrentTime(youtubePlayerRef.current.getCurrentTime());
+      } catch {};
+    }
+
+    if (timeUpdateIntervalRef.current) {
+      clearInterval(timeUpdateIntervalRef.current);
+      timeUpdateIntervalRef.current = null;
+    }
+
+    if (!youtubePlayerRef.current) {
+      setTimeout(() => {
+      if (youtubePlayerRef.current) {
+          startTimeUpdates();
+          }
+      }, 1000);
+      return;
+    }
+
+    timeUpdateIntervalRef.current = setInterval(() => {
+      if (!youtubePlayerRef.current) return;
+
+      try {
+        if (typeof youtubePlayerRef.current.getCurrentTime !== 'function') return;
+
+          const currentSeconds = youtubePlayerRef.current.getCurrentTime();
+          setCurrentTime(currentSeconds);
+
+          if (duration <= 0 && typeof youtubePlayerRef.current.getDuration === 'function') {
+            try {
+              const videoDuration = youtubePlayerRef.current.getDuration();
+              if (videoDuration && videoDuration > 0) {
+                setDuration(videoDuration);
+              }
+          } catch {};
+      }
+      } catch {};
+    }, 50);
+  };
+
+  // Agregar un efecto dedicado para verificar la duración periódicamente
+  useEffect(() => {
+    if (!isPlaying || !currentTrack || !youtubePlayerRef.current) return;
+
+    const updateDuration = () => {
+      try {
+        if (youtubePlayerRef.current && typeof youtubePlayerRef.current.getDuration === 'function') {
+          const newDuration = youtubePlayerRef.current.getDuration();
+
+          if (newDuration && newDuration > 0) {
+            if (duration !== newDuration) {
+            setDuration(newDuration);
+              return true;
+            }
+            return true;
+          }
+      }
+      } catch {};
+      return false;
+    };
+
+    const durationValid = updateDuration();
+
+    if (!durationValid) {
+      const durationCheckInterval = setInterval(() => {
+        if (updateDuration() || !isPlaying) {
+          clearInterval(durationCheckInterval);
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(durationCheckInterval);
+      };
+    }
+  }, [isPlaying, currentTrack, duration]);
+
+  // Limpiar intervalo de tiempo cuando cambia el estado de reproducción
+  useEffect(() => {
+    if (!isPlaying && timeUpdateIntervalRef.current) {
+      clearInterval(timeUpdateIntervalRef.current);
+      timeUpdateIntervalRef.current = null;
     }
 
     return () => {
+      if (timeUpdateIntervalRef.current) {
+        clearInterval(timeUpdateIntervalRef.current);
+        timeUpdateIntervalRef.current = null;
+      }
+    };
+  }, [isPlaying]);
+
+  // Cargar la API de YouTube
+  useEffect(() => {
+    let isMounted = true;
+
+    const initYouTubeAPI = () => {
+      if (!window.YT) {
+        if (document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+          window.onYouTubeIframeAPIReady = () => {
+            if (isMounted) {
+              setIsYoutubeReady(true);
+              setTimeout(() => {
+                createYouTubePlayer();
+              }, 500);
+            }
+          };
+          return;
+        }
+
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        tag.id = 'youtube-iframe-api-script';
+
+          window.onYouTubeIframeAPIReady = () => {
+            if (isMounted) {
+            setIsYoutubeReady(true);
+            setTimeout(() => {
+              createYouTubePlayer();
+            }, 500);
+          }
+        };
+
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+      } else {
+        setIsYoutubeReady(true);
+        setTimeout(() => {
+          createYouTubePlayer();
+        }, 500);
+      }
+    };
+
+    initYouTubeAPI();
+
+    return () => {
+      isMounted = false;
       window.onYouTubeIframeAPIReady = null;
     };
   }, []);
 
-  // Configurar el reproductor de YouTube cuando esté listo
+  // Crear y configurar el reproductor una vez que la API está lista
   useEffect(() => {
     if (!isYoutubeReady) return;
 
-  
+    if (!window.YT || !window.YT.Player) {
+      const checkInterval = setInterval(() => {
+        if (window.YT && window.YT.Player) {
+          clearInterval(checkInterval);
+          createYouTubePlayer();
+        }
+      }, 100);
 
-    // Verificar si ya existe el reproductor visible
-    let playerContainer = document.getElementById('youtube-player-container');
-    let playerElement: HTMLElement;
-    
-    // Si no existe, crear los elementos necesarios
-    if (!playerContainer) {
-      // Crear elemento div para el reproductor de YouTube
-      playerContainer = document.createElement('div');
-      playerContainer.id = 'youtube-player-container';
-      
-      // Posicionar fuera de la vista pero manteniendo funcionalidad
-      playerContainer.style.position = 'fixed';
-      playerContainer.style.bottom = '-1px';
-      playerContainer.style.right = '0';
-      playerContainer.style.width = '1px';
-      playerContainer.style.height = '1px';
-      playerContainer.style.opacity = '0.01'; // No completamente invisible para que YouTube siga funcionando
-      playerContainer.style.pointerEvents = 'none';
-      
-      // Crear el elemento para el iframe de YouTube
-      playerElement = document.createElement('div');
-      playerElement.id = 'youtube-player';
-      playerContainer.appendChild(playerElement);
-      document.body.appendChild(playerContainer);
-      
-
+      return () => {
+        clearInterval(checkInterval);
+      };
     } else {
-      playerElement = document.getElementById('youtube-player') as HTMLElement;
-     
+      createYouTubePlayer();
     }
-
-    // Crear instancia del reproductor con opciones mejoradas
-  
-
-    // Definir funciones callback antes de crear el player para evitar problemas de closure
-    const onPlayerReady = (event: any) => {
-    
-      setYoutubePlayer(event.target);
-      youtubePlayerRef.current = event.target; // Guardar en la referencia también
-      event.target.setVolume(volume * 100);
-      
-      // Si ya hay una canción actual, cargarla en el reproductor
-      if (currentTrack && currentTrack.youtubeId) {
-
-        event.target.loadVideoById({
-          videoId: currentTrack.youtubeId,
-          startSeconds: 0,
-          suggestedQuality: 'default'
-        });
-        
-        // Sincronizar el estado de reproducción según isPlaying
-        if (!isPlaying) {
-          event.target.pauseVideo();
-        }
-      }
-    };
-    
-    const onPlayerStateChange = (event: any) => {
-      // YT.PlayerState.UNSTARTED = -1
-      // YT.PlayerState.ENDED = 0
-      // YT.PlayerState.PLAYING = 1
-      // YT.PlayerState.PAUSED = 2
-      // YT.PlayerState.BUFFERING = 3
-      // YT.PlayerState.CUED = 5
-      
-      if (event.data === 1) { // PLAYING
-        setIsPlaying(true);
-        
-        // Actualizar la duración solo cuando está disponible
-        const duration = event.target.getDuration();
-        if (duration && duration > 0) {
-          setDuration(duration);
-        }
-        
-        // Actualizar tiempo actual de inmediato para que las letras sincronizadas funcionen
-        const currentTimeFromPlayer = event.target.getCurrentTime();
-        if (currentTimeFromPlayer !== undefined && currentTimeFromPlayer !== null) {
-          setCurrentTime(currentTimeFromPlayer);
-        }
-      } 
-      else if (event.data === 2) { // PAUSED
-        setIsPlaying(false);
-      }
-      else if (event.data === 0) { // ENDED
-        setIsPlaying(false);
-        
-        // Intentar reproducir la siguiente canción automáticamente después de un breve retardo
-        setTimeout(() => {
-          nextTrack();
-        }, 500);
-      }
-    };
-    
-    const onPlayerError = (event: any) => {
-      console.error('PlayerContext: Error en el reproductor de YouTube', event.data);
-      
-      // Códigos de error comunes:
-      // 2 – La solicitud contiene un valor de parámetro no válido
-      // 5 – El contenido solicitado no puede ser reproducido en un reproductor HTML5
-      // 100 – El video solicitado no se encuentra
-      // 101, 150 – El propietario del video solicitado no permite que se reproduzca en reproductores insertados
-      
-      // Intentar siguiente canción en caso de error
-      if (event.data === 150 || event.data === 101 || event.data === 100) {
-      
-        setTimeout(() => nextTrack(), 500);
-      }
-    };
-
-    // Crear y configurar el reproductor
-    const player = new window.YT.Player('youtube-player', {
-      height: '1',
-      width: '1',
-      playerVars: {
-        autoplay: 0, // No autoplay hasta que lo solicitemos explícitamente
-        controls: 0,
-        enablejsapi: 1,
-        fs: 0,
-        rel: 0,
-        modestbranding: 1,
-        iv_load_policy: 3, // Ocultar anotaciones
-        playsinline: 1, // Reproducir en dispositivos móviles
-        origin: window.location.origin // Importante para seguridad
-      },
-      events: {
-        onReady: onPlayerReady,
-        onStateChange: onPlayerStateChange,
-        onError: onPlayerError
-      }
-    });
-
-    // Iniciar intervalo para actualizar el tiempo actual y sincronizar estados
-    const interval = setInterval(() => {
-      if (!youtubePlayerRef.current) {
-        return;
-      }
-      
-      try {
-        // Asegurarse de que podemos acceder a los métodos del reproductor
-        if (youtubePlayerRef.current.getCurrentTime && youtubePlayerRef.current.getPlayerState) {
-          // Actualizar tiempo actual solo si el reproductor está activo (no en estado 0=ENDED)
-          if (youtubePlayerRef.current.getPlayerState() !== 0) {
-            const currentTimeFromPlayer = youtubePlayerRef.current.getCurrentTime();
-            
-            // Usar una función para asegurar que estamos actualizando desde el último estado
-            setCurrentTime((prevTime) => {
-              // Solo actualizar si hay un cambio significativo para evitar renders innecesarios
-              if (Math.abs(prevTime - currentTimeFromPlayer) > 0.1) {
-                return currentTimeFromPlayer;
-              }
-              return prevTime;
-            });
-          }
-          
-          // Sincronizar el estado de reproducción con el estado actual del reproductor
-          const playerState = youtubePlayerRef.current.getPlayerState();
-          const shouldBePlaying = playerState === 1; // PLAYING
-          
-          if (isPlaying !== shouldBePlaying) {
-            setIsPlaying(shouldBePlaying);
-          }
-          
-          // Verificar si el reproductor ha cambiado de video
-          if (youtubePlayerRef.current.getVideoData && currentTrack) {
-            const videoData = youtubePlayerRef.current.getVideoData();
-            // Si el ID del video actual no coincide con el del track, actualizar el contexto
-            if (videoData && videoData.video_id && videoData.video_id !== currentTrack.youtubeId) {
-              // Aquí podríamos buscar el track correcto en la playlist, pero es complicado
-            }
-          }
-        }
-      } catch (error) {
-        console.error('PlayerContext: Error al actualizar estado del reproductor:', error);
-      }
-    }, 200); // Actualizar cada 200ms para una respuesta más rápida
-
-    return () => {
-      clearInterval(interval);
-      // No eliminar el contenedor, solo desconectar eventos
-      if (youtubePlayerRef.current) {
-        try {
-          youtubePlayerRef.current.stopVideo();
-        } catch (e) {
-          console.error('Error al detener el video:', e);
-        }
-      }
-    };
   }, [isYoutubeReady]);
+
+  // createYouTubePlayer desactivado: usamos react-youtube para instanciar el player
+  const createYouTubePlayer = () => {};
 
   // Cargar letras cuando cambia la canción actual
   useEffect(() => {
     if (!currentTrack) return;
-    
-    const fetchLyrics = async () => {
+
+    const loadLyrics = async () => {
       setLyrics(prev => ({ ...prev, isLoading: true }));
-      
+
       const result = await getLyrics(currentTrack);
-      
+
       if (result.syncedLyrics) {
         const parsedLyrics = parseSyncedLyrics(result.syncedLyrics);
         setLyrics({
@@ -335,231 +354,302 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
           synced: parsedLyrics,
           isLoading: false
         });
-       
       } else if (result.plainLyrics) {
         setLyrics({
           plain: result.plainLyrics,
           synced: [],
           isLoading: false
         });
-     
+          } else {
+        setLyrics({
+          plain: null,
+          synced: [],
+          isLoading: false
+        });
+      }
+    };
+
+    loadLyrics();
+  }, [currentTrack]);
+
+  // Función para cargar letras
+  const loadLyrics = async (track: Track): Promise<void> => {
+    if (!track || !track.title || !track.artist) {
+      setLyrics({
+        plain: null,
+        synced: [],
+        isLoading: false
+      });
+        return;
+      }
+
+    setLyrics(prev => ({ ...prev, isLoading: true }));
+
+    try {
+      const result = await getLyrics(track);
+
+      if (result.syncedLyrics) {
+        const parsedLyrics = parseSyncedLyrics(result.syncedLyrics);
+        setLyrics({
+          plain: result.plainLyrics,
+          synced: parsedLyrics,
+          isLoading: false
+        });
+      } else if (result.plainLyrics) {
+        setLyrics({
+          plain: result.plainLyrics,
+          synced: [],
+          isLoading: false
+        });
       } else {
         setLyrics({
           plain: null,
           synced: [],
           isLoading: false
         });
-       
       }
-    };
-    
-    fetchLyrics();
-  }, [currentTrack]);
+    } catch {
+      setLyrics({
+        plain: null,
+        synced: [],
+        isLoading: false
+      });
+    }
+  };
 
   // Función para convertir un objeto de track de Spotify a nuestro formato Track
   const convertSpotifyTrackToTrack = (spotifyTrack: any): Track => {
-    const coverUrl = spotifyTrack.album?.images?.[0]?.url || 'https://placehold.co/300x300/gray/white?text=No+Cover';
+    try {
+      let albumCoverUrl = '/placeholder-album.jpg';
+      if (spotifyTrack.album && spotifyTrack.album.images && spotifyTrack.album.images.length > 0) {
+        albumCoverUrl = spotifyTrack.album.images[0].url;
+      }
+
+      albumCoverUrl = getValidImageUrl(albumCoverUrl);
+
     return {
       id: spotifyTrack.id,
       title: spotifyTrack.name,
-      artist: spotifyTrack.artists?.map((artist: any) => artist.name).join(', ') || 'Artista desconocido',
-      album: spotifyTrack.album?.name || 'Álbum desconocido',
-      cover: coverUrl,
-      albumCover: coverUrl, // Añadir albumCover con el mismo valor que cover
-      duration: spotifyTrack.duration_ms || 0,
-      spotifyId: spotifyTrack.id,
-      artistId: spotifyTrack.artists?.[0]?.id // Guardamos el ID del primer artista para recomendaciones
-    };
+        artist: spotifyTrack.artists.map((artist: any) => artist.name).join(', '),
+        duration: spotifyTrack.duration_ms / 1000,
+        album: spotifyTrack.album?.name || 'Desconocido',
+        cover: albumCoverUrl,
+        albumCover: albumCoverUrl,
+        source: 'spotify',
+        youtubeId: undefined
+      };
+    } catch {
+      return {
+        id: `error_${Date.now()}`,
+        title: spotifyTrack?.name || 'Canción desconocida',
+        artist: spotifyTrack?.artists ? spotifyTrack.artists.map((artist: any) => artist.name).join(', ') : 'Artista desconocido',
+        duration: spotifyTrack?.duration_ms ? spotifyTrack.duration_ms / 1000 : 0,
+        album: spotifyTrack?.album?.name || 'Desconocido',
+        cover: PLACEHOLDER_ALBUM,
+        albumCover: PLACEHOLDER_ALBUM,
+        source: 'spotify',
+        youtubeId: undefined
+      };
+    }
   };
 
-  // Reproducir una canción
-  const playTrack = async (track: Track) => {
-    try {
-      // Actualizar estado
-      setCurrentTrack(track);
-      
-      // Si no está en la playlist actual, la actualizamos
-      let trackIndex = playlist.findIndex(t => t.id === track.id);
-      
-      if (trackIndex === -1) {
-        // Si la canción no está en la playlist, la añadimos como única canción
-        // y luego generamos recomendaciones
-        setPlaylist([track]);
-        setCurrentIndex(0);
-        trackIndex = 0;
-        
-        // Si solo hay un elemento en la lista de reproducción (la canción actual),
-        // intentamos generar automáticamente una lista de reproducción en segundo plano
-        createAutoPlaylist(track).catch(error => {
-          console.error('Error al generar lista de reproducción automática:', error);
-        });
-      } else {
-        // Si la canción ya está en la playlist, actualizamos el índice
-        setCurrentIndex(trackIndex);
-      }
-      
-      // Si ya tiene ID de YouTube, usarlo directamente
-      if (track.youtubeId) {
-        if (youtubePlayerRef.current) {
-          // Primero pausamos cualquier reproducción actual
-          youtubePlayerRef.current.pauseVideo();
-          
-          // Luego cargamos el nuevo video
-          youtubePlayerRef.current.loadVideoById({
-            videoId: track.youtubeId,
-            startSeconds: 0,
-            suggestedQuality: 'default'
-          });
-          
-          // Establecer volumen
-          youtubePlayerRef.current.setVolume(volume * 100);
-          
-          // Actualizar el estado
-          setIsPlaying(true);
-        } else {
-          console.error('PlayerContext: YouTube player no está disponible');
-        }
-        return;
-      }
-      
-      // Si no tiene ID de YouTube, obtenerlo de la API
-     
-      
+  // Mejorar la función playTrack para manejar mejor los errores y siempre generar listas de reproducción
+  const playTrack = async (track: Track): Promise<boolean> => {
+    if (!track.youtubeId) {
+      setError('No se encontró ID de YouTube para esta canción');
+      return false;
+    }
+    
+    // Establecer la canción actual inmediatamente
+    setCurrentTrack(track);
+    setCurrentIndex(0);
+    
+    // Reproducir la canción
+    const player = youtubePlayerRef.current;
+    if (player && typeof player.loadVideoById === 'function') {
       try {
-        // Llamar a nuestra API que maneja la búsqueda en YouTube
-        const response = await fetch('/api/spotify/play', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            trackId: track.spotifyId || track.id,
-            name: track.title,
-            artist: track.artist
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error(`Error en la respuesta: ${response.status}`);
+        player.loadVideoById({ videoId: track.youtubeId, startSeconds: 0 });
+        player.playVideo();
+      } catch {}
+    }
+    
+    // Generar automáticamente una playlist con recomendaciones
+    // Solo si no hay una playlist existente o si es una canción diferente
+    const shouldCreateAutoPlaylist = 
+      playlist.length <= 1 || 
+      !playlist.some(t => t.id === track.id) ||
+      (currentTrack && currentTrack.id !== track.id);
+    
+    if (shouldCreateAutoPlaylist) {
+      // Crear la playlist automática en segundo plano
+      setTimeout(async () => {
+        try {
+          await createAutoPlaylist(track);
+        } catch (error) {
+          console.warn('Error al generar playlist automática:', error);
+          // Si falla, al menos mantener la canción actual en la playlist
+          setPlaylist([track]);
         }
-        
-        const data = await response.json();
-        
-        if (data.videoId) {
-          // Guardar el ID del video para futuras reproducciones
-          track.youtubeId = data.videoId;
-          
-          // Reproducir el video
-          if (youtubePlayerRef.current) {
-            youtubePlayerRef.current.loadVideoById({
-              videoId: data.videoId,
-              startSeconds: 0,
-              suggestedQuality: 'default'
-            });
-            youtubePlayerRef.current.setVolume(volume * 100);
-            
-            // Actualizar el estado
-            setIsPlaying(true);
-            
-       
-          } else {
-            console.error('PlayerContext: YouTube player no está disponible después de obtener videoId');
+      }, 500); // Pequeño delay para que la reproducción comience inmediatamente
+    } else {
+      // Si ya hay una playlist válida, solo actualizar la posición
+      setPlaylist(prev => prev.length > 0 ? prev : [track]);
+    }
+    
+    return true;
+  };
+
+  // Reproducir una pista cargando y lanzando el play en la instancia única de YouTube Player
+  const playTrackWithPlayer = async (track: Track): Promise<boolean> => {
+    if (!track.youtubeId) {
+      setError('No se encontró ID de YouTube para esta canción');
+      return false;
+    }
+    
+    // Establecer la canción actual inmediatamente
+    setCurrentTrack(track);
+    setCurrentIndex(0);
+    
+    const player = youtubePlayerRef.current;
+    
+    if (!player) {
+      setError('Reproductor no inicializado');
+      return false;
+    }
+    
+    try {
+      await loadVideo(player, track.youtubeId);
+      
+      setIsPlaying(true);
+      startTimeUpdates();
+      
+      // Generar automáticamente una playlist con recomendaciones
+      // Solo si no hay una playlist existente o si es una canción diferente
+      const shouldCreateAutoPlaylist = 
+        playlist.length <= 1 || 
+        !playlist.some(t => t.id === track.id) ||
+        (currentTrack && currentTrack.id !== track.id);
+      
+      if (shouldCreateAutoPlaylist) {
+        // Crear la playlist automática en segundo plano
+        setTimeout(async () => {
+          try {
+            await createAutoPlaylist(track);
+          } catch (error) {
+            console.warn('Error al generar playlist automática:', error);
+            // Si falla, al menos mantener la canción actual en la playlist
+            setPlaylist([track]);
           }
-        } else {
-          console.error('No se encontró un video para esta canción');
-        }
-      } catch (error) {
-        console.error('Error al buscar video para la canción:', error);
+        }, 500); // Pequeño delay para que la reproducción comience inmediatamente
+      } else {
+        // Si ya hay una playlist válida, solo actualizar la posición
+        setPlaylist(prev => prev.length > 0 ? prev : [track]);
       }
+      
+      return true;
     } catch (error) {
-      console.error('Error al reproducir la canción:', error);
+      setError(`Error al reproducir: ${error instanceof Error ? error.message : String(error)}`);
+      return false;
     }
   };
 
   // Reproducir una playlist
   const playPlaylist = async (tracks: Track[], startIndex: number = 0) => {
     if (tracks.length === 0) return;
-    
-    // Actualizar playlist
+
     setPlaylist(tracks);
     setCurrentIndex(startIndex);
-    
-    // Reproducir la primera canción
+
     const track = tracks[startIndex];
     await playTrack(track);
   };
 
-  // Alternar reproducción/pausa
+  // Alternar reproducción/pausa de forma directa
   const togglePlay = () => {
-    if (!youtubePlayerRef.current || !currentTrack) {
-      console.warn('PlayerContext: No se puede alternar reproducción, falta player o track');
-      return;
-    }
-    
-    if (isPlaying) {
-      youtubePlayerRef.current.pauseVideo();
-    } else {
-      youtubePlayerRef.current.playVideo();
+    const player = youtubePlayerRef.current;
+    if (!player || typeof player.getPlayerState !== 'function') return;
+    if (player.getPlayerState() === window.YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+          setIsPlaying(false);
+          isPlayingRef.current = false;
+        } else {
+      player.playVideo();
+          setIsPlaying(true);
+          isPlayingRef.current = true;
+          startTimeUpdates();
     }
   };
 
-  // Siguiente canción
+  // Modificar la implementación del control de tiempo entre llamadas
+  // Evitar llamadas múltiples rápidas con una referencia mejor
+  const nextTrackTimeRef = useRef<number>(0);
+
+  // Simplificar nextTrack
   const nextTrack = async () => {
-    if (playlist.length <= 1 || currentIndex < 0) {
-      // Si no hay más canciones, intentamos generar recomendaciones si tenemos la canción actual
-      if (currentTrack) {
+    const now = Date.now();
+    const timeSinceLastCall = now - nextTrackTimeRef.current;
+
+    if (timeSinceLastCall < 800) return;
+
+    nextTrackTimeRef.current = now;
+
+    try {
+      if (nextTrackTimeoutRef.current) {
+        clearTimeout(nextTrackTimeoutRef.current);
+        nextTrackTimeoutRef.current = null;
+      }
+
+      if (!playlist || playlist.length === 0 || !currentTrack) {
+        setError('No hay más canciones en cola. Genera una lista automática.');
+        return;
+      }
+
+      const nextIndex = currentIndex + 1;
+
+      if (nextIndex < playlist.length) {
+        const nextTrackToPlay = playlist[nextIndex];
+              setCurrentIndex(nextIndex);
+
+        setTimeout(async () => {
+          await playTrack(nextTrackToPlay);
+        }, 100);
+              } else {
+        setError('Generando recomendaciones automáticas...');
+
         try {
-          await createAutoPlaylist(currentTrack);
-          // Si se creó una playlist, avanzamos a la siguiente canción
-          if (playlist.length > 1) {
-            const nextIndex = 1; // La siguiente canción después de la actual
-            setCurrentIndex(nextIndex);
-            await playTrack(playlist[nextIndex]);
-            return; // Importante: retornar para evitar continuar con la ejecución
+          if (currentTrack) {
+            await createAutoPlaylist(currentTrack);
+
+            setTimeout(() => {
+              try {
+                if (playlist.length > 0) {
+                setCurrentIndex(0);
+                playTrack(playlist[0]);
+                  setError('');
+              } else {
+                  setError('No se pudieron generar recomendaciones. Intenta con otra canción.');
+                }
+              } catch {
+                setError('Error al reproducir canciones recomendadas.');
+              }
+            }, 1000);
+          } else {
+            setError('No hay canción actual para generar recomendaciones.');
           }
-        } catch (error) {
-          console.error('Error al generar recomendaciones al llegar al final de la playlist:', error);
+        } catch {
+          setError('Error al generar lista automática. Inténtalo de nuevo.');
         }
       }
-      return;
+    } catch (error) {
+      setError(`Error al reproducir siguiente canción: ${error instanceof Error ? error.message : String(error)}`);
     }
-    
-    // Si ya estamos en la última canción, intentamos obtener más recomendaciones
-    if (currentIndex === playlist.length - 1) {
-      try {
-        // Usamos la canción actual para generar más recomendaciones
-        await createAutoPlaylist(currentTrack!);
-        
-        // Si se actualizó la playlist, ajustamos el índice a la siguiente canción
-        if (playlist.length > 1) {
-          const nextIndex = 1; // La canción nueva estará después de la actual que volvió a la posición 0
-          setCurrentIndex(nextIndex);
-          await playTrack(playlist[nextIndex]);
-          return;
-        }
-      } catch (recommendationError) {
-        console.error('Error al obtener más recomendaciones:', recommendationError);
-        // Si falla, seguimos con el comportamiento normal de ciclar la playlist
-      }
-    }
-    
-    // Comportamiento normal: avanzar a la siguiente canción en la playlist
-    const nextIndex = (currentIndex + 1) % playlist.length;
-    setCurrentIndex(nextIndex);
-    await playTrack(playlist[nextIndex]);
   };
 
   // Canción anterior
   const previousTrack = async () => {
-  
-    
-    if (playlist.length <= 1 || currentIndex < 0) {
-      return;
-    }
-    
+    if (playlist.length <= 1 || currentIndex < 0) return;
+
     const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-  
-    
     setCurrentIndex(prevIndex);
     await playTrack(playlist[prevIndex]);
   };
@@ -587,7 +677,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
 
   // Controlar el volumen
   const handleVolumeChange = (newVolume: number) => {
-    setVolume(newVolume);
+    setVolumeState(newVolume);
     if (youtubePlayerRef.current) {
       youtubePlayerRef.current.setVolume(newVolume * 100);
     }
@@ -595,204 +685,587 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
 
   // Evento para escuchar eventos de reproducción desde fuera del contexto
   useEffect(() => {
-    // Función para manejar el evento personalizado 'playTrack'
-    const handleExternalPlayEvent = (event: any) => {
-      try {
-        if (!event || !event.detail) {
-          console.error('PlayerContext: Evento recibido sin datos');
-          return;
+    const handleCustomPlayTrack = (event: CustomEvent) => {
+      if (event.detail) {
+        const track = event.detail;
+        
+        // Verificar si el reproductor está disponible
+        const playerAvailable = !!youtubePlayerRef.current;
+        
+        if (track.youtubeId && playerAvailable) {
+          playTrackWithPlayer(track);
+        } else {
+          playTrack(track);
         }
-        
-        const track = event.detail as Track;
-        
-        if (!track) {
-          return;
-        }
-        
-        if (!track.youtubeId) {
-          console.error('PlayerContext: Track sin youtubeId', track);
-          return;
-        }
-        
-        // Llamar a playTrack directamente
-        playTrack(track);
-      } catch (error) {
-        console.error('Error al manejar evento externo:', error);
       }
     };
 
-    // Añadir el listener
-    window.addEventListener('playTrack', handleExternalPlayEvent as EventListener);
+    const handleCreatePlaylist = (event: CustomEvent) => {
+      if (event.detail) {
+        if (event.detail.title) {
+          const track: Track = {
+            id: event.detail.id || `autogen_${Date.now()}`,
+            title: event.detail.title,
+            artist: event.detail.subtitle || 'Artista desconocido',
+            album: event.detail.album || '',
+            cover: event.detail.coverUrl || '/placeholder-album.jpg',
+            duration: event.detail.duration || 180000,
+            youtubeId: event.detail.youtubeId,
+            source: event.detail.source || 'automatic'
+          };
 
-    // Limpiar al desmontar
-    return () => {
-      window.removeEventListener('playTrack', handleExternalPlayEvent as EventListener);
+          setTimeout(() => {
+            createAutoPlaylist(track).catch(() => {});
+          }, 500);
+        }
+      }
     };
-  }, [playTrack]);
+
+    window.addEventListener('playTrack', handleCustomPlayTrack as EventListener);
+    window.addEventListener('createPlaylist', handleCreatePlaylist as EventListener);
+
+    return () => {
+      window.removeEventListener('playTrack', handleCustomPlayTrack as EventListener);
+      window.removeEventListener('createPlaylist', handleCreatePlaylist as EventListener);
+    };
+  }, []);
 
   // Sincronizar el tiempo cuando isPlaying cambia a true
   useEffect(() => {
     if (isPlaying && youtubePlayerRef.current && youtubePlayerRef.current.getCurrentTime) {
-      // Actualizar inmediatamente el tiempo actual cuando se inicia la reproducción
       try {
         const currentTimeFromPlayer = youtubePlayerRef.current.getCurrentTime();
         setCurrentTime(currentTimeFromPlayer);
-      } catch (error) {
-        console.error('Error al sincronizar tiempo:', error);
-      }
+      } catch {};
     }
   }, [isPlaying]);
 
-  // Nueva función para generar lista de reproducción automática
-  const createAutoPlaylist = async (track: Track) => {
-    try {
-      console.log('[Playlist] Generando lista de reproducción automática para:', track.title);
-      
-      let recommendedTracks: Track[] = [];
-      
-      // Usar el nuevo sistema multi-fuente para obtener recomendaciones similares
-      try {
-        console.log('[Playlist] Intentando obtener tracks similares con sistema multi-fuente');
-        // Asegurar que track tiene todas las propiedades necesarias
-        const trackForRecommendation: AppTrack = {
-          ...track,
-          albumCover: track.cover // Usar cover como albumCover si no existe
-        };
-        
-        const similarTracks = await getSimilarTracks(trackForRecommendation, 25);
-        if (similarTracks && similarTracks.length > 0) {
-          recommendedTracks = similarTracks;
-          console.log('[Playlist] Recomendaciones obtenidas por sistema multi-fuente:', recommendedTracks.length);
-        }
-      } catch (error) {
-        console.error('[Playlist] Error con recomendador multi-fuente:', error);
-      }
-      
-      // Si no funcionó el sistema multi-fuente, intentar el sistema antiguo
-      if (recommendedTracks.length === 0) {
-        // Intentamos diferentes métodos para obtener recomendaciones, en orden de prioridad
-        console.log('[Playlist] Usando sistema de recomendaciones de fallback');
-        
-        // 1. Si tenemos el ID de Spotify, obtener recomendaciones directamente
-        if (track.spotifyId) {
-          try {
-            // Preparar parámetros para la API
-            let params = new URLSearchParams();
-            params.append('action', 'recommended');
-            params.append('limit', '20');
-            
-            // Añadir seed_tracks si hay spotifyId
-            if (track.spotifyId) {
-              params.append('seed_tracks', track.spotifyId);
-            }
-            
-            // Añadir seed_artists si hay artistId
-            if (track.artistId) {
-              params.append('seed_artists', track.artistId);
-            }
-            
-            // Obtener recomendaciones basadas en la canción y artista actual
-            const response = await fetch(`/api/spotify?${params.toString()}`);
-            
-            if (response.ok) {
-              const data = await response.json();
-              if (data.tracks && data.tracks.length > 0) {
-                recommendedTracks = data.tracks.map((track: any) => convertSpotifyTrackToTrack(track));
-                console.log('[Playlist] Recomendaciones obtenidas por método combinado:', recommendedTracks.length);
-              }
-            }
-          } catch (error) {
-            console.error('[Playlist] Error al obtener recomendaciones combinadas:', error);
-          }
-        }
-        
-        // 2. Si no hay recomendaciones y tenemos el ID del artista, obtener canciones populares del artista
-        if (recommendedTracks.length === 0 && track.artist) {
-          try {
-            // Intentar primero con el sistema multi-fuente
-            const artistTracks = await getMultiArtistTracks(track.artist, 20);
-            if (artistTracks && artistTracks.length > 0) {
-              recommendedTracks = artistTracks.filter(t => t.id !== track.id); // Filtrar canción actual
-              console.log('[Playlist] Recomendaciones obtenidas por artista (multi):', recommendedTracks.length);
-            }
-            
-            // Si no funciona, intentar con el sistema antiguo si tenemos el artistId
-            if (recommendedTracks.length === 0 && track.artistId) {
-              const spotifyArtistTracks = await getArtistTopTracks(track.artistId);
-              if (spotifyArtistTracks && spotifyArtistTracks.length > 0) {
-                recommendedTracks = spotifyArtistTracks
-                  .filter((t: any) => t.id !== track.spotifyId)
-                  .map((track: any) => convertSpotifyTrackToTrack(track)); 
-                console.log('[Playlist] Recomendaciones obtenidas por artista (spotify):', recommendedTracks.length);
-              }
-            }
-          } catch (error) {
-            console.error('[Playlist] Error al obtener canciones populares del artista:', error);
-          }
-        }
-        
-        // 3. Si aún no hay recomendaciones, buscar por nombre del artista
-        if (recommendedTracks.length === 0 && track.artist) {
-          try {
-            const searchResults = await searchTracks(track.artist, 20);
-            if (searchResults && searchResults.length > 0) {
-              recommendedTracks = searchResults
-                .filter((t: any) => t.id !== track.spotifyId)
-                .map((track: any) => convertSpotifyTrackToTrack(track));
-              console.log('[Playlist] Recomendaciones obtenidas por búsqueda de artista:', recommendedTracks.length);
-            }
-          } catch (error) {
-            console.error('[Playlist] Error al buscar canciones por artista:', error);
-          }
-        }
-      }
-      
-      // 4. Si todavía no hay recomendaciones, obtener recomendaciones generales
-      if (recommendedTracks.length === 0) {
+  // Actualizar duración cuando el video comienza a reproducirse
+  useEffect(() => {
+    if (isPlaying && youtubePlayerRef.current && youtubePlayerRef.current.getDuration) {
+      const updateDuration = () => {
         try {
-          // Intentar primero con el sistema multi-fuente
-          const generalRecs = await getGeneralRecommendations(20);
-          if (generalRecs && generalRecs.length > 0) {
-            recommendedTracks = generalRecs;
-            console.log('[Playlist] Recomendaciones generales obtenidas (multi):', recommendedTracks.length);
-          } else {
-            // Si no funciona, intentar con el sistema antiguo
-            const spotifyRecs = await getRecommendedTracks(20);
-            if (spotifyRecs && spotifyRecs.length > 0) {
-              recommendedTracks = spotifyRecs.map((track: any) => convertSpotifyTrackToTrack(track));
-              console.log('[Playlist] Recomendaciones generales obtenidas (spotify):', recommendedTracks.length);
+          const videoDuration = youtubePlayerRef.current.getDuration();
+          if (videoDuration && videoDuration > 0) {
+            setDuration(videoDuration);
+            return true;
+          }
+        } catch {};
+        return false;
+      };
+
+      if (!updateDuration()) {
+        let attempts = 0;
+        const maxAttempts = 5;
+        const durationCheckInterval = setInterval(() => {
+          attempts++;
+          if (updateDuration() || attempts >= maxAttempts) {
+            clearInterval(durationCheckInterval);
+          }
+        }, 500);
+
+        return () => clearInterval(durationCheckInterval);
+      }
+    }
+  }, [isPlaying, currentTrack]);
+
+  // Función para generar automáticamente la playlist
+  const createAutoPlaylist = async (track: Track): Promise<void> => {
+    try {
+      if (!track || !track.title) {
+        setError('No se pudo generar lista automática: información de canción incompleta.');
+        return;
+      }
+
+      track.cover = getValidImageUrl(track.cover);
+      track.albumCover = getValidImageUrl(track.albumCover);
+
+      let recommendedTracks: Track[] = [];
+      let errors: string[] = [];
+
+      try {
+        let params = new URLSearchParams();
+        const seed_artist = track.artist || 'unknown';
+        const seed_track = track.title;
+        const limit = 25;
+
+        if (seed_artist !== 'unknown') {
+          params.append('seed_artist', seed_artist);
+        }
+        if (seed_track) {
+          params.append('seed_track', seed_track);
+        }
+        params.append('limit', String(limit));
+
+        const { pythonApiUrl } = getAPIConfig();
+        
+        let apiUrl = '';
+        
+        if (pythonApiUrl) {
+          const recommendationsEndpoint = `${pythonApiUrl}/api/recommendations`;
+          apiUrl = `${recommendationsEndpoint}?${params.toString()}`;
+        } else {
+          apiUrl = `/api/user/recommendations?${params.toString()}`;
+        }
+
+        let response: Response | null = null;
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        const controller = new AbortController();
+        let timeoutId: NodeJS.Timeout | null = setTimeout(() => controller.abort(), 15000);
+
+        try {
+          while (retryCount < maxRetries && !response) {
+            try {
+              if (retryCount > 0) {
+                await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount - 1)));
+              }
+
+              response = await fetch(apiUrl, {
+                signal: controller.signal,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Cache-Control': 'no-cache',
+                  'x-demo-mode': getAPIConfig().demoMode ? 'true' : 'false'
+                }
+              });
+            } catch {
+              retryCount++;
+              if (retryCount >= maxRetries) {
+                throw new Error('Max retries reached');
+              }
             }
           }
-        } catch (error) {
-          console.error('[Playlist] Error al obtener recomendaciones generales:', error);
-        }
-      }
-      
-      if (recommendedTracks.length > 0) {
-        // Añadir la canción actual al principio si no está ya
-        let newPlaylist: Track[] = [track];
-        
-        // Añadir las recomendaciones, evitando duplicados
-        recommendedTracks.forEach(recTrack => {
-          if (!newPlaylist.some(t => t.id === recTrack.id)) {
-            newPlaylist.push(recTrack);
+
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
           }
-        });
-        
-        // Actualizar la playlist
-        console.log('[Playlist] Lista de reproducción automática generada con', newPlaylist.length, 'canciones');
-        setPlaylist(newPlaylist);
-        setCurrentIndex(0); // La canción actual estará en la posición 0
-      } else {
-        console.warn('[Playlist] No se pudieron obtener recomendaciones para la lista automática');
+
+          if (response && response.ok) {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+              const data = await response.json();
+
+              if (data && Array.isArray(data) && data.length > 0) {
+                console.log('[API-DATA] Datos completos de la API de recomendaciones:', JSON.stringify(data, null, 2));
+                
+                // Procesar las recomendaciones directamente (ya vienen con videoId válido)
+                const processedTracks = data.slice(0, 20).map((item: any, index: number): AppTrack | null => {
+                  try {
+                    const artist = item.artist || 'Artista Desconocido';
+                    const title = item.title || 'Sin título';
+                    
+                    // El campo 'id' de la API de Python ya contiene el videoId válido
+                    const youtubeId = item.id || item.youtubeId;
+                    
+                    // Solo incluir canciones que tengan youtubeId válido
+                    if (!youtubeId || youtubeId === 'undefined' || youtubeId === '') {
+                      return null;
+                    }
+
+                    // Procesar duración - priorizar duration_text (formato MM:SS) que es más confiable
+                    let duration = 180; // Duración por defecto: 3 minutos
+                    
+                    // Función auxiliar para convertir formato MM:SS a segundos
+                    const parseTimeString = (timeStr: string): number => {
+                      if (!timeStr || typeof timeStr !== 'string') return 0;
+                      
+                      const parts = timeStr.split(':');
+                      if (parts.length === 2) {
+                        // Formato MM:SS
+                        const minutes = parseInt(parts[0], 10);
+                        const seconds = parseInt(parts[1], 10);
+                        if (!isNaN(minutes) && !isNaN(seconds)) {
+                          return minutes * 60 + seconds;
+                        }
+                      } else if (parts.length === 3) {
+                        // Formato HH:MM:SS
+                        const hours = parseInt(parts[0], 10);
+                        const minutes = parseInt(parts[1], 10);
+                        const seconds = parseInt(parts[2], 10);
+                        if (!isNaN(hours) && !isNaN(minutes) && !isNaN(seconds)) {
+                          return hours * 3600 + minutes * 60 + seconds;
+                        }
+                      }
+                      return 0;
+                    };
+                    
+                    // PRIORIDAD 1: duration_text (formato MM:SS de la API de Python)
+                    if (item.duration_text && typeof item.duration_text === 'string' && item.duration_text.includes(':')) {
+                      const parsedDuration = parseTimeString(item.duration_text);
+                      if (parsedDuration > 0) {
+                        duration = parsedDuration;
+                      }
+                    }
+                    // PRIORIDAD 2: duration como string con formato MM:SS
+                    else if (item.duration && typeof item.duration === 'string' && item.duration.includes(':')) {
+                      const parsedDuration = parseTimeString(item.duration);
+                      if (parsedDuration > 0) {
+                        duration = parsedDuration;
+                      }
+                    }
+                    // PRIORIDAD 3: duration como número (segundos)
+                    else if (item.duration && item.duration !== "" && !isNaN(Number(item.duration))) {
+                      const numDuration = Number(item.duration);
+                      // Si la duración está en milisegundos (mayor a 1000), convertir a segundos
+                      duration = numDuration > 1000 ? Math.floor(numDuration / 1000) : numDuration;
+                    }
+                    // PRIORIDAD 4: duration_ms (Spotify)
+                    else if (item.duration_ms && !isNaN(Number(item.duration_ms))) {
+                      duration = Math.floor(Number(item.duration_ms) / 1000);
+                    }
+                    // PRIORIDAD 5: length (otros APIs)
+                    else if (item.length && !isNaN(Number(item.length))) {
+                      const numLength = Number(item.length);
+                      duration = numLength > 1000 ? Math.floor(numLength / 1000) : numLength;
+                    }
+                    
+                    // Asegurar que la duración esté en un rango razonable (30 segundos a 20 minutos)
+                    if (duration < 30) duration = 180;
+                    if (duration > 1200) duration = 180;
+                    
+                    // Log de debug mejorado para verificar el procesamiento de duración
+                    console.log(`[DURATION-DEBUG] Track: "${title}" | duration_text: "${item.duration_text}" | duration: ${JSON.stringify(item.duration)} | Final: ${duration}s`);
+
+
+
+                    return {
+                      id: youtubeId,
+                      title: title,
+                      artist: artist,
+                      album: item.album || 'Álbum Desconocido',
+                      albumCover: getValidImageUrl(item.albumCover || item.cover || item.thumbnail),
+                      cover: getValidImageUrl(item.cover || item.thumbnail),
+                      duration: duration,
+                      youtubeId: youtubeId,
+                      spotifyId: item.spotifyId,
+                      source: item.source || 'python-recommendation',
+                      artistId: item.artistId,
+                      albumId: item.albumId
+                    };
+                  } catch (error) {
+                    return null;
+                  }
+                });
+                
+                // Filtrar tracks nulos y tomar solo los que tienen youtubeId válido
+                recommendedTracks = processedTracks.filter((track): track is AppTrack => track !== null);
+              }
+            }
+          }
+        } finally {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+        }
+      } catch {
+        errors.push('Error en la API de recomendaciones');
       }
-    } catch (error) {
-      console.error('[Playlist] Error al generar la lista de reproducción automática:', error);
+
+      // Solo usar fallbacks si no hay recomendaciones válidas en absoluto
+      if (recommendedTracks.length === 0) {
+        
+        const fallbackTracks: AppTrack[] = [];
+        const similarArtists = [
+          'Artista Similar', 'Popular Artist', 'Nueva Música', 'Top Hits', 'El mejor', 'Clásicos'
+        ];
+
+        for (let i = 0; i < 10; i++) {
+          const artistIndex = i % similarArtists.length;
+          fallbackTracks.push({
+            id: `fallback_track_${i}_${Date.now()}`,
+            title: `Canción similar #${i + 1}`,
+            artist: `${similarArtists[artistIndex]} (basado en ${track.artist || 'desconocido'})`,
+            album: 'Álbum recomendado',
+            cover: getValidImageUrl(track.cover),
+            albumCover: getValidImageUrl(track.albumCover || track.cover),
+            duration: 180 + (i * 20),
+            spotifyId: undefined,
+            youtubeId: undefined,
+            source: 'fallback'
+          });
+        }
+        recommendedTracks = [...recommendedTracks, ...fallbackTracks];
+      }
+
+      if (recommendedTracks.length > 0) {
+        try {
+          let newPlaylist: AppTrack[] = [track];
+
+          recommendedTracks.forEach((recTrack: AppTrack) => {
+            if (recTrack && recTrack.title) {
+              if (!recTrack.id) {
+                recTrack.id = `gen_${recTrack.title.substring(0, 10)}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+              }
+              if (!newPlaylist.some(t => t.id === recTrack.id)) {
+                recTrack.cover = getValidImageUrl(recTrack.cover);
+                recTrack.albumCover = getValidImageUrl(recTrack.albumCover || recTrack.cover);
+
+                newPlaylist.push(recTrack);
+              }
+            }
+          });
+
+          setPlaylist(newPlaylist);
+          setCurrentIndex(0);
+          setLastPlaylistUpdate(Date.now());
+          setError('');
+          return;
+        } catch {
+          setError('Error al crear lista automática');
+          return;
+        }
+      } else {
+        setError('No se pudieron generar recomendaciones automáticas. Por favor, intenta con otra canción.');
+        return;
+      }
+    } catch {
+      setError('Error al generar la lista automática. Por favor, intenta de nuevo más tarde.');
+      return;
     }
   };
 
-  // Valor del contexto
+  // Actualizar getYoutubeVideoId
+  const getYoutubeVideoId = async (title: string, artist: string): Promise<string | null> => {
+    try {
+      const queryParams = new URLSearchParams({
+        title,
+        artist
+      }).toString();
+
+      const response = await fetch(`/api/youtube/find-track?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error en la respuesta: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.videoId) {
+        return data.videoId;
+      }
+
+      if (data.message && !data.error) {
+        return null;
+      }
+
+      if (data.error) {
+        setError(`Error al buscar video: ${data.message || data.error}`);
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  // Actualizar fallbackFindVideo
+  const fallbackFindVideo = async (track: Track): Promise<boolean> => {
+    try {
+      const searchQuery = `${track.title} ${track.artist}`;
+
+      const response = await fetch(`/api/youtube/search?query=${encodeURIComponent(searchQuery)}&filter=songs&limit=1`);
+
+      if (!response.ok) {
+        throw new Error(`Error en la búsqueda: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.results && data.results.length > 0 && data.results[0].videoId) {
+        const videoId = data.results[0].videoId;
+
+        track.youtubeId = videoId;
+        setCurrentTrack({ ...track });
+
+        if (youtubePlayerRef.current) {
+          await playTrackWithPlayer(track);
+          return true;
+        }
+          } else {
+        if (data.error) {
+          setError(`Error: ${data.message || 'No se pudo encontrar la canción'}`);
+        }
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  // Función para cargar un video en el reproductor
+  const loadVideo = async (player: any, videoId: string): Promise<void> => {
+      if (!player || typeof player.loadVideoById !== 'function') {
+      throw new Error('Reproductor no disponible o método loadVideoById no encontrado');
+      }
+
+    try {
+      player.loadVideoById({
+        videoId: videoId,
+        startSeconds: 0,
+        suggestedQuality: 'default'
+      });
+
+      setCurrentTime(0);
+
+      let checkAttempts = 0;
+      const maxAttempts = 5;
+
+        const checkState = () => {
+        try {
+          if (typeof player.getPlayerState === 'function') {
+            const state = player.getPlayerState();
+
+            if (state === 1 || state === 3) {
+              if (typeof player.getDuration === 'function') {
+          const videoDuration = player.getDuration();
+          if (videoDuration && videoDuration > 0) {
+            setDuration(videoDuration);
+                  startTimeUpdates();
+
+                  if (state === 1 && !isPlaying) {
+                    setIsPlaying(true);
+                    isPlayingRef.current = true;
+                  }
+
+                  return;
+                }
+              }
+            }
+          }
+
+          checkAttempts++;
+
+          if (checkAttempts < maxAttempts) {
+            setTimeout(checkState, 500);
+          } else {
+            if (typeof player.playVideo === 'function') {
+              player.playVideo();
+              setIsPlaying(true);
+              isPlayingRef.current = true;
+            }
+          }
+        } catch {};
+      };
+
+      setTimeout(checkState, 500);
+    } catch {
+      throw new Error('Error al cargar video');
+    }
+  };
+
+  // Función helper para encontrar y establecer el ID de YouTube de una canción
+  const findAndSetYoutubeId = async (track: Track): Promise<boolean> => {
+    try {
+      const fallbackSuccess = await fallbackFindVideo(track);
+      if (fallbackSuccess) {
+        return true;
+      }
+
+      try {
+        const videoId = await getYoutubeVideoId(track.title, track.artist);
+        if (videoId) {
+          track.youtubeId = videoId;
+          setCurrentTrack({ ...track });
+          return true;
+        }
+      } catch {};
+
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  // Constantes para imágenes de fallback para reducir solicitudes repetitivas
+  const PLACEHOLDER_ALBUM = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg==';
+
+  // Caché para imágenes fallidas para evitar múltiples solicitudes a imágenes que fallan
+  const failedCoverCache = new Set<string>();
+
+  // Ya no necesitamos precargar la imagen porque es un Data URL
+  // if (typeof window !== 'undefined') {
+  //   const img = new window.Image();
+  //   img.src = PLACEHOLDER_ALBUM;
+  // }
+
+  // Función helper para obtener una URL de imagen válida
+  const getValidImageUrl = (url?: string): string => {
+    if (!url || url === '' || failedCoverCache.has(url)) {
+      return PLACEHOLDER_ALBUM;
+    }
+
+    if (url.includes('undefined') ||
+        url.includes('/default/') ||
+        url === 'default' ||
+        url.includes('no-cover')) {
+      return PLACEHOLDER_ALBUM;
+    }
+
+    return url;
+  };
+
+  // Función para cambiar entre reproducción aleatoria y normal
+  const toggleShuffle = () => {
+    if (!isShuffleEnabled) {
+      setOriginalPlaylist([...playlist]);
+
+      if (currentTrack && playlist.length > 1) {
+        const currentIdx = playlist.findIndex(track =>
+          track.id === currentTrack.id);
+
+        if (currentIdx !== -1) {
+          const currentSong = playlist[currentIdx];
+          const songsToShuffle = [
+            ...playlist.slice(0, currentIdx),
+            ...playlist.slice(currentIdx + 1)
+          ];
+
+          const shuffled = shuffleArray(songsToShuffle);
+
+          setPlaylist([currentSong, ...shuffled]);
+        } else {
+          setPlaylist(shuffleArray([...playlist]));
+        }
+      } else {
+        setPlaylist(shuffleArray([...playlist]));
+      }
+    } else {
+      setPlaylist([...originalPlaylist]);
+    }
+
+    setIsShuffleEnabled(!isShuffleEnabled);
+  };
+
+  // Función para cambiar el modo de repetición
+  const toggleRepeat = () => {
+    setIsRepeatEnabled(!isRepeatEnabled);
+  };
+
+  // Función para mezclar un array (algoritmo Fisher-Yates)
+  const shuffleArray = (array: any[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  // Modificar el valor del contexto para incluir las nuevas funciones
   const value: PlayerContextType = {
+    player,
     currentTrack,
     playlist,
     isPlaying,
@@ -800,6 +1273,10 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     currentTime,
     duration,
     lyrics,
+    isLoading,
+    error,
+    isShuffleEnabled,
+    isRepeatEnabled,
     playTrack,
     playPlaylist,
     togglePlay,
@@ -808,14 +1285,223 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     setVolume,
     seekTo,
     addToQueue,
-    createAutoPlaylist
+    createAutoPlaylist,
+    toggleShuffle,
+    toggleRepeat
   };
+
+  // Añadir este useEffect al final, justo antes del return de PlayerProvider
+  // Monitor global de finalización de canciones
+  useEffect(() => {
+    if (!isPlaying || !currentTrack) return;
+
+    if (duration <= 0) return;
+
+    const checkProgress = () => {
+      try {
+        if (!youtubePlayerRef.current) return;
+
+        let playerCurrentTime = currentTime;
+        let playerDuration = duration;
+
+        if (typeof youtubePlayerRef.current.getCurrentTime === 'function') {
+          playerCurrentTime = youtubePlayerRef.current.getCurrentTime();
+        }
+
+        if (typeof youtubePlayerRef.current.getDuration === 'function') {
+          playerDuration = youtubePlayerRef.current.getDuration();
+        }
+
+        const progressRatio = playerCurrentTime / playerDuration;
+        const timeRemaining = Math.max(0, playerDuration - playerCurrentTime);
+
+        if (progressRatio >= 0.995) {
+          nextTrack();
+          return true;
+        }
+
+        if (timeRemaining < 0.3 && playerDuration > 0) {
+          nextTrack();
+          return true;
+        }
+
+        try {
+          if (typeof youtubePlayerRef.current.getPlayerState === 'function') {
+            const playerState = youtubePlayerRef.current.getPlayerState();
+            if (playerState === 0) {
+              nextTrack();
+              return true;
+            }
+          }
+        } catch {};
+
+        return false;
+      } catch {
+        return false;
+      }
+    };
+
+    const progressInterval = setInterval(checkProgress, 1000);
+
+    let endTimer: NodeJS.Timeout | null = null;
+
+    if (duration > 0 && currentTime >= 0) {
+      const timeToEnd = Math.max(0, (duration - currentTime) * 1000);
+
+      if (timeToEnd > 0 && timeToEnd < 30000) {
+        endTimer = setTimeout(() => {
+          if (isPlaying && checkProgress()) {}
+        }, timeToEnd + 200);
+      }
+    }
+
+    return () => {
+      clearInterval(progressInterval);
+      if (endTimer) clearTimeout(endTimer);
+    };
+  }, [isPlaying, currentTrack, duration, currentTime]);
+
+  // Estado para el reproductor de fallback (HTML5 Audio)
+  const [fallbackAudioPlayer, setFallbackAudioPlayer] = useState<HTMLAudioElement | null>(null);
+  const fallbackPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const [usingFallbackPlayer, setUsingFallbackPlayer] = useState<boolean>(false);
+
+  // Inicializar el reproductor de audio de fallback
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const audioElement = new Audio();
+      audioElement.preload = 'auto';
+      audioElement.volume = volume;
+
+      audioElement.addEventListener('timeupdate', () => {
+        setCurrentTime(audioElement.currentTime);
+      });
+
+      audioElement.addEventListener('durationchange', () => {
+        if (audioElement.duration && audioElement.duration > 0) {
+          setDuration(audioElement.duration);
+        }
+      });
+
+      audioElement.addEventListener('ended', () => {
+        setIsPlaying(false);
+        nextTrack();
+      });
+
+      audioElement.addEventListener('pause', () => {
+        setIsPlaying(false);
+      });
+
+      audioElement.addEventListener('play', () => {
+        setIsPlaying(true);
+      });
+
+      fallbackPlayerRef.current = audioElement;
+      setFallbackAudioPlayer(audioElement);
+    }
+
+    return () => {
+      if (fallbackPlayerRef.current) {
+        fallbackPlayerRef.current.pause();
+        fallbackPlayerRef.current.src = '';
+        fallbackPlayerRef.current = null;
+      }
+    };
+  }, []);
+
+  // Función para reproducir usando el fallback player
+  const playWithFallbackPlayer = async (track: ExtendedTrack): Promise<boolean> => {
+    if (!fallbackPlayerRef.current) {
+      return false;
+    }
+
+    try {
+      setUsingFallbackPlayer(true);
+
+      if (track.audioUrl) {
+        fallbackPlayerRef.current.src = track.audioUrl;
+        fallbackPlayerRef.current.play();
+        setIsPlaying(true);
+        return true;
+      }
+
+      if (track.youtubeId) {
+        try {
+          const response = await fetch(`/api/audio-proxy?videoId=${track.youtubeId}`);
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.audioUrl) {
+              fallbackPlayerRef.current.src = data.audioUrl;
+              fallbackPlayerRef.current.play();
+              setIsPlaying(true);
+              return true;
+            }
+          }
+        } catch {};
+        }
+
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  // Monitor de estado del reproductor (agregando esta nueva verificación)
+  useEffect(() => {
+    if (!currentTrack) return;
+
+    const stateCheckInterval = setInterval(() => {
+      if (!youtubePlayerRef.current) return;
+
+      try {
+        if (typeof youtubePlayerRef.current.getPlayerState === 'function') {
+          const playerState = youtubePlayerRef.current.getPlayerState();
+          const isActuallyPlaying = playerState === 1;
+
+          if (isActuallyPlaying !== isPlaying) {
+            setIsPlaying(isActuallyPlaying);
+            isPlayingRef.current = isActuallyPlaying;
+
+            if (isActuallyPlaying && !isPlaying) {
+              startTimeUpdates();
+            }
+          }
+
+          // Removido: no actualizar currentTime aquí para evitar conflictos con el timer principal
+
+          if (duration <= 0 && typeof youtubePlayerRef.current.getDuration === 'function') {
+            const videoDuration = youtubePlayerRef.current.getDuration();
+            if (videoDuration && videoDuration > 0) {
+              setDuration(videoDuration);
+            }
+          }
+        }
+      } catch {};
+    }, 2000);
+
+    return () => {
+      clearInterval(stateCheckInterval);
+    };
+  }, [currentTrack, isPlaying, currentTime, duration]);
 
   return (
     <PlayerContext.Provider value={value}>
+      {/* Componente de YouTube para reproducir el video actual */}
+      {currentTrack?.youtubeId && (
+        <YouTubePlayer
+          videoId={currentTrack.youtubeId}
+          onReady={player => {
+            youtubePlayerRef.current = player;
+            setYoutubePlayer(player);
+            setIsPlaying(true);
+            startTimeUpdates();
+          }}
+        />
+      )}
       {children}
     </PlayerContext.Provider>
   );
 };
 
-export default PlayerContext; 
+export default PlayerContext;

@@ -1,0 +1,980 @@
+{
+  "albums": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=musica%20italiana&type=album&market=IT&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=musica%20italiana&type=album&market=IT&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 22,
+    "items": [
+      {
+        "album_type": "compilation",
+        "total_tracks": 32,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1xnLEEXVqDIdcErH761vAF"
+        },
+        "href": "https://api.spotify.com/v1/albums/1xnLEEXVqDIdcErH761vAF",
+        "id": "1xnLEEXVqDIdcErH761vAF",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273524603963ee35d5a052298b5",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02524603963ee35d5a052298b5",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851524603963ee35d5a052298b5",
+            "width": 64
+          }
+        ],
+        "name": "Musica italiana estiva",
+        "release_date": "2024-06-07",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1xnLEEXVqDIdcErH761vAF",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "single",
+        "total_tracks": 1,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/753BrMSZZPDcA4Ue5MdF6u"
+        },
+        "href": "https://api.spotify.com/v1/albums/753BrMSZZPDcA4Ue5MdF6u",
+        "id": "753BrMSZZPDcA4Ue5MdF6u",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273462c35e7b658b0f2092c7b8c",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02462c35e7b658b0f2092c7b8c",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851462c35e7b658b0f2092c7b8c",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana",
+        "release_date": "2024-04-05",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:753BrMSZZPDcA4Ue5MdF6u",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0L1f9i3L3fkMNENljDOsjG"
+            },
+            "href": "https://api.spotify.com/v1/artists/0L1f9i3L3fkMNENljDOsjG",
+            "id": "0L1f9i3L3fkMNENljDOsjG",
+            "name": "Rocco Hunt",
+            "type": "artist",
+            "uri": "spotify:artist:0L1f9i3L3fkMNENljDOsjG"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 32,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6C43LAQyNkN7xR0MdvKOZw"
+        },
+        "href": "https://api.spotify.com/v1/albums/6C43LAQyNkN7xR0MdvKOZw",
+        "id": "6C43LAQyNkN7xR0MdvKOZw",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e8b23efd66f679d0355d4268",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e8b23efd66f679d0355d4268",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e8b23efd66f679d0355d4268",
+            "width": 64
+          }
+        ],
+        "name": "La migliore musica italiana",
+        "release_date": "2023-07-21",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6C43LAQyNkN7xR0MdvKOZw",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 22,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3RhgRrK9gcQECPrCTsEdQl"
+        },
+        "href": "https://api.spotify.com/v1/albums/3RhgRrK9gcQECPrCTsEdQl",
+        "id": "3RhgRrK9gcQECPrCTsEdQl",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27361a21ccaa195cabf74cef7cc",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0261a21ccaa195cabf74cef7cc",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485161a21ccaa195cabf74cef7cc",
+            "width": 64
+          }
+        ],
+        "name": "Musica italiana per l'estate",
+        "release_date": "2023-06-30",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3RhgRrK9gcQECPrCTsEdQl",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 12,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5AI0BehZpIeMVZGH2qRm6z"
+        },
+        "href": "https://api.spotify.com/v1/albums/5AI0BehZpIeMVZGH2qRm6z",
+        "id": "5AI0BehZpIeMVZGH2qRm6z",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2735ee19215f83cbcdb108cf2da",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e025ee19215f83cbcdb108cf2da",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048515ee19215f83cbcdb108cf2da",
+            "width": 64
+          }
+        ],
+        "name": "Musica italiana",
+        "release_date": "2019-06-05",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5AI0BehZpIeMVZGH2qRm6z",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 11,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3IATtG0q07AEWndJCsCpIU"
+        },
+        "href": "https://api.spotify.com/v1/albums/3IATtG0q07AEWndJCsCpIU",
+        "id": "3IATtG0q07AEWndJCsCpIU",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ceb6d4d4ac8f8b0c8eb1afdc",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ceb6d4d4ac8f8b0c8eb1afdc",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ceb6d4d4ac8f8b0c8eb1afdc",
+            "width": 64
+          }
+        ],
+        "name": "Musica",
+        "release_date": "2019-02-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3IATtG0q07AEWndJCsCpIU",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0dE9ooTNz8iEKIKItRI66t"
+            },
+            "href": "https://api.spotify.com/v1/artists/0dE9ooTNz8iEKIKItRI66t",
+            "id": "0dE9ooTNz8iEKIKItRI66t",
+            "name": "Il Volo",
+            "type": "artist",
+            "uri": "spotify:artist:0dE9ooTNz8iEKIKItRI66t"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0LE8IdjvX78yOLxOjH4cg3"
+        },
+        "href": "https://api.spotify.com/v1/albums/0LE8IdjvX78yOLxOjH4cg3",
+        "id": "0LE8IdjvX78yOLxOjH4cg3",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737a5f15888768a803db5acf26",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e027a5f15888768a803db5acf26",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048517a5f15888768a803db5acf26",
+            "width": 64
+          }
+        ],
+        "name": "Grande amore",
+        "release_date": "2015-09-25",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0LE8IdjvX78yOLxOjH4cg3",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0dE9ooTNz8iEKIKItRI66t"
+            },
+            "href": "https://api.spotify.com/v1/artists/0dE9ooTNz8iEKIKItRI66t",
+            "id": "0dE9ooTNz8iEKIKItRI66t",
+            "name": "Il Volo",
+            "type": "artist",
+            "uri": "spotify:artist:0dE9ooTNz8iEKIKItRI66t"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 50,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/6uuu2lLzzBpMuiYQiLAMpr"
+        },
+        "href": "https://api.spotify.com/v1/albums/6uuu2lLzzBpMuiYQiLAMpr",
+        "id": "6uuu2lLzzBpMuiYQiLAMpr",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2733b863eb3296e0eeaeb3588a7",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e023b863eb3296e0eeaeb3588a7",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048513b863eb3296e0eeaeb3588a7",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana...le canzoni indimenticabili",
+        "release_date": "2015-08-07",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:6uuu2lLzzBpMuiYQiLAMpr",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 7,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/3Ugt1E8Ft5I0Ry1cLUdMIi"
+        },
+        "href": "https://api.spotify.com/v1/albums/3Ugt1E8Ft5I0Ry1cLUdMIi",
+        "id": "3Ugt1E8Ft5I0Ry1cLUdMIi",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273e6ec2a341b6d0bfc9ee5ad28",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02e6ec2a341b6d0bfc9ee5ad28",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851e6ec2a341b6d0bfc9ee5ad28",
+            "width": 64
+          }
+        ],
+        "name": "Sanremo grande amore",
+        "release_date": "2015-02-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:3Ugt1E8Ft5I0Ry1cLUdMIi",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0dE9ooTNz8iEKIKItRI66t"
+            },
+            "href": "https://api.spotify.com/v1/artists/0dE9ooTNz8iEKIKItRI66t",
+            "id": "0dE9ooTNz8iEKIKItRI66t",
+            "name": "Il Volo",
+            "type": "artist",
+            "uri": "spotify:artist:0dE9ooTNz8iEKIKItRI66t"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 16,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/4UvgFRfpxDJLmwO57wEPPz"
+        },
+        "href": "https://api.spotify.com/v1/albums/4UvgFRfpxDJLmwO57wEPPz",
+        "id": "4UvgFRfpxDJLmwO57wEPPz",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2739754806f0ce9d1ef33dd1a13",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e029754806f0ce9d1ef33dd1a13",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048519754806f0ce9d1ef33dd1a13",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana",
+        "release_date": "2013-03-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:4UvgFRfpxDJLmwO57wEPPz",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 36,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/4Sc2S7VOFtTHvdlxsMxyWK"
+        },
+        "href": "https://api.spotify.com/v1/albums/4Sc2S7VOFtTHvdlxsMxyWK",
+        "id": "4Sc2S7VOFtTHvdlxsMxyWK",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ce6694744841bb06e14dcaad",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ce6694744841bb06e14dcaad",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ce6694744841bb06e14dcaad",
+            "width": 64
+          }
+        ],
+        "name": "CIAO ITALIA - 36 Best Italian Songs",
+        "release_date": "2012-03-16",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:4Sc2S7VOFtTHvdlxsMxyWK",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5keUgUw6Kqe2fO283eem7x"
+            },
+            "href": "https://api.spotify.com/v1/artists/5keUgUw6Kqe2fO283eem7x",
+            "id": "5keUgUw6Kqe2fO283eem7x",
+            "name": "The Italians",
+            "type": "artist",
+            "uri": "spotify:artist:5keUgUw6Kqe2fO283eem7x"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 50,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1omXEEZyvv5R4u32iTydFP"
+        },
+        "href": "https://api.spotify.com/v1/albums/1omXEEZyvv5R4u32iTydFP",
+        "id": "1omXEEZyvv5R4u32iTydFP",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27388216c7a5ac5da5199b3cb2b",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0288216c7a5ac5da5199b3cb2b",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485188216c7a5ac5da5199b3cb2b",
+            "width": 64
+          }
+        ],
+        "name": "50 Mejores Canciones Italianas",
+        "release_date": "2012-03-14",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1omXEEZyvv5R4u32iTydFP",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 21,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/191xZsXIZWwYcKshzfEJbg"
+        },
+        "href": "https://api.spotify.com/v1/albums/191xZsXIZWwYcKshzfEJbg",
+        "id": "191xZsXIZWwYcKshzfEJbg",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273b7514134df981b6d128fc71a",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02b7514134df981b6d128fc71a",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851b7514134df981b6d128fc71a",
+            "width": 64
+          }
+        ],
+        "name": "Italian Music, Tarantella, Come Back to Sorrento",
+        "release_date": "2010-04-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:191xZsXIZWwYcKshzfEJbg",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6B1qY6diGzu9FFbGOG7fSk"
+            },
+            "href": "https://api.spotify.com/v1/artists/6B1qY6diGzu9FFbGOG7fSk",
+            "id": "6B1qY6diGzu9FFbGOG7fSk",
+            "name": "Italian Mandolin Torna A Surriento",
+            "type": "artist",
+            "uri": "spotify:artist:6B1qY6diGzu9FFbGOG7fSk"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 16,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/4TRGduyN9BY67tiwArFQ29"
+        },
+        "href": "https://api.spotify.com/v1/albums/4TRGduyN9BY67tiwArFQ29",
+        "id": "4TRGduyN9BY67tiwArFQ29",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2739f67753bca83c384f4fb4edd",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e029f67753bca83c384f4fb4edd",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048519f67753bca83c384f4fb4edd",
+            "width": 64
+          }
+        ],
+        "name": "Caffé Italiano: Instrumental Italian Favorites",
+        "release_date": "2007-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:4TRGduyN9BY67tiwArFQ29",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7vo2Hl0NDiBr6GcyGDSLFZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/7vo2Hl0NDiBr6GcyGDSLFZ",
+            "id": "7vo2Hl0NDiBr6GcyGDSLFZ",
+            "name": "Jack Jezzro",
+            "type": "artist",
+            "uri": "spotify:artist:7vo2Hl0NDiBr6GcyGDSLFZ"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 24,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7Dr08Oi3zxdCzmFulSXSs2"
+        },
+        "href": "https://api.spotify.com/v1/albums/7Dr08Oi3zxdCzmFulSXSs2",
+        "id": "7Dr08Oi3zxdCzmFulSXSs2",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273da96ceef85aba33d1e68b773",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02da96ceef85aba33d1e68b773",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851da96ceef85aba33d1e68b773",
+            "width": 64
+          }
+        ],
+        "name": "Ratatouille (Original Motion Picture Soundtrack)",
+        "release_date": "2007-01-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7Dr08Oi3zxdCzmFulSXSs2",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/4kLvhMAuCloLxoP1aVM7Lr"
+            },
+            "href": "https://api.spotify.com/v1/artists/4kLvhMAuCloLxoP1aVM7Lr",
+            "id": "4kLvhMAuCloLxoP1aVM7Lr",
+            "name": "Michael Giacchino",
+            "type": "artist",
+            "uri": "spotify:artist:4kLvhMAuCloLxoP1aVM7Lr"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 13,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1Rvdw3XSJv3WMxpwyf3pbb"
+        },
+        "href": "https://api.spotify.com/v1/albums/1Rvdw3XSJv3WMxpwyf3pbb",
+        "id": "1Rvdw3XSJv3WMxpwyf3pbb",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ab115fa906830d43f3a32237",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ab115fa906830d43f3a32237",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ab115fa906830d43f3a32237",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana Vol 7",
+        "release_date": "2006-01-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:1Rvdw3XSJv3WMxpwyf3pbb",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "compilation",
+        "total_tracks": 18,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/41l8EKjPsEx1Z0AVr9Em3m"
+        },
+        "href": "https://api.spotify.com/v1/albums/41l8EKjPsEx1Z0AVr9Em3m",
+        "id": "41l8EKjPsEx1Z0AVr9Em3m",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273c8a5e1cbac0880722e4f446a",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02c8a5e1cbac0880722e4f446a",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851c8a5e1cbac0880722e4f446a",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana Vol 9",
+        "release_date": "2006-01-17",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:41l8EKjPsEx1Z0AVr9Em3m",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+            },
+            "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+            "id": "0LyfQWJT6nXafLPZqxe9Of",
+            "name": "Various Artists",
+            "type": "artist",
+            "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 16,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/2hmIA0PiSC3qzE2jBDfvWt"
+        },
+        "href": "https://api.spotify.com/v1/albums/2hmIA0PiSC3qzE2jBDfvWt",
+        "id": "2hmIA0PiSC3qzE2jBDfvWt",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d36c155b7c99dbca0f82c0cf",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d36c155b7c99dbca0f82c0cf",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d36c155b7c99dbca0f82c0cf",
+            "width": 64
+          }
+        ],
+        "name": "Musica Italiana Vol 2",
+        "release_date": "2004",
+        "release_date_precision": "year",
+        "type": "album",
+        "uri": "spotify:album:2hmIA0PiSC3qzE2jBDfvWt",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1J9EhhC3aWLG8pQ72MEy2J"
+            },
+            "href": "https://api.spotify.com/v1/artists/1J9EhhC3aWLG8pQ72MEy2J",
+            "id": "1J9EhhC3aWLG8pQ72MEy2J",
+            "name": "I Paperi Pazzi",
+            "type": "artist",
+            "uri": "spotify:artist:1J9EhhC3aWLG8pQ72MEy2J"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 12,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0CewPA0oXl2anqTzAgVcKX"
+        },
+        "href": "https://api.spotify.com/v1/albums/0CewPA0oXl2anqTzAgVcKX",
+        "id": "0CewPA0oXl2anqTzAgVcKX",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2734400e3f5234b4d217fd48c85",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e024400e3f5234b4d217fd48c85",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d000048514400e3f5234b4d217fd48c85",
+            "width": 64
+          }
+        ],
+        "name": "Dove c'è musica",
+        "release_date": "1996-04-30",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:0CewPA0oXl2anqTzAgVcKX",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/61J0BktHv7PuP3tjTPYXSX"
+            },
+            "href": "https://api.spotify.com/v1/artists/61J0BktHv7PuP3tjTPYXSX",
+            "id": "61J0BktHv7PuP3tjTPYXSX",
+            "name": "Eros Ramazzotti",
+            "type": "artist",
+            "uri": "spotify:artist:61J0BktHv7PuP3tjTPYXSX"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 12,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/1ava3upLgSC3aN4BUoI442"
+        },
+        "href": "https://api.spotify.com/v1/albums/1ava3upLgSC3aN4BUoI442",
+        "id": "1ava3upLgSC3aN4BUoI442",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27357381e6126d0f7a166f2d8b1",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e0257381e6126d0f7a166f2d8b1",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d0000485157381e6126d0f7a166f2d8b1",
+            "width": 64
+          }
+        ],
+        "name": "Tarantelas Famosas",
+        "release_date": "1995",
+        "release_date_precision": "year",
+        "type": "album",
+        "uri": "spotify:album:1ava3upLgSC3aN4BUoI442",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/5B49Br2KT1OW2nz7zZWz4j"
+            },
+            "href": "https://api.spotify.com/v1/artists/5B49Br2KT1OW2nz7zZWz4j",
+            "id": "5B49Br2KT1OW2nz7zZWz4j",
+            "name": "Don Corleone",
+            "type": "artist",
+            "uri": "spotify:artist:5B49Br2KT1OW2nz7zZWz4j"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 7,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0I3z9Ye15qtOwzrvh9LWdh"
+        },
+        "href": "https://api.spotify.com/v1/albums/0I3z9Ye15qtOwzrvh9LWdh",
+        "id": "0I3z9Ye15qtOwzrvh9LWdh",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273a7e4164f75cfa742fc4749a1",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02a7e4164f75cfa742fc4749a1",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851a7e4164f75cfa742fc4749a1",
+            "width": 64
+          }
+        ],
+        "name": "Musica Es",
+        "release_date": "1988",
+        "release_date_precision": "year",
+        "type": "album",
+        "uri": "spotify:album:0I3z9Ye15qtOwzrvh9LWdh",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/61J0BktHv7PuP3tjTPYXSX"
+            },
+            "href": "https://api.spotify.com/v1/artists/61J0BktHv7PuP3tjTPYXSX",
+            "id": "61J0BktHv7PuP3tjTPYXSX",
+            "name": "Eros Ramazzotti",
+            "type": "artist",
+            "uri": "spotify:artist:61J0BktHv7PuP3tjTPYXSX"
+          }
+        ]
+      },
+      {
+        "album_type": "album",
+        "total_tracks": 10,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/5LkInsAkNvLWqwJwcyrJ8y"
+        },
+        "href": "https://api.spotify.com/v1/albums/5LkInsAkNvLWqwJwcyrJ8y",
+        "id": "5LkInsAkNvLWqwJwcyrJ8y",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273d919d138f6e83aba728bd697",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02d919d138f6e83aba728bd697",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851d919d138f6e83aba728bd697",
+            "width": 64
+          }
+        ],
+        "name": "L'Italiano",
+        "release_date": "1983-02-01",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:5LkInsAkNvLWqwJwcyrJ8y",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/6elIiwc8OyeqKxXe2rmPXZ"
+            },
+            "href": "https://api.spotify.com/v1/artists/6elIiwc8OyeqKxXe2rmPXZ",
+            "id": "6elIiwc8OyeqKxXe2rmPXZ",
+            "name": "Toto Cutugno",
+            "type": "artist",
+            "uri": "spotify:artist:6elIiwc8OyeqKxXe2rmPXZ"
+          }
+        ]
+      }
+    ]
+  }
+}

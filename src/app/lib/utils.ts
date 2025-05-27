@@ -14,11 +14,11 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatDuration(ms: number): string {
   if (!ms) return '0:00';
-  
+
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  
+
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
@@ -56,7 +56,7 @@ export function getDominantColor(): string {
     '#06B6D4', // Turquesa
     '#3B82F6', // Azul
   ];
-  
+
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
@@ -69,4 +69,4 @@ export function toKebabCase(str: string): string {
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '');
-} 
+}

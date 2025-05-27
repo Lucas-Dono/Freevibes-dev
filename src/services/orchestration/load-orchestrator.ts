@@ -1,6 +1,6 @@
 /**
  * Orquestador de Carga Inteligente
- * 
+ *
  * Este servicio implementa un sistema avanzado de priorización para la carga
  * de contenido musical, optimizando tanto la experiencia del usuario como
  * la utilización de cuotas de API.
@@ -91,12 +91,12 @@ export class LoadOrchestrator {
    */
   setPriority(page: PageType, section: SectionType): void {
     this.state.currentPriority = { page, section };
-    
+
     // Reordenar la cola basado en nuevas prioridades
     if (this.state.queue.length > 0) {
       this.reorderQueue();
     }
-    
+
     if (this.DEBUG) {
       console.log(`[Orchestrator] Prioridad establecida: ${page} - ${section}`);
     }
@@ -114,10 +114,10 @@ export class LoadOrchestrator {
    * Encola una solicitud de carga de tracks con datos faltantes
    */
   enqueueLoad(
-    tracks: Track[], 
-    options: { 
-      page: PageType, 
-      section: SectionType, 
+    tracks: Track[],
+    options: {
+      page: PageType,
+      section: SectionType,
       isVisible: boolean,
       completeImages?: boolean,
       completeYoutubeIds?: boolean,
@@ -127,7 +127,7 @@ export class LoadOrchestrator {
   ): void {
     // Determinar la prioridad basada en la sección y visibilidad
     const basePriority = this.calculatePriority(options.page, options.section, options.isVisible);
-    
+
     // Añadir a la cola con la prioridad calculada
     this.state.queue.push({
       tracks,
@@ -139,7 +139,7 @@ export class LoadOrchestrator {
     if (this.DEBUG) {
       console.log(`[Orchestrator] Encolada carga para ${tracks.length} tracks (prioridad: ${basePriority})`);
     }
-    
+
     // Iniciar procesamiento si no está en curso
     if (!this.isProcessingQueue) {
       this.processQueue();
@@ -152,17 +152,17 @@ export class LoadOrchestrator {
   private calculatePriority(page: PageType, section: SectionType, isVisible: boolean): number {
     // Prioridad base según visibilidad
     let priority = isVisible ? PRIORITIES.VISIBLE_MEDIUM : PRIORITIES.OFFSCREEN_MEDIUM;
-    
+
     // Modificar prioridad según el tipo de página
     if (page === this.state.currentPriority?.page) {
       priority += 20; // Aumentar prioridad para la página actual
     }
-    
+
     // Modificar prioridad según el tipo de sección
     if (section === this.state.currentPriority?.section) {
       priority += 30; // Aumentar aún más para la sección actual
     }
-    
+
     // Prioridades específicas por sección
     switch (section) {
       case 'paraTi':
@@ -177,7 +177,7 @@ export class LoadOrchestrator {
       default:
         break;
     }
-    
+
     return priority;
   }
 
@@ -185,34 +185,34 @@ export class LoadOrchestrator {
    * Procesa la cola de carga según disponibilidad y prioridades
    */
   private async processQueue(): Promise<void> {
-    if (this.isProcessingQueue || this.state.queue.length === 0 || 
+    if (this.isProcessingQueue || this.state.queue.length === 0 ||
         this.state.activeRequests >= this.MAX_CONCURRENT_REQUESTS) {
       return;
     }
-    
+
     this.isProcessingQueue = true;
-    
+
     try {
       // Ordenar la cola por prioridad
       this.reorderQueue();
-      
+
       // Procesar el elemento con mayor prioridad
       const nextItem = this.state.queue.shift();
       if (!nextItem) {
         this.isProcessingQueue = false;
         return;
       }
-      
+
       this.state.activeRequests++;
-      
+
       // Procesar los tracks
       const completedTracks = await this.processTracks(nextItem.tracks, nextItem.preferSpotify);
-      
+
       // Llamar al callback con los tracks completados
       nextItem.onComplete(completedTracks);
-      
+
       this.state.activeRequests--;
-      
+
       if (this.DEBUG) {
         console.log(`[Orchestrator] Procesados ${completedTracks.length} tracks. Cola: ${this.state.queue.length}`);
       }
@@ -220,7 +220,7 @@ export class LoadOrchestrator {
       console.error('[Orchestrator] Error procesando cola:', error);
     } finally {
       this.isProcessingQueue = false;
-      
+
       // Continuar procesando si hay más elementos
       if (this.state.queue.length > 0) {
         setTimeout(() => this.processQueue(), 50);
@@ -237,24 +237,24 @@ export class LoadOrchestrator {
       const completelyComplete = tracks.filter(t => this.isTrackComplete(t));
       const needImages = tracks.filter(t => !this.hasValidImage(t) && this.hasValidTitles(t));
       const needTitleArtist = tracks.filter(t => !this.hasValidTitles(t));
-      
+
       // Primero procesar los que necesitan título/artista (más importantes)
       const processedTitleArtists = await this.completeTitlesAndArtists(needTitleArtist, preferSpotify);
-      
+
       // Luego procesar los que necesitan imágenes
       const processedImages = await this.completeImages(needImages, preferSpotify);
-      
+
       // Buscar IDs de YouTube si es necesario y hay cuota
       const quotaStatus = youtube.getQuotaStatus();
       let tracksWithYoutubeId: Track[] = [...completelyComplete, ...processedTitleArtists, ...processedImages];
-      
+
       if (quotaStatus.hasQuota) {
         const tracksNeedingYoutube = tracksWithYoutubeId.filter(t => !t.youtubeId);
         if (tracksNeedingYoutube.length > 0) {
           tracksWithYoutubeId = await enhanceTracksWithYouTubeIds(tracksWithYoutubeId);
         }
       }
-      
+
       // Verificar si hay canciones incompletas que necesitan reemplazo
       const finalTracks = this.filterAndReplaceMissingTracks(tracksWithYoutubeId, preferSpotify);
       return finalTracks;
@@ -272,12 +272,12 @@ export class LoadOrchestrator {
     // Separar tracks completos e incompletos
     const completeTracks = tracks.filter(track => this.isTrackComplete(track));
     const incompleteTracks = tracks.filter(track => !this.isTrackComplete(track));
-    
+
     // Si todos los tracks están completos o no hay incompletos, devolver tal cual
     if (incompleteTracks.length === 0) {
       return tracks;
     }
-    
+
     // Generar un mapa de tracks existentes para evitar duplicados
     const existingTrackMap = new Map<string, boolean>();
     completeTracks.forEach(track => {
@@ -287,20 +287,20 @@ export class LoadOrchestrator {
         existingTrackMap.set(`spotify:${track.spotifyId}`, true);
       }
     });
-    
+
     // Intentar encontrar reemplazos para tracks incompletos
     let replacementTracks: Track[] = [];
-    
+
     if (incompleteTracks.length > 0) {
       try {
         console.log(`[Orchestrator] Buscando reemplazos para ${incompleteTracks.length} canciones incompletas`);
-        
+
         // Extraer artistas de los tracks existentes para buscar similares
         const artists = completeTracks
           .map(t => t.artist)
           .filter(Boolean)
           .slice(0, 3);
-        
+
         // Extraer posibles géneros de los artistas en los nombres de artistas
         const possibleGenres: string[] = [];
         completeTracks.forEach(track => {
@@ -313,10 +313,10 @@ export class LoadOrchestrator {
             }
           }
         });
-        
+
         // Construir query basada en artistas/géneros existentes
         let searchQuery = '';
-        
+
         if (artists.length > 0) {
           searchQuery = `artist:${artists[0]}`;
         } else if (possibleGenres.length > 0) {
@@ -325,48 +325,48 @@ export class LoadOrchestrator {
           // Sin artistas ni géneros, usar un término genérico popular
           searchQuery = 'top tracks';
         }
-        
+
         // Buscar tracks similares para reemplazar los incompletos
         const replacements = await searchMultiSource(searchQuery, incompleteTracks.length * 2, {
           preferredSource: preferSpotify ? 'spotify' : undefined,
           forceFresh: true
         });
-        
+
         // Filtrar para evitar duplicados con los tracks existentes
         replacementTracks = replacements.filter(track => {
           const key = `${track.artist?.toLowerCase()}:${track.title?.toLowerCase()}`;
           const spotifyKey = track.spotifyId ? `spotify:${track.spotifyId}` : null;
-          
+
           // Si el track ya existe (por nombre o ID), no usarlo como reemplazo
           if (existingTrackMap.has(key) || (spotifyKey && existingTrackMap.has(spotifyKey))) {
             return false;
           }
-          
+
           // Solo usar tracks completos como reemplazos
           if (!track.title || !track.artist || !track.cover) {
             return false;
           }
-          
+
           // Marcar como usado para no duplicar entre reemplazos
           existingTrackMap.set(key, true);
           if (spotifyKey) {
             existingTrackMap.set(spotifyKey, true);
           }
-          
+
           return true;
         });
       } catch (error) {
         console.error('[Orchestrator] Error buscando reemplazos:', error);
       }
     }
-    
+
     // Limitar reemplazos al número de tracks incompletos
     const finalReplacements = replacementTracks.slice(0, incompleteTracks.length);
-    
+
     if (finalReplacements.length > 0) {
       console.log(`[Orchestrator] Encontrados ${finalReplacements.length} reemplazos para ${incompleteTracks.length} canciones incompletas`);
     }
-    
+
     // Combinar tracks completos originales con los reemplazos
     return [...completeTracks, ...finalReplacements];
   }
@@ -376,9 +376,9 @@ export class LoadOrchestrator {
    */
   private async completeTitlesAndArtists(tracks: Track[], preferSpotify: boolean = false): Promise<Track[]> {
     if (tracks.length === 0) return [];
-    
+
     const result: Track[] = [];
-    
+
     for (const track of tracks) {
       try {
         // Determinar query de búsqueda según lo que tengamos
@@ -396,13 +396,13 @@ export class LoadOrchestrator {
           result.push(track);
           continue;
         }
-        
+
         // Buscar en Spotify primero si se ha especificado
         const searchResults = await searchMultiSource(query, 1, {
           preferredSource: preferSpotify ? 'spotify' : undefined,
           forceFresh: true
         });
-        
+
         if (searchResults.length > 0) {
           // Mezclar datos existentes con los nuevos
           result.push({
@@ -423,7 +423,7 @@ export class LoadOrchestrator {
         result.push(track);
       }
     }
-    
+
     return result;
   }
 
@@ -432,9 +432,9 @@ export class LoadOrchestrator {
    */
   private async completeImages(tracks: Track[], preferSpotify: boolean = false): Promise<Track[]> {
     if (tracks.length === 0) return [];
-    
+
     const result: Track[] = [];
-    
+
     // Primero agrupar por artista para minimizar peticiones
     const artistGroups: Record<string, Track[]> = {};
     tracks.forEach(track => {
@@ -442,13 +442,13 @@ export class LoadOrchestrator {
         result.push(track);
         return;
       }
-      
+
       if (!artistGroups[track.artist]) {
         artistGroups[track.artist] = [];
       }
       artistGroups[track.artist].push(track);
     });
-    
+
     // Procesar cada grupo de artistas
     for (const [artist, artistTracks] of Object.entries(artistGroups)) {
       try {
@@ -457,10 +457,10 @@ export class LoadOrchestrator {
           preferredSource: preferSpotify ? 'spotify' : undefined,
           forceFresh: preferSpotify // Forzar búsqueda fresca si se prefiere Spotify
         });
-        
+
         // Verificar si encontramos imagen válida (no placeholder de Last.fm)
-        if (searchResults.length > 0 && 
-            searchResults[0].cover && 
+        if (searchResults.length > 0 &&
+            searchResults[0].cover &&
             (!preferSpotify || !this.isLastFmPlaceholder(searchResults[0].cover))) {
           // Aplicar la misma imagen a todos los tracks del mismo artista
           for (const track of artistTracks) {
@@ -475,17 +475,17 @@ export class LoadOrchestrator {
           // buscar cada track individualmente
           for (const track of artistTracks) {
             // Si preferimos Spotify, usar formato de búsqueda específico para mejores resultados
-            const searchQuery = preferSpotify 
+            const searchQuery = preferSpotify
               ? `track:${track.title} artist:${artist}` // Formato específico para Spotify
               : `${track.title} ${artist}`; // Formato general
-            
+
             const trackSearch = await searchMultiSource(searchQuery, 1, {
               preferredSource: preferSpotify ? 'spotify' : undefined,
               forceFresh: preferSpotify // Forzar búsqueda fresca si se prefiere Spotify
             });
-            
-            if (trackSearch.length > 0 && 
-                trackSearch[0].cover && 
+
+            if (trackSearch.length > 0 &&
+                trackSearch[0].cover &&
                 (!preferSpotify || !this.isLastFmPlaceholder(trackSearch[0].cover))) {
               result.push({
                 ...track,
@@ -500,9 +500,9 @@ export class LoadOrchestrator {
                 preferredSource: 'spotify',
                 forceFresh: true
               });
-              
-              if (generalSearch.length > 0 && 
-                  generalSearch[0].cover && 
+
+              if (generalSearch.length > 0 &&
+                  generalSearch[0].cover &&
                   !this.isLastFmPlaceholder(generalSearch[0].cover)) {
                 result.push({
                   ...track,
@@ -526,7 +526,7 @@ export class LoadOrchestrator {
         result.push(...artistTracks);
       }
     }
-    
+
     return result;
   }
 
@@ -535,7 +535,7 @@ export class LoadOrchestrator {
    */
   private isLastFmPlaceholder(url: string): boolean {
     if (!url) return false;
-    
+
     const lastfmIndicators = [
       '2a96cbd8b46e442fc41c2b86b821562f', // ID común de placeholder de Last.fm (estrella)
       'lastfm.freetls.fastly.net/i/u/',    // URLs de Last.fm para placeholders
@@ -549,7 +549,7 @@ export class LoadOrchestrator {
       'c6f59c1e5e7240a4c0d427abd71f3dbb', // Otro ID de placeholder conocido
       '4128a6eb29f94943c9d206c08e625904' // Otro ID de placeholder conocido
     ];
-    
+
     return lastfmIndicators.some(indicator => url.includes(indicator));
   }
 
@@ -558,7 +558,7 @@ export class LoadOrchestrator {
    */
   private hasValidImage(track: Track): boolean {
     if (!track.cover) return false;
-    
+
     // Verificar si es una imagen de marcador de posición o de Last.fm
     const placeholderIndicators = [
       'default-cover',
@@ -576,8 +576,8 @@ export class LoadOrchestrator {
       'c6f59c1e5e7240a4c0d427abd71f3dbb', // Otro ID de placeholder conocido
       '4128a6eb29f94943c9d206c08e625904' // Otro ID de placeholder conocido
     ];
-    
-    return !placeholderIndicators.some(indicator => 
+
+    return !placeholderIndicators.some(indicator =>
       track.cover?.includes(indicator)
     );
   }
@@ -589,17 +589,17 @@ export class LoadOrchestrator {
     // Verificar si tiene tanto título como artista con contenido válido
     const invalidTitleIndicators = ['unknown', 'untitled', 'sin título', 'track', 'genre:'];
     const invalidArtistIndicators = ['unknown', 'various', 'artist', 'artista para'];
-    
-    const hasValidTitle = Boolean(track.title) && 
-      !invalidTitleIndicators.some(indicator => 
+
+    const hasValidTitle = Boolean(track.title) &&
+      !invalidTitleIndicators.some(indicator =>
         track.title?.toLowerCase().includes(indicator)
       );
-    
-    const hasValidArtist = Boolean(track.artist) && 
-      !invalidArtistIndicators.some(indicator => 
+
+    const hasValidArtist = Boolean(track.artist) &&
+      !invalidArtistIndicators.some(indicator =>
         track.artist?.toLowerCase().includes(indicator)
       );
-    
+
     return hasValidTitle && hasValidArtist;
   }
 
@@ -607,8 +607,8 @@ export class LoadOrchestrator {
    * Determina si un track está completo (tiene todos los datos importantes)
    */
   private isTrackComplete(track: Track): boolean {
-    return this.hasValidTitles(track) && 
-           this.hasValidImage(track) && 
+    return this.hasValidTitles(track) &&
+           this.hasValidImage(track) &&
            Boolean(track.spotifyId || track.youtubeId);
   }
 
@@ -627,21 +627,21 @@ export class LoadOrchestrator {
     return [...tracks].sort((a, b) => {
       const aComplete = this.isTrackComplete(a);
       const bComplete = this.isTrackComplete(b);
-      
+
       if (aComplete && !bComplete) return -1;
       if (!aComplete && bComplete) return 1;
-      
+
       // Si ambos tienen el mismo estado de completitud, priorizar los que tienen imagen
       const aHasImage = this.hasValidImage(a);
       const bHasImage = this.hasValidImage(b);
-      
+
       if (aHasImage && !bHasImage) return -1;
       if (!aHasImage && bHasImage) return 1;
-      
+
       return 0;
     });
   }
 }
 
 // Exportar una instancia singleton
-export const loadOrchestrator = LoadOrchestrator.getInstance(); 
+export const loadOrchestrator = LoadOrchestrator.getInstance();

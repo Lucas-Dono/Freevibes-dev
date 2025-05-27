@@ -1,0 +1,542 @@
+{
+  "playlists": {
+    "href": "https://api.spotify.com/v1/search?offset=0&limit=20&query=pop%20latino&type=playlist&market=ES&locale=*",
+    "limit": 20,
+    "next": "https://api.spotify.com/v1/search?offset=20&limit=20&query=pop%20latino&type=playlist&market=ES&locale=*",
+    "offset": 0,
+    "previous": null,
+    "total": 900,
+    "items": [
+      {
+        "collaborative": false,
+        "description": "Las mejores canciones pop latinas de los 90s, 2000s &amp; 2010s Hits. Las canciones latinas de siempre que activan tu nostalgia y te animan el día.  Latinos RETRO Éxitos del Pop Latino. ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1lvD3XTXCHx0VjXNbl49XF"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1lvD3XTXCHx0VjXNbl49XF",
+        "id": "1lvD3XTXCHx0VjXNbl49XF",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d3e6e99c5fc7f006c66232c",
+            "width": null
+          }
+        ],
+        "name": "POP LATINO : 90s, 2000s & 2010s Hits",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAF/ZsAI+juudhTW3UgSW/jIHKUeLKX",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1lvD3XTXCHx0VjXNbl49XF/tracks",
+          "total": 194
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1lvD3XTXCHx0VjXNbl49XF"
+      },
+      {
+        "collaborative": false,
+        "description": "Lo + Nuevo del POP LATINO, y los éxitos más top de la música latina 2025 y últimos años en esta playlist. Latin Pop 2025 con el mejor pop latino actual y los éxitos de  los últimos años, música para bailar sin parar. Pop Latino 2020s! ",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1zZuDCC032tiepZ5RjQlt3"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1zZuDCC032tiepZ5RjQlt3",
+        "id": "1zZuDCC032tiepZ5RjQlt3",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72cda488118f2ca24df04b314aa",
+            "width": null
+          }
+        ],
+        "name": "POP LATINO 2025 + 2024 + 2023 + 2022 + 2021 + 2020 :  Éxitos 2020s ",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAD1Ycu61gljEBDDlq85AcnLh+yh3+C",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1zZuDCC032tiepZ5RjQlt3/tracks",
+          "total": 254
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1zZuDCC032tiepZ5RjQlt3"
+      },
+      {
+        "collaborative": false,
+        "description": "Curadora de Groover - https:&#x2F;&#x2F;bit.ly&#x2F;3SZVuTF. Reggaeton actual, previa, fiesta, fin de, pop latino, música latina 2024, género urbano, lo más escuchado, mix música latina, éxitos latinos, perreo, reguetón y pop 2025, party, música bailable, letras emotivas, sonidos tropicales, artistas latinos",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1JVocmG0dGNuEFcQgnMZus"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1JVocmG0dGNuEFcQgnMZus",
+        "id": "1JVocmG0dGNuEFcQgnMZus",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c5d43fe06a5e6c672fd303086",
+            "width": null
+          }
+        ],
+        "name": "Pop Latino 2025 🍑  💣  Top 50 lo más escuchado 🔥",
+        "owner": {
+          "display_name": "Marina Cardozo",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/21luid7sbkky6g4vk7lthklcy"
+          },
+          "href": "https://api.spotify.com/v1/users/21luid7sbkky6g4vk7lthklcy",
+          "id": "21luid7sbkky6g4vk7lthklcy",
+          "type": "user",
+          "uri": "spotify:user:21luid7sbkky6g4vk7lthklcy"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAABnITh8ZfrV/O94ORJ+0pp6sMg7vOX",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1JVocmG0dGNuEFcQgnMZus/tracks",
+          "total": 143
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1JVocmG0dGNuEFcQgnMZus"
+      },
+      {
+        "collaborative": false,
+        "description": "Repaso de las canciones latinas más escuchadas y bailadas del 2010 al 2020! Latinos Top Hits 🔥 ✌️",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/2hBC6omZg8SmrTQem9svDj"
+        },
+        "href": "https://api.spotify.com/v1/playlists/2hBC6omZg8SmrTQem9svDj",
+        "id": "2hBC6omZg8SmrTQem9svDj",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c8847bc5148f235a66fbb41fe",
+            "width": null
+          }
+        ],
+        "name": "2010 - 2020⚡LATINOS Top Hits 🔝🎧",
+        "owner": {
+          "display_name": "rodneysson",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/22wehhn2rnhvvtqv7evgkjy5q"
+          },
+          "href": "https://api.spotify.com/v1/users/22wehhn2rnhvvtqv7evgkjy5q",
+          "id": "22wehhn2rnhvvtqv7evgkjy5q",
+          "type": "user",
+          "uri": "spotify:user:22wehhn2rnhvvtqv7evgkjy5q"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAADB2CCeyZSR767G/iTqjL3LVLUP+TS",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/2hBC6omZg8SmrTQem9svDj/tracks",
+          "total": 211
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:2hBC6omZg8SmrTQem9svDj"
+      },
+      {
+        "collaborative": false,
+        "description": "",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1vKlWaVMDQXSWZFVtSt54C"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1vKlWaVMDQXSWZFVtSt54C",
+        "id": "1vKlWaVMDQXSWZFVtSt54C",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e0223a1613112c1ecf946f51177ab67616d00001e02a043fa84be801dca33dacca1ab67616d00001e02d2058f8dce6d83975ddf3d61ab67616d00001e02e1f4c211ce1ef95454bbbcc4",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e0223a1613112c1ecf946f51177ab67616d00001e02a043fa84be801dca33dacca1ab67616d00001e02d2058f8dce6d83975ddf3d61ab67616d00001e02e1f4c211ce1ef95454bbbcc4",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e0223a1613112c1ecf946f51177ab67616d00001e02a043fa84be801dca33dacca1ab67616d00001e02d2058f8dce6d83975ddf3d61ab67616d00001e02e1f4c211ce1ef95454bbbcc4",
+            "width": 60
+          }
+        ],
+        "name": "HITAZOS LATINOS DEL 2000",
+        "owner": {
+          "display_name": "Antonela",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/er1ak8earx9tbb8jt91h5gtbp"
+          },
+          "href": "https://api.spotify.com/v1/users/er1ak8earx9tbb8jt91h5gtbp",
+          "id": "er1ak8earx9tbb8jt91h5gtbp",
+          "type": "user",
+          "uri": "spotify:user:er1ak8earx9tbb8jt91h5gtbp"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAaLLj8e/Y8/qBcJ7eeWorUqt4uNwK",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1vKlWaVMDQXSWZFVtSt54C/tracks",
+          "total": 102
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1vKlWaVMDQXSWZFVtSt54C"
+      },
+      {
+        "collaborative": false,
+        "description": "Pop Latino retro! 90 - 2000 - 2010 Hits latinos para no parar de cantar y bailar! Flashback 🔙 Modo Radio Latinos Retro 📻",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/03EGtPIAt7wGuAV3CYPzrp"
+        },
+        "href": "https://api.spotify.com/v1/playlists/03EGtPIAt7wGuAV3CYPzrp",
+        "id": "03EGtPIAt7wGuAV3CYPzrp",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c269ea5db71452ca840647d67",
+            "width": null
+          }
+        ],
+        "name": "LATINOS RETRO 🔙 Hits Latinos 90s-2000 📻",
+        "owner": {
+          "display_name": "rodneysson",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/22wehhn2rnhvvtqv7evgkjy5q"
+          },
+          "href": "https://api.spotify.com/v1/users/22wehhn2rnhvvtqv7evgkjy5q",
+          "id": "22wehhn2rnhvvtqv7evgkjy5q",
+          "type": "user",
+          "uri": "spotify:user:22wehhn2rnhvvtqv7evgkjy5q"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAGPvFPA1i3QY3vRxzGA86uYmpQ3SoY",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/03EGtPIAt7wGuAV3CYPzrp/tracks",
+          "total": 139
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:03EGtPIAt7wGuAV3CYPzrp"
+      },
+      null,
+      {
+        "collaborative": false,
+        "description": "Pop Latino Romantico 2025",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/64hDFVYGAzNfYtbJVVCVc6"
+        },
+        "href": "https://api.spotify.com/v1/playlists/64hDFVYGAzNfYtbJVVCVc6",
+        "id": "64hDFVYGAzNfYtbJVVCVc6",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da845df6d2bde1643a2b3183fbc3",
+            "width": null
+          }
+        ],
+        "name": "Pop Latino Romantico 2025",
+        "owner": {
+          "display_name": "KaravanList",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/qxpm8ukb3d7bdj8m2opqerwf8"
+          },
+          "href": "https://api.spotify.com/v1/users/qxpm8ukb3d7bdj8m2opqerwf8",
+          "id": "qxpm8ukb3d7bdj8m2opqerwf8",
+          "type": "user",
+          "uri": "spotify:user:qxpm8ukb3d7bdj8m2opqerwf8"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAH2mZ3O8ck5g2ikrEcnaeOleIzo9B0",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/64hDFVYGAzNfYtbJVVCVc6/tracks",
+          "total": 75
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:64hDFVYGAzNfYtbJVVCVc6"
+      },
+      {
+        "collaborative": false,
+        "description": "Curator: @katojimenezmusic Éxitos Argentina, Música Argentina, Top Hits Argentina, Playlist Argentina,  Techengue, Trap, Reggaetón Argentino, Cumbia Argentina, Rock, Pop Argentino, Indie, Viral Argentina, Tendencias Argentina, Lo más escuchado Argentina, Novedades, últimos lanzamientos Argentina.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/6qv68QBGb4BKfLUb92MSik"
+        },
+        "href": "https://api.spotify.com/v1/playlists/6qv68QBGb4BKfLUb92MSik",
+        "id": "6qv68QBGb4BKfLUb92MSik",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da848b77d160412410021ca143a1",
+            "width": null
+          }
+        ],
+        "name": "TOP ARGENTINA 2025",
+        "owner": {
+          "display_name": "Don Playlist",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/315n6qxrjbamvj3n5dbatnwpdyp4"
+          },
+          "href": "https://api.spotify.com/v1/users/315n6qxrjbamvj3n5dbatnwpdyp4",
+          "id": "315n6qxrjbamvj3n5dbatnwpdyp4",
+          "type": "user",
+          "uri": "spotify:user:315n6qxrjbamvj3n5dbatnwpdyp4"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAHI2LwC0TQWI2yCh0MXGUTz4JiU96G",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/6qv68QBGb4BKfLUb92MSik/tracks",
+          "total": 165
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:6qv68QBGb4BKfLUb92MSik"
+      },
+      {
+        "collaborative": false,
+        "description": "Temas Actualizados Cada Semana , Lo mejor en canciones y mixes que debes escuchar , solo aqui. Sigue esta lista y escucha la mejor musica del momento.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0rm6uV1H7fpqdp7hPybn2E"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0rm6uV1H7fpqdp7hPybn2E",
+        "id": "0rm6uV1H7fpqdp7hPybn2E",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84294ab270a62b6917c245a525",
+            "width": null
+          }
+        ],
+        "name": "Mix Pop LATINO ( Lo Mejor )",
+        "owner": {
+          "display_name": "Jhon",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/13vjsvobolqa12wu4c96xxeuz"
+          },
+          "href": "https://api.spotify.com/v1/users/13vjsvobolqa12wu4c96xxeuz",
+          "id": "13vjsvobolqa12wu4c96xxeuz",
+          "type": "user",
+          "uri": "spotify:user:13vjsvobolqa12wu4c96xxeuz"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAAvho8nEGeHQqA6DUkIfBpvaODSSBb",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0rm6uV1H7fpqdp7hPybn2E/tracks",
+          "total": 239
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0rm6uV1H7fpqdp7hPybn2E"
+      },
+      {
+        "collaborative": false,
+        "description": "reggaeton 2025 best latino songs most popular trending today mix viral top 100 hottest latin pop trap dance rnb bachata spanish regueton ⚠️ NO SOCIAL MEDIA ACCOUNTS ASSOCIATED WITH THIS PROFILE. BEWARE OF SCAMS!",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/45GzgV6QdDD5fXBN4i3U0g"
+        },
+        "href": "https://api.spotify.com/v1/playlists/45GzgV6QdDD5fXBN4i3U0g",
+        "id": "45GzgV6QdDD5fXBN4i3U0g",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c96c521ff3d2d1f463950174e",
+            "width": null
+          }
+        ],
+        "name": "LATIN MUSIC 2025 🔥 Top Latin Hits 🍑 Pop Latino",
+        "owner": {
+          "display_name": "Spot",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/31heeg5wrzm67nrgtehxz23z2mmq"
+          },
+          "href": "https://api.spotify.com/v1/users/31heeg5wrzm67nrgtehxz23z2mmq",
+          "id": "31heeg5wrzm67nrgtehxz23z2mmq",
+          "type": "user",
+          "uri": "spotify:user:31heeg5wrzm67nrgtehxz23z2mmq"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAABgeyN1pjoGws2ki9zSNrzUc9nli0r",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/45GzgV6QdDD5fXBN4i3U0g/tracks",
+          "total": 123
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:45GzgV6QdDD5fXBN4i3U0g"
+      },
+      {
+        "collaborative": false,
+        "description": "¡Lo + escuchado del momento! Los éxitos 2025 de reggaeton hits, trap (latino, español y argentino), música latina, pop latino y pop inglés y éxitos en general. Son los hits más destacados. Musica actual y éxitos 2020s.  Canciones 2025 más escuchadas ft. Blackout Emilia, Tini Nicki Nicole",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/1sAVKbeZfl9IjAST4MNnYb"
+        },
+        "href": "https://api.spotify.com/v1/playlists/1sAVKbeZfl9IjAST4MNnYb",
+        "id": "1sAVKbeZfl9IjAST4MNnYb",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84bf3a2c432c8193a75518be1f",
+            "width": null
+          }
+        ],
+        "name": " Lo Mas Escuchado 2025 : Éxitos Abril 2025",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAUQN6lyzQeMXYNj3rZmhuJRbcwD5Qj",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/1sAVKbeZfl9IjAST4MNnYb/tracks",
+          "total": 245
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:1sAVKbeZfl9IjAST4MNnYb"
+      },
+      null,
+      null,
+      null,
+      {
+        "collaborative": false,
+        "description": "Best Latin Hits 2025 y 2020s. Mix Latino : Éxitos y novedades de música latina: Las más bailables - Pop Latino, Reggaeton, Bachata, Cumbia, Corridos y Música Mexicana. Música latina variada. Mix latino. Latin Music.",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/00lcDNEw2Ych9srALHrMEr"
+        },
+        "href": "https://api.spotify.com/v1/playlists/00lcDNEw2Ych9srALHrMEr",
+        "id": "00lcDNEw2Ych9srALHrMEr",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c9f8092f93419818e5c06225b",
+            "width": null
+          }
+        ],
+        "name": "Musica Latina 2025 💛 Top Éxitos Latinos 2025",
+        "owner": {
+          "display_name": "Filtr Éxitos",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/mejoresplaylistsspotify"
+          },
+          "href": "https://api.spotify.com/v1/users/mejoresplaylistsspotify",
+          "id": "mejoresplaylistsspotify",
+          "type": "user",
+          "uri": "spotify:user:mejoresplaylistsspotify"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAALN84wX36qbWB8F0IqZxf4700dK9AF",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/00lcDNEw2Ych9srALHrMEr/tracks",
+          "total": 273
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:00lcDNEw2Ych9srALHrMEr"
+      },
+      null,
+      {
+        "collaborative": false,
+        "description": "LOS EXITOS TOP DE 2025 EN LA MEJOR LISTA | Playlist 2025 Hits | New Latin Pop Hits 2025| Latino Pop Playlist | Lista Pop En Español 2025 | Pop En Ingles 2025 | K-Pop Hits 2025",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/0qSZmCG0ZKBWdhZwvPYxV0"
+        },
+        "href": "https://api.spotify.com/v1/playlists/0qSZmCG0ZKBWdhZwvPYxV0",
+        "id": "0qSZmCG0ZKBWdhZwvPYxV0",
+        "images": [
+          {
+            "height": null,
+            "url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84c10896aa4e773e1459318c7b",
+            "width": null
+          }
+        ],
+        "name": "MUSICA 2025 😍 Abril Mayo 2025🔥TEMAZOS 2025 😍VERANO 2025 🕺POP LATINO 2025🔥TOP EXITOS 2025",
+        "owner": {
+          "display_name": "Pacific Spain",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/pacificspain"
+          },
+          "href": "https://api.spotify.com/v1/users/pacificspain",
+          "id": "pacificspain",
+          "type": "user",
+          "uri": "spotify:user:pacificspain"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAVDykeW1Kqt51IjWWaQAFfVCOolVGM",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/0qSZmCG0ZKBWdhZwvPYxV0/tracks",
+          "total": 88
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:0qSZmCG0ZKBWdhZwvPYxV0"
+      },
+      null,
+      {
+        "collaborative": false,
+        "description": "📲 IG: @PuraVibraMix | Los últimos éxitos latinos hits en español mejores canciones nuevas regueton mix música latina urbana las últimas escuchadas",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/playlist/5IrbE253BlGCPS09wxZUMI"
+        },
+        "href": "https://api.spotify.com/v1/playlists/5IrbE253BlGCPS09wxZUMI",
+        "id": "5IrbE253BlGCPS09wxZUMI",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://mosaic.scdn.co/640/ab67616d00001e023e6665989eeb44e512a29571ab67616d00001e02491678beaffcefac517a699eab67616d00001e02ba1b09e33e17904446bbd60eab67616d00001e02bbd45c8d36e0e045ef640411",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://mosaic.scdn.co/300/ab67616d00001e023e6665989eeb44e512a29571ab67616d00001e02491678beaffcefac517a699eab67616d00001e02ba1b09e33e17904446bbd60eab67616d00001e02bbd45c8d36e0e045ef640411",
+            "width": 300
+          },
+          {
+            "height": 60,
+            "url": "https://mosaic.scdn.co/60/ab67616d00001e023e6665989eeb44e512a29571ab67616d00001e02491678beaffcefac517a699eab67616d00001e02ba1b09e33e17904446bbd60eab67616d00001e02bbd45c8d36e0e045ef640411",
+            "width": 60
+          }
+        ],
+        "name": "Pop Latino y Reggaeton 2025 💜 Lo más nuevo y escuchado del género urbano",
+        "owner": {
+          "display_name": "Pura Vibra",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/user/vridjx5qdi67zopaxm6vz5q3i"
+          },
+          "href": "https://api.spotify.com/v1/users/vridjx5qdi67zopaxm6vz5q3i",
+          "id": "vridjx5qdi67zopaxm6vz5q3i",
+          "type": "user",
+          "uri": "spotify:user:vridjx5qdi67zopaxm6vz5q3i"
+        },
+        "primary_color": null,
+        "public": true,
+        "snapshot_id": "AAAA9Ip4HdKqDUlYEWRZc05GkBp+Joyr",
+        "tracks": {
+          "href": "https://api.spotify.com/v1/playlists/5IrbE253BlGCPS09wxZUMI/tracks",
+          "total": 125
+        },
+        "type": "playlist",
+        "uri": "spotify:playlist:5IrbE253BlGCPS09wxZUMI"
+      }
+    ]
+  }
+}

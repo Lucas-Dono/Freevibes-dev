@@ -70,13 +70,28 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     seekTo(newTime);
   };
 
+  // Detector simple del último segundo de la canción
+  useEffect(() => {
+    // Solo activar si hay reproducción en curso y tenemos duración válida
+    if (!isPlaying || !currentTrack || duration <= 0) return;
+
+    // Calcular tiempo restante en segundos
+    const timeRemaining = Math.max(0, duration - currentTime);
+
+    // Si estamos en el último segundo de la canción
+    if (timeRemaining <= 1 && timeRemaining > 0) {
+      console.log('[YouTubePlayer] Último segundo de reproducción, avanzando a siguiente canción');
+      nextTrack();
+    }
+  }, [currentTime, duration, isPlaying, currentTrack, nextTrack]);
+
   if (!currentTrack) {
     return (
-      <Box 
+      <Box
         className={className}
-        sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           height,
           bgcolor: 'background.paper',
@@ -95,24 +110,24 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     <Box className={className} sx={{ height, position: 'relative' }}>
       {/* Contenedor oculto donde se cargará el iframe de YouTube */}
       <Box id="youtube-player-visible" sx={{ height: '100%', width: '100%' }} />
-      
+
       {/* Controles del reproductor */}
       {showControls && (
-        <Box 
-          sx={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            left: 0, 
-            right: 0, 
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
             bgcolor: 'rgba(0,0,0,0.6)',
             p: 1,
             backdropFilter: 'blur(5px)'
           }}
         >
           {/* Barra de progreso */}
-          <Box 
-            sx={{ 
-              height: '4px', 
+          <Box
+            sx={{
+              height: '4px',
               bgcolor: 'background.paper',
               cursor: 'pointer',
               mb: 1,
@@ -130,7 +145,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               }}
             />
           </Box>
-          
+
           {/* Tiempos */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant="caption" color="text.secondary">
@@ -140,29 +155,29 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               {formatTime(duration)}
             </Typography>
           </Box>
-          
+
           {/* Botones de control */}
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton onClick={previousTrack} size="small" color="primary">
                 <SkipPrevious />
               </IconButton>
-              
+
               <IconButton onClick={togglePlay} size="medium" color="primary" sx={{ mx: 1 }}>
                 {isPlaying ? <Pause /> : <PlayArrow />}
               </IconButton>
-              
+
               <IconButton onClick={nextTrack} size="small" color="primary">
                 <SkipNext />
               </IconButton>
             </Box>
-            
+
             {/* Controles de volumen */}
             <Box sx={{ display: 'flex', alignItems: 'center', width: '120px' }}>
               <IconButton onClick={handleToggleMute} size="small">
                 {isMuted || volume === 0 ? <VolumeOff /> : <VolumeUp />}
               </IconButton>
-              
+
               <input
                 type="range"
                 min="0"
@@ -176,14 +191,14 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           </Stack>
         </Box>
       )}
-      
+
       {/* Información de la canción actual */}
-      <Box 
-        sx={{ 
-          position: 'absolute', 
-          top: 0, 
-          left: 0, 
-          p: 2, 
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          p: 2,
           color: 'white',
           textShadow: '0 1px 2px rgba(0,0,0,0.5)',
           pointerEvents: 'none'
@@ -200,4 +215,4 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   );
 };
 
-export default YouTubePlayer; 
+export default YouTubePlayer;

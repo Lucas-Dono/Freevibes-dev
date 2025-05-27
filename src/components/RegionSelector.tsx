@@ -54,7 +54,7 @@ export default function RegionSelector() {
 
   return (
     <div className="relative">
-      <button 
+      <button
         onClick={toggleDialog}
         className="flex items-center gap-1 px-2 py-1 text-sm bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
       >
@@ -70,7 +70,7 @@ export default function RegionSelector() {
         <div className="absolute right-0 top-full mt-2 p-4 z-50 bg-white dark:bg-gray-900 shadow-lg rounded-md w-64">
           <div className="flex flex-col gap-3">
             <h3 className="font-semibold text-sm">Selecciona tu región</h3>
-            
+
             <div className="mb-2">
               <label htmlFor="region" className="block text-xs mb-1">
                 País
@@ -88,7 +88,7 @@ export default function RegionSelector() {
                 ))}
               </select>
             </div>
-            
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowDialog(false)}
@@ -108,4 +108,4 @@ export default function RegionSelector() {
       )}
     </div>
   );
-} 
+}

@@ -11,20 +11,20 @@ export const UserSchema = new Schema(
     avatarUrl: { type: String },
     lastLogin: { type: Date },
     preferences: {
-      theme: { 
-        type: String, 
+      theme: {
+        type: String,
         enum: ['light', 'dark', 'system'],
         default: 'system'
       },
-      audioQuality: { 
-        type: String, 
+      audioQuality: {
+        type: String,
         enum: ['normal', 'high', 'ultra'],
         default: 'normal'
       },
       language: { type: String, default: 'es' },
     },
-    roles: [{ 
-      type: String, 
+    roles: [{
+      type: String,
       enum: Object.values(Role),
       default: [Role.USER]
     }],

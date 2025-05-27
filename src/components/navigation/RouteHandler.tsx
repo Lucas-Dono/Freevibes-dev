@@ -11,20 +11,19 @@ import { getPageTypeFromPath, getPrimarySection } from '@/lib/navigation-map';
  */
 export default function RouteHandler() {
   const pathname = usePathname();
-  
+
   useEffect(() => {
     if (!pathname) return;
-    
+
     // Detectar la página y sección actual
     const pageType = getPageTypeFromPath(pathname);
     const primarySection = getPrimarySection(pathname);
-    
+
     // Establecer prioridad en el orquestador de carga
     loadOrchestrator.setPriority(pageType, primarySection);
-    
-    console.log(`[Navigation] Ruta actualizada: ${pathname} (${pageType}/${primarySection})`);
+
   }, [pathname]);
-  
+
   // Este componente no renderiza nada visual, solo gestiona la lógica de navegación
   return null;
-} 
+}

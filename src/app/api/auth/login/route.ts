@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { API_CONFIG } from '@/config/api-config';
 
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-    
+
     // Validar que se proporcionen email y password
     if (!email || !password) {
       return NextResponse.json(
@@ -12,8 +13,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hacer petición al backend para autenticar
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
+    // Hacer petición al backend para autenticar - usando NODE_API_URL en lugar de BACKEND_URL
+    const response = await fetch(`${API_CONFIG.NODE_API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // Devolver el token y otros datos relevantes
     return NextResponse.json(data);
-    
+
   } catch (error) {
     console.error('Error en login:', error);
     return NextResponse.json(
@@ -41,4 +42,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

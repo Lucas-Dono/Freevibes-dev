@@ -1,6 +1,6 @@
 /**
  * Servicio para buscar imágenes y detalles de canciones en múltiples APIs
- * 
+ *
  * Este servicio se encarga de buscar información completa sobre canciones
  * consultando las APIs de Spotify, Deezer y Last.fm cuando es necesario.
  */
@@ -18,7 +18,7 @@ let isProcessingQueue = false;
 
 /**
  * Busca imágenes y detalles de una canción en todas las APIs disponibles
- * 
+ *
  * @param artist Nombre del artista
  * @param title Título de la canción
  * @param options Opciones adicionales
@@ -35,7 +35,6 @@ export async function findTrackImage(
   }
 
   const trackKey = `${artist}:${title}`;
-  console.log(`[TrackImageService] Buscando información para "${trackKey}"`);
 
   // Encolar la solicitud y procesarla cuando sea posible
   return new Promise((resolve) => {
@@ -44,7 +43,7 @@ export async function findTrackImage(
       resolve(result);
       return result;
     });
-    
+
     processQueue();
   });
 }
@@ -54,9 +53,9 @@ export async function findTrackImage(
  */
 async function processQueue() {
   if (isProcessingQueue || requestQueue.length === 0) return;
-  
+
   isProcessingQueue = true;
-  
+
   while (requestQueue.length > 0) {
     const request = requestQueue.shift();
     if (request) {
@@ -69,13 +68,13 @@ async function processQueue() {
       }
     }
   }
-  
+
   isProcessingQueue = false;
 }
 
 /**
  * Busca información de una canción en todas las APIs disponibles
- * 
+ *
  * @param artist Nombre del artista
  * @param title Título de la canción
  * @param options Opciones adicionales
@@ -89,7 +88,7 @@ async function searchAllApis(
   try {
     const searchQuery = `${title} ${artist}`;
     const trackKey = `${artist}:${title}`;
-    
+
     // Intentamos buscar primero en Spotify (mejores metadatos)
     const spotifyResults = await searchSpotify(searchQuery);
     if (spotifyResults) {
@@ -100,13 +99,13 @@ async function searchAllApis(
         timestamp: Date.now()
       };
     }
-    
+
     // Si no hay resultados de Spotify, intentar con la búsqueda multi-fuente
     const multiResults = await searchMultiSource(searchQuery, 1, {
       preferredSource: options.preferSpotify ? 'spotify' : 'deezer',
       forceFresh: true
     });
-    
+
     if (multiResults && multiResults.length > 0) {
       const track = multiResults[0];
       const trackResults = {
@@ -118,7 +117,7 @@ async function searchAllApis(
         albumCover: track.albumCover,
         spotifyId: track.spotifyId
       };
-      
+
       // Guardar en caché y retornar los resultados
       await cacheTrackImage(trackKey, trackResults);
       return {
@@ -126,8 +125,7 @@ async function searchAllApis(
         timestamp: Date.now()
       };
     }
-    
-    console.log(`[TrackImageService] No se encontraron detalles para "${trackKey}" en ninguna API`);
+
     return null;
   } catch (error) {
     console.error(`[TrackImageService] Error buscando detalles:`, error);
@@ -137,22 +135,22 @@ async function searchAllApis(
 
 /**
  * Busca detalles de una canción en Spotify
- * 
+ *
  * @param query Consulta de búsqueda
  * @returns Detalles de la canción o null
  */
 async function searchSpotify(query: string): Promise<Omit<CachedTrackDetails, 'timestamp'> | null> {
   try {
     const results = await spotifyApi.searchTracks(query, 1);
-    
+
     if (results && results.length > 0) {
       const track = results[0];
-      
+
       // Verificar que tengamos una imagen de portada
       if (!track.album?.images?.[0]?.url) {
         return null;
       }
-      
+
       return {
         id: track.id,
         title: track.name,
@@ -164,10 +162,10 @@ async function searchSpotify(query: string): Promise<Omit<CachedTrackDetails, 't
         popularity: track.popularity
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('[TrackImageService] Error en búsqueda de Spotify:', error);
     return null;
   }
-} 
+}

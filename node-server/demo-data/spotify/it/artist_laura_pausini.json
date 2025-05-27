@@ -1,0 +1,36 @@
+{
+  "external_urls": {
+    "spotify": "https://open.spotify.com/artist/2e4nwiX8ZCU09LGLOpeqTH"
+  },
+  "followers": {
+    "href": null,
+    "total": 2745719
+  },
+  "genres": [
+    "latin pop",
+    "italo dance"
+  ],
+  "href": "https://api.spotify.com/v1/artists/2e4nwiX8ZCU09LGLOpeqTH",
+  "id": "2e4nwiX8ZCU09LGLOpeqTH",
+  "images": [
+    {
+      "url": "https://i.scdn.co/image/ab6761610000e5eb102bbbb1f908fd139e98c510",
+      "height": 640,
+      "width": 640
+    },
+    {
+      "url": "https://i.scdn.co/image/ab67616100005174102bbbb1f908fd139e98c510",
+      "height": 320,
+      "width": 320
+    },
+    {
+      "url": "https://i.scdn.co/image/ab6761610000f178102bbbb1f908fd139e98c510",
+      "height": 160,
+      "width": 160
+    }
+  ],
+  "name": "Laura Pausini",
+  "popularity": 73,
+  "type": "artist",
+  "uri": "spotify:artist:2e4nwiX8ZCU09LGLOpeqTH"
+}

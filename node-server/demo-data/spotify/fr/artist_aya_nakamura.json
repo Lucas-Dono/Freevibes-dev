@@ -1,0 +1,36 @@
+{
+  "external_urls": {
+    "spotify": "https://open.spotify.com/artist/7IlRNXHjoOCgEAWN5qYksg"
+  },
+  "followers": {
+    "href": null,
+    "total": 5215286
+  },
+  "genres": [
+    "pop urbaine",
+    "french pop"
+  ],
+  "href": "https://api.spotify.com/v1/artists/7IlRNXHjoOCgEAWN5qYksg",
+  "id": "7IlRNXHjoOCgEAWN5qYksg",
+  "images": [
+    {
+      "url": "https://i.scdn.co/image/ab6761610000e5eb8fe3fd15b08ed17abc0ee9db",
+      "height": 640,
+      "width": 640
+    },
+    {
+      "url": "https://i.scdn.co/image/ab676161000051748fe3fd15b08ed17abc0ee9db",
+      "height": 320,
+      "width": 320
+    },
+    {
+      "url": "https://i.scdn.co/image/ab6761610000f1788fe3fd15b08ed17abc0ee9db",
+      "height": 160,
+      "width": 160
+    }
+  ],
+  "name": "Aya Nakamura",
+  "popularity": 71,
+  "type": "artist",
+  "uri": "spotify:artist:7IlRNXHjoOCgEAWN5qYksg"
+}

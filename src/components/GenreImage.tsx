@@ -51,13 +51,13 @@ const genreColors: Record<string, string> = {
 // Función para obtener un color aleatorio pero consistente para géneros no mapeados
 const getRandomGenreColor = (genre: string): string => {
   if (!genre) return genreColors.default;
-  
+
   // Generar un hash simple del nombre del género
   let hash = 0;
   for (let i = 0; i < genre.length; i++) {
     hash = genre.charCodeAt(i) + ((hash << 5) - hash);
   }
-  
+
   // Colorear en el rango de los colores existentes
   const allColors = Object.values(genreColors);
   const colorIndex = Math.abs(hash) % allColors.length;
@@ -80,16 +80,16 @@ interface GenreImageProps {
   size?: string; // Tamaño predefinido (small, medium, large)
 }
 
-const GenreImage = ({ 
-  genre, 
-  track, 
-  artist, 
-  title, 
-  artistName, 
+const GenreImage = ({
+  genre,
+  track,
+  artist,
+  title,
+  artistName,
   trackTitle,
   index = 0,
-  width = 200, 
-  height = 200, 
+  width = 200,
+  height = 200,
   priority = false,
   className,
   showFallback = true,
@@ -135,7 +135,7 @@ const GenreImage = ({
   // Función para detectar placeholders de Last.fm
   const isLastFmPlaceholder = (url: string): boolean => {
     if (!url) return false;
-    
+
     const lastfmIndicators = [
       '2a96cbd8b46e442fc41c2b86b821562f', // ID común de placeholder de Last.fm (estrella)
       'lastfm.freetls.fastly.net/i/u/',    // URLs de Last.fm para placeholders
@@ -149,7 +149,7 @@ const GenreImage = ({
       'c6f59c1e5e7240a4c0d427abd71f3dbb', // Otro ID de placeholder conocido
       '4128a6eb29f94943c9d206c08e625904' // Otro ID de placeholder conocido
     ];
-    
+
     return lastfmIndicators.some(indicator => url.includes(indicator));
   };
 
@@ -158,201 +158,153 @@ const GenreImage = ({
     setError(false);
 
     try {
+      // OPTIMIZACIÓN: Verificar la caché de memoria primero
+      const cacheKey = `genre_${genre || ''}_${artist || artistName || ''}_${title || trackTitle || ''}`;
+      const cachedImage = sessionStorage.getItem(cacheKey);
+
+      if (cachedImage) {
+        console.log(`[GenreImage] Usando imagen cacheada para: ${cacheKey}`);
+        setImageUrl(cachedImage);
+        setIsLoading(false);
+        return;
+      }
+
       // Usar los alias si las propiedades principales no están disponibles
       const effectiveArtist = artist || artistName || '';
       const effectiveTitle = title || trackTitle || '';
+      const effectiveGenre = genre?.toLowerCase() || '';
 
       // Si ya tenemos un track completo con cover, verificar que no sea de Last.fm
       if (track?.cover && track.cover !== 'placeholder' && !isLastFmPlaceholder(track.cover)) {
         setImageUrl(track.cover);
-        setIsLoading(false);
-        return;
-      }
-      
-      // NUEVO: Si tenemos un género específico, usar directamente la imagen de género
-      // en lugar de esperar que falle la búsqueda
-      if (genre && genreBackgrounds[genre.toLowerCase()]) {
-        const genreImageUrl = genreBackgrounds[genre.toLowerCase()];
-        console.log(`[GenreImage] Usando imagen directa para género: ${genre}`);
-        setImageUrl(genreImageUrl);
+        sessionStorage.setItem(cacheKey, track.cover);
         setIsLoading(false);
         return;
       }
 
-      // Determinar si estamos en la sección "explore"
-      const isExplore = pathname?.includes('/explore');
-      
-      // Para explore, intentar buscar desde el track-image-service directamente
+      // PRIORIDAD 1: Si tenemos un género específico, usar directamente la imagen de género
+      if (effectiveGenre && genreBackgrounds[effectiveGenre]) {
+        const genreImageUrl = genreBackgrounds[effectiveGenre];
+        console.log(`[GenreImage] Usando imagen directa para género: ${effectiveGenre}`);
+        setImageUrl(genreImageUrl);
+        sessionStorage.setItem(cacheKey, genreImageUrl);
+        setIsLoading(false);
+        return;
+      }
+
+      // PRIORIDAD 2: Para artistas y tracks, usar caché local
       if (effectiveTitle && effectiveArtist) {
+        const trackCacheKey = `${effectiveArtist}:${effectiveTitle}`;
         try {
-          // Intentar primero obtener de caché o servicio de imágenes con preferencia Spotify
-          const cachedDetails = await getTrackImageFromCache(`${effectiveArtist}:${effectiveTitle}`);
-          
+          // Intentar primero obtener de caché con una única solicitud
+          const cachedDetails = await getTrackImageFromCache(trackCacheKey);
+
           if (cachedDetails && cachedDetails.cover && !isLastFmPlaceholder(cachedDetails.cover)) {
             setImageUrl(cachedDetails.cover);
+            sessionStorage.setItem(cacheKey, cachedDetails.cover);
             setIsLoading(false);
             return;
           }
-          
-          // Si no está en caché, buscar directamente con preferencia por Spotify
-          const foundDetails = await findTrackImage(effectiveArtist, effectiveTitle, { preferSpotify: true });
-          
-          if (foundDetails && foundDetails.cover && !isLastFmPlaceholder(foundDetails.cover)) {
-            setImageUrl(foundDetails.cover);
+
+          // No hacer peticiones a APIs externas para imágenes de géneros
+          // esto ayuda a reducir la carga y las peticiones innecesarias
+          if (effectiveGenre) {
+            // Usar un color de género para evitar solicitudes adicionales
             setIsLoading(false);
+            setError(true); // Forzar el fallback de color
             return;
+          }
+
+          // Solo para tracks específicos (no géneros), buscar imágenes
+          if (!effectiveGenre && pathname && !pathname.includes('/explore/genres')) {
+            // Si no está en caché, buscar directamente con preferencia por Spotify
+            // PERO limitamos a páginas relevantes, no de género
+            const foundDetails = await findTrackImage(effectiveArtist, effectiveTitle, { preferSpotify: true });
+
+            if (foundDetails && foundDetails.cover && !isLastFmPlaceholder(foundDetails.cover)) {
+              setImageUrl(foundDetails.cover);
+              sessionStorage.setItem(cacheKey, foundDetails.cover);
+              setIsLoading(false);
+              return;
+            }
           }
         } catch (err) {
           console.log('Error buscando imagen directamente:', err);
         }
       }
 
-      // NUEVO: Si llegamos aquí, intentar extraer posible género del artista
+      // PRIORIDAD 3: Intentar extraer posible género del artista
       if (effectiveArtist) {
         const artistLower = effectiveArtist.toLowerCase();
-        const possibleGenres = Object.keys(genreBackgrounds).filter(g => 
+        const possibleGenres = Object.keys(genreBackgrounds).filter(g =>
           g !== 'default' && artistLower.includes(g)
         );
-        
+
         if (possibleGenres.length > 0) {
           const detectedGenre = possibleGenres[0];
           console.log(`[GenreImage] Género detectado a partir del artista "${effectiveArtist}": ${detectedGenre}`);
-          setImageUrl(genreBackgrounds[detectedGenre]);
+          const detectedUrl = genreBackgrounds[detectedGenre];
+          setImageUrl(detectedUrl);
+          sessionStorage.setItem(cacheKey, detectedUrl);
           setIsLoading(false);
           return;
         }
       }
 
-      // Crear un objeto track para pasar al orquestador
-      const trackToEnhance: Track = track || {
-        id: `${effectiveTitle}-${effectiveArtist}`,
-        title: effectiveTitle,
-        artist: effectiveArtist || genre || '',
-        album: '',
-        cover: '',
-        albumCover: '',
-        duration: 0
-      };
-      
-      // Encolar la carga de datos con el orquestador
-      loadOrchestrator.enqueueLoad(
-        [trackToEnhance], 
-        { 
-          page: pageType, 
-          section: 'paraTi', // SIEMPRE usar paraTi para forzar 100% Spotify
-          isVisible: true,
-          completeImages: true,
-          preferSpotify: true // SIEMPRE preferir Spotify
-        },
-        (enhancedTracks) => {
-          if (enhancedTracks.length > 0 && enhancedTracks[0].cover && !isLastFmPlaceholder(enhancedTracks[0].cover)) {
-            setImageUrl(enhancedTracks[0].cover);
-            setIsLoading(false);
-          } else {
-            // Si todo falló, usar imagen de género genérica pero NO mostrar error
-            const genreName = genre?.toLowerCase() || '';
-            
-            // Buscar imagen directa para el género, o usar default
-            const genericImage = genreBackgrounds[genreName] || genreBackgrounds.default;
-            setImageUrl(genericImage);
-            setIsLoading(false);
-          }
-        }
-      );
+      // PRIORIDAD 4: Usar fallback de color para evitar solicitudes adicionales
+      console.log(`[GenreImage] Usando fallback de color para: ${effectiveGenre || effectiveArtist || effectiveTitle}`);
+      setIsLoading(false);
+      setError(true); // Esto activará el fallback visual
+
     } catch (err) {
       console.error('Error cargando imagen:', err);
-      
-      // Incluso en caso de error, mostrar una imagen de género
-      const genreName = genre?.toLowerCase() || '';
-      const fallbackImage = genreBackgrounds[genreName] || genreBackgrounds.default;
-      setImageUrl(fallbackImage);
       setIsLoading(false);
-      setError(false); // No mostrar error visual
+      setError(true); // Forzar fallback visual
     }
   };
 
-  // Determinar el color de fondo para fallback según el género
-  const genreName = genre?.toLowerCase() || '';
-  const fallbackColor = genreColors[genreName] || getRandomGenreColor(genreName);
-  
   return (
-    <Box
+    <div
       ref={imageRef}
-      className={className}
-      sx={{
-        width: width,
-        height: height,
-        position: 'relative',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        backgroundColor: error || (!imageUrl && isLoading) ? fallbackColor : 'transparent',
+      className={`overflow-hidden w-full h-full relative ${className || ''}`}
+      style={{
+        backgroundColor: error || !imageUrl
+          ? (genre && genreColors[genre.toLowerCase()]) || getRandomGenreColor(genre || '')
+          : undefined,
       }}
     >
-      {imageUrl && !error ? (
+      {(imageUrl && !error) ? (
         <Image
           src={imageUrl}
-          alt={title || artist || genre || 'Genre image'}
-          fill
-          style={{ objectFit: 'cover' }}
-          priority={priority}
-          sizes={`${width}px`}
+          alt={genre || artist || title || 'Género musical'}
+          width={width}
+          height={height}
+          priority={priority || index < 10}
+          className="w-full h-full object-cover"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+            width: '100%',
+            height: '100%'
+          }}
+          onError={() => {
+            console.log('Error cargando imagen:', imageUrl);
+            setError(true);
+          }}
         />
       ) : showFallback ? (
-        // Gradiente para fallback
-        <Box 
-          sx={{
-            width: '100%',
-            height: '100%',
-            background: `linear-gradient(135deg, ${fallbackColor} 0%, rgba(0,0,0,0.5) 100%)`,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            textAlign: 'center',
-            padding: '10px',
-          }}
-        >
-          {isLoading ? (
-            // Indicador de carga
-            <Box sx={{ 
-              width: '20px', 
-              height: '20px', 
-              borderRadius: '50%', 
-              border: '2px solid rgba(255,255,255,0.3)',
-              borderTop: '2px solid white',
-              animation: 'spin 1s linear infinite',
-              '@keyframes spin': {
-                '0%': { transform: 'rotate(0deg)' },
-                '100%': { transform: 'rotate(360deg)' }
-              }
-            }} />
-          ) : (
-            <>
-              <Box sx={{ 
-                fontWeight: 'bold',
-                fontSize: Math.min(width / 10, 16), 
-                textShadow: '0 0 4px rgba(0,0,0,0.7)',
-                textTransform: 'capitalize',
-                mb: 1
-              }}>
-                {genre || artist || ''}
-              </Box>
-              {(width >= 100 && height >= 100) && (
-                <Box sx={{ 
-                  fontSize: Math.min(width / 15, 12), 
-                  opacity: 0.9,
-                  textShadow: '0 0 4px rgba(0,0,0,0.7)'
-                }}>
-                  Imagen representativa
-                </Box>
-              )}
-            </>
-          )}
-        </Box>
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-black">
+          <div className="text-center px-2">
+            <div className="text-white font-bold uppercase text-lg md:text-xl truncate max-w-full">
+              {genre
+                ? genre.charAt(0).toUpperCase() + genre.slice(1)
+                : artist || title || 'Música'}
+            </div>
+          </div>
+        </div>
       ) : null}
-    </Box>
+    </div>
   );
 };
 
-export default GenreImage; 
+export default GenreImage;

@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Card, 
-  CardContent, 
-  Typography, 
-  Button, 
-  TextField, 
-  Box, 
-  Avatar, 
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  TextField,
+  Box,
+  Avatar,
   CircularProgress,
   Chip,
   FormControl,
@@ -42,8 +42,8 @@ const popularGenres = [
 export default function EditProfilePage() {
   const router = useRouter();
   const { profile, loading, error, updateProfile } = useProfile();
-  const { profileNotifications } = useCustomNotifications();
-  
+  const { showNotification, addSystemNotification } = useCustomNotifications();
+
   // Estados para el formulario
   const [formData, setFormData] = useState({
     username: '',
@@ -52,18 +52,18 @@ export default function EditProfilePage() {
     coverImage: '',
     favoriteGenres: [] as Array<{name: string; color?: string}>,
   });
-  
+
   const [formErrors, setFormErrors] = useState({
     username: '',
     bio: '',
     profileImage: '',
     coverImage: '',
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  
+
   // Configurar el formulario cuando el perfil esté disponible
   useEffect(() => {
     if (profile) {
@@ -76,7 +76,7 @@ export default function EditProfilePage() {
       });
     }
   }, [profile]);
-  
+
   // Manejar cambios en los campos del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -84,14 +84,14 @@ export default function EditProfilePage() {
       ...formData,
       [name]: value,
     });
-    
+
     // Limpiar errores cuando el usuario modifica un campo
     setFormErrors({
       ...formErrors,
       [name]: '',
     });
   };
-  
+
   // Manejar la adición de géneros musicales favoritos
   const handleAddGenre = (genre: { name: string; color?: string }) => {
     // Verificar si el género ya existe
@@ -102,7 +102,7 @@ export default function EditProfilePage() {
       });
     }
   };
-  
+
   // Manejar la eliminación de géneros
   const handleRemoveGenre = (genreName: string) => {
     setFormData({
@@ -110,7 +110,7 @@ export default function EditProfilePage() {
       favoriteGenres: formData.favoriteGenres.filter(g => g.name !== genreName),
     });
   };
-  
+
   // Validación del formulario
   const validateForm = () => {
     let isValid = true;
@@ -120,35 +120,35 @@ export default function EditProfilePage() {
       profileImage: '',
       coverImage: '',
     };
-    
+
     // Validación de nombre de usuario (solo caracteres alfanuméricos y guiones bajos)
     if (formData.username && !/^[a-zA-Z0-9_]+$/.test(formData.username)) {
       errors.username = 'El nombre de usuario solo puede contener letras, números y guiones bajos.';
       isValid = false;
     }
-    
+
     // Validación de longitud de bio
     if (formData.bio && formData.bio.length > 500) {
       errors.bio = 'La bio no puede superar los 500 caracteres.';
       isValid = false;
     }
-    
+
     // Validación de URL de imagen de perfil
     if (formData.profileImage && !isValidURL(formData.profileImage)) {
       errors.profileImage = 'Ingresa una URL válida para la imagen de perfil.';
       isValid = false;
     }
-    
+
     // Validación de URL de imagen de portada
     if (formData.coverImage && !isValidURL(formData.coverImage)) {
       errors.coverImage = 'Ingresa una URL válida para la imagen de portada.';
       isValid = false;
     }
-    
+
     setFormErrors(errors);
     return isValid;
   };
-  
+
   // Función helper para validar URLs
   const isValidURL = (url: string) => {
     try {
@@ -158,30 +158,30 @@ export default function EditProfilePage() {
       return false;
     }
   };
-  
+
   // Manejar el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validar el formulario
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors as any);
-      profileNotifications.onFormErrors();
+      showNotification('Por favor corrige los errores en el formulario', 'error');
       return;
     }
-    
+
     setIsSubmitting(true);
     setFormErrors({} as any);
     setShowSuccess(false);
-    
+
     try {
       const updatedProfile = await updateProfile(formData);
-      
+
       if (updatedProfile) {
         setShowSuccess(true);
-        profileNotifications.onProfileUpdated();
-        
+        showNotification('Perfil actualizado con éxito', 'success');
+
         // Redireccionar después de un breve periodo (para que el usuario vea el mensaje de éxito)
         setTimeout(() => {
           router.push(`/user/${updatedProfile.id}`);
@@ -189,31 +189,31 @@ export default function EditProfilePage() {
       }
     } catch (error) {
       setSubmitError('Error al actualizar el perfil. Por favor, intenta de nuevo más tarde.');
-      profileNotifications.onProfileUpdateError();
+      showNotification('Error al actualizar el perfil', 'error');
       console.error('Error actualizando perfil:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   if (loading) {
     return (
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
       }}>
         <CircularProgress color="secondary" />
       </Box>
     );
   }
-  
+
   if (error) {
     return (
-      <Box sx={{ 
-        py: 4, 
-        textAlign: 'center' 
+      <Box sx={{
+        py: 4,
+        textAlign: 'center'
       }}>
         <Typography variant="h5" color="error" gutterBottom>
           Error al cargar el perfil
@@ -221,9 +221,9 @@ export default function EditProfilePage() {
         <Typography color="text.secondary">
           {error}
         </Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           sx={{ mt: 3 }}
           onClick={() => router.push('/home')}
         >
@@ -232,7 +232,7 @@ export default function EditProfilePage() {
       </Box>
     );
   }
-  
+
   return (
     <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
@@ -248,7 +248,7 @@ export default function EditProfilePage() {
             Personaliza tu perfil con tus datos e intereses musicales
           </Typography>
         </motion.div>
-        
+
         <Paper elevation={0} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
@@ -258,7 +258,7 @@ export default function EditProfilePage() {
                   Imágenes de perfil
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth sx={{ mb: 3 }}>
@@ -287,7 +287,7 @@ export default function EditProfilePage() {
                       )}
                     </FormControl>
                   </Grid>
-                  
+
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth sx={{ mb: 3 }}>
                       <InputLabel htmlFor="coverImage" shrink>
@@ -317,14 +317,14 @@ export default function EditProfilePage() {
                   </Grid>
                 </Grid>
               </Grid>
-              
+
               {/* Información personal */}
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom fontWeight="medium">
                   Información personal
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth sx={{ mb: 3 }}>
@@ -344,7 +344,7 @@ export default function EditProfilePage() {
                       />
                     </FormControl>
                   </Grid>
-                  
+
                   <Grid item xs={12}>
                     <FormControl fullWidth sx={{ mb: 3 }}>
                       <InputLabel htmlFor="bio" shrink>
@@ -367,14 +367,14 @@ export default function EditProfilePage() {
                   </Grid>
                 </Grid>
               </Grid>
-              
+
               {/* Géneros musicales */}
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom fontWeight="medium">
                   Géneros musicales favoritos
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                
+
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     Géneros seleccionados:
@@ -400,7 +400,7 @@ export default function EditProfilePage() {
                     )}
                   </Box>
                 </Box>
-                
+
                 <Box>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     Géneros populares:
@@ -423,7 +423,7 @@ export default function EditProfilePage() {
                   </Box>
                 </Box>
               </Grid>
-              
+
               {/* Botones de acción */}
               <Grid item xs={12} sx={{ mt: 3 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -435,20 +435,20 @@ export default function EditProfilePage() {
                   >
                     Cancelar
                   </Button>
-                  
+
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     {showSuccess && (
                       <Typography variant="body2" color="success.main">
                         ¡Perfil actualizado correctamente!
                       </Typography>
                     )}
-                    
+
                     {submitError && (
                       <Typography variant="body2" color="error">
                         {submitError}
                       </Typography>
                     )}
-                    
+
                     <Button
                       variant="contained"
                       color="primary"
@@ -469,4 +469,4 @@ export default function EditProfilePage() {
       </div>
     </div>
   );
-} 
+}

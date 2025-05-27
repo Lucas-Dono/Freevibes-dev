@@ -1,0 +1,35 @@
+{
+  "external_urls": {
+    "spotify": "https://open.spotify.com/artist/5TYxZTjIPqKM8K8NuP9woO"
+  },
+  "followers": {
+    "href": null,
+    "total": 2962376
+  },
+  "genres": [
+    "flamenco"
+  ],
+  "href": "https://api.spotify.com/v1/artists/5TYxZTjIPqKM8K8NuP9woO",
+  "id": "5TYxZTjIPqKM8K8NuP9woO",
+  "images": [
+    {
+      "url": "https://i.scdn.co/image/ab6761610000e5ebdfb9d2cb6a43021d9002a10e",
+      "height": 640,
+      "width": 640
+    },
+    {
+      "url": "https://i.scdn.co/image/ab67616100005174dfb9d2cb6a43021d9002a10e",
+      "height": 320,
+      "width": 320
+    },
+    {
+      "url": "https://i.scdn.co/image/ab6761610000f178dfb9d2cb6a43021d9002a10e",
+      "height": 160,
+      "width": 160
+    }
+  ],
+  "name": "C. Tangana",
+  "popularity": 73,
+  "type": "artist",
+  "uri": "spotify:artist:5TYxZTjIPqKM8K8NuP9woO"
+}

@@ -7,11 +7,22 @@
     "dev:frontend": "vite --host 0.0.0.0",
     "dev:backend": "PORT=5001 node server.js",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:docker": "docker-compose -f docker-compose-dev.yml up",
+    "dev:docker:build": "docker-compose -f docker-compose-dev.yml up --build",
+    "dev:docker:down": "docker-compose -f docker-compose-dev.yml down",
+    "dev:docker:logs": "docker-compose -f docker-compose-dev.yml logs -f",
+    "dev:docker:clean": "docker-compose -f docker-compose-dev.yml down --volumes --remove-orphans",
+    "dev:setup": "npm install && npm run dev:docker:build",
+    "dev:start": "powershell -ExecutionPolicy Bypass -File ./dev-start.ps1",
+    "dev:admin": "echo \"Admin disponible en: http://localhost:3000/admin (admin/dev123)\"",
+    "dev:dashboard": "echo \"Dashboard disponible en: http://localhost:3000/dashboard\"",
+    "dev:db:reset": "docker-compose -f docker-compose-dev.yml down postgres && docker volume rm portfolio_postgres_data && docker-compose -f docker-compose-dev.yml up postgres -d",
+    "dev:health": "curl http://localhost:5001/api/health || echo \"API no disponible\"",
     "server": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
-  },
+  }
   "dependencies": {
     "@emotion/cache": "11.10.5",
     "@emotion/react": "11.10.6",

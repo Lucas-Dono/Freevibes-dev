@@ -1,0 +1,244 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">FreeVibes</string>
+    
+    <!-- Navigation -->
+    <string name="home">Inicio</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_search">Buscar</string>
+    <string name="nav_library">Biblioteca</string>
+    <string name="nav_profile">Perfil</string>
+    
+    <!-- Authentication -->
+    <string name="auth_login">Iniciar Sesión</string>
+    <string name="auth_register">Registrarse</string>
+    <string name="auth_logout">Cerrar Sesión</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Contraseña</string>
+    <string name="auth_username">Nombre de usuario</string>
+    <string name="auth_display_name">Nombre completo</string>
+    <string name="auth_confirm_password">Confirmar contraseña</string>
+    <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="auth_no_account">¿No tienes cuenta?</string>
+    <string name="auth_have_account">¿Ya tienes cuenta?</string>
+    <string name="auth_create_account">Crear cuenta</string>
+    <string name="auth_sign_in">Ingresar</string>
+    
+    <!-- Home -->
+    <string name="home_welcome">Bienvenido</string>
+    <string name="home_recently_played">Reproducido recientemente</string>
+    <string name="home_recommended">Recomendado para ti</string>
+    <string name="home_trending">Tendencias</string>
+    <string name="home_charts">Charts</string>
+    <string name="home_new_releases">Nuevos lanzamientos</string>
+    <string name="home_your_playlists">Tus playlists</string>
+    
+    <!-- Search Fragment -->
+    <string name="search">Buscar</string>
+    <string name="search_hint">Buscar canciones, artistas, álbumes...</string>
+    <string name="search_recent">Búsquedas recientes</string>
+    <string name="search_no_results">No se encontraron resultados</string>
+    <string name="search_try_different">Intenta con términos diferentes</string>
+    
+    <!-- Library -->
+    <string name="library_playlists">Playlists</string>
+    <string name="library_liked_songs">Canciones que te gustan</string>
+    <string name="library_downloaded">Descargas</string>
+    <string name="library_recently_added">Agregado recientemente</string>
+    <string name="library_create_playlist">Crear playlist</string>
+    
+    <!-- Player -->
+    <string name="player_play">Reproducir</string>
+    <string name="player_pause">Pausar</string>
+    <string name="player_next">Siguiente</string>
+    <string name="player_previous">Anterior</string>
+    <string name="player_shuffle">Aleatorio</string>
+    <string name="player_repeat">Repetir</string>
+    <string name="player_like">Me gusta</string>
+    <string name="player_unlike">No me gusta</string>
+    <string name="player_add_to_playlist">Agregar a playlist</string>
+    <string name="player_share">Compartir</string>
+    
+    <!-- Playlist -->
+    <string name="playlist_name">Nombre de la playlist</string>
+    <string name="playlist_description">Descripción</string>
+    <string name="playlist_public">Pública</string>
+    <string name="playlist_private">Privada</string>
+    <string name="playlist_create">Crear</string>
+    <string name="playlist_edit">Editar</string>
+    <string name="playlist_delete">Eliminar</string>
+    <string name="playlist_add_songs">Agregar canciones</string>
+    <string name="playlist_remove_song">Eliminar canción</string>
+    <string name="playlist_empty">Esta playlist está vacía</string>
+    <string name="playlist_songs_count">%d canciones</string>
+    
+    <!-- Profile -->
+    <string name="profile">Perfil</string>
+    <string name="profile_settings">Configuración</string>
+    <string name="profile_edit">Editar perfil</string>
+    <string name="profile_change_password">Cambiar contraseña</string>
+    <string name="profile_notifications">Notificaciones</string>
+    <string name="profile_privacy">Privacidad</string>
+    <string name="profile_about">Acerca de</string>
+    <string name="profile_help">Ayuda</string>
+    
+    <!-- Settings -->
+    <string name="settings_audio_quality">Calidad de audio</string>
+    <string name="settings_download_quality">Calidad de descarga</string>
+    <string name="settings_auto_play">Reproducción automática</string>
+    <string name="settings_download_wifi">Descargar solo con WiFi</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_cache">Caché</string>
+    <string name="settings_clear_cache">Limpiar caché</string>
+    
+    <!-- Common -->
+    <string name="common_loading">Cargando...</string>
+    <string name="common_error">Error</string>
+    <string name="common_retry">Reintentar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_ok">OK</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_delete">Eliminar</string>
+    <string name="common_edit">Editar</string>
+    <string name="common_share">Compartir</string>
+    <string name="common_download">Descargar</string>
+    <string name="common_offline">Sin conexión</string>
+    <string name="common_online">En línea</string>
+    
+    <!-- Errors -->
+    <string name="error_network">Error de conexión</string>
+    <string name="error_server">Error del servidor</string>
+    <string name="error_unknown">Error desconocido</string>
+    <string name="error_no_internet">Sin conexión a internet</string>
+    <string name="error_timeout">Tiempo de espera agotado</string>
+    <string name="error_invalid_credentials">Credenciales inválidas</string>
+    <string name="error_user_exists">El usuario ya existe</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_weak_password">Contraseña muy débil</string>
+    
+    <!-- Success Messages -->
+    <string name="success_login">Sesión iniciada correctamente</string>
+    <string name="success_register">Cuenta creada correctamente</string>
+    <string name="success_logout">Sesión cerrada</string>
+    <string name="success_playlist_created">Playlist creada</string>
+    <string name="success_playlist_updated">Playlist actualizada</string>
+    <string name="success_song_added">Canción agregada</string>
+    <string name="success_song_removed">Canción eliminada</string>
+    
+    <!-- Time -->
+    <string name="time_now">Ahora</string>
+    <string name="time_minutes_ago">Hace %d minutos</string>
+    <string name="time_hours_ago">Hace %d horas</string>
+    <string name="time_days_ago">Hace %d días</string>
+    
+    <!-- Time formats -->
+    <string name="time_format_12h">h:mm a</string>
+    <string name="time_format_24h">HH:mm</string>
+    <string name="date_format">dd/MM/yyyy</string>
+    <string name="datetime_format">dd/MM/yyyy HH:mm</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_album_art">Carátula del álbum</string>
+    <string name="cd_play_button">Botón de reproducir</string>
+    <string name="cd_pause_button">Botón de pausa</string>
+    <string name="cd_next_button">Siguiente canción</string>
+    <string name="cd_previous_button">Canción anterior</string>
+    <string name="cd_shuffle_button">Reproducción aleatoria</string>
+    <string name="cd_repeat_button">Repetir</string>
+    <string name="cd_volume_button">Control de volumen</string>
+    <string name="cd_menu_button">Menú</string>
+    <string name="cd_back_button">Volver</string>
+    <string name="cd_like_button">Botón me gusta</string>
+    <string name="cd_search_button">Botón buscar</string>
+    <string name="cd_profile_image">Imagen de perfil</string>
+
+    <!-- Additional strings -->
+    <string name="trending_now">Tendencias</string>
+    <string name="recommended_for_you">Recomendado para ti</string>
+    <string name="see_all">Ver todo</string>
+    <string name="no_music_available">No hay música disponible</string>
+    <string name="check_connection_try_again">Verifica tu conexión e intenta de nuevo</string>
+    <string name="feature_coming_soon">Función próximamente</string>
+    <string name="now_playing">Reproduciendo: %1$s</string>
+    <string name="play_track">Reproducir canción</string>
+    <string name="like_track">Me gusta</string>
+    <string name="download_track">Descargar</string>
+    <string name="more_options">Más opciones</string>
+    
+    <!-- Search strings -->
+    <string name="searching">Buscando...</string>
+    <string name="search_music_hint">Busca tu música favorita</string>
+    <string name="search_description">Encuentra canciones, artistas y álbumes</string>
+    <string name="no_results_found">No se encontraron resultados</string>
+    <string name="no_results_for_query">No se encontraron resultados para \"%1$s\"</string>
+    <string name="search_suggestions">• Verifica la ortografía\n• Usa términos más generales\n• Prueba con el nombre del artista</string>
+    <string name="search_error">Error en la búsqueda</string>
+
+    <!-- Library Fragment -->
+    <string name="your_library">Tu Biblioteca</string>
+    <string name="create_playlist">Crear Playlist</string>
+    <string name="loading_library">Cargando biblioteca...</string>
+    <string name="loading_tracks">Cargando canciones...</string>
+    <string name="no_tracks_title">Sin canciones</string>
+    <string name="no_tracks_message">Aún no tienes canciones guardadas</string>
+    <string name="empty_library_title">Biblioteca vacía</string>
+    <string name="empty_library_message">Comienza a explorar música para llenar tu biblioteca</string>
+    <string name="explore_music">Explorar Música</string>
+    <string name="error_loading_library">Error cargando biblioteca</string>
+    <string name="retry">Reintentar</string>
+    
+    <!-- Library Tabs -->
+    <string name="playlists">Playlists</string>
+    <string name="liked_songs">Canciones que te gustan</string>
+    <string name="recently_played">Reproducido recientemente</string>
+    
+    <!-- Playlists -->
+    <string name="no_playlists_title">Aún no hay playlists</string>
+    <string name="no_playlists_message">Crea tu primera playlist para organizar tu música favorita</string>
+    <string name="play_playlist">Reproducir playlist</string>
+    
+    <!-- Liked Tracks -->
+    <string name="no_liked_tracks_title">Aún no hay canciones que te gusten</string>
+    <string name="no_liked_tracks_message">Las canciones que te gusten aparecerán aquí</string>
+    <string name="discover_music">Descubrir Música</string>
+    
+    <!-- Recently Played -->
+    <string name="no_recent_tracks_title">No hay actividad reciente</string>
+    <string name="no_recent_tracks_message">Las canciones que reproduzcas aparecerán aquí</string>
+    <string name="start_listening">Comenzar a Escuchar</string>
+    
+    <!-- Playlist Info -->
+    <string name="created_by_you">Creado por ti</string>
+    <string name="created_by">Creado por %1$s</string>
+    
+    <!-- Plurals -->
+    <plurals name="track_count">
+        <item quantity="one">%d canción</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    
+    <!-- Profile Fragment -->
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="your_stats">Tus Estadísticas</string>
+    <string name="listening_time">Tiempo</string>
+    <string name="my_playlists">Mis Playlists</string>
+    <string name="settings">Configuración</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="error_loading_profile">Error cargando perfil</string>
+    
+    <!-- Player Fragment -->
+    <string name="playing_from">Reproduciendo desde</string>
+    <string name="album_art">Carátula del álbum</string>
+    <string name="track_name">Nombre de la canción</string>
+    <string name="artist_name">Nombre del artista</string>
+    <string name="add_to_favorites">Agregar a favoritos</string>
+    <string name="shuffle">Aleatorio</string>
+    <string name="repeat">Repetir</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="play_pause">Reproducir/Pausar</string>
+    <string name="back">Volver</string>
+
+</resources>

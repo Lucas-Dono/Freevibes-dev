@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Background Circle -->
+    <path
+        android:fillColor="@color/primary"
+        android:pathData="M60,60m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0" />
+    
+    <!-- Music Note -->
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M45,35 L45,75 C45,80 40,85 35,85 C30,85 25,80 25,75 C25,70 30,65 35,65 C37,65 39,66 40,67 L40,45 L70,35 L70,65 C70,70 65,75 60,75 C55,75 50,70 50,65 C50,60 55,55 60,55 C62,55 64,56 65,57 L65,25 L45,35 Z" />
+    
+    <!-- Sound Waves -->
+    <path
+        android:fillColor="@color/white"
+        android:fillAlpha="0.6"
+        android:pathData="M80,45 C85,50 85,70 80,75 M85,40 C92,47 92,73 85,80 M90,35 C99,44 99,76 90,85" />
+    
+</vector>

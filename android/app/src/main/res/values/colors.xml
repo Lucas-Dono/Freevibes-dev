@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary">#1DB954</color>
+    <color name="primary_dark">#1AA34A</color>
+    <color name="primary_light">#4AC776</color>
+    
+    <!-- Secondary Colors -->
+    <color name="secondary">#FF6B35</color>
+    <color name="secondary_dark">#E55A2B</color>
+    <color name="secondary_light">#FF8A5B</color>
+    
+    <!-- Material Design Colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_primary">#1DB954</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="bottom_nav_item_color">#1DB954</color>
+    
+    <!-- Background Colors -->
+    <color name="background_primary">#121212</color>
+    <color name="background_secondary">#181818</color>
+    <color name="overlay_transparent">#80000000</color>
+    <color name="background_tertiary">#2A2A2A</color>
+    
+    <!-- Surface Colors -->
+    <color name="surface">#1E1E1E</color>
+    <color name="surface_primary">#1E1E1E</color>
+    <color name="surface_secondary">#2A2A2A</color>
+    <color name="surface_variant">#3A3A3A</color>
+    <color name="surface_tertiary">#3A3A3A</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
+    <color name="text_tertiary">#808080</color>
+    <color name="text_disabled">#4A4A4A</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_blue">#1E88E5</color>
+    <color name="accent_purple">#8E24AA</color>
+    <color name="accent_red">#E53935</color>
+    <color name="accent_orange">#FB8C00</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="error">#F44336</color>
+    <color name="info">#2196F3</color>
+    
+    <!-- Common Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    
+    <!-- Bottom Navigation -->
+    <color name="bottom_nav_selected">#1DB954</color>
+    <color name="bottom_nav_unselected">#808080</color>
+    
+    <!-- Button Colors -->
+    <color name="button_primary">#1DB954</color>
+    <color name="button_primary_pressed">#1AA34A</color>
+    <color name="button_secondary">#2A2A2A</color>
+    <color name="button_secondary_pressed">#3A3A3A</color>
+    
+    <!-- Card Colors -->
+    <color name="card_background">#1E1E1E</color>
+    <color name="card_border">#3A3A3A</color>
+    
+    <!-- Input Colors -->
+    <color name="input_background">#2A2A2A</color>
+    <color name="input_border">#3A3A3A</color>
+    <color name="input_border_focused">#1DB954</color>
+    
+    <!-- Overlay Colors -->
+    <color name="overlay_dark">#80000000</color>
+    <color name="overlay_light">#40FFFFFF</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#1DB954</color>
+    <color name="gradient_end">#1AA34A</color>
+</resources>

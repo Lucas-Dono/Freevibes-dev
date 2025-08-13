@@ -10,6 +10,19 @@ const NodeCache = require('node-cache');
 const { handleDemoRequest, isDemoMode } = require('./demo-data/demo-handler');
 // Importar las funciones de manejo de playlists de demo
 const { getDemoPlaylists, getPlaylistDetailsByArtist } = require('./demo-handler');
+// Importar rutas de autenticación JWT para Android
+const authRoutes = require('./routes/auth');
+// Importar rutas de playlists de usuario
+const userPlaylistRoutes = require('./routes/user-playlists');
+// Importar rutas de configuración de Android
+const androidConfigRoutes = require('./routes/android-config');
+// Importar middleware específico para Android
+const {
+  detectAndroidApp,
+  optimizeForAndroid,
+  validateAndroidVersion,
+  androidLogger
+} = require('./middleware/android-middleware');
 
 const app = express();
 const PORT = process.env.PORT || '3001'; // Asegurar string
@@ -29,6 +42,19 @@ console.log('=========================================================');
 // Usar PYTHON_API_URL para el resto del código
 const PYTHON_API_BASE_URL = PYTHON_API_URL;
 
+// Middleware global para detectar aplicaciones Android
+app.use(detectAndroidApp);
+app.use(optimizeForAndroid);
+app.use(validateAndroidVersion);
+app.use(androidLogger);
+
+// Configurar rutas de autenticación JWT
+app.use('/api/auth', authRoutes);
+// Configurar rutas de playlists de usuario
+app.use('/api/user', userPlaylistRoutes);
+// Configurar rutas de configuración de Android
+app.use('/api/android', androidConfigRoutes);
+
 // Configuración CORS
 const corsOptions = {
   // Función que determina dinámicamente qué origen permitir
@@ -39,8 +65,23 @@ const corsOptions = {
     // Usar orígenes de env si existen, si no, los por defecto
     const allowedOrigins = allowedOriginsEnv ? allowedOriginsEnv.split(',') : defaultOrigins;
 
-    // En modo desarrollo, o si no hay origen (Postman, curl), permitir
-    if (!origin || process.env.NODE_ENV !== 'production') {
+    // Permitir requests sin origen (aplicaciones móviles nativas, Postman, curl)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // En modo desarrollo, permitir todos los orígenes
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+
+    // Verificar si es una aplicación Android (User-Agent contiene información de Android)
+    // Las apps Android nativas no envían origen, pero podemos detectarlas por otros headers
+    const userAgent = origin.headers?.['user-agent'] || '';
+    const isAndroidApp = userAgent.toLowerCase().includes('android') || 
+                        userAgent.toLowerCase().includes('freevibes-android');
+    
+    if (isAndroidApp) {
       return callback(null, true);
     }
 
@@ -61,7 +102,17 @@ const corsOptions = {
       callback(new Error('No permitido por CORS'), false);
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'User-Agent',
+    'X-Android-App',
+    'X-App-Version'
+  ],
   credentials: true,
   optionsSuccessStatus: 204
 };
